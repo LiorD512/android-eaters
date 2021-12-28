@@ -36,18 +36,18 @@
                 app:ci_drawable="@drawable/vp_dark_indicator_selected"
                 app:ci_drawable_unselected="@drawable/vp_dark_indicator_unselected"
                 app:ci_gravity="center"
-                android:layout_marginBottom="30dp"
+                android:layout_marginBottom="50dp"
                 android:layout_gravity="bottom"
                 android:id="@+id/dishFragPhotosIndicator"
                 android:layout_width="match_parent"
                 android:layout_height="48dp"/>
 
-        <ImageView
-                android:id="@+id/dishFragCoverPhoto"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:scaleType="centerCrop"
-                android:src="@drawable/my_dishes_pic" />
+<!--        <ImageView-->
+<!--                android:id="@+id/dishFragCoverPhoto"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="match_parent"-->
+<!--                android:scaleType="centerCrop"-->
+<!--                android:src="@drawable/my_dishes_pic" />-->
 
         <ImageView
                 android:id="@+id/dishFragVideoBtn"

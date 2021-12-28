@@ -144,6 +144,26 @@ data class FullDish(
     @Json(name = "available_at") val availableMenuItems: List<MenuItem> = listOf(),
     @Json(name = "cooking_methods") val cookingMethods: List<CookingMethods>?,
     @Json(name = "dish_ingredients") val dishIngredients: List<DishIngredient>?
+){
+    fun getMediaData(): List<WSMedia>{
+        val media = mutableListOf<WSMedia>()
+        imagesGallery?.forEach{
+            media.add(WSMedia(WSMediaType.IMAGE, it.url))
+        }
+        video?.let{
+            media.add(WSMedia(WSMediaType.VIDEO, it))
+        }
+        return media
+    }
+}
+
+enum class WSMediaType {
+    VIDEO,
+    IMAGE
+}
+data class WSMedia(
+    val mediaType: WSMediaType,
+    val url: String?
 )
 
 @Parcelize

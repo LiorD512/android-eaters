@@ -66,6 +66,8 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
         initMainViewPager()
 
         initUiRelatedProcesses()
+
+        Log.d(TAG, "density: ${getResources().getDisplayMetrics().density}")
     }
 
     fun initUi() {

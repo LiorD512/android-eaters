@@ -1,12 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        xmlns:tools="http://schemas.android.com/tools">
 
     <ImageView
+            android:scaleType="centerCrop"
             android:id="@+id/dishPhoto"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
+
+    <ImageView
+            android:id="@+id/dishPhotoBtn"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="center"
+            android:visibility="gone"
+            tools:visibility="visible"
+            android:src="@drawable/ic_play_grey"
+            android:background="@drawable/transparent_to_black_60_gradient"/>
 
 </FrameLayout>

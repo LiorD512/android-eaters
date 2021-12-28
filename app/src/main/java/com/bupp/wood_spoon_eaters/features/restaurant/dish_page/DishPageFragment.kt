@@ -35,7 +35,7 @@ class DishPageFragment : Fragment(R.layout.fragment_dish_page),
     PlusMinusView.PlusMinusInterface,
     WSFloatingButton.WSFloatingButtonListener,
     ClearCartRestaurantBottomSheet.ClearCartListener,
-    ExpandableTextView.ExpandableTextViewListener {
+    ExpandableTextView.ExpandableTextViewListener, DishPhotosAdapter.DishPhotosListener {
 
     private var binding: FragmentDishPageBinding? = null
     private val viewModel by viewModel<DishPageViewModel>()
@@ -72,7 +72,7 @@ class DishPageFragment : Fragment(R.layout.fragment_dish_page),
             availableTimesAdapter = DishAvailabilityAdapter()
             dishFragMainListLayout.dishFragDescription.initExpandableTextView(this@DishPageFragment)
 
-            dishPhotosAdapter = DishPhotosAdapter(requireContext())
+            dishPhotosAdapter = DishPhotosAdapter(requireContext(), this@DishPageFragment)
             dishFragPhotosPager.adapter = dishPhotosAdapter
             dishFragPhotosIndicator.setViewPager(dishFragPhotosPager)
         }
@@ -231,7 +231,7 @@ class DishPageFragment : Fragment(R.layout.fragment_dish_page),
             dishFragHeaderName.text = dish?.name
             dishFragHeaderPrice.text = dish?.price?.formatedValue ?: ""
             dishFragTopHeaderDishName.text = dish?.name
-            Glide.with(requireContext()).load(dish?.thumbnail?.url).into(dishFragCoverPhoto)
+//            Glide.with(requireContext()).load(dish?.thumbnail?.url).into(dishFragCoverPhoto)
             if(menuItem.availableLater == null) {
                 dishFragTags.setTags(menuItem.tags)
                 dishFragTags.isVisible = !menuItem.tags.isNullOrEmpty()
@@ -251,7 +251,7 @@ class DishPageFragment : Fragment(R.layout.fragment_dish_page),
             dishFragHeaderName.text = dish.name
             dishFragHeaderPrice.text = dish.price?.formatedValue ?: ""
             dishFragTopHeaderDishName.text = dish.name
-            Glide.with(requireContext()).load(dish.thumbnail?.url).into(dishFragCoverPhoto)
+//            Glide.with(requireContext()).load(dish.thumbnail?.url).into(dishFragCoverPhoto)
                 dishFragTags.setTags(orderItem.menuItem?.tags)
 
             dishFragMainListLayout.dishFragUserRequestInput.setText(orderItem.notes)
@@ -296,7 +296,7 @@ class DishPageFragment : Fragment(R.layout.fragment_dish_page),
             dishFragAdditionalDetailsLayout.isVisible = !dish.instruction.isNullOrEmpty()
             dishFragAdditionalDetails.text = dish.instruction
 
-            dish.imagesGallery?.let { dishPhotosAdapter?.setDishPhotos(it) }
+            dish.getMediaData().let { dishPhotosAdapter?.setDishMedia(it) }
         }
     }
 
@@ -384,6 +384,10 @@ class DishPageFragment : Fragment(R.layout.fragment_dish_page),
 
     override fun onTextViewExpanded() {
         viewModel.logEvent(Constants.EVENT_CLICK_VIEW_MORE)
+    }
+
+    override fun onPlayBtnClicked(videoUrl: String) {
+        VideoViewDialog(videoUrl).show(childFragmentManager, Constants.VIDEO_VIEW_DIALOG)
     }
 
 

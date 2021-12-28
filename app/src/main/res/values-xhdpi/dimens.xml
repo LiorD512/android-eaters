@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="tip_percent_view_item_horizontal_padding">11.7dp</dimen>
-    <dimen name="coming_soon_img_height">259dp</dimen>
+    <dimen name="coming_soon_img_height">159dp</dimen>
     <dimen name="header_view_height">50dp</dimen>
 </resources>
