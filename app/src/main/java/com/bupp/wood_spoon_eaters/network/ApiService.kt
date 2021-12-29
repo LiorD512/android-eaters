@@ -133,7 +133,7 @@ interface ApiService {
     @DELETE("eaters/me")
     suspend fun deleteMe(): Response<Unit>
 
-
+    @VERSION("v3")
     @GET("cooks/{cook_id}")
     suspend fun getCook(
         @Path(value = "cook_id", encoded = true) cookId: Long,
