@@ -105,30 +105,33 @@ class RestaurantPageViewModel(
 
     private fun checkIfUnavailableCookingSlot(restaurant: Restaurant): Boolean {
         val canDeliver = restaurant.canBeDelivered ?: false
-        if (restaurant.cookingSlots[0].isDummy()) {
-            if (canDeliver) {
-                unavailableEventData.postValue(
-                    UnavailableUiData(
-                        UnavailableUiType.NO_COOKING_SLOT,
-                        "Unfortunately, this Home kitchen is closed at the moment. Check back later!"
+        if(restaurant.cookingSlots.isNotEmpty()){
+            if (restaurant.cookingSlots[0].isDummy()) {
+                if (canDeliver) {
+                    unavailableEventData.postValue(
+                        UnavailableUiData(
+                            UnavailableUiType.NO_COOKING_SLOT,
+                            "Unfortunately, this Home kitchen is closed at the moment. Check back later!"
+                        )
                     )
-                )
+                } else {
+                    unavailableEventData.postValue(
+                        UnavailableUiData(
+                            UnavailableUiType.UNAVAILABLE_IN_YOUR_LOCATION,
+                            "Unfortunately, this Home kitchen does not deliver to you location."
+                        )
+                    )
+                }
+                onCookingSlotSelected(restaurant.cookingSlots[0], true)
+                return true
             } else {
                 unavailableEventData.postValue(
-                    UnavailableUiData(
-                        UnavailableUiType.UNAVAILABLE_IN_YOUR_LOCATION,
-                        "Unfortunately, this Home kitchen does not deliver to you location."
-                    )
+                    UnavailableUiData(UnavailableUiType.AVAILABLE)
                 )
+                return false
             }
-            onCookingSlotSelected(restaurant.cookingSlots[0], true)
-            return true
-        } else {
-            unavailableEventData.postValue(
-                UnavailableUiData(UnavailableUiType.AVAILABLE)
-            )
-            return false
         }
+        return true
     }
 
     /** Creating  Delivery date list
