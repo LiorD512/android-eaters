@@ -159,7 +159,7 @@ class DishPageViewModel(
         var overallPrice = ""
         if(isEditMode){
             orderItemData.value?.let {
-                it.price.value?.let {
+                it.getSingleItemPrice()?.let {
                     val priceStr = DecimalFormat("##.##").format(it * quantity)
                     overallPrice = "$$priceStr"
                 }
