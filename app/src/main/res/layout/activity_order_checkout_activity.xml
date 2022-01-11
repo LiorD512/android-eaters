@@ -21,7 +21,7 @@
             app:layout_constraintEnd_toEndOf="parent"/>
 
     <com.bupp.wood_spoon_eaters.views.WSProgressBar
-            android:id="@+id/restaurantAct"
+            android:id="@+id/progressBar"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             tools:visibility="gone"

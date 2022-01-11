@@ -11,6 +11,7 @@ import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.custom_views.TipLineView
 import com.bupp.wood_spoon_eaters.databinding.FragmentTipBinding
 import com.bupp.wood_spoon_eaters.dialogs.WSErrorDialog
+import com.bupp.wood_spoon_eaters.features.order_checkout.OrderCheckoutActivity
 import com.bupp.wood_spoon_eaters.features.order_checkout.OrderCheckoutViewModel
 import com.bupp.wood_spoon_eaters.features.order_checkout.checkout.CheckoutViewModel
 import com.bupp.wood_spoon_eaters.model.Order
@@ -90,19 +91,11 @@ class TipFragment : Fragment(R.layout.fragment_tip), CustomTipBottomSheet.Custom
             mainViewModel.handleMainNavigation(OrderCheckoutViewModel.NavigationEventType.FINISH_ACTIVITY_AFTER_PURCHASE)
         })
         viewModel.progressData.observe(viewLifecycleOwner, {
-            handlePb(it ?: false)
+            (activity as OrderCheckoutActivity).handleProgressBar(it)
         })
         viewModel.wsErrorEvent.observe(viewLifecycleOwner, {
             handleWSError(it.getContentIfNotHandled())
         })
-    }
-
-    private fun handlePb(shouldShow: Boolean) {
-        if(shouldShow){
-            binding!!.tipFragPb.show()
-        }else{
-            binding!!.tipFragPb.hide()
-        }
     }
 
     @SuppressLint("SetTextI18n")

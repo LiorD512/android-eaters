@@ -102,6 +102,7 @@ class CheckoutViewModel(
 
     fun updateOrderParams(orderRequest: OrderRequest, eventType: String? = null) {
         viewModelScope.launch {
+            progressData.startProgress()
             val result = cartManager.updateOrderParams(orderRequest, eventType)
             when (result?.type) {
                 OrderRepository.OrderRepoStatus.UPDATE_ORDER_SUCCESS -> {
@@ -115,6 +116,7 @@ class CheckoutViewModel(
                 else -> {
                 }
             }
+            progressData.endProgress()
         }
     }
 

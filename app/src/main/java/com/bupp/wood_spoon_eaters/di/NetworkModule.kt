@@ -7,6 +7,7 @@ import `in`.co.ophio.secure.core.ObscuredPreferencesBuilder
 import android.app.Application
 import android.content.Context
 import android.content.SharedPreferences
+import com.bupp.wood_spoon_eaters.BuildConfig
 import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.common.FlavorConfigManager
 import com.bupp.wood_spoon_eaters.di.abs.*
@@ -18,6 +19,7 @@ import com.bupp.wood_spoon_eaters.network.ApiService
 import com.bupp.wood_spoon_eaters.network.ApiSettings
 import com.bupp.wood_spoon_eaters.network.AuthInterceptor
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
+import com.localebro.okhttpprofiler.OkHttpProfilerInterceptor
 import com.squareup.moshi.*
 import com.squareup.moshi.adapters.PolymorphicJsonAdapterFactory
 import com.squareup.moshi.adapters.Rfc3339DateJsonAdapter
@@ -66,6 +68,10 @@ fun provideDefaultOkhttpClient(apiSettings: ApiSettings): OkHttpClient {
     val authInterceptor = AuthInterceptor(apiSettings)
 
     val httpClient = OkHttpClient.Builder().addInterceptor(logging).addInterceptor(authInterceptor)
+
+    if(BuildConfig.DEBUG){
+        httpClient.addInterceptor(OkHttpProfilerInterceptor())
+    }
     return httpClient.build()
 }
 

@@ -9,10 +9,6 @@ import android.util.Log
 import android.widget.Toast
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleObserver
-import androidx.lifecycle.OnLifecycleEvent
-import androidx.lifecycle.ProcessLifecycleOwner
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.bottom_sheets.campaign_bottom_sheet.CampaignBottomSheet
 import com.bupp.wood_spoon_eaters.common.*
@@ -40,7 +36,6 @@ import com.mikhaellopez.ratebottomsheet.RateBottomSheet
 import com.mikhaellopez.ratebottomsheet.RateBottomSheetManager
 import com.stripe.android.view.PaymentMethodsActivityStarter
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import timber.log.Timber
 import java.util.*
 
 

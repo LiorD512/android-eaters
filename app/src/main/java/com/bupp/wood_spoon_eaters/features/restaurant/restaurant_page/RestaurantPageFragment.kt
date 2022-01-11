@@ -10,6 +10,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.navArgs
+import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.bottom_sheets.clear_cart_dialogs.clear_cart_restaurant.ClearCartCookingSlotBottomSheet
@@ -39,6 +40,7 @@ import com.bupp.wood_spoon_eaters.views.FavoriteBtn
 import com.bupp.wood_spoon_eaters.views.floating_buttons.WSFloatingButton
 import io.split.android.client.SplitClient
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
 class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
@@ -53,12 +55,13 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
     private var binding: FragmentRestaurantPageBinding? = null
 
     private val mainViewModel by sharedViewModel<RestaurantMainViewModel>()
-    private val viewModel by sharedViewModel<RestaurantPageViewModel>()
+    private val viewModel by viewModel<RestaurantPageViewModel>()
 
     var adapterDishes: DishesMainAdapter? = null
 
     var adapterCuisines: RPAdapterCuisine? = RPAdapterCuisine()
 
+    var dishDividerDecoration: RecyclerView.ItemDecoration? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -103,23 +106,18 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
 
             adapterDishes = DishesMainAdapter(getDishesAdapterListener())
             val divider: Drawable? = ContextCompat.getDrawable(requireContext(), R.drawable.divider_white_three)
-            val dishDividerDecoration = DividerItemDecoratorDish(divider)
-            dishDividerDecoration.let {
+            dishDividerDecoration = DividerItemDecoratorDish(divider)
+            dishDividerDecoration?.let {
                 restaurantDishesList.addItemDecoration(it)
             }
-//            restaurantDishesList.initSwipeableRecycler(adapterDishes!!)
+            restaurantDishesList.initSwipeableRecycler(adapterDishes!!)
 
             restaurantNoNetworkLayout.noNetworkSectionBtn.setOnClickListener {
                 detailsSkeleton.visibility = View.VISIBLE
-                restaurantNoNetwork.visibility = View.INVISIBLE
+                restaurantNoNetwork.visibility = View.GONE
                 viewModel.reloadPage(false)
             }
-            searchFragInput.setOnClickListener { openSearchDish() }
         }
-    }
-
-    private fun openSearchDish() {
-        mainViewModel.handleNavigation(RestaurantMainViewModel.NavigationType.OPEN_DISH_SEARCH)
     }
 
 
@@ -192,31 +190,24 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
         mainViewModel.reOpenCartEvent.observe(viewLifecycleOwner, {
             reOpenCart()
         })
-        mainViewModel.featureFlagEvent.observe(viewLifecycleOwner, {
-            handleFeatureFlagData(it)
+        viewModel.networkErrorEvent.observe(viewLifecycleOwner, {
+            handleNetworkErrorEvent(it)
         })
     }
 
     private fun handleUnAvailableEvent(event: RestaurantPageViewModel.UnavailableUiData?) {
-        event?.let{
-            Log.d("wow","handleUnAvailableEvent")
-            if(event.type != AVAILABLE){
+        event?.let {
+            Log.d("wow", "handleUnAvailableEvent")
+            if (event.type != AVAILABLE) {
                 showErrorToast(event.text!!, binding!!.root, Toast.LENGTH_LONG)
-                with(binding!!){
+                with(binding!!) {
                     restFragUnavailableGradient.visibility = View.VISIBLE
                     restaurantMainListLayout.restaurantDishesList.initSwipeableRecycler(adapterDishes!!, false)
                     restaurantMainListLayout.restaurantCookingSlotLayout.visibility = View.GONE
                 }
-            }else{
+            } else {
                 binding!!.restaurantMainListLayout.restaurantDishesList.initSwipeableRecycler(adapterDishes!!, true)
             }
-        }
-    }
-
-    private fun handleFeatureFlagData(client: SplitClient?) {
-        client?.let{
-            val restaurantSearch = client.getTreatment(Constants.SEARCH_IN_RESTAURANT)
-                binding!!.restaurantMainListLayout.restaurantSearchLayout.isVisible = restaurantSearch == "on"
         }
     }
 
@@ -238,7 +229,6 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
 
             topHeaderRestaurantName.text = params.restaurantName
             topHeaderChefName.text = "By ${params.chefName}"
-            restaurantMainListLayout.searchFragInput.hint = "Search ${params.restaurantName}"
         }
     }
 
@@ -347,21 +337,26 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
 
     private fun handleDishesList(dishSections: RestaurantPageViewModel.DishListData?) {
         with(binding!!) {
-            if (dishSections?.dishes.isNullOrEmpty()) {
+            restaurantMainListLayout.restaurantNoNetwork.visibility = View.GONE
+            restaurantMainListLayout.restaurantMainLayout.visibility = View.VISIBLE
+
+            if (dishSections?.animateList == true)
+                restaurantMainListLayout.restaurantDishesList.scheduleLayoutAnimation()
+
+            adapterDishes?.submitList(dishSections?.dishes)
+        }
+    }
+
+
+    private fun handleNetworkErrorEvent(it: LiveEvent<Boolean>?) {
+        with(binding!!) {
+            it?.getContentIfNotHandled()?.let {
                 if (!restaurantMainListLayout.restaurantNoNetwork.isVisible) {
                     restaurantMainListLayout.detailsSkeleton.visibility = View.GONE
                     restaurantMainListLayout.restaurantNoNetwork.visibility = View.VISIBLE
                 } else {
                     //Do nothing
                 }
-            } else {
-                restaurantMainListLayout.restaurantNoNetwork.visibility = View.GONE
-                restaurantMainListLayout.restaurantMainLayout.visibility = View.VISIBLE
-
-                if (dishSections?.animateList == true)
-                    restaurantMainListLayout.restaurantDishesList.scheduleLayoutAnimation()
-
-                adapterDishes?.submitList(dishSections?.dishes)
             }
         }
     }

@@ -58,6 +58,7 @@ class DishViewHolderSingleDish(val binding: RestaurantItemDishBinding) : DishesM
                     dishName.alpha = 0.4f
                     dishPrice.alpha = 0.4f
                     dishDescription.alpha = 0.4f
+                    isSwipeable = false
                 }
             }
         }

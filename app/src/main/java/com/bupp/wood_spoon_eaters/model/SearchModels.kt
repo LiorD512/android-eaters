@@ -95,7 +95,6 @@ data class Dish(
     @Json(name = "description") val description: String,
     @Json(name = "avg_rating") val rating: Double?,
     @Json(name = "thumbnail") val thumbnail: WSImage?,
-//    @Json(name = "image_gallery") val imageGallery: List<String>?,
     @Json(name = "gallery") val imagesGallery: List<WSImage>?,
     @Json(name = "video") val video: String?,
     @Json(name = "is_favorite") val isFavorite: Boolean?,
@@ -112,6 +111,17 @@ data class Dish(
         }else{
             price
         }
+    }
+
+    fun getMediaData(): List<WSMedia>{
+        val media = mutableListOf<WSMedia>()
+        imagesGallery?.forEach{
+            media.add(WSMedia(WSMediaType.IMAGE, it.url))
+        }
+        video?.let{
+            media.add(WSMedia(WSMediaType.VIDEO, it))
+        }
+        return media
     }
 
 }

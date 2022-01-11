@@ -17,7 +17,7 @@ data class FeedResult(
 data class FeedSection(
     var id: Long? = null,
     var title: String? = null,
-    var href: String? = null,
+    var full_href: String? = null,
     var collections: MutableList<FeedSectionCollectionItem>? = null
 ): Parcelable
 
@@ -25,20 +25,20 @@ sealed class FeedSectionCollectionItem(
     @Json(name = "type") var type: FeedModelsViewType?
 ) : Parcelable {
     abstract val items: List<Parcelable>?
-    abstract val href: String?
+    abstract val full_href: String?
 }
 
 @Parcelize
 @JsonClass(generateAdapter = true)
 data class FeedCampaignSection(
-    override val href: String?,
+    override val full_href: String?,
     override val items: List<Campaign>?,
 ): Parcelable, FeedSectionCollectionItem(FeedModelsViewType.COUPONS)
 
 @Parcelize
 @JsonClass(generateAdapter = true)
 data class FeedIsEmptySection(
-    override val href: String? = null,
+    override val full_href: String? = null,
     override val items: List<Campaign>? = null,
     @Json(name = "title") val title: String?,
     @Json(name = "subtitle") val subtitle: String?,
@@ -48,7 +48,7 @@ data class FeedIsEmptySection(
 @Parcelize
 @JsonClass(generateAdapter = true)
 data class FeedSingleEmptySection(
-    override val href: String? = null,
+    override val full_href: String? = null,
     override val items: List<Campaign>? = null,
     @Json(name = "title") val title: String?,
     @Json(name = "subtitle") val subtitle: String?,
@@ -58,7 +58,7 @@ data class FeedSingleEmptySection(
 @Parcelize
 @JsonClass(generateAdapter = true)
 data class FeedSearchEmptySection(
-    override val href: String? = null,
+    override val full_href: String? = null,
     override val items: List<Campaign>? = null,
     @Json(name = "title") val title: String?,
     @Json(name = "subtitle") val subtitle: String?,
@@ -68,7 +68,7 @@ data class FeedSearchEmptySection(
 @Parcelize
 @JsonClass(generateAdapter = true)
 data class FeedComingSoonSection(
-    override val href: String? = null,
+    override val full_href: String? = null,
     override val items: List<Campaign>? = null,
     @Json(name = "title") val title: String?,
     @Json(name = "subtitle") val subtitle: String?,
@@ -97,7 +97,7 @@ data class FeedNoChefSectionTest(
 @Parcelize
 @JsonClass(generateAdapter = true)
 data class FeedRestaurantSection(
-    override var href: String?,
+    override var full_href: String?,
     override val items: List<FeedRestaurantSectionItem>?,
     @Json(name = "chef_name") val chefName: String?,
     @Json(name = "restaurant_name") val restaurantName: String?,
@@ -108,10 +108,14 @@ data class FeedRestaurantSection(
     @Json(name = "chef_cover") val chefCover: WSImage?,
     @Json(name = "avg_rating") val avgRating: Float?,
     @Json(name = "cooking_slot") val cookingSlot: FeedDishCookingSlot?,
-    @Json(name = "availability") val availability: RestaurantAvailability?,
+//    @Json(name = "availability") val availability: RestaurantAvailability?,
     var flagUrl: String?,
     var countryIso: String?,
 ) : Parcelable, FeedSectionCollectionItem(FeedModelsViewType.RESTAURANT) {
+
+    fun isAvailable(): Boolean{
+        return cookingSlot?.canOrder?: false
+    }
 
     fun getAvgRating(): String{
         avgRating?.let{
@@ -120,10 +124,7 @@ data class FeedRestaurantSection(
         return ""
     }
 
-    fun toRestaurantInitParams(sectionTitle: String? = null,
-                               sectionOrder: Int? = null,
-                               restaurantOrderInSection: Int? = null,
-                               dishIndexInRestaurant: Int? = null): RestaurantInitParams {
+    fun toRestaurantInitParams(sectionTitle: String? = null, sectionOrder: Int? = null, restaurantOrderInSection: Int? = null, dishIndexInRestaurant: Int? = null, isFromSearch: Boolean = false): RestaurantInitParams {
         return RestaurantInitParams(
             chefId,
             chefThumbnail,
@@ -133,6 +134,7 @@ data class FeedRestaurantSection(
             chefName,
             false,
             null,
+            isFromSearch,
             cookingSlot,
             sectionTitle,
             sectionOrder,
@@ -239,7 +241,7 @@ data class FeedAdapterSearchSkeleton(
 
 @Parcelize
 data class FeedAdapterHref(
-    val href: String? = null, override val id: Long?
+    val full_href: String? = null, override val id: Long?
 ): Parcelable, FeedAdapterItem(FeedAdapterViewType.HREF)
 
 @Parcelize

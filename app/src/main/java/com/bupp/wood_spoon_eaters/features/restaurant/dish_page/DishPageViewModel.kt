@@ -77,15 +77,13 @@ class DishPageViewModel(
     )
 
     val dishQuantityChange = MutableLiveData<DishQuantityData>()
-    val unavailableUiEvent = MutableLiveData<Boolean>()
+    val unavailableUiEvent = MutableLiveData<MenuItem?>()
 
     fun initData(extras: DishInitParams) {
         Log.d("orderFlow - dishPage","initData")
         this.extras = extras
         if (extras.menuItem != null) {
             currentFragmentState = DishFragmentState.ADD_DISH
-            handleMenuItemData(extras.menuItem)
-            getFullDish(extras.menuItem.id)
 
             if (extras.cookingSlot?.id != extras.menuItem.cookingSlotId) {
                 Log.d(TAG, "this is a different Cooking slot")
@@ -93,11 +91,16 @@ class DishPageViewModel(
             }
             isDummy = extras.cookingSlot?.isDummy()
             if(isDummy == true){
-                unavailableUiEvent.postValue(true)
+                unavailableUiEvent.postValue(extras.menuItem)
+                getFullDish(dishId = extras.menuItem.dishId)
+            } else {
+                handleMenuItemData(extras.menuItem)
+                getFullDish(menuItemId = extras.menuItem.id)
             }
+
             eventsManager.logEvent(Constants.EVENT_CLICK_ON_DISH, getDishClicked(extras))
 
-        }else if(extras.orderItem != null){
+        } else if (extras.orderItem != null){
             currentFragmentState = DishFragmentState.UPDATE_DISH
             isEditMode = true
             handleOrderItemData(extras.orderItem)
@@ -113,7 +116,6 @@ class DishPageViewModel(
         menuItemData.postValue(menuItem)
         dishMaxQuantity = menuItem.getQuantityCount() - quantityInCart
         counterBtnsState.postValue(CounterBtnState(1, dishMaxQuantity))
-
     }
 
     private fun getDishClicked(dishParam: DishInitParams): Map<String, String> {
@@ -135,18 +137,29 @@ class DishPageViewModel(
         counterBtnsState.postValue(CounterBtnState(orderItem.quantity, dishMaxQuantity))
     }
 
-    private fun getFullDish(menuItemId: Long) {
+    private fun getFullDish(menuItemId: Long? = null, dishId: Long? = null) {
         Log.d("orderFlow - dishPage","getFullDish")
         menuItemId.let {
             skeletonProgressData.startProgress()
             viewModelScope.launch {
-                val fullDishResult = cartManager.getFullDish(it)
+                val fullDishResult = when {
+                    menuItemId != null -> {
+                        cartManager.getFullDishByMenuItem(menuItemId)
+                    }
+                    dishId != null -> {
+                        cartManager.getFullDishByDish(dishId)
+                    }
+                    else -> { null }
+                }
+
                 val fullDish = fullDishResult?.data
                 if(fullDish == null){
                     networkError.postValue(true)
-                }else{
-                    dishFullData.postValue(fullDish!!)
-                    getUserRequestData(fullDish.restaurant)
+                } else {
+                    fullDish.let{
+                        dishFullData.postValue(it)
+                        getUserRequestData(fullDish.restaurant)
+                    }
                 }
                 skeletonProgressData.endProgress()
             }
@@ -166,7 +179,7 @@ class DishPageViewModel(
         var overallPrice = ""
         if(isEditMode){
             orderItemData.value?.let {
-                it.price.value?.let {
+                it.getSingleItemPrice()?.let {
                     val priceStr = DecimalFormat("##.##").format(it * quantity)
                     overallPrice = "$$priceStr"
                 }

@@ -53,6 +53,7 @@ class RestaurantPageViewModel(
     val clearCartEvent = cartManager.getClearCartUiEvent()
     val orderLiveData = cartManager.getCurrentOrderData()
     val wsErrorEvent = cartManager.getWsErrorEvent()
+    val networkErrorEvent = LiveEventData<Boolean>();
     val floatingBtnEvent = cartManager.getFloatingCartBtnEvent()
     val onCookingSlotForceChange = cartManager.getOnCookingSlotIdChange()
 
@@ -66,7 +67,9 @@ class RestaurantPageViewModel(
         if (initialParamData.value == null) {
             currentRestaurantId = params.restaurantId ?: -1
             initialParamData.postValue(params)
-            searchedCookingSlotId = params.cookingSlot?.id
+            if(params.isFromSearch){
+                searchedCookingSlotId = params.cookingSlot?.id
+            }
             initRestaurantFullData(params.restaurantId, query = params.query)
         }
     }
@@ -97,7 +100,7 @@ class RestaurantPageViewModel(
                         }
                     }
                 } else if (result.type == SERVER_ERROR) {
-                    dishListLiveData.postValue(DishListData(emptyList()))
+                    networkErrorEvent.postRawValue(true)
                 }
             }
         }

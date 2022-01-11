@@ -7,8 +7,8 @@ import com.bupp.wood_spoon_eaters.network.result_handler.ResultHandler
 import com.bupp.wood_spoon_eaters.network.result_handler.ResultManager
 
 interface OrderRepositoryInterface{
-    suspend fun getFullDish(menuItemId: Long, feedRequest: FeedRequest): ResultHandler<ServerResponse<FullDish>>
-    suspend fun getFullDishNew(menuItemId: Long): ResultHandler<ServerResponse<FullDish>>
+    suspend fun getFullDishByDish(dishId: Long, feedRequest: FeedRequest? = null): ResultHandler<ServerResponse<FullDish>>
+    suspend fun getFullDishByMenuItem(menuItemId: Long, feedRequest: FeedRequest? = null): ResultHandler<ServerResponse<FullDish>>
     suspend fun postOrder(orderRequest: OrderRequest): ResultHandler<ServerResponse<Order>>
     suspend fun updateOrder(orderId: Long, orderRequest: OrderRequest): ResultHandler<ServerResponse<Order>>
     suspend fun checkoutOrder(orderId: Long, paymentMethodId: String?): ResultHandler<ServerResponse<Any>>
@@ -23,18 +23,23 @@ interface OrderRepositoryInterface{
 }
 
 class OrderRepositoryImpl(private val service: ApiService, private val resultManager: ResultManager) : OrderRepositoryInterface {
-    override suspend fun getFullDish(menuItemId: Long, feedRequest: FeedRequest): ResultHandler<ServerResponse<FullDish>> {
+    override suspend fun getFullDishByDish(dishId: Long, feedRequest: FeedRequest?): ResultHandler<ServerResponse<FullDish>> {
         return resultManager.safeApiCall { service.getSingleDish(
-            menuItemId = menuItemId,
-            lat = feedRequest.lat,
-            lng = feedRequest.lng,
-            addressId = feedRequest.addressId,
-            timestamp = feedRequest.timestamp
+            dishId = dishId,
+            lat = feedRequest?.lat,
+            lng = feedRequest?.lng,
+            addressId = feedRequest?.addressId,
+            timestamp = feedRequest?.timestamp
         ) }
     }
-    override suspend fun getFullDishNew(menuItemId: Long): ResultHandler<ServerResponse<FullDish>> {
-        return resultManager.safeApiCall { service.getSingleDish(
+
+    override suspend fun getFullDishByMenuItem(menuItemId: Long, feedRequest: FeedRequest?): ResultHandler<ServerResponse<FullDish>> {
+        return resultManager.safeApiCall { service.getSingleMenuItem(
             menuItemId = menuItemId,
+            lat = feedRequest?.lat,
+            lng = feedRequest?.lng,
+            addressId = feedRequest?.addressId,
+            timestamp = feedRequest?.timestamp
         ) }
     }
     override suspend fun postOrder(orderRequest: OrderRequest): ResultHandler<ServerResponse<Order>> {

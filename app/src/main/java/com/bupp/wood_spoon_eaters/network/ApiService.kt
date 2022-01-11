@@ -87,6 +87,7 @@ interface ApiService {
     suspend fun validateReferralToken(@Field("referral_token") token: String): ServerResponse<Any>
 
     /** Restaurant **/
+    @VERSION("v3")
     @GET("cooks/{cook_id}")
     suspend fun getRestaurant(
         @Path(value = "cook_id", encoded = true) restaurantId: Long,
@@ -147,8 +148,18 @@ interface ApiService {
     //New Order calls
 
     @VERSION("v3")
-    @GET("menu_items/{menu_item_id}/dish")
+    @GET("dishes/{dish_id}")
     suspend fun getSingleDish(
+        @Path(value = "dish_id", encoded = true) dishId: Long,
+        @Query("lat") lat: Double? = null,
+        @Query("lng") lng: Double? = null,
+        @Query("address_id") addressId: Long? = null,
+        @Query("timestamp") timestamp: String? = null
+    ): ServerResponse<FullDish>
+
+    @VERSION("v3")
+    @GET("menu_items/{menu_item_id}/dish")
+    suspend fun getSingleMenuItem(
         @Path(value = "menu_item_id", encoded = true) menuItemId: Long,
         @Query("lat") lat: Double? = null,
         @Query("lng") lng: Double? = null,

@@ -39,7 +39,6 @@ class SearchFragment : Fragment(R.layout.fragment_search), FeedMainAdapter.FeedM
 
         initUi()
         initObservers()
-
     }
 
     private fun initUi() {
@@ -126,6 +125,7 @@ class SearchFragment : Fragment(R.layout.fragment_search), FeedMainAdapter.FeedM
     override fun onRestaurantClick(restaurantInitParams: RestaurantInitParams) {
         val query = binding!!.searchFragInput.text.toString()
         restaurantInitParams.query = query
+        restaurantInitParams.isFromSearch = true
         mainViewModel.startRestaurantActivity(restaurantInitParams)
         viewModel.logRestaurantClick(restaurantInitParams)
     }

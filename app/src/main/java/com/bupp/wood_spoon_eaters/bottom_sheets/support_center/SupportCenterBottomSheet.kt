@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.bottom_sheets.abs.FullScreenBottomSheetBase
+import com.bupp.wood_spoon_eaters.bottom_sheets.abs.TopCorneredBottomSheet
 import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.common.FlowEventsManager
 import com.bupp.wood_spoon_eaters.custom_views.HeaderView
@@ -22,7 +23,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class SupportCenterBottomSheet: FullScreenBottomSheetBase(), WSCounterEditText.WSCounterListener, HeaderView.HeaderViewListener {
+class SupportCenterBottomSheet: TopCorneredBottomSheet(), WSCounterEditText.WSCounterListener, HeaderView.HeaderViewListener {
 
     private var binding: SupportCenterBottomSheetBinding? = null
     private val viewModel: SupportViewModel by viewModel()
@@ -34,19 +35,11 @@ class SupportCenterBottomSheet: FullScreenBottomSheetBase(), WSCounterEditText.W
         return view
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setStyle(DialogFragment.STYLE_NORMAL, R.style.BottomSheetStyle)
-    }
-
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setFullScreenDialog()
 
-        val parent = view.parent as View
-        parent.setBackgroundResource(R.drawable.top_cornered_bkg)
-
-//        Analytics.with(requireContext()).screen("Support center")
         viewModel.logPageEvent(FlowEventsManager.FlowEvents.PAGE_VISIT_SUPPORT_CENTER)
 
         initUI()

@@ -40,6 +40,7 @@ class AuthInterceptor(private val settings: ApiSettings) : Interceptor {
             }
         }
 
+
         return response
     }
 
@@ -66,56 +67,24 @@ class AuthInterceptor(private val settings: ApiSettings) : Interceptor {
     private fun buildVersionPath(request: Request): Request {
         Log.d(TAG, "buildVersionPath - VERSION_PLACE_HOLDER")
         val invocation = request.tag(Invocation::class.java)
-        val version = invocation?.method()?.getAnnotation(VERSION::class.java)
+        val version = invocation?.method()?.getAnnotation(VERSION::class.java)?.version
 
 
         var url = request.url.toUrl().toString()
 
         if (version != null) {
             //Annotation is present
-            url = url.replace(FlavorConfigManager.VERSION_PLACE_HOLDER, version.version)
-            Log.d(TAG, "version: ${version.version} - $url")
+            url = url.replace(FlavorConfigManager.VERSION_PLACE_HOLDER, version)
+            Log.d(TAG, "version: ${version} - $url")
         } else {
             //No annotation
             Log.d(TAG, "version: $version - v2")
             url = url.replace(FlavorConfigManager.VERSION_PLACE_HOLDER, "v2")
         }
 
-//        val finalUrl = "https://$host$path"
         Log.d(TAG, "finalUrl: $url")
-
         val finalRequest = request.newBuilder().url(url).build()
         return finalRequest
     }
-
-//    private fun refreshSessionToken(): Boolean {
-//        try {
-//
-//            val refreshToken = settings.refreshToken
-//            if (apiService != null && refreshToken != null) {
-//                var retrofitLoginResponse: retrofit2.Response<LoginResponse>? = null
-////                retrofitLoginResponse = apiService!!.refreshToken(
-////                        String.format("Bearer %s", refreshToken),
-////                        RefreshTokenRequest(refreshToken)
-////                ).execute()
-//
-//                if (retrofitLoginResponse!!.code() == 200) {
-//                    val loginResponse = retrofitLoginResponse.body()
-//                    val updatedRefreshToken = loginResponse!!.refreshToken
-//                    val updatedToken = loginResponse.token
-//                    settings.refreshToken = updatedRefreshToken
-//                    settings.token = updatedToken
-//                }
-//            }
-//            storedAuthToken = null
-//
-//        } catch (e: IOException) {
-//            e.printStackTrace()
-//            return false
-//        }
-//
-//        return true
-//    }
-
 
 }

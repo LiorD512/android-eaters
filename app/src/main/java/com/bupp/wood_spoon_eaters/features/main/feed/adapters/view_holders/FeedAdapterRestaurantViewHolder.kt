@@ -115,14 +115,8 @@ class FeedAdapterRestaurantViewHolder(
                     }
                 }
 
-                if(restaurant.availability != RestaurantAvailability.AVAILABLE) {
-                    binding.feedRestaurantItemAvailability.visibility = View.VISIBLE
-                }else{
-                    binding.feedRestaurantItemAvailability.visibility = View.INVISIBLE
-                }
-
-
-                binding.feedRestaurantItemUnavailable.isVisible = restaurant.cookingSlot?.canOrder == false
+                binding.feedRestaurantItemAvailability.isVisible = restaurant.isAvailable()
+                binding.feedRestaurantItemUnavailable.isVisible = !restaurant.isAvailable()
             }
         }
     }

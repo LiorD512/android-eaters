@@ -194,7 +194,7 @@ class SearchViewModel(
             var counter = 0
             feed?.forEach { feedAdapterItem ->
                 if (feedAdapterItem is FeedAdapterHref) {
-                    feedAdapterItem.href?.let {
+                    feedAdapterItem.full_href?.let {
                         val feedRepository = feedRepository.getFeedHref(it)
                         counter++
                         when (feedRepository.type) {

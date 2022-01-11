@@ -108,6 +108,14 @@ class OrderCheckoutActivity : BaseActivity() {
             }
     }
 
+    fun handleProgressBar(isLoading: Boolean) {
+        if (isLoading) {
+            binding.progressBar.show()
+        } else {
+            binding.progressBar.hide()
+        }
+    }
+
     fun onEditOrderClick() {
         intent.putExtra("editOrderClick", true)
         setResult(RESULT_OK, intent)

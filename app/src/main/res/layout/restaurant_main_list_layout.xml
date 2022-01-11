@@ -4,16 +4,16 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:animateLayoutChanges="true"
         android:background="@color/white"
+        android:animateLayoutChanges="true"
         android:orientation="vertical"
         android:paddingBottom="20dp">
 
     <LinearLayout
+            android:animateLayoutChanges="true"
             android:id="@+id/restaurantMainLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:animateLayoutChanges="true"
             android:orientation="vertical">
 
         <FrameLayout
@@ -113,7 +113,6 @@
                             android:layout_height="wrap_content"
                             android:layout_marginStart="15.4dp"
                             android:layout_marginTop="15dp"
-                            android:layout_marginBottom="23dp"
                             android:animateLayoutChanges="true"
                             android:background="@drawable/grey_white_cornered_rag15_rect"
                             android:orientation="horizontal"
@@ -142,39 +141,6 @@
 
                     </LinearLayout>
 
-                    <LinearLayout
-                            android:id="@+id/restaurantSearchLayout"
-                            android:layout_width="match_parent"
-                            android:layout_height="38dp"
-                            android:layout_margin="15.4dp"
-                            android:background="@drawable/rect_bkg_grey"
-                            android:gravity="center"
-                            android:orientation="horizontal">
-
-                        <EditText
-                                android:id="@+id/searchFragInput"
-                                style="@style/LatoBold13Black"
-                                android:layout_width="0dp"
-                                android:layout_height="match_parent"
-                                android:layout_weight="1"
-                                android:background="@null"
-                                android:focusable="false"
-                                android:hint="Search Israeli In The Big Apple"
-                                android:imeOptions="actionDone"
-                                android:inputType="textCapSentences"
-                                android:letterSpacing="-0.01"
-                                android:paddingStart="12.5dp"
-                                android:textColorHint="@color/very_light_grey" />
-
-                        <ImageView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:paddingHorizontal="3.8dp"
-                                android:paddingVertical="3dp"
-                                android:src="@drawable/ic_search" />
-
-                    </LinearLayout>
-
                 </LinearLayout>
 
             </LinearLayout>
@@ -184,6 +150,7 @@
         <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
+                android:layout_marginTop="23dp"
                 android:layout_marginHorizontal="17.8dp"
                 android:background="@color/grey_white" />
 
@@ -198,14 +165,14 @@
     </LinearLayout>
 
     <FrameLayout
+            android:visibility="gone"
             android:id="@+id/restaurantNoNetwork"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:visibility="invisible">
+            android:layout_height="match_parent">
 
         <include
                 android:id="@+id/restaurantNoNetworkLayout"
-                layout="@layout/feed_adapter_no_network_item" />
+                layout="@layout/feed_adapter_no_network_item"/>
 
     </FrameLayout>
 

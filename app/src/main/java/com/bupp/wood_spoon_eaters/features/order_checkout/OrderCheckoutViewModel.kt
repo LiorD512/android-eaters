@@ -10,6 +10,7 @@ import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.common.FlowEventsManager
 import com.bupp.wood_spoon_eaters.common.MTLogger
 import com.bupp.wood_spoon_eaters.di.abs.LiveEventData
+import com.bupp.wood_spoon_eaters.di.abs.ProgressData
 import com.bupp.wood_spoon_eaters.features.order_checkout.checkout.CheckoutFragmentDirections
 import com.bupp.wood_spoon_eaters.features.order_checkout.upsale_and_cart.CustomOrderItem
 import com.bupp.wood_spoon_eaters.features.restaurant.RestaurantMainViewModel
@@ -33,6 +34,7 @@ private val eventsManager: EventsManager) : ViewModel() {
 
     val navigationEvent = LiveEventData<NavigationEvent>()
     val deliveryAtChangeEvent = cartManager.getDeliveryAtChangeEvent()
+    val progressData = ProgressData()
 
     data class NavigationEvent(
         val navigationType: NavigationEventType,

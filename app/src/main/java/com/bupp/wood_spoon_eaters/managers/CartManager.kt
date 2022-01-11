@@ -304,9 +304,19 @@ class CartManager(
     /**
      * Dish Page related functions
      */
-    suspend fun getFullDish(menuItemId: Long): OrderRepository.OrderRepoResult<FullDish>? {
+    suspend fun getFullDishByMenuItem(menuItemId: Long): OrderRepository.OrderRepoResult<FullDish>? {
         Log.d("orderFlow - cartManager", "getFullDish")
-        val result = orderRepository.getFullDish(menuItemId)
+        val result = orderRepository.getFullDishByMenuItem(menuItemId)
+        if (result.type == OrderRepository.OrderRepoStatus.FULL_DISH_SUCCESS) {
+            return result
+        }
+        //inspect result log if reach here.
+        return null
+    }
+
+    suspend fun getFullDishByDish(dishId: Long): OrderRepository.OrderRepoResult<FullDish>? {
+        Log.d("orderFlow - cartManager", "getFullDish")
+        val result = orderRepository.getFullDishByDish(dishId)
         if (result.type == OrderRepository.OrderRepoStatus.FULL_DISH_SUCCESS) {
             return result
         }

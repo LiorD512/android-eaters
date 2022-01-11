@@ -40,9 +40,35 @@ class OrderRepository(val apiService: OrderRepositoryImpl, val eaterDataManager:
         WS_ERROR
     }
 
-    suspend fun getFullDish(menuItemId: Long): OrderRepoResult<FullDish> {
+    suspend fun getFullDishByMenuItem(menuItemId: Long): OrderRepoResult<FullDish> {
         val result = withContext(Dispatchers.IO) {
-            apiService.getFullDishNew(menuItemId)
+            apiService.getFullDishByMenuItem(menuItemId)
+        }
+        result.let{
+            return  when (result) {
+                is ResultHandler.NetworkError -> {
+                    MTLogger.c(TAG,"getFullDish - NetworkError")
+                    OrderRepoResult(OrderRepoStatus.SERVER_ERROR)
+                }
+                is ResultHandler.GenericError -> {
+                    MTLogger.c(TAG,"getFullDish - GenericError")
+                    OrderRepoResult(OrderRepoStatus.FULL_DISH_FAILED)
+                }
+                is ResultHandler.Success -> {
+                    MTLogger.c(TAG,"getFullDish - Success")
+                    OrderRepoResult(OrderRepoStatus.FULL_DISH_SUCCESS, result.value.data)
+                }
+                is ResultHandler.WSCustomError -> {
+                    MTLogger.c(TAG,"getFullDish - WSError")
+                    OrderRepoResult(OrderRepoStatus.WS_ERROR, wsError = result.errors)
+                }
+            }
+        }
+    }
+
+    suspend fun getFullDishByDish(menuItemId: Long): OrderRepoResult<FullDish> {
+        val result = withContext(Dispatchers.IO) {
+            apiService.getFullDishByDish(menuItemId)
         }
         result.let{
             return  when (result) {

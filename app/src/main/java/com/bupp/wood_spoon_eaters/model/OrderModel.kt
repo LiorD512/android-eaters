@@ -164,9 +164,13 @@ data class OrderItem(
     @Json(name = "notes") var notes: String?,
     @Json(name = "_destroy") var _destroy: Boolean? = null
 ): Parcelable {
-//     fun getRemovedIngredientsIds(): List<Long>{
-//         return removedIngredients.mapNotNull { it.id }
-//     }
+    fun getSingleItemPrice(): Double? {
+        price.value?.let {
+            return price.value / quantity
+        }
+        return null
+    }
+
     fun toOrderItemRequest(): OrderItemRequest{
         return OrderItemRequest(
             id = id,

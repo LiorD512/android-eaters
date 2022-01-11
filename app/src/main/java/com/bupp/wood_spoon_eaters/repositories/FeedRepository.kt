@@ -33,7 +33,6 @@ class FeedRepository(
     suspend fun getFeed(feedRequest: FeedRequest): FeedRepoResult {
         val result = withContext(Dispatchers.IO) {
             apiService.getFeed(feedRequest.lat, feedRequest.lng, feedRequest.addressId, feedRequest.timestamp)
-//            apiService.getFeed(40.845381, -73.866364, null, feedRequest.timestamp)
         }
         result.let {
             return when (result) {
@@ -61,8 +60,8 @@ class FeedRepository(
     @SuppressLint("LogNotTimber")
     suspend fun getFeedHref(href: String): FeedRepoResult {
         val result = withContext(Dispatchers.IO) {
-            val baseUrl = flavorConfigManager.getBaseUrl()
-            apiService.getHrefCollection(baseUrl + href)
+//            val baseUrl = flavorConfigManager.getBaseUrl()
+            apiService.getHrefCollection(href)
         }
         result.let {
             return when (result) {
@@ -104,7 +103,7 @@ class FeedRepository(
                 feedData.add(FeedAdapterTitle(it, localId))
                 Log.d("wowProcessFeedData", "adding title - $localId")
             }
-            feedSection.href?.let {
+            feedSection.full_href?.let {
                 localId++
                 feedData.add(FeedAdapterHref(it, localId))
                 Log.d("wowProcessFeedData", "adding href  - $localId")
@@ -165,13 +164,13 @@ class FeedRepository(
     private fun processFeedHrefData(data: List<FeedSectionCollectionItem>?, href: String): List<FeedAdapterItem> {
         val tempFeedResult = mutableListOf<FeedSection>()
         lastFeedDataResult?.sections?.forEachIndexed { index, section ->
-            section.href?.let {
+            section.full_href?.let {
                 if (it == href) {
                     Log.d("wowProcessFeedData", "handeling href - $href")
                     data?.let { data ->
                         if (data.isNotEmpty() && data[0].items!!.isNotEmpty()) {
                             Log.d("wowProcessFeedData", "update href section")
-                            section.href = null
+                            section.full_href = null
                             lastFeedDataResult?.sections!![index].collections = data.toMutableList()
                         } else {
                             Log.d("wowProcessFeedData", "href empty")
