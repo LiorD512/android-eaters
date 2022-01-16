@@ -153,34 +153,13 @@ class UpSaleNCartBottomSheet() : BottomSheetDialogFragment() {
 
     private fun refreshButtonPosition() {
         binding?.floatingCartBtnLayout?.waitForLayout {
-            val height = getScreenHeight()
-            val yPos = height - (buttonHeight).toFloat() - currentSheetView!!.y
-            binding!!.floatingCartBtnLayout.animate().y(yPos).setDuration(0).start()
-//            Log.d(TAG, "initial height: $height")
-//            Log.d(TAG, "initial currentSheetView.y: ${currentSheetView?.y}")
-//            Log.d(TAG, "initial binding.floatingCartBtnLayout.measuredHeight: ${binding.floatingCartBtnLayout.measuredHeight}")
-//            Log.d(TAG, "initial binding.floatingCartBtnLayout.y: ${binding.floatingCartBtnLayout.y}")
-//            Log.d(TAG, "initial getScreenSizeIncludingTopBottomBar: ${getScreenSizeIncludingTopBottomBar(requireContext())[1]}")
-//            Log.d(TAG, "initial getStatusBarSize(): ${getStatusBarSize()}")
-//            Log.d(TAG, "initial getBottomBarHeight: ${getBottomBarHeight()}")
+            currentSheetView?.let{ currentSheetView->
+                val height = getScreenHeight()
+                val yPos = height - (buttonHeight).toFloat() - currentSheetView.y
+                binding!!.floatingCartBtnLayout.animate().y(yPos).setDuration(0).start()
+            }
         }
     }
-
-//    fun getScreenSizeIncludingTopBottomBar(context: Context): IntArray {
-//        val screenDimensions = IntArray(2) // width[0], height[1]
-//        val x: Int
-//        val y: Int
-//        val orientation = context.resources.configuration.orientation
-//        val wm = context.getSystemService(Context.WINDOW_SERVICE) as WindowManager
-//        val display = wm.defaultDisplay
-//        val screenSize = Point()
-//        display.getRealSize(screenSize)
-//        x = screenSize.x
-//        y = screenSize.y
-//        screenDimensions[0] = if (orientation == Configuration.ORIENTATION_PORTRAIT) x else y // width
-//        screenDimensions[1] = if (orientation == Configuration.ORIENTATION_PORTRAIT) y else x // height
-//        return screenDimensions
-//    }
 
     fun getBottomBarHeight(): Int {
         val resources: Resources = requireContext().resources
