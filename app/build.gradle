@@ -8,14 +8,14 @@ apply plugin: "androidx.navigation.safeargs.kotlin"
 
 
 android {
-//    signingConfigs {
-//        signing_config {
-//            storeFile file('D:\\Monkeytech\\Keys\\WoodSpoon\\Eaters\\woodSpoonEaters.jks')
-//            storePassword 'kofkof12'
-//            keyPassword 'kofkof12'
-//            keyAlias = 'woodSpoonEaters'
-//        }
-//    }
+    signingConfigs {
+        signing_config {
+            storeFile file('C:\\Users\\Nicol\\OneDrive\\Work\\Woodspoon\\keys\\Eaters\\key.jks')
+            storePassword 'kofkof12'
+            keyPassword 'kofkof12'
+            keyAlias = 'woodSpoonEaters'
+        }
+    }
 
     compileSdkVersion rootProject.ext.compileSdkVersion
     defaultConfig {
@@ -24,9 +24,9 @@ android {
         targetSdkVersion 30
 
         applicationId "com.bupp.wood_spoon_eaters"
-        versionCode 98
-        versionName "2.3.8"
-//        signingConfig signingConfigs.debug
+        versionCode 101
+        versionName "2.4.0"
+        signingConfig signingConfigs.debug
     }
 
 

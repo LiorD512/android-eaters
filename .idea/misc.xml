@@ -187,6 +187,7 @@
         <entry key="..\:/Users/Nicol/AndroidStudioProjects/WoodSpoonEaters_Android/app/src/main/res/layout/ws_counter_edit_text.xml" value="0.25555555555555554" />
         <entry key="..\:/Users/Nicol/AndroidStudioProjects/WoodSpoonEaters_Android/app/src/main/res/layout/ws_title_value_view.xml" value="0.36875" />
         <entry key="..\:/Users/Nicol/Coding/AndroidStudioProjects/eaters/app/src/main/res/drawable/ic_icons_pagination.xml" value="0.36203703703703705" />
+        <entry key="..\:/Users/Nicol/Coding/AndroidStudioProjects/eaters/app/src/main/res/drawable/rectangle_dark_grey_cornered.xml" value="0.2682051282051282" />
         <entry key="..\:/Users/Nicol/Coding/AndroidStudioProjects/eaters/app/src/main/res/drawable/top_cornered_bkg.xml" value="0.36203703703703705" />
         <entry key="..\:/Users/Nicol/Coding/AndroidStudioProjects/eaters/app/src/main/res/drawable/vp_dark_indicator_selected.xml" value="0.36203703703703705" />
         <entry key="..\:/Users/Nicol/Coding/AndroidStudioProjects/eaters/app/src/main/res/drawable/vp_dark_indicator_unselected.xml" value="0.36203703703703705" />
@@ -194,6 +195,7 @@
         <entry key="..\:/Users/Nicol/Coding/AndroidStudioProjects/eaters/app/src/main/res/layout/cancel_order_dialog_layout.xml" value="0.36875" />
         <entry key="..\:/Users/Nicol/Coding/AndroidStudioProjects/eaters/app/src/main/res/layout/dish_main_list_layout.xml" value="0.21145833333333333" />
         <entry key="..\:/Users/Nicol/Coding/AndroidStudioProjects/eaters/app/src/main/res/layout/dish_photo_item.xml" value="0.36875" />
+        <entry key="..\:/Users/Nicol/Coding/AndroidStudioProjects/eaters/app/src/main/res/layout/error_toast.xml" value="0.25625" />
         <entry key="..\:/Users/Nicol/Coding/AndroidStudioProjects/eaters/app/src/main/res/layout/feed_adapter_big_restaurant_item.xml" value="0.36875" />
         <entry key="..\:/Users/Nicol/Coding/AndroidStudioProjects/eaters/app/src/main/res/layout/feed_adapter_coming_soon_item.xml" value="0.25" />
         <entry key="..\:/Users/Nicol/Coding/AndroidStudioProjects/eaters/app/src/main/res/layout/feed_adapter_no_network_item.xml" value="0.36875" />
@@ -202,6 +204,7 @@
         <entry key="..\:/Users/Nicol/Coding/AndroidStudioProjects/eaters/app/src/main/res/layout/fragment_feed.xml" value="0.26296296296296295" />
         <entry key="..\:/Users/Nicol/Coding/AndroidStudioProjects/eaters/app/src/main/res/layout/fragment_restaurant_page.xml" value="0.203125" />
         <entry key="..\:/Users/Nicol/Coding/AndroidStudioProjects/eaters/app/src/main/res/layout/fragment_tip.xml" value="0.36875" />
+        <entry key="..\:/Users/Nicol/Coding/AndroidStudioProjects/eaters/app/src/main/res/layout/rectangle_dark_grey_cornered.xml" value="0.2125" />
         <entry key="..\:/Users/Nicol/Coding/AndroidStudioProjects/eaters/app/src/main/res/layout/restaurant_item_dish.xml" value="0.36875" />
         <entry key="..\:/Users/Nicol/Coding/AndroidStudioProjects/eaters/app/src/main/res/layout/restaurant_main_list_layout.xml" value="0.33" />
         <entry key="..\:/Users/Nicol/Coding/AndroidStudioProjects/eaters/app/src/main/res/layout/support_center_bottom_sheet.xml" value="0.25" />

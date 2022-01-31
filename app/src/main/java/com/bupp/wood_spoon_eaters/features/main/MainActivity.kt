@@ -35,6 +35,7 @@ import com.mikhaellopez.ratebottomsheet.AskRateBottomSheet
 import com.mikhaellopez.ratebottomsheet.RateBottomSheet
 import com.mikhaellopez.ratebottomsheet.RateBottomSheetManager
 import com.stripe.android.view.PaymentMethodsActivityStarter
+import com.uxcam.UXCam
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.util.*
 
@@ -324,6 +325,7 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
                 updateLocationOnResult.launch(Intent(this, LocationAndAddressActivity::class.java))
             }
             MainViewModel.MainNavigationEvent.START_PAYMENT_METHOD_ACTIVITY -> {
+                UXCam.occludeSensitiveScreen(true)
                 PaymentMethodsActivityStarter(this).startForResult(PaymentMethodsActivityStarter.Args.Builder().build())
             }
             MainViewModel.MainNavigationEvent.INITIALIZE_STRIPE -> {
@@ -347,6 +349,7 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
         when (requestCode) {
             PaymentMethodsActivityStarter.REQUEST_CODE -> {
                 MTLogger.c(TAG, "Stripe")
+                UXCam.occludeSensitiveScreen(false)
                 val result = PaymentMethodsActivityStarter.Result.fromIntent(data)
 
                 result?.let {

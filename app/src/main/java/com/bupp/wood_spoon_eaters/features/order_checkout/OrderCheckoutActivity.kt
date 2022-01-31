@@ -18,6 +18,7 @@ import com.bupp.wood_spoon_eaters.features.main.MainActivity
 import com.bupp.wood_spoon_eaters.features.restaurant.RestaurantMainViewModel
 import com.bupp.wood_spoon_eaters.utils.showErrorToast
 import com.stripe.android.view.PaymentMethodsActivityStarter
+import com.uxcam.UXCam
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class OrderCheckoutActivity : BaseActivity() {
@@ -65,6 +66,7 @@ class OrderCheckoutActivity : BaseActivity() {
                     startAddressChooserForResult.launch(Intent(this, LocationAndAddressActivity::class.java))
                 }
                 OrderCheckoutViewModel.NavigationEventType.START_PAYMENT_METHOD_ACTIVITY -> {
+                    UXCam.occludeSensitiveScreen(true)
                     PaymentMethodsActivityStarter(this).startForResult(PaymentMethodsActivityStarter.Args.Builder().build())
                 }
                 OrderCheckoutViewModel.NavigationEventType.FINISH_CHECKOUT_ACTIVITY -> {
@@ -98,6 +100,7 @@ class OrderCheckoutActivity : BaseActivity() {
             when (requestCode) {
                 PaymentMethodsActivityStarter.REQUEST_CODE -> {
                     MTLogger.c(MainActivity.TAG, "Stripe")
+                    UXCam.occludeSensitiveScreen(false)
                     val result = PaymentMethodsActivityStarter.Result.fromIntent(data)
                     result?.let {
                         MTLogger.c(MainActivity.TAG, "payment method success")
