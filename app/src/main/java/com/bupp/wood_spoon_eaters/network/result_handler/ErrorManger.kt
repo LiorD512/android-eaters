@@ -1,10 +1,11 @@
 package com.bupp.wood_spoon_eaters.network.result_handler
 
 import android.util.Log
+import com.bupp.wood_spoon_eaters.managers.EventsManager
 
-class ErrorManger {
+class ErrorManger(private val eventsManager : EventsManager) {
 
-    fun onError(){
-        Log.d("ErrorManger", "This is an error")
+    fun onError(origin: String, errorMsg: String){
+        eventsManager.logErrorToFirebase(origin, errorMsg)
     }
 }

@@ -8,25 +8,23 @@ apply plugin: "androidx.navigation.safeargs.kotlin"
 
 
 android {
-//    signingConfigs {
-//        signing_config {
-//            storeFile file('D:\\Monkeytech\\Keys\\WoodSpoon\\Eaters\\woodSpoonEaters.jks')
-//            storePassword 'kofkof12'
-//            keyPassword 'kofkof12'
-//            keyAlias = 'woodSpoonEaters'
-//        }
-//    }
+    signingConfigs {
+        signing_config {
+            storeFile file('D:\\Monkeytech\\Keys\\WoodSpoon\\Eaters\\woodSpoonEaters.jks')
+            storePassword 'kofkof12'
+            keyPassword 'kofkof12'
+            keyAlias = 'woodSpoonEaters'
+        }
+    }
 
     compileSdkVersion rootProject.ext.compileSdkVersion
     defaultConfig {
         minSdkVersion 26
-
         targetSdkVersion 30
-
         applicationId "com.bupp.wood_spoon_eaters"
-        versionCode 99
-        versionName "2.3.9"
-//        signingConfig signingConfigs.debug
+        versionCode 102
+        versionName "2.4.1"
+        signingConfig signingConfigs.debug
     }
 
 
@@ -35,8 +33,12 @@ android {
             debuggable true
             manifestPlaceholders["isTestMode"] = "true"
 
-            buildConfigField "String", "BASE_URL", '"https://api.eatwoodspoon-staging.com/api/VERSION/"'
+            buildConfigField "String", "BASE_URL", '"https://api.staging.eatwoodspoon.com/api/VERSION/"'
             buildConfigField "String", "DEFAULT_TOKEN", '"37fb7781d13515de191c3d4749118705311b71c4a539d593"'
+
+            buildConfigField "String", "TAG", '"HomeEaters_Staging"'
+            buildConfigField "String", "SHIPBOOK_APP_ID", '"620bc0e8244a8956dfc02096"'
+            buildConfigField "String", "SHIPBOOK_APP_KEY", '"ed8fdb9f6cc94159fb1afe3a6140315b"'
 
             applicationIdSuffix = ".staging"
         }
@@ -49,6 +51,10 @@ android {
 
             buildConfigField "String", "BASE_URL", '"https://woodspoon-production.herokuapp.com/api/VERSION/"'
             buildConfigField "String", "DEFAULT_TOKEN", '"9fa2df5e19ca2c5452f1a8361d463ac2c4297ad35bc5cdfd"'
+
+            buildConfigField "String", "TAG", '"HomeEaters_Production"'
+            buildConfigField "String", "SHIPBOOK_APP_ID", '"620bc0e04bdba41a60f3540c"'
+            buildConfigField "String", "SHIPBOOK_APP_KEY", '"3a270a6df019054845206ae471c89461"'
         }
         create("benchmark") {
             initWith(getByName("release"))
@@ -211,12 +217,16 @@ dependencies {
     implementation 'com.google.firebase:firebase-analytics:20.0.0'
     implementation 'com.google.firebase:firebase-messaging:23.0.0'
     implementation 'com.google.firebase:firebase-crashlytics:18.2.4'
+    implementation platform('com.google.firebase:firebase-bom:26.3.0')
+    implementation 'com.google.firebase:firebase-messaging-ktx'
+    implementation 'com.google.firebase:firebase-analytics-ktx'
 
     //skeleton
     implementation 'com.facebook.shimmer:shimmer:0.5.0'
 
-    //http profiler
-    implementation 'com.localebro:okhttpprofiler:1.0.8'
+    //ship book
+    implementation 'io.shipbook:shipbooksdk:1.+'
+
 }
 
 apply plugin: 'com.google.gms.google-services'

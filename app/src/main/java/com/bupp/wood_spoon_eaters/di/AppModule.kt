@@ -53,7 +53,7 @@ val appModule = module {
     single { FcmManager(get()) }
     single { UserSettings(get(), get()) }
     single { FlowEventsManager(get(), get()) }
-    single { ErrorManger()}
+    single { ErrorManger(get())}
     single { ResultManager(get()) }
 
     //repos

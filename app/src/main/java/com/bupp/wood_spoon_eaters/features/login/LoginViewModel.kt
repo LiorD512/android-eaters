@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.common.FlowEventsManager
+import com.bupp.wood_spoon_eaters.common.MTLogger
 import com.bupp.wood_spoon_eaters.di.abs.LiveEventData
 import com.bupp.wood_spoon_eaters.di.abs.ProgressData
 import com.bupp.wood_spoon_eaters.fcm.FcmManager
@@ -136,6 +137,7 @@ class LoginViewModel(
         if (validatePhoneData()) {
             progressData.startProgress()
             viewModelScope.launch {
+                MTLogger.d("user resending code to phone:${phonePrefix + phone}}")
                 val userRepoResult = userRepository.sendPhoneVerification(phonePrefix!!+phone!!)
                 when (userRepoResult.type) {
                     UserRepository.UserRepoStatus.SERVER_ERROR -> {
@@ -167,6 +169,7 @@ class LoginViewModel(
             phone?.let { phone ->
                 progressData.startProgress()
                 viewModelScope.launch {
+                    MTLogger.d("user sending code: phone:${phonePrefix + phone}, code:${code}")
                     val userRepoResult = userRepository.sendCodeAndPhoneVerification(phonePrefix!!+phone, code!!)
                     when (userRepoResult.type) {
                         UserRepository.UserRepoStatus.SERVER_ERROR -> {

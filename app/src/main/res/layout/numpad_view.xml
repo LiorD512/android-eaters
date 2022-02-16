@@ -355,10 +355,10 @@
                 <!--android:tint="@color/black"-->
                 <!--android:src="@drawable/ic_close"-->
                 <ImageView
-                        android:src="@drawable/icons_keyboard_delete"
                         android:id="@+id/numPadBtnDeleteBtn"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"/>
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/icons_keyboard_delete" />
 
                 <LinearLayout
                         android:layout_height="0dp"

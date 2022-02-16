@@ -30,8 +30,6 @@ class SplashActivity : AppCompatActivity(), UpdateRequiredDialog.UpdateRequiredD
 
         binding = ActivitySplashBinding.inflate(layoutInflater)
         setContentView(binding.root)
-//        android.os.Debug.waitForDebugger()
-//        setContentView(R.layout.activity_splash)
 
         FirebaseAnalytics.getInstance(this)
 
@@ -65,7 +63,7 @@ class SplashActivity : AppCompatActivity(), UpdateRequiredDialog.UpdateRequiredD
                     }
                 }
             }
-            
+
         })
 
         viewModel.errorEvent.observe(this, {

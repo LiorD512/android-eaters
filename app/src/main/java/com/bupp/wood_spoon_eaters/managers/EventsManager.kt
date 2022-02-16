@@ -3,6 +3,7 @@ package com.bupp.wood_spoon_eaters.managers
 import android.content.Context
 import android.os.Bundle
 import android.util.Log
+import com.bupp.wood_spoon_eaters.BuildConfig
 import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.common.FlowEventsManager
 import com.bupp.wood_spoon_eaters.model.Address
@@ -10,6 +11,9 @@ import com.bupp.wood_spoon_eaters.model.Eater
 import com.bupp.wood_spoon_eaters.utils.DateUtils
 import com.facebook.appevents.AppEventsConstants
 import com.facebook.appevents.AppEventsLogger
+import com.google.firebase.analytics.FirebaseAnalytics
+import com.google.firebase.analytics.ktx.analytics
+import com.google.firebase.ktx.Firebase
 import com.segment.analytics.Analytics
 import com.segment.analytics.Properties
 import com.segment.analytics.Traits
@@ -17,13 +21,14 @@ import com.uxcam.UXCam
 import java.math.BigDecimal
 import java.util.*
 
-class EventsManager(val context: Context){
+class EventsManager(val context: Context) {
 
     private var currentUserId: String? = null
     private val shouldFireEvent = true//FlavorClassThing.equals("release", true)
+    private var firebaseAnalytics: FirebaseAnalytics = Firebase.analytics
 
-    fun initSegment(eater: Eater?, address: Address?){
-        eater?.let{ user ->
+    fun initSegment(eater: Eater?, address: Address?) {
+        eater?.let { user ->
 
             this.currentUserId = user.id.toString()
             Analytics.with(context).identify(
@@ -31,18 +36,17 @@ class EventsManager(val context: Context){
                     .putName(user.getFullName())
                     .putEmail(user.email)
                     .putPhone(user.phoneNumber)
-                    .putValue("shipped Order Count", user.ordersCount)
-                , null
+                    .putValue("shipped Order Count", user.ordersCount), null
             )
 
             UXCam.setUserIdentity(user.id.toString())
             UXCam.setUserProperty("email", user.email ?: "N/A")
             UXCam.setUserProperty("name", user.getFullName() ?: "N/A")
-            UXCam.setUserProperty("phone",user.phoneNumber ?: "N/A")
+            UXCam.setUserProperty("phone", user.phoneNumber ?: "N/A")
             UXCam.setUserProperty("created_at", DateUtils.parseDateToDate(user.createdAt))
 
 //            Log.d(TAG, "address: $address")
-            address?.let{
+            address?.let {
                 Analytics.with(context).identify(
                     user.id.toString(), Traits()
                         .putAddress(
@@ -60,15 +64,15 @@ class EventsManager(val context: Context){
 
 
     fun sendPurchaseEvent(orderId: Long?, purchaseCost: Double) {
-        if(shouldFireEvent){
-            orderId?.let{
+        if (shouldFireEvent) {
+            orderId?.let {
                 sendFirstPurchaseEvent(it, purchaseCost)
             }
         }
     }
 
     private fun sendFirstPurchaseEvent(orderId: Long?, purchaseCost: Double) {
-        if(shouldFireEvent) {
+        if (shouldFireEvent) {
             Log.d(TAG, "sendFirstPurchaseEvent")
             val logger = AppEventsLogger.newLogger(context)
             val params = Bundle()
@@ -78,12 +82,12 @@ class EventsManager(val context: Context){
     }
 
     private fun logFBAddToCart(eventData: Map<String, Any>?) {
-        if(shouldFireEvent) {
+        if (shouldFireEvent) {
             Log.d(TAG, "logFBAddToCart")
             val logger = AppEventsLogger.newLogger(context)
             val params = Bundle()
 
-            val formattedPrice = (eventData?.get("dish_price") as String).replace("$","")
+            val formattedPrice = (eventData?.get("dish_price") as String).replace("$", "")
 
             params.putString(AppEventsConstants.EVENT_PARAM_CONTENT, eventData.get("dish_name") as String?)
             params.putString(AppEventsConstants.EVENT_PARAM_CONTENT_TYPE, "Dish")
@@ -94,12 +98,12 @@ class EventsManager(val context: Context){
     }
 
     private fun logFBAddAdditionalToCart(eventData: Map<String, Any>?) {
-        if(shouldFireEvent) {
+        if (shouldFireEvent) {
             Log.d(TAG, "logFBAddAdditionalToCart")
             val logger = AppEventsLogger.newLogger(context)
             val params = Bundle()
 
-            val formattedPrice = (eventData?.get("dish_price") as String).replace("$","")
+            val formattedPrice = (eventData?.get("dish_price") as String).replace("$", "")
 
             params.putString(AppEventsConstants.EVENT_PARAM_CONTENT, eventData.get("dish_name") as String?)
             params.putString(AppEventsConstants.EVENT_PARAM_CONTENT_TYPE, "Dish-Upsale")
@@ -110,7 +114,7 @@ class EventsManager(val context: Context){
     }
 
     private fun logFBCreateAccount(eventData: Map<String, Any>?) {
-        if(shouldFireEvent) {
+        if (shouldFireEvent) {
             Log.d(TAG, "logFBAddAdditionalToCart")
             val logger = AppEventsLogger.newLogger(context)
             val params = Bundle()
@@ -121,7 +125,7 @@ class EventsManager(val context: Context){
     }
 
     fun logOnRestaurantClickEvent(eventData: Map<String, Any>?) {
-        if(shouldFireEvent) {
+        if (shouldFireEvent) {
             Log.d(TAG, "logFBOnRestaurantClickEvent")
             val logger = AppEventsLogger.newLogger(context)
             val params = Bundle()
@@ -135,12 +139,12 @@ class EventsManager(val context: Context){
     }
 
     private fun logOnDishClickEvent(eventData: Map<String, Any>?) {
-        if(shouldFireEvent) {
+        if (shouldFireEvent) {
             Log.d(TAG, "logOnDishClickEvent")
             val logger = AppEventsLogger.newLogger(context)
             val params = Bundle()
 
-            val formattedPrice = (eventData?.get("dish_price") as String).replace("$","")
+            val formattedPrice = (eventData?.get("dish_price") as String).replace("$", "")
 
             params.putString(AppEventsConstants.EVENT_PARAM_CONTENT, eventData["dish_name"] as String?)
             params.putString(AppEventsConstants.EVENT_PARAM_CONTENT_TYPE, "dISH")
@@ -150,21 +154,21 @@ class EventsManager(val context: Context){
         }
     }
 
-    fun logEvent(eventName: String, params: Map<String, Any>? = null){
+    fun logEvent(eventName: String, params: Map<String, Any>? = null) {
         Log.d(TAG, "logEvent: $eventName PARAMS: $params")
-        if(params != null ){
+        if (params != null) {
             UXCam.logEvent(eventName, params)
-        }else{
+        } else {
             UXCam.logEvent(eventName)
         }
 
         val eventData = Properties()
         eventData.putValue("user_id", currentUserId)
 
-        params?.forEach{
+        params?.forEach {
             eventData.putValue(it.key, it.value)
         }
-        when(eventName){
+        when (eventName) {
 //            Constants.EVENT_ADD_ADDITIONAL_DISH -> {
 //                Analytics.with(context).track(Constants.EVENT_ADD_ADDITIONAL_DISH, eventData)
 //                logFBAddAdditionalToCart(params)
@@ -193,7 +197,7 @@ class EventsManager(val context: Context){
 
     fun onFlowEventFired(curEvent: FlowEventsManager.FlowEvents) {
         Log.d(TAG, "onFlowEventFired: ${curEvent.name}")
-        when(curEvent){
+        when (curEvent) {
             FlowEventsManager.FlowEvents.PAGE_VISIT_ON_BOARDING -> {
                 Analytics.with(context).screen("onboarding")
             }
@@ -257,7 +261,22 @@ class EventsManager(val context: Context){
         }
     }
 
-    companion object{
+
+    fun logErrorToFirebase(eventName: String, errorMsg: String) {
+        val bundle = Bundle()
+        bundle.putString("func_$eventName", errorMsg)
+        logToFirebase(bundle)
+    }
+
+    private fun logToFirebase(bundle: Bundle) {
+        if (BuildConfig.DEBUG) {
+            firebaseAnalytics.logEvent("Error_Staging", bundle)
+        } else {
+            firebaseAnalytics.logEvent("Error_Prod", bundle)
+        }
+    }
+
+    companion object {
         const val TAG = "wowEventsManager"
 
 

@@ -20,7 +20,6 @@ class ResultManager(private val errorManager: ErrorManger) {
             try {
                 ResultHandler.Success(apiCall.invoke())
             } catch (throwable: Throwable) {
-                errorManager.onError()
                 when (throwable) {
                     is IOException -> {
                         val errorMessage = throwable.message
@@ -48,17 +47,23 @@ class ResultManager(private val errorManager: ErrorManger) {
                             }
                             else -> {
                                 val errorResponse = convertErrorBody(throwable)
+                                errorManager.onError(getCallingFunctionName(apiCall), throwable.localizedMessage?:"")
                                 ResultHandler.GenericError(code, errorResponse)
                             }
                         }
                     }
                     else -> {
                         Log.d("safeApiCall", "safeApiCall serverResponse: ${throwable.message}")
+                        errorManager.onError(getCallingFunctionName(apiCall), throwable.localizedMessage?:"")
                         ResultHandler.GenericError(null, null)
                     }
                 }
             }
         }
+    }
+
+    private fun <T>getCallingFunctionName(apiCall: suspend () -> T): String {
+        return apiCall.javaClass.enclosingMethod?.name ?: ""
     }
 
     private fun convertErrorBody(throwable: HttpException): String {

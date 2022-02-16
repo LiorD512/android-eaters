@@ -14,6 +14,7 @@ import com.segment.analytics.android.integrations.appsflyer.AppsflyerIntegration
 import com.segment.analytics.android.integrations.mixpanel.MixpanelIntegration
 import com.uxcam.UXCam
 import io.branch.referral.Branch
+import io.shipbook.shipbooksdk.ShipBook
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin
@@ -35,6 +36,8 @@ class WoodSpoonApplication : Application() {
             androidContext(this@WoodSpoonApplication)
             koin.loadModules(listOf(appModule, networkModule))
         }
+
+        initShipBook()
 
         FacebookSdk.setIsDebugEnabled(true)
         FacebookSdk.addLoggingBehavior(LoggingBehavior.APP_EVENTS)
@@ -66,7 +69,12 @@ class WoodSpoonApplication : Application() {
         MTLogger.Builder()
             .showLinks(true)
             .autoTag(true)
-            .tagPrefix("wow")
+            .tagPrefix("MTL")
             .build()
+    }
+
+    private fun initShipBook() {
+        ShipBook.start(this, BuildConfig.SHIPBOOK_APP_ID, BuildConfig.SHIPBOOK_APP_KEY)
+        ShipBook.addWrapperClass(MTLogger::class.java.name)
     }
 }

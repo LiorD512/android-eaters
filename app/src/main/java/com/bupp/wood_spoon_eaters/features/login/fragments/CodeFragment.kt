@@ -9,6 +9,7 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.common.FlowEventsManager
+import com.bupp.wood_spoon_eaters.common.MTLogger
 import com.bupp.wood_spoon_eaters.custom_views.simpler_views.SimpleTextWatcher
 import com.bupp.wood_spoon_eaters.databinding.FragmentCodeBinding
 import com.bupp.wood_spoon_eaters.databinding.FragmentDishPageBinding
@@ -110,10 +111,12 @@ class CodeFragment : Fragment(R.layout.fragment_code) {
     }
 
     private fun resendCode() {
+        MTLogger.d("on resend code click")
         viewModel.resendCode()
     }
 
     private fun sendCode() {
+        MTLogger.d("on send code click")
         viewModel.sendPhoneAndCodeNumber(requireContext())
     }
 

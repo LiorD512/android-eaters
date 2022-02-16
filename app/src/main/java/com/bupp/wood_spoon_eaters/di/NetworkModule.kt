@@ -1,26 +1,21 @@
 package com.bupp.wood_spoon_eaters.di
 
-//import com.bupp.wood_spoon_eaters.network.google.client.GoogleRetrofitFactory
-//import com.bupp.wood_spoon_eaters.network.google.interfaces.GoogleApi
 import `in`.co.ophio.secure.core.KeyStoreKeyGenerator
 import `in`.co.ophio.secure.core.ObscuredPreferencesBuilder
 import android.app.Application
 import android.content.Context
 import android.content.SharedPreferences
-import com.bupp.wood_spoon_eaters.BuildConfig
 import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.common.FlavorConfigManager
-import com.bupp.wood_spoon_eaters.di.abs.*
 import com.bupp.wood_spoon_eaters.di.abs.AppSettingAdapter
-//import com.bupp.wood_spoon_eaters.di.abs.FeedRestaurantItemAdapter
 import com.bupp.wood_spoon_eaters.di.abs.SerializeNulls.Companion.JSON_ADAPTER_FACTORY
+import com.bupp.wood_spoon_eaters.di.abs.UriAdapter
 import com.bupp.wood_spoon_eaters.model.*
 import com.bupp.wood_spoon_eaters.network.ApiService
 import com.bupp.wood_spoon_eaters.network.ApiSettings
 import com.bupp.wood_spoon_eaters.network.AuthInterceptor
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
-import com.localebro.okhttpprofiler.OkHttpProfilerInterceptor
-import com.squareup.moshi.*
+import com.squareup.moshi.Moshi
 import com.squareup.moshi.adapters.PolymorphicJsonAdapterFactory
 import com.squareup.moshi.adapters.Rfc3339DateJsonAdapter
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
@@ -69,9 +64,6 @@ fun provideDefaultOkhttpClient(apiSettings: ApiSettings): OkHttpClient {
 
     val httpClient = OkHttpClient.Builder().addInterceptor(logging).addInterceptor(authInterceptor)
 
-    if(BuildConfig.DEBUG){
-        httpClient.addInterceptor(OkHttpProfilerInterceptor())
-    }
     return httpClient.build()
 }
 
