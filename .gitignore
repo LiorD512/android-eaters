@@ -13,3 +13,4 @@
 /captures
 .externalNativeBuild
 app/prodFlavor/release/app.aab
+*.jks
