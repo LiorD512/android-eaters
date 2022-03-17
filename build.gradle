@@ -1,11 +1,3 @@
-
-
-ext {
-    var = 'kofkof12'
-    var1 = 'woodSpoonEaters'
-}
-
-
 buildscript {
     ext.kotlin_version = '1.5.30'
     apply from: "versions.gradle"
@@ -22,7 +14,6 @@ buildscript {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     }
 }
-
 
 allprojects {
     repositories {
