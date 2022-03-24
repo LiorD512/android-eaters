@@ -1,5 +1,4 @@
 <resources>
-    <string name="app_name">WoodSpoon</string>
     <string name="ux_cam_app_key">cpv4jp007ywix6x</string>
     <string name="segment_jey">ArTgdJ2yAsbjtEuQL4PYyeLDOHJ6k4xg</string>
     <string name="apps_flayer_key">pdDuzVhDY8UpBHir8tgvKc</string>
@@ -9,10 +8,6 @@
     <string name="facebook_app_id">795355207569753</string>
     <string name="fb_login_protocol_scheme">fb795355207569753</string>
     <string name="split_api_key">bj48b15galmv6j5mf6s7ckc2jqepqg53ghg3</string>
-
-    <!--    <string name="app_name">Staging-WoodSpoonEater</string>-->
-
-
     <string name="tool_tip_service_fee_title">Service fee</string>
     <string name="tool_tip_service_fee_body">
         <![CDATA[The service fee goes toward helping us pay couriers, provide quality customer support & logistics, process payments, and other costs associated with running our service.]]></string>
@@ -160,6 +155,4 @@
     <string name="rate_order_done_body">Your rating has been submitted!</string>
     <string name="campaign_full_details_title">Terms of use</string>
     <string name="by_dishes_restaurants_chefs_or_dietary">By dishes, restaurants, chefs or dietary</string>
-
-
 </resources>
