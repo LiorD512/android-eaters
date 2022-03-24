@@ -32,48 +32,17 @@
             tools:replace="supportsRtl, fullBackupContent, allowBackup">
         <activity
                 android:name=".features.track_your_order.TrackYourOrderActivity"
+                android:exported="true"
                 android:screenOrientation="portrait"
-                tools:ignore="LockedOrientationActivity"
-                android:exported="true" />
+                tools:ignore="LockedOrientationActivity" />
         <activity
                 android:name=".features.order_checkout.OrderCheckoutActivity"
                 android:exported="true"
                 android:screenOrientation="portrait"
-                tools:ignore="LockedOrientationActivity" /> <!-- <activity android:name=".delete_me.TestActivity" -->
-        <!-- android:screenOrientation="portrait" -->
-        <!-- android:windowSoftInputMode="adjustResize"> -->
-        <!-- <intent-filter> -->
-        <!-- <action android:name="android.intent.action.MAIN" /> -->
-        <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
-        <!-- </intent-filter> -->
-        <!-- </activity> -->
+                tools:ignore="LockedOrientationActivity" />
 
-
-        <activity android:name=".features.reviews.review_activity.ReviewActivity">
-
-        </activity>
-<!--        <activity-->
-<!--                android:name=".delete_me.TestActivity"-->
-<!--                android:screenOrientation="portrait"-->
-<!--                android:windowSoftInputMode="adjustResize">-->
-        <!--            <intent-filter>-->
-        <!--                <action android:name="android.intent.action.MAIN" />-->
-        <!--                <category android:name="android.intent.category.LAUNCHER" />-->
-        <!--            </intent-filter>-->
-<!--        </activity>-->
-
-        <meta-data
-                android:name="com.google.android.geo.API_KEY"
-                android:value="AIzaSyCowuTI2_0q8rpGYlqueBX6nbk2kSjjitU" />
-        <meta-data
-                android:name="com.appsee.ApiKey"
-                android:value="@string/appsee_api_key" />
-        <meta-data
-                android:name="com.facebook.sdk.ApplicationId"
-                android:value="@string/facebook_app_id" />
-        <meta-data
-                android:name="com.facebook.sdk.AutoLogAppEventsEnabled"
-                android:value="true" />
+        <activity android:name=".features.reviews.review_activity.ReviewActivity"
+                android:exported="false"/>
 
         <service
                 android:name=".fcm.MyFirebaseMessagingService"
@@ -83,26 +52,11 @@
             </intent-filter>
         </service>
 
-        <meta-data
-                android:name="com.google.firebase.messaging.default_notification_icon"
-                android:resource="@mipmap/ic_launcher_round" />
-        <meta-data
-                android:name="com.google.firebase.messaging.default_notification_color"
-                android:resource="@color/colorAccent" />
-        <meta-data
-                android:name="com.google.firebase.messaging.default_notification_channel_id"
-                android:value="@string/default_notification_channel_id" />
-
         <activity
-                android:exported="true"
                 android:name=".features.locations_and_address.LocationAndAddressActivity"
+                android:exported="true"
                 android:screenOrientation="portrait"
-                tools:ignore="LockedOrientationActivity" /> <!-- <activity -->
-        <!-- android:name=".features.new_order.NewOrderActivity" -->
-        <!-- android:label="@string/title_activity_new_order" -->
-        <!-- android:screenOrientation="portrait" -->
-        <!-- android:theme="@style/AppTheme.NoActionBar" -->
-        <!-- android:windowSoftInputMode="adjustResize" /> -->
+                tools:ignore="LockedOrientationActivity" />
         <activity
                 android:name=".features.splash.SplashActivity"
                 android:exported="true"
@@ -151,19 +105,10 @@
                         android:host="woodspoon-alternate.app.link"
                         android:scheme="https" />
             </intent-filter>
-        </activity> <!-- Branch init -->
-        <meta-data
-                android:name="io.branch.sdk.BranchKey"
-                android:value="key_live_jgQUKCloy5j6un5oqeJJ3bcavsdX7wYj" />
-        <meta-data
-                android:name="io.branch.sdk.BranchKey.test"
-                android:value="key_test_caHOMCbetYp9Eh0jucUXgejbBsj45D9u" />
-        <meta-data
-                android:name="io.branch.sdk.TestMode"
-                android:value="${isTestMode}" /> <!-- Set to true to use Branch_Test_Key (useful when simulating installs and/or switching between debug and production flavors) -->
+        </activity>
         <activity
-                android:exported="true"
                 android:name=".features.login.LoginActivity"
+                android:exported="true"
                 android:screenOrientation="portrait"
                 android:windowSoftInputMode="adjustResize"
                 tools:ignore="LockedOrientationActivity" />
@@ -187,8 +132,8 @@
             </intent-filter>
         </activity>
         <activity
-                android:exported="true"
                 android:name=".features.restaurant.RestaurantActivity"
+                android:exported="true"
                 android:screenOrientation="portrait"
                 android:windowSoftInputMode="adjustPan"
                 tools:ignore="LockedOrientationActivity" />
@@ -206,6 +151,38 @@
         <profileable
                 android:shell="true"
                 tools:targetApi="q" />
+
+        <meta-data
+                android:name="com.google.android.geo.API_KEY"
+                android:value="AIzaSyCowuTI2_0q8rpGYlqueBX6nbk2kSjjitU" />
+        <meta-data
+                android:name="com.appsee.ApiKey"
+                android:value="@string/appsee_api_key" />
+        <meta-data
+                android:name="com.facebook.sdk.ApplicationId"
+                android:value="@string/facebook_app_id" />
+        <meta-data
+                android:name="com.facebook.sdk.AutoLogAppEventsEnabled"
+                android:value="true" />
+        <meta-data
+                android:name="com.google.firebase.messaging.default_notification_icon"
+                android:resource="@mipmap/ic_launcher_round" />
+        <meta-data
+                android:name="com.google.firebase.messaging.default_notification_color"
+                android:resource="@color/colorAccent" />
+        <meta-data
+                android:name="com.google.firebase.messaging.default_notification_channel_id"
+                android:value="@string/default_notification_channel_id" />
+        <meta-data
+                android:name="io.branch.sdk.BranchKey"
+                android:value="key_live_jgQUKCloy5j6un5oqeJJ3bcavsdX7wYj" />
+        <meta-data
+                android:name="io.branch.sdk.BranchKey.test"
+                android:value="key_test_caHOMCbetYp9Eh0jucUXgejbBsj45D9u" />
+        <meta-data
+                android:name="io.branch.sdk.TestMode"
+                android:value="${isTestMode}" /> <!-- Set to true to use Branch_Test_Key (useful when simulating installs and/or switching between debug and production flavors) -->
+
     </application>
 
 </manifest>

@@ -6,13 +6,17 @@ apply plugin: 'com.google.gms.google-services'
 apply plugin: 'com.google.firebase.crashlytics'
 apply plugin: "androidx.navigation.safeargs.kotlin"
 
+def keystorePropertiesFile = rootProject.file("keystore.properties")
+def keystoreProperties = new Properties()
+keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+
 android {
     signingConfigs {
-        signing_config {
-            storeFile file('woodSpoonEaters.jks')
-            storePassword 'kofkof12'
-            keyPassword 'kofkof12'
-            keyAlias = 'woodSpoonEaters'
+        release {
+            keyAlias keystoreProperties['releaseKeyAlias']
+            keyPassword keystoreProperties['releaseKeyPassword']
+            storeFile file(keystoreProperties['releaseKeyStore'])
+            storePassword keystoreProperties['releaseStorePassword']
         }
     }
 
@@ -23,11 +27,10 @@ android {
         applicationId "com.bupp.wood_spoon_eaters"
         versionCode 103
         versionName "2.5.0"
-        signingConfig signingConfigs.debug
     }
 
     buildTypes {
-        getByName("debug") {
+        debug {
             debuggable true
             manifestPlaceholders["isTestMode"] = "true"
 
@@ -38,9 +41,10 @@ android {
             buildConfigField "String", "SHIPBOOK_APP_ID", '"620bc0e8244a8956dfc02096"'
             buildConfigField "String", "SHIPBOOK_APP_KEY", '"ed8fdb9f6cc94159fb1afe3a6140315b"'
 
+            resValue "string", "app_name", "Staging-WoodSpoonEaters"
             applicationIdSuffix = ".staging"
         }
-        getByName("release") {
+        release {
             debuggable false
             shrinkResources true
             minifyEnabled true
@@ -53,10 +57,9 @@ android {
             buildConfigField "String", "TAG", '"HomeEaters_Production"'
             buildConfigField "String", "SHIPBOOK_APP_ID", '"620bc0e04bdba41a60f3540c"'
             buildConfigField "String", "SHIPBOOK_APP_KEY", '"3a270a6df019054845206ae471c89461"'
-        }
-        create("benchmark") {
-            initWith(getByName("release"))
-            signingConfig signingConfigs.debug
+
+            resValue "string", "app_name", "WoodSpoon"
+            signingConfig signingConfigs.release
         }
     }
 
@@ -75,9 +78,6 @@ android {
 }
 
 dependencies {
-    implementation fileTree(include: ['*.jar'], dir: 'libs')
-
-    // Android Support
     implementation 'androidx.appcompat:appcompat:1.3.1'
 
     // Android
@@ -87,7 +87,7 @@ dependencies {
     implementation "androidx.navigation:navigation-fragment-ktx:2.3.5"
 
     implementation 'androidx.fragment:fragment-ktx:1.3.6'
-    implementation "org.jetbrains.kotlin:kotlin-reflect:1.5.31"
+    implementation "org.jetbrains.kotlin:kotlin-reflect:1.6.0"
     implementation 'android.arch.lifecycle:extensions:1.1.1'
 
     //Support libraries
@@ -125,7 +125,7 @@ dependencies {
     implementation 'com.google.android.flexbox:flexbox:3.0.0'
     implementation 'com.github.ibrahimsn98:PhoneNumberKit:1.6.2'
     implementation 'com.github.rubensousa:gravitysnaphelper:2.2.1'
-    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.0-alpha-2'
+    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.8.1'
 
     //exo player
     implementation 'com.google.android.exoplayer:exoplayer-ui:2.16.1'
@@ -201,10 +201,6 @@ dependencies {
     implementation 'com.google.firebase:firebase-messaging-ktx'
     implementation 'com.google.firebase:firebase-analytics-ktx'
 
-    //skeleton
-    implementation 'com.facebook.shimmer:shimmer:0.5.0'
-
     //ship book
-    implementation 'io.shipbook:shipbooksdk:1.+'
-
+    implementation 'io.shipbook:shipbooksdk:1.6.2'
 }
