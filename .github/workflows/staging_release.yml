@@ -22,5 +22,29 @@ jobs:
 
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
+      
+    - name: Run Tests
+      run: ./gradlew test
+      
     - name: Build with Gradle
       run: ./gradlew build
+      
+    - name: Build Release AAB
+      run: ./gradlew bundleRelease
+      
+    - name: Sign AAB  
+      uses: r0adkll/sign-android-release@v1
+      with:
+        releaseDirectory: app/build/outputs/bundle/release
+        signingKeyBase64: ${{ secrets.GOOGLE_PLAY_SIGNING_KEY }}
+        alias: ${{ secrets.GOOGLE_PLAY_ALIAS }}
+        keyStorePassword: ${{ secrets.GOOGLE_PLAY_PASSWORD }}
+        keyPassword: ${{ secrets.GOOGLE_PLAY_PASSWORD }}
+        
+#     - name: Deploy to Play Store
+#       uses: r0adkll/upload-google-play@v1
+#       with:
+#         serviceAccountJsonPlainText: ${{secrets.SERVICE_ACCOUNT}}
+#         packageName: com.bupp.wood_spoon_eaters
+#         releaseFiles: app/build/outputs/bundle/release/app-release.aab
+#         track: alpha
