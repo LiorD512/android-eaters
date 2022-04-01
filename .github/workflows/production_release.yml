@@ -1,4 +1,4 @@
-name: Android CI
+name: Android Production Release
 
 on:
   push:
@@ -41,10 +41,10 @@ jobs:
         keyStorePassword: ${{ secrets.GOOGLE_PLAY_PASSWORD }}
         keyPassword: ${{ secrets.GOOGLE_PLAY_PASSWORD }}
         
-#     - name: Deploy to Play Store
-#       uses: r0adkll/upload-google-play@v1
-#       with:
-#         serviceAccountJsonPlainText: ${{secrets.SERVICE_ACCOUNT}}
-#         packageName: com.bupp.wood_spoon_eaters
-#         releaseFiles: app/build/outputs/bundle/release/app-release.aab
-#         track: alpha
+    - name: Deploy to Play Store
+      uses: r0adkll/upload-google-play@v1
+      with:
+        serviceAccountJsonPlainText: ${{secrets.GOOGLE_PLAY_PUBLISHING_ACCOUNT}}
+        packageName: com.bupp.wood_spoon_eaters
+        releaseFiles: app/build/outputs/bundle/release/app-release.aab
+        track: alpha
