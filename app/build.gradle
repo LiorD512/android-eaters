@@ -12,7 +12,7 @@ android {
         minSdkVersion 26
         targetSdkVersion 30
         applicationId "com.bupp.wood_spoon_eaters"
-        versionCode System.getenv('VERSION_CODE') as Integer ?: 103
+        versionCode System.getenv('VERSION_CODE') as Integer
         versionName "2.5.0"
     }
 
