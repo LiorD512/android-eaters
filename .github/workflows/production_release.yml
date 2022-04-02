@@ -22,7 +22,10 @@ jobs:
 
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
-      
+
+    - name: Set version code
+      run: export VERSION_CODE=`expr $GITHUB_RUN_NUMBER + 103`
+
     - name: Run Tests
       run: ./gradlew test
       
@@ -42,7 +45,7 @@ jobs:
         keyPassword: ${{ secrets.GOOGLE_PLAY_PASSWORD }}
         
     - name: Deploy to Play Store
-      uses: r0adkll/upload-google-play@v1
+      uses: r0adkll/upload-google-play@v1.0.15
       with:
         serviceAccountJsonPlainText: ${{secrets.GOOGLE_PLAY_PUBLISHING_ACCOUNT}}
         packageName: com.bupp.wood_spoon_eaters
