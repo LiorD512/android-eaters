@@ -24,7 +24,7 @@ jobs:
       run: chmod +x gradlew
 
     - name: Set version code
-      run: export VERSION_CODE=`expr $GITHUB_RUN_NUMBER + 103`
+      run: export VERSION_CODE=`expr $GITHUB_RUN_NUMBER + 103`; echo Next versionCode $VERSION_CODE
 
     - name: Run Tests
       run: ./gradlew test
