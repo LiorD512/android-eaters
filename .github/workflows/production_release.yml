@@ -7,10 +7,9 @@ on:
     branches: [ develop ]
 
 jobs:
+  build:
 
-  test_and_build:
-
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
 
     steps:
     - uses: actions/checkout@v3
@@ -33,28 +32,12 @@ jobs:
       
     - name: Build with Gradle
       run: ./gradlew build
-
+      
     - name: Build Release AAB
       run: ./gradlew bundleRelease
-
-    - uses: actions/upload-artifact@v3
-      with:
-        name: app-build-outputs
-        path: app/build/outputs/
-
-  deploy_google_play:
-
-    runs-on: ubuntu-20.04
-    needs: [test_and_build]
-
-    steps:
-
-    - uses: actions/download-artifact@v3
-      with:
-        name: app-build-outputs
-        path: app/build/outputs/
-
-    - name: Sign AAB  
+      
+    - name: Sign AAB
+      if: startsWith(github.ref, 'refs/heads/release')
       uses: r0adkll/sign-android-release@v1
       with:
         releaseDirectory: app/build/outputs/bundle/release
@@ -64,6 +47,7 @@ jobs:
         keyPassword: ${{ secrets.GOOGLE_PLAY_PASSWORD }}
         
     - name: Deploy to Play Store
+      if: startsWith(github.ref, 'refs/heads/release')
       uses: r0adkll/upload-google-play@v1.0.15
       with:
         serviceAccountJsonPlainText: ${{secrets.GOOGLE_PLAY_PUBLISHING_ACCOUNT}}
