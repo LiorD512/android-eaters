@@ -12,7 +12,7 @@ android {
         minSdkVersion 26
         targetSdkVersion 30
         applicationId "com.bupp.wood_spoon_eaters"
-        versionCode System.getenv('VERSION_CODE') as Integer
+        versionCode System.getenv('VERSION_CODE') as Integer ?: 1000 // Temporary fallback versionCode to enable local builds
         versionName "2.5.0"
     }
 
