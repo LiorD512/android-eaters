@@ -1,8 +1,6 @@
 name: Android Pull Request Check
 
 on:
-  push:
-    branches: [ develop ]
   pull_request:
     branches: [ develop ]
 
