@@ -30,14 +30,22 @@ class EventsManager(val context: Context) {
     fun initSegment(eater: Eater?, address: Address?) {
         eater?.let { user ->
 
-            this.currentUserId = user.id.toString()
-            Analytics.with(context).identify(
-                user.id.toString(), Traits()
-                    .putName(user.getFullName())
-                    .putEmail(user.email)
-                    .putPhone(user.phoneNumber)
-                    .putValue("shipped Order Count", user.ordersCount), null
-            )
+            val userIdString = user.id.toString().also {
+                this.currentUserId = it
+            }
+            val unifiedUserIdString = "Eater-$userIdString"
+            val traits = Traits()
+                .putName(user.getFullName())
+                .putEmail(user.email)
+                .putPhone(user.phoneNumber)
+                .putValue("shipped Order Count", user.ordersCount)
+
+            Analytics.with(context).apply {
+                identify(userIdString, traits, null)
+                alias(unifiedUserIdString)
+                identify(unifiedUserIdString, traits, null)
+
+            }
 
             UXCam.setUserIdentity(user.id.toString())
             UXCam.setUserProperty("email", user.email ?: "N/A")
