@@ -37,13 +37,14 @@ jobs:
       run: ./gradlew bundleRelease
 
     - name: Publish To App Center
+      if: github.ref == 'refs/heads/develop'
       uses: wzieba/AppCenter-Github-Action@v1.3.2
       with:
         appName: Monkeytech/WoodSpoon-Android
         token: ${{ secrets.APP_CENTER_TOKEN }}
         group: WoodSpoon Android Testers
         file: app/build/outputs/apk/debug/app-debug.apk
-        releaseNotes: "Staging version.\nBuild number $VERSION_CODE\n ${{ github.event.head_commit.message }}"
+        releaseNotes: "Staging version.\nBuild number ${{env.VERSION_CODE}}\n ${{ github.event.head_commit.message }}"
         notifyTesters: false
         debug: true
 
