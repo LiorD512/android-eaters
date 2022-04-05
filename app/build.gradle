@@ -6,26 +6,13 @@ apply plugin: 'com.google.gms.google-services'
 apply plugin: 'com.google.firebase.crashlytics'
 apply plugin: "androidx.navigation.safeargs.kotlin"
 
-def keystorePropertiesFile = rootProject.file("keystore.properties")
-def keystoreProperties = new Properties()
-keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
-
 android {
-    signingConfigs {
-        release {
-            keyAlias keystoreProperties['releaseKeyAlias']
-            keyPassword keystoreProperties['releaseKeyPassword']
-            storeFile file(keystoreProperties['releaseKeyStore'])
-            storePassword keystoreProperties['releaseStorePassword']
-        }
-    }
-
     compileSdkVersion rootProject.ext.compileSdkVersion
     defaultConfig {
         minSdkVersion 26
         targetSdkVersion 30
         applicationId "com.bupp.wood_spoon_eaters"
-        versionCode 103
+        versionCode System.getenv('VERSION_CODE') as Integer ?: 1000 // Temporary fallback versionCode to enable local builds
         versionName "2.5.0"
     }
 
@@ -59,7 +46,6 @@ android {
             buildConfigField "String", "SHIPBOOK_APP_KEY", '"3a270a6df019054845206ae471c89461"'
 
             resValue "string", "app_name", "WoodSpoon"
-            signingConfig signingConfigs.release
         }
     }
 
