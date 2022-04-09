@@ -40,6 +40,17 @@ class EventsManager(val context: Context) {
                 .putPhone(user.phoneNumber)
                 .putValue("shipped Order Count", user.ordersCount)
 
+            address?.let {
+                traits.putAddress(
+                    Traits.Address()
+                        .putCity(it.city?.name)
+                        .putCountry(it.country?.name)
+                        .putState(it.state?.name)
+                        .putStreet(it.streetLine1)
+                        .putPostalCode(it.zipCode)
+                )
+            }
+
             Analytics.with(context).apply {
                 identify(userIdString, traits, null)
                 alias(unifiedUserIdString)
@@ -53,20 +64,6 @@ class EventsManager(val context: Context) {
             UXCam.setUserProperty("phone", user.phoneNumber ?: "N/A")
             UXCam.setUserProperty("created_at", DateUtils.parseDateToDate(user.createdAt))
 
-//            Log.d(TAG, "address: $address")
-            address?.let {
-                Analytics.with(context).identify(
-                    user.id.toString(), Traits()
-                        .putAddress(
-                            Traits.Address()
-                                .putCity(it.city?.name)
-                                .putCountry(it.country?.name)
-                                .putState(it.state?.name)
-                                .putStreet(it.streetLine1)
-                                .putPostalCode(it.zipCode)
-                        ), null
-                )
-            }
         }
     }
 
