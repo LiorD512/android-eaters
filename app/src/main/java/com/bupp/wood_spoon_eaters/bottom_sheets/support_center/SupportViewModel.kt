@@ -5,6 +5,7 @@ import com.bupp.wood_spoon_eaters.common.FlowEventsManager
 import com.bupp.wood_spoon_eaters.managers.EaterDataManager
 import com.bupp.wood_spoon_eaters.repositories.AppSettingsRepository
 import com.bupp.wood_spoon_eaters.repositories.MetaDataRepository
+import com.bupp.wood_spoon_eaters.repositories.getReportsEmailAddress
 
 class SupportViewModel(val appSettingsRepository: AppSettingsRepository, val eaterDataManager: EaterDataManager, private val flowEventsManager: FlowEventsManager) : ViewModel() {
 

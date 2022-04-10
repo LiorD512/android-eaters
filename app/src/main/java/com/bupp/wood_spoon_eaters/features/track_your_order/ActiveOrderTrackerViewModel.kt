@@ -23,6 +23,7 @@ import com.bupp.wood_spoon_eaters.model.RestaurantInitParams
 import com.bupp.wood_spoon_eaters.network.ApiService
 import com.bupp.wood_spoon_eaters.repositories.AppSettingsRepository
 import com.bupp.wood_spoon_eaters.repositories.MetaDataRepository
+import com.bupp.wood_spoon_eaters.repositories.getContactUsPhoneNumber
 import com.google.android.gms.maps.model.*
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay

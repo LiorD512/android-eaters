@@ -2,6 +2,7 @@ package com.bupp.wood_spoon_eaters.views.ws_range_time_picker
 
 import com.bupp.wood_spoon_eaters.repositories.AppSettingsRepository
 import com.bupp.wood_spoon_eaters.repositories.MetaDataRepository
+import com.bupp.wood_spoon_eaters.repositories.getMinFutureOrderWindow
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 

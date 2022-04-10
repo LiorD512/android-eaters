@@ -7,10 +7,7 @@ import com.bupp.wood_spoon_eaters.common.*
 import com.bupp.wood_spoon_eaters.model.RestaurantInitParams
 import com.bupp.wood_spoon_eaters.managers.*
 import com.bupp.wood_spoon_eaters.model.*
-import com.bupp.wood_spoon_eaters.repositories.AppSettingsRepository
-import com.bupp.wood_spoon_eaters.repositories.MetaDataRepository
-import com.bupp.wood_spoon_eaters.repositories.RestaurantRepository
-import com.bupp.wood_spoon_eaters.repositories.UserRepository
+import com.bupp.wood_spoon_eaters.repositories.*
 import com.stripe.android.model.PaymentMethod
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

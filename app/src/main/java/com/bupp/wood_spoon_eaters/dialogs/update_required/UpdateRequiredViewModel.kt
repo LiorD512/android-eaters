@@ -2,8 +2,7 @@ package com.bupp.wood_spoon_eaters.dialogs.update_required
 
 import androidx.lifecycle.ViewModel
 import com.bupp.wood_spoon_eaters.features.base.SingleLiveEvent
-import com.bupp.wood_spoon_eaters.repositories.AppSettingsRepository
-import com.bupp.wood_spoon_eaters.repositories.MetaDataRepository
+import com.bupp.wood_spoon_eaters.repositories.*
 
 class UpdateRequiredViewModel(val appSettingsRepository: AppSettingsRepository) : ViewModel() {
 
