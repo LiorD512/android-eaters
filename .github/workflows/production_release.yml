@@ -63,4 +63,4 @@ jobs:
         serviceAccountJsonPlainText: ${{secrets.GOOGLE_PLAY_PUBLISHING_ACCOUNT}}
         packageName: com.bupp.wood_spoon_eaters
         releaseFiles: app/build/outputs/bundle/release/app-release.aab
-        track: alpha
+        track: internal
