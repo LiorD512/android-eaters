@@ -43,13 +43,13 @@ class SplashViewModel(
     private var isUserRegistered = false // true if user had only phone verification
     private var shouldUpdateVersion = false
 
-    fun initAppSplashData(context: Context) {
+    fun initAppSplashData() {
         viewModelScope.launch {
 
             userRepository.initUserRepo()
             metaDataRepository.initMetaData()
             appSettingsRepository.initAppSettings()
-            paymentManager.initPaymentManager(context)
+            paymentManager.initPaymentManager(getApplication())
 
             isUserExist = userRepository.isUserValid()
             isUserSigned = userRepository.isUserSignedUp()
