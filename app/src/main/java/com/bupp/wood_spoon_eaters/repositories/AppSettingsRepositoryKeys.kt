@@ -11,56 +11,37 @@ import java.math.BigDecimal
  * These extension functions should be a part of corresponding features
  */
 
-fun AppSettingsRepository.getTermsOfServiceUrl() = appSetting("terms_url") ?: ""
+fun AppSettingsRepository.getTermsOfServiceUrl() = stringAppSetting("terms_url") ?: ""
 
-fun AppSettingsRepository.getPrivacyPolicyUrl() = appSetting("privacy_policy_url") ?: ""
+fun AppSettingsRepository.getPrivacyPolicyUrl() = stringAppSetting("privacy_policy_url") ?: ""
 
-fun AppSettingsRepository.getStripePublishableKey() = appSetting("stripe_publishable_key")
+fun AppSettingsRepository.getStripePublishableKey() = stringAppSetting("stripe_publishable_key")
 
-fun AppSettingsRepository.getReportsEmailAddress() = appSetting("client_support_email") ?: ""
+fun AppSettingsRepository.getReportsEmailAddress() = stringAppSetting("client_support_email") ?: ""
+
+fun AppSettingsRepository.getUpdateDialogTitle() = stringAppSetting("android_version_control_title") ?: ""
+
+fun AppSettingsRepository.getUpdateDialogBody() = stringAppSetting("android_version_control_body") ?: ""
+
+fun AppSettingsRepository.getUpdateDialogUrl() = stringAppSetting("android_version_control_link") ?: ""
+
+fun AppSettingsRepository.getMinOrderFeeStr(nationwide: Boolean): String {
+    return priceAppSetting(if (nationwide) "nationwide_min_order" else "min_order")?.formatedValue ?: ""
+}
+
+fun AppSettingsRepository.getQaUrl() = stringAppSetting("qa_url") ?: ""
+
+fun AppSettingsRepository.getContactUsPhoneNumber() = stringAppSetting("contact_us_number") ?: ""
+
+fun AppSettingsRepository.getContactUsTextNumber() = stringAppSetting("text_message_num") ?: ""
+
+fun AppSettingsRepository.getLocationDistanceThreshold() = intAppSetting("location_distance_threshold") ?: 20
+
+fun AppSettingsRepository.getDefaultFeedLocationName() = stringAppSetting("default_feed_location_name") ?: ""
 
 // WIP
 
 private fun AppSettingsRepository.getSettings() = appSettings
-
-fun AppSettingsRepository.getUpdateDialogTitle(): String {
-    for (settings in getSettings()) {
-        if (settings.key == "android_version_control_title")
-            return settings.value!! as String
-    }
-    return ""
-}
-
-fun AppSettingsRepository.getUpdateDialogBody(): String {
-    for (settings in getSettings()) {
-        if (settings.key == "android_version_control_body")
-            return settings.value!! as String
-    }
-    return ""
-}
-
-fun AppSettingsRepository.getUpdateDialogUrl(): String {
-    for (settings in getSettings()) {
-        if (settings.key == "android_version_control_link")
-            return settings.value!! as String
-    }
-    return ""
-}
-
-fun AppSettingsRepository.getMinOrderFeeStr(nationwide: Boolean): String {
-    if (nationwide) {
-        for (settings in getSettings()) {
-            if (settings.key == "nationwide_min_order")
-                return (settings.value!! as Price).formatedValue as String
-        }
-    } else {
-        for (settings in getSettings()) {
-            if (settings.key == "min_order")
-                return (settings.value!! as Price).formatedValue as String
-        }
-    }
-    return ""
-}
 
 private fun AppSettingsRepository.getMinAndroidVersion(): String {
     for (settings in getSettings()) {
@@ -96,38 +77,6 @@ private fun getNumberFromStr(str: String): Int {
     return versionNumber
 }
 
-fun AppSettingsRepository.getContactUsPhoneNumber(): String {
-    for (settings in getSettings()) {
-        if (settings.key == "contact_us_number")
-            return (settings.value!!) as String
-    }
-    return ""
-}
-
-fun AppSettingsRepository.getContactUsTextNumber(): String {
-    for (settings in getSettings()) {
-        if (settings.key == "text_message_num")
-            return (settings.value!!) as String
-    }
-    return ""
-}
-
-fun AppSettingsRepository.getQaUrl(): String {
-    for (settings in getSettings()) {
-        if (settings.key == "qa_url")
-            return (settings.value!!) as String
-    }
-    return ""
-}
-
-fun AppSettingsRepository.getLocationDistanceThreshold(): Int {
-    for (settings in getSettings()) {
-        if (settings.key == "location_distance_threshold")
-            return (settings.value!!) as Int
-    }
-    return 20
-}
-
 fun AppSettingsRepository.getMinFutureOrderWindow(): Int {
     for (settings in getSettings()) {
         if (settings.key == "min_future_order_window")
@@ -152,13 +101,7 @@ fun AppSettingsRepository.getDefaultLng(): Double {
     return 0.0
 }
 
-fun AppSettingsRepository.getDefaultFeedLocationName(): String {
-    for (settings in getSettings()) {
-        if (settings.key == "default_feed_location_name")
-            return (settings.value!!) as String
-    }
-    return ""
-}
+
 
 fun AppSettingsRepository.getCloudinaryTransformations(): CloudinaryTransformations? {
     for (settings in getSettings()) {

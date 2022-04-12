@@ -1,6 +1,7 @@
 package com.bupp.wood_spoon_eaters.model
 
 import android.os.Parcelable
+import androidx.annotation.Keep
 import com.bupp.wood_spoon_eaters.bottom_sheets.reviews.Metrics
 import com.google.gson.annotations.SerializedName
 import com.squareup.moshi.Json
@@ -101,17 +102,22 @@ data class PrepTimeRange(
 
 @JsonClass(generateAdapter = true)
 data class AppSettings(
-    @Json(name = "settings") val settings: List<AppSetting>,
+    @Json(name = "settings") val settings: List<AppSetting>?,
     @Json(name = "ff") val ff: Map<String, Boolean>?
 )
 
 @JsonClass(generateAdapter = true)
 data class AppSetting(
-    var id: Long?,
-    var key: String?,
-    var data_type: String?,
-    var value: Any?
+    val id: Long?,
+    val key: String?,
+    val data_type: String?,
+    val value: Any?
 )
+
+@Keep
+enum class AppSettingKnownTypes {
+    string, integer, decimal, price, key_value, boolean, csv_array
+}
 
 enum class CloudinaryTransformationsType {
     @Json(name = "small")
