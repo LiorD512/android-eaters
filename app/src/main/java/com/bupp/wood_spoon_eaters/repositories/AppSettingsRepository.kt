@@ -31,6 +31,7 @@ fun AppSettingsRepository.intAppSetting(key: String) = appSetting(key) as? Int
 
 fun AppSettingsRepository.priceAppSetting(key: String) = appSetting(key) as? Price
 
+fun AppSettingsRepository.appSettingOrFeatureFlag(key: String) = featureFlag(key) ?: booleanAppSetting(key)
 
 sealed class AppSettingsRepoState {
     object NotInitialized : AppSettingsRepoState()
@@ -41,7 +42,8 @@ sealed class AppSettingsRepoState {
 
 internal class AppSettingsRepositoryImpl(
     private val apiService: ApiService,
-    private val resultManager: ResultManager
+    private val resultManager: ResultManager,
+    private val featureListProvider: FeatureFlagsListProvider
 ) : AppSettingsRepository {
 
     private val _state = MutableStateFlow<AppSettingsRepoState>(AppSettingsRepoState.NotInitialized)
@@ -49,9 +51,7 @@ internal class AppSettingsRepositoryImpl(
 
     private suspend fun getAppSetting(): ResultHandler<ServerResponse<AppSettings>> {
         return resultManager.safeApiCall {
-            apiService.getAppSettings(
-                listOf("feature", "feature2", "other_feature", "test_mobile_show_build_number")
-            )
+            apiService.getAppSettings(featureListProvider.getFeatureFlagsList())
         }
     }
 
@@ -91,9 +91,5 @@ internal class AppSettingsRepositoryImpl(
 
     override fun featureFlag(key: String): Boolean? {
         return featureFlags[key]
-    }
-
-    companion object {
-        const val TAG = "AppSettingsRepository"
     }
 }

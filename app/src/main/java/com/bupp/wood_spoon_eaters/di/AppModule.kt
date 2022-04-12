@@ -59,7 +59,7 @@ val appModule = module {
     //repos
     single { MetaDataRepository(get()) }
     single { MetaDataRepositoryImpl(get(), get()) }
-    single<AppSettingsRepository> { AppSettingsRepositoryImpl(get(), get()) }
+    single<AppSettingsRepository> { AppSettingsRepositoryImpl(get(), get(), StaticFeatureFlagsListProvider()) }
     single { FeedRepository(get(), get(), get(), get()) }
     single { FeedRepositoryImpl(get(), get()) }
     single { UserRepositoryImpl(get(), get()) }

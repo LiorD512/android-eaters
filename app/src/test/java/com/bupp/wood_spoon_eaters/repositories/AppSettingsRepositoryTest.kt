@@ -180,6 +180,19 @@ class AppSettingsRepositoryTest {
     }
 
     @Test
+    fun testFeatureFlags() = runBlocking {
+        mockWebServer.enqueue(
+            ff = mapOf(
+                "feature_1" to true,
+                "feature_2" to false
+            )
+        )
+        appSettingsRepository.initAppSettings(testDispatcher)
+        assert(appSettingsRepository.featureFlag("feature_1") == true)
+        assert(appSettingsRepository.featureFlag("feature_2") == false)
+    }
+
+    @Test
     fun featureFlagsAndSettingsParsingError() = runBlocking {
         mockWebServer.enqueue(
             MockResponse().setBody(
