@@ -1,5 +1,7 @@
 package com.bupp.wood_spoon_eaters.repositories
 
+import com.bupp.wood_spoon_eaters.BuildConfig
+import com.bupp.wood_spoon_eaters.managers.EventsManager
 import com.bupp.wood_spoon_eaters.model.*
 import com.bupp.wood_spoon_eaters.network.ApiService
 import com.bupp.wood_spoon_eaters.network.getAppSettings
@@ -43,7 +45,8 @@ sealed class AppSettingsRepoState {
 internal class AppSettingsRepositoryImpl(
     private val apiService: ApiService,
     private val resultManager: ResultManager,
-    private val featureListProvider: FeatureFlagsListProvider
+    private val featureListProvider: FeatureFlagsListProvider,
+    private val eventsManager: EventsManager
 ) : AppSettingsRepository {
 
     private val _state = MutableStateFlow<AppSettingsRepoState>(AppSettingsRepoState.NotInitialized)
@@ -86,10 +89,23 @@ internal class AppSettingsRepositoryImpl(
         get() = (state.value as? AppSettingsRepoState.Success)?.featureFlags ?: emptyMap()
 
     override fun appSetting(key: String): Any? {
-        return appSettings.firstOrNull { it.key == key }?.value
+        val value = appSettings.firstOrNull { it.key == key }?.value
+        if (value == null) {
+            eventsManager.logEvent(
+                MissingKeyErrorEventName,
+                mapOf(
+                    "key" to key
+                )
+            )
+        }
+        return value
     }
 
     override fun featureFlag(key: String): Boolean? {
         return featureFlags[key]
+    }
+
+    companion object {
+        const val MissingKeyErrorEventName = "missing_app_setting_key"
     }
 }

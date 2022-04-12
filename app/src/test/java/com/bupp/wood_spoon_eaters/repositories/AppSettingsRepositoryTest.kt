@@ -3,6 +3,7 @@ package com.bupp.wood_spoon_eaters.repositories
 import com.bupp.wood_spoon_eaters.MainCoroutineRule
 import com.bupp.wood_spoon_eaters.di.abs.AppSettingAdapter
 import com.bupp.wood_spoon_eaters.di.abs.SerializeNulls
+import com.bupp.wood_spoon_eaters.managers.EventsManager
 import com.bupp.wood_spoon_eaters.model.*
 import com.bupp.wood_spoon_eaters.network.ApiService
 import com.bupp.wood_spoon_eaters.network.result_handler.ErrorManger
@@ -24,7 +25,7 @@ import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import org.mockito.kotlin.mock
+import org.mockito.kotlin.*
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.moshi.MoshiConverterFactory
@@ -38,9 +39,12 @@ class AppSettingsRepositoryTest {
     var mainCoroutineRule = MainCoroutineRule()
     private val testDispatcher = TestCoroutineDispatcher()
 
+    lateinit var eventsManager: EventsManager
+
     lateinit var appSettingsRepository: AppSettingsRepository
 
     lateinit var mockWebServer: MockWebServer
+
 
     @Before
     fun setUp() {
@@ -68,8 +72,8 @@ class AppSettingsRepositoryTest {
         val apiService = retrofit.create(ApiService::class.java)
 
         val errorManger: ErrorManger = mock()
-
-        appSettingsRepository = AppSettingsRepositoryImpl(apiService, ResultManager(errorManger))
+        eventsManager = mock()
+        appSettingsRepository = AppSettingsRepositoryImpl(apiService, ResultManager(errorManger), StaticFeatureFlagsListProvider(), eventsManager)
     }
 
     @After
@@ -177,6 +181,18 @@ class AppSettingsRepositoryTest {
         mockWebServer.enqueue(settings = listOf(AppSetting(id = 1, settingKey, data_type = AppSettingKnownTypes.string.name, 5)))
         appSettingsRepository.initAppSettings(testDispatcher)
         assert(appSettingsRepository.stringAppSetting(settingKey) == null)
+    }
+
+    @Test
+    fun testMissingPropertyErrorReporting() = runBlocking {
+        val settingKey = "my_setting"
+
+        mockWebServer.enqueue(settings = listOf(AppSetting(id = 1, settingKey, data_type = AppSettingKnownTypes.string.name, "http://example.com")))
+        appSettingsRepository.initAppSettings(testDispatcher)
+        assert(appSettingsRepository.stringAppSetting("other_key") == null)
+
+//        verify(eventsManager, times(1)).logEvent(MissingKeyErrorEventName, any());
+
     }
 
     @Test
