@@ -53,19 +53,18 @@ val appModule = module {
     single { FcmManager(get()) }
     single { UserSettings(get(), get()) }
     single { FlowEventsManager(get(), get()) }
-    single { ErrorManger(get())}
+    single { ErrorManger(get()) }
     single { ResultManager(get()) }
 
     //repos
     single { MetaDataRepository(get()) }
     single { MetaDataRepositoryImpl(get(), get()) }
-    single { AppSettingsRepository(get()) }
-    single { AppSettingsRepositoryImpl(get(), get()) }
+    single<AppSettingsRepository> { AppSettingsRepositoryImpl(get(), get(), StaticFeatureFlagsListProvider(), get()) }
     single { FeedRepository(get(), get(), get(), get()) }
     single { FeedRepositoryImpl(get(), get()) }
     single { UserRepositoryImpl(get(), get()) }
-    single { RestaurantRepository(get())}
-    single { RestaurantRepositoryImpl(get(), get())}
+    single { RestaurantRepository(get()) }
+    single { RestaurantRepositoryImpl(get(), get()) }
     single { UserRepository(get(), get(), get(), get(), get()) }
     single { OrderRepository(get(), get()) }
     single { OrderRepositoryImpl(get(), get()) }
@@ -87,14 +86,13 @@ val appModule = module {
     single { EaterDataManager(get(), get(), get(), get(), get()) }
 
 
-
     //VIEW MODELS
 
     //bottom sheet
     viewModel { AddressMenuViewModel(get(), get(), get()) }
 
     //splash
-    viewModel { SplashViewModel(get(), get(), get(), get(), get(), get(), get()) }
+    viewModel { SplashViewModel(get(), get(), get(), get(), get(), get(), get(), get()) }
     viewModel { SuperUserViewModel(get(), get()) }
 
     //login
@@ -129,7 +127,7 @@ val appModule = module {
     viewModel { CancelOrderViewModel(get()) }
 
     //Profile
-    viewModel { MyProfileViewModel(get(), get(), get(), get(), get(), get()) }
+    viewModel { MyProfileViewModel(get(), get(), get(), get(), get(), get(), get()) }
     viewModel { EditProfileViewModel(get(), get(), get()) }
     viewModel { SingleOrderDetailsViewModel(get(), get()) }
     viewModel { OrdersHistoryViewModel(get(), get(), get()) }
@@ -144,15 +142,14 @@ val appModule = module {
     viewModel { SettingsViewModel(get(), get(), get(), get(), get()) }
 
     //RestaurantPage
-    viewModel { RestaurantMainViewModel(get(), get(),get(), get()) }
+    viewModel { RestaurantMainViewModel(get(), get(), get(), get()) }
     viewModel { RestaurantPageViewModel(get(), get(), get(), get(), get(), get()) }
     viewModel { DishPageViewModel(get(), get(), get(), get()) }
     viewModel { OrderCheckoutViewModel(get(), get(), get(), get()) }
-    viewModel { ReviewsBSViewModel(get(), get())}
+    viewModel { ReviewsBSViewModel(get(), get()) }
 
     //Review Activity
-    viewModel { ReviewsViewModel(get(),get(), get())}
-
+    viewModel { ReviewsViewModel(get(), get(), get()) }
 
 
 }

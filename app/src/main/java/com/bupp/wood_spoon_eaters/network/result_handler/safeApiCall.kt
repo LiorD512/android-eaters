@@ -11,6 +11,7 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import retrofit2.HttpException
+import timber.log.Timber
 import java.io.IOException
 
 class ResultManager(private val errorManager: ErrorManger) {
@@ -47,14 +48,14 @@ class ResultManager(private val errorManager: ErrorManger) {
                             }
                             else -> {
                                 val errorResponse = convertErrorBody(throwable)
-                                errorManager.onError(getCallingFunctionName(apiCall), throwable.localizedMessage?:"")
+                                errorManager.onError(getCallingFunctionName(apiCall), throwable.localizedMessage ?: "")
                                 ResultHandler.GenericError(code, errorResponse)
                             }
                         }
                     }
                     else -> {
-                        Log.d("safeApiCall", "safeApiCall serverResponse: ${throwable.message}")
-                        errorManager.onError(getCallingFunctionName(apiCall), throwable.localizedMessage?:"")
+                        Timber.e(throwable, "safeApiCall serverResponse [%s]", throwable.message)
+                        errorManager.onError(getCallingFunctionName(apiCall), throwable.localizedMessage ?: "")
                         ResultHandler.GenericError(null, null)
                     }
                 }
@@ -62,7 +63,7 @@ class ResultManager(private val errorManager: ErrorManger) {
         }
     }
 
-    private fun <T>getCallingFunctionName(apiCall: suspend () -> T): String {
+    private fun <T> getCallingFunctionName(apiCall: suspend () -> T): String {
         return apiCall.javaClass.enclosingMethod?.name ?: ""
     }
 

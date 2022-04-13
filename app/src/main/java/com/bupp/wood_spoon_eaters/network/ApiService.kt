@@ -14,7 +14,9 @@ interface ApiService {
     //AppConfig
     @VERSION("v3")
     @GET("eaters/utils/config")
-    suspend fun getAppSettings(): ServerResponse<AppSettings>
+    suspend fun getAppSettings(
+        @Query("ff") features: String
+    ): ServerResponse<AppSettings>
 
     //MetaData
     @VERSION("v3")
@@ -269,3 +271,6 @@ interface ApiService {
         @Body photo: RequestBody
     ): ResponseBody
 }
+
+suspend fun ApiService.getAppSettings(features: List<String>) =
+    getAppSettings(features = features.joinToString(separator = ","))

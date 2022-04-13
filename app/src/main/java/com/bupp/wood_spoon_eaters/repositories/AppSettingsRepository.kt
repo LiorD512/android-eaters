@@ -1,241 +1,111 @@
 package com.bupp.wood_spoon_eaters.repositories
 
-import android.util.Log
 import com.bupp.wood_spoon_eaters.BuildConfig
+import com.bupp.wood_spoon_eaters.managers.EventsManager
 import com.bupp.wood_spoon_eaters.model.*
-import com.bupp.wood_spoon_eaters.network.base_repos.AppSettingsRepositoryImpl
+import com.bupp.wood_spoon_eaters.network.ApiService
+import com.bupp.wood_spoon_eaters.network.getAppSettings
 import com.bupp.wood_spoon_eaters.network.result_handler.ResultHandler
+import com.bupp.wood_spoon_eaters.network.result_handler.ResultManager
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.withContext
-import java.math.BigDecimal
+import timber.log.Timber
 
-class AppSettingsRepository(private val apiService: AppSettingsRepositoryImpl) {
+interface AppSettingsRepository {
 
-    private var appSettingsArr: List<AppSetting> = listOf()
+    val state: StateFlow<AppSettingsRepoState>
+    val appSettings: List<AppSetting>
+    val featureFlags: Map<String, Boolean>
 
-    enum class AppSettingsRepoStatus{
-        SUCCESS,
-        FAILED,
-    }
-    data class AppSettingsRepoResult(val status: AppSettingsRepoStatus)
+    suspend fun initAppSettings(dispatcher: CoroutineDispatcher = Dispatchers.IO)
+    fun appSetting(key: String): Any?
+    fun featureFlag(key: String): Boolean?
+}
 
-    suspend fun initAppSettings(): AppSettingsRepoResult {
-        val result = withContext(Dispatchers.IO){
-            apiService.getAppSetting()
+fun AppSettingsRepository.stringAppSetting(key: String) = appSetting(key) as? String
+
+fun AppSettingsRepository.booleanAppSetting(key: String) = appSetting(key) as? Boolean
+
+fun AppSettingsRepository.intAppSetting(key: String) = appSetting(key) as? Int
+
+fun AppSettingsRepository.priceAppSetting(key: String) = appSetting(key) as? Price
+
+fun AppSettingsRepository.appSettingOrFeatureFlag(key: String) = featureFlag(key) ?: booleanAppSetting(key)
+
+sealed class AppSettingsRepoState {
+    object NotInitialized : AppSettingsRepoState()
+
+    data class Failed(val reason: ResultHandler<Nothing>) : AppSettingsRepoState()
+    data class Success(val appSettings: List<AppSetting>, val featureFlags: Map<String, Boolean>) : AppSettingsRepoState()
+}
+
+internal class AppSettingsRepositoryImpl(
+    private val apiService: ApiService,
+    private val resultManager: ResultManager,
+    private val featureListProvider: FeatureFlagsListProvider,
+    private val eventsManager: EventsManager
+) : AppSettingsRepository {
+
+    private val _state = MutableStateFlow<AppSettingsRepoState>(AppSettingsRepoState.NotInitialized)
+    override val state: StateFlow<AppSettingsRepoState> = _state
+
+    private suspend fun getAppSetting(): ResultHandler<ServerResponse<AppSettings>> {
+        return resultManager.safeApiCall {
+            apiService.getAppSettings(featureListProvider.getFeatureFlagsList())
         }
-        result.let{
-            when (result) {
-                is ResultHandler.NetworkError -> {
-                    Log.d(TAG,"initAppSetting - NetworkError")
-                    return AppSettingsRepoResult(AppSettingsRepoStatus.FAILED)
-                }
-                is ResultHandler.GenericError -> {
-                    Log.d(TAG,"initAppSetting - GenericError")
-                    return AppSettingsRepoResult(AppSettingsRepoStatus.FAILED)
-                }
-                is ResultHandler.Success -> {
-                    Log.d(TAG,"initAppSetting - Success")
-                    val appSettings = result.value.data
-                    appSettings?.let{
-                        this.appSettingsArr = it.settings
-                    }
-                    return AppSettingsRepoResult(AppSettingsRepoStatus.SUCCESS)
-                }
-                is ResultHandler.WSCustomError -> {
-                    return AppSettingsRepoResult(AppSettingsRepoStatus.FAILED)
-                }
+    }
+
+    override suspend fun initAppSettings(dispatcher: CoroutineDispatcher) = withContext(dispatcher) {
+        _state.value = when (val result = getAppSetting()) {
+            is ResultHandler.NetworkError -> {
+                Timber.d("initAppSetting - NetworkError")
+                AppSettingsRepoState.Failed(result)
+            }
+            is ResultHandler.GenericError -> {
+                Timber.d("initAppSetting - GenericError")
+                AppSettingsRepoState.Failed(result)
+            }
+            is ResultHandler.Success -> {
+                Timber.d("initAppSetting - Success")
+                AppSettingsRepoState.Success(
+                    appSettings = result.value.data?.settings ?: emptyList(),
+                    featureFlags = result.value.data?.ff ?: emptyMap()
+                )
+            }
+            is ResultHandler.WSCustomError -> {
+                Timber.d("initAppSetting - WSCustomError")
+                AppSettingsRepoState.Failed(result)
             }
         }
     }
 
-    private fun getSettings(): List<AppSetting> {
-        return appSettingsArr
-    }
+    override val appSettings: List<AppSetting>
+        get() = (state.value as? AppSettingsRepoState.Success)?.appSettings ?: emptyList()
 
-    fun getTermsOfServiceUrl(): String {
-        for (settings in getSettings()){
-            if(settings.key == "terms_url")
-                return settings.value!! as String
+    override val featureFlags: Map<String, Boolean>
+        get() = (state.value as? AppSettingsRepoState.Success)?.featureFlags ?: emptyMap()
+
+    override fun appSetting(key: String): Any? {
+        val value = appSettings.firstOrNull { it.key == key }?.value
+        if (value == null) {
+            eventsManager.logEvent(
+                MissingKeyErrorEventName,
+                mapOf(
+                    "key" to key
+                )
+            )
         }
-        return ""
+        return value
     }
 
-    fun getPrivacyPolicyUrl(): String {
-        for (settings in getSettings()){
-            if(settings.key == "privacy_policy_url")
-                return settings.value!! as String
-        }
-        return ""
+    override fun featureFlag(key: String): Boolean? {
+        return featureFlags[key]
     }
 
-    fun getStripePublishableKey(): String?{
-        for (settings in getSettings()){
-            if(settings.key == "stripe_publishable_key")
-                return settings.value!! as String
-        }
-        return null
+    companion object {
+        const val MissingKeyErrorEventName = "missing_app_setting_key"
     }
-
-    fun getReportsEmailAddress(): String {
-        for (settings in getSettings()){
-            if(settings.key == "client_support_email")
-                return settings.value!! as String
-        }
-        return ""
-    }
-
-    fun getUpdateDialogTitle(): String {
-        for (settings in getSettings()){
-            if(settings.key == "android_version_control_title")
-                return settings.value!! as String
-        }
-        return ""
-    }
-
-    fun getUpdateDialogBody(): String {
-        for (settings in getSettings()){
-            if(settings.key == "android_version_control_body")
-                return settings.value!! as String
-        }
-        return ""
-    }
-
-    fun getUpdateDialogUrl(): String {
-        for (settings in getSettings()){
-            if(settings.key == "android_version_control_link")
-                return settings.value!! as String
-        }
-        return ""
-    }
-
-    fun getMinOrderFeeStr(nationwide: Boolean): String {
-        if(nationwide){
-            for (settings in getSettings()){
-                if(settings.key == "nationwide_min_order")
-                    return (settings.value!! as Price).formatedValue as String
-            }
-        }else{
-            for (settings in getSettings()){
-                if(settings.key == "min_order")
-                    return (settings.value!! as Price).formatedValue as String
-            }
-        }
-        return ""
-    }
-
-    private fun getMinAndroidVersion():String{
-        for (settings in getSettings()){
-            if(settings.key == "eaters_min_android_version")
-                return (settings.value!!) as String
-        }
-        return ""
-    }
-
-    fun checkMinVersionFail(): Boolean {
-        val minVersion = getMinAndroidVersion()
-        Log.d("wowMetaDataRepo", "minimum version: $minVersion")
-        minVersion.let{
-            val versionName = BuildConfig.VERSION_NAME
-
-            val myCurrVersion = getNumberFromStr(versionName)
-            val minimumVersion = getNumberFromStr(minVersion)
-            Log.d("wowMetaDataRepo", "curVersion: $myCurrVersion, minimum version: $minimumVersion")
-            return myCurrVersion < minimumVersion
-        }
-    }
-
-    private fun getNumberFromStr(str: String): Int {
-        var versionNumber = 0
-        val numParts = str.split("\\.".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
-        if (numParts.size in 1..3) {
-            var multiplier = 1
-            for (i in numParts.indices.reversed()) {
-                versionNumber += Integer.parseInt(numParts[i].replace("\"", "")) * multiplier
-                multiplier *= 1000
-            }
-        }
-        return versionNumber
-    }
-
-    fun getContactUsPhoneNumber(): String {
-        for (settings in getSettings()){
-            if(settings.key == "contact_us_number")
-                return (settings.value!!) as String
-        }
-        return ""
-    }
-
-    fun getContactUsTextNumber(): String {
-        for (settings in getSettings()){
-            if(settings.key == "text_message_num")
-                return (settings.value!!) as String
-        }
-        return ""
-    }
-
-    fun getQaUrl(): String {
-        for (settings in getSettings()){
-            if(settings.key == "qa_url")
-                return (settings.value!!) as String
-        }
-        return ""
-    }
-
-    fun getLocationDistanceThreshold(): Int {
-        for (settings in getSettings()){
-            if(settings.key == "location_distance_threshold")
-                return (settings.value!!) as Int
-        }
-        return 20
-    }
-
-    fun getMinFutureOrderWindow(): Int {
-        for (settings in getSettings()){
-            if(settings.key == "min_future_order_window")
-                return (settings.value!!) as Int
-        }
-        return 60
-    }
-
-    fun getDefaultLat(): Double {
-        for (settings in getSettings()){
-            if(settings.key == "default_feed_lat")
-                return ((settings.value!!) as BigDecimal).toDouble()
-        }
-        return 0.0
-    }
-
-    fun getDefaultLng(): Double {
-        for (settings in getSettings()){
-            if(settings.key == "default_feed_lng")
-                return ((settings.value!!) as BigDecimal).toDouble()
-        }
-        return 0.0
-    }
-
-    fun getDefaultFeedLocationName(): String {
-        for (settings in getSettings()){
-            if(settings.key == "default_feed_location_name")
-                return (settings.value!!) as String
-        }
-        return ""
-    }
-
-    fun getCloudinaryTransformations(): CloudinaryTransformations? {
-        for (settings in getSettings()){
-            if(settings.key == "cloudinary_transformations"){
-                val cloudinaryMap = settings.value as Map<*, *>?
-                cloudinaryMap?.let {
-                    return CloudinaryTransformations(cloudinaryMap as Map<CloudinaryTransformationsType, String>?)
-                }
-            }
-        }
-        return null
-    }
-
-    companion object{
-        const val TAG = "wowMetaDataRepo"
-    }
-
-
 }

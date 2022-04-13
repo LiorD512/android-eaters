@@ -16,6 +16,8 @@ import com.bupp.wood_spoon_eaters.model.Eater
 import com.bupp.wood_spoon_eaters.model.EaterRequest
 import com.bupp.wood_spoon_eaters.model.ErrorEventType
 import com.bupp.wood_spoon_eaters.model.SelectableIcon
+import com.bupp.wood_spoon_eaters.repositories.AppSettingsRepository
+import com.bupp.wood_spoon_eaters.repositories.EatersFeatureFlags
 import com.bupp.wood_spoon_eaters.repositories.MetaDataRepository
 import com.bupp.wood_spoon_eaters.repositories.UserRepository
 import kotlinx.coroutines.launch
@@ -27,6 +29,7 @@ class MyProfileViewModel(
     private val flavorConfigManager: FlavorConfigManager,
     paymentManager: PaymentManager,
     campaignManager: CampaignManager,
+    private val appSettingsRepository: AppSettingsRepository
 ) :
     ViewModel(), EphemeralKeyProvider.EphemeralKeyProviderListener {
 
@@ -40,7 +43,6 @@ class MyProfileViewModel(
     val campaignLiveData = campaignManager.getCampaignLiveData()
 
 
-
     init {
         setVersionData()
         viewModelScope.launch {
@@ -49,7 +51,12 @@ class MyProfileViewModel(
     }
 
     private fun setVersionData() {
-        val versionData = "Version: ${BuildConfig.VERSION_NAME} ${flavorConfigManager.getEnvName()}"
+        val buildNumber = if (appSettingsRepository.featureFlag(EatersFeatureFlags.test_mobile_show_build_number.name) != false) {
+            " (${BuildConfig.VERSION_CODE})"
+        } else ""
+
+
+        val versionData = "Version: ${BuildConfig.VERSION_NAME}$buildNumber ${flavorConfigManager.getEnvName()}"
         versionLiveData.postValue(versionData)
     }
 
@@ -58,7 +65,7 @@ class MyProfileViewModel(
     fun fetchProfileData() {
         viewModelScope.launch {
             Log.d(TAG, "fetchProfileData")
-            val eater =  userRepository.fetchUser()
+            val eater = userRepository.fetchUser()
             val dietaries = metaDataRepository.getDietaryList()
             profileData.postValue(ProfileData(eater, dietaries))
         }
@@ -118,7 +125,6 @@ class MyProfileViewModel(
     companion object {
         const val TAG = "wowMyProfileVM"
     }
-
 
 }
 

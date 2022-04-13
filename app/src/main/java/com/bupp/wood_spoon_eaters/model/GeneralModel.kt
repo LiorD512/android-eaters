@@ -1,6 +1,7 @@
 package com.bupp.wood_spoon_eaters.model
 
 import android.os.Parcelable
+import androidx.annotation.Keep
 import com.bupp.wood_spoon_eaters.bottom_sheets.reviews.Metrics
 import com.google.gson.annotations.SerializedName
 import com.squareup.moshi.Json
@@ -9,7 +10,7 @@ import kotlinx.parcelize.Parcelize
 import java.util.ArrayList
 
 @JsonClass(generateAdapter = true)
-data class ServerResponse<T> (
+data class ServerResponse<T>(
     var code: Int = 0,
     var message: String? = null,
     var data: T? = null,
@@ -36,7 +37,7 @@ data class WSError(
 @Parcelize
 data class WSImage(
     @Json(name = "url") val url: String?,
-):Parcelable
+) : Parcelable
 
 @JsonClass(generateAdapter = true)
 data class CountriesISO(
@@ -71,7 +72,7 @@ data class NotificationGroup(
     @Json(name = "id") val id: Long,
     @Json(name = "name") val name: String,
     @Json(name = "description") val description: String
-): Parcelable
+) : Parcelable
 
 @JsonClass(generateAdapter = true)
 data class ReportIssue(
@@ -101,27 +102,34 @@ data class PrepTimeRange(
 
 @JsonClass(generateAdapter = true)
 data class AppSettings(
-    @Json(name = "settings") val settings: List<AppSetting>
+    @Json(name = "settings") val settings: List<AppSetting>?,
+    @Json(name = "ff") val ff: Map<String, Boolean>?
 )
 
 @JsonClass(generateAdapter = true)
 data class AppSetting(
-    var id: Long?,
-    var key: String?,
-    var data_type: String?,
-    var value: Any?
+    val id: Long?,
+    val key: String?,
+    val data_type: String?,
+    val value: Any?
 )
 
-enum class CloudinaryTransformationsType{
-    @Json(name = "small") SMALL,
+@Keep
+enum class AppSettingKnownTypes {
+    string, integer, decimal, price, key_value, boolean, csv_array
+}
+
+enum class CloudinaryTransformationsType {
+    @Json(name = "small")
+    SMALL,
     MEDIUM, LARGE
 }
 
 @JsonClass(generateAdapter = true)
 data class CloudinaryTransformations(
     var keyValueMap: Map<CloudinaryTransformationsType, String>?
-){
-    fun getByType(type: CloudinaryTransformationsType): String?{
+) {
+    fun getByType(type: CloudinaryTransformationsType): String? {
         //todo - Amitt! check this !
         return keyValueMap?.get(type)
     }

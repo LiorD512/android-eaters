@@ -3,8 +3,7 @@ package com.bupp.wood_spoon_eaters.dialogs.web_docs
 import androidx.lifecycle.ViewModel
 import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.common.FlowEventsManager
-import com.bupp.wood_spoon_eaters.repositories.AppSettingsRepository
-import com.bupp.wood_spoon_eaters.repositories.MetaDataRepository
+import com.bupp.wood_spoon_eaters.repositories.*
 
 class WebDocsViewModel(private val appSettingsRepository: AppSettingsRepository, private val flowEventsManager: FlowEventsManager) : ViewModel() {
 

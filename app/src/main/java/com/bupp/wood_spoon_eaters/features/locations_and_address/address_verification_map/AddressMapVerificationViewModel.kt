@@ -7,8 +7,10 @@ import com.bupp.wood_spoon_eaters.di.abs.LiveEventData
 import com.bupp.wood_spoon_eaters.model.AddressRequest
 import com.bupp.wood_spoon_eaters.repositories.AppSettingsRepository
 import com.bupp.wood_spoon_eaters.repositories.MetaDataRepository
+import com.bupp.wood_spoon_eaters.repositories.getLocationDistanceThreshold
 import com.bupp.wood_spoon_eaters.utils.LocationUtils
 import com.google.android.gms.maps.model.LatLng
+
 
 class AddressMapVerificationViewModel(val metaDataRepository: MetaDataRepository, val appSettingsRepository: AppSettingsRepository, val settings: UserSettings) : ViewModel() {
 

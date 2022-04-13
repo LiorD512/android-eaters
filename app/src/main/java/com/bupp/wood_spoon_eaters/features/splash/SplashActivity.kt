@@ -38,7 +38,7 @@ class SplashActivity : AppCompatActivity(), UpdateRequiredDialog.UpdateRequiredD
     }
 
     private fun init() {
-        viewModel.initAppSplashData(this)
+        viewModel.initAppSplashData()
     }
 
     private fun initObservers() {
