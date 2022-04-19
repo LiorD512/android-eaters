@@ -145,7 +145,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             app:tip_type="FEES_AND_ESTIMATED_TAX"
-                            app:title="Fees &amp; Estimated tax" />
+                            app:title="@string/fees_and_estimated_tax_title" />
 
                     <com.bupp.wood_spoon_eaters.views.WSTitleValueView
                             android:id="@+id/singleOrderDetailsPromoCode"

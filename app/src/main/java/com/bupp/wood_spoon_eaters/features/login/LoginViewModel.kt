@@ -16,6 +16,7 @@ import com.bupp.wood_spoon_eaters.managers.PaymentManager
 import com.bupp.wood_spoon_eaters.model.CountriesISO
 import com.bupp.wood_spoon_eaters.model.EaterRequest
 import com.bupp.wood_spoon_eaters.model.ErrorEventType
+import com.bupp.wood_spoon_eaters.repositories.AppSettingsRepository
 import com.bupp.wood_spoon_eaters.repositories.MetaDataRepository
 import com.bupp.wood_spoon_eaters.repositories.UserRepository
 import kotlinx.coroutines.launch
@@ -26,6 +27,7 @@ class LoginViewModel(
     private val userRepository: UserRepository,
     private val flowEventsManager: FlowEventsManager,
     private val metaDataRepository: MetaDataRepository,
+    private val appSettingsRepository: AppSettingsRepository,
     private val deviceDetailsManager: FcmManager,
     private val paymentManager: PaymentManager
 ) : ViewModel() {
@@ -185,6 +187,7 @@ class LoginViewModel(
                         UserRepository.UserRepoStatus.SUCCESS -> {
                             Log.d("wowLoginVM", "sendPhoneAndCodeNumber - Success")
                             metaDataRepository.initMetaData()
+                            appSettingsRepository.initAppSettings()
                             if (userRepository.isUserSignedUp()) {
                                 paymentManager.initPaymentManager(context)
                                 navigationEvent.postRawValue(NavigationEventType.OPEN_MAIN_ACT)

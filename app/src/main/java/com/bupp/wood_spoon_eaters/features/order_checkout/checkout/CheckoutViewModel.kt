@@ -1,11 +1,14 @@
 package com.bupp.wood_spoon_eaters.features.order_checkout.checkout
 
 import android.util.Log
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.bupp.wood_spoon_eaters.di.abs.LiveEventData
 import com.bupp.wood_spoon_eaters.di.abs.ProgressData
+import com.bupp.wood_spoon_eaters.experiments.PricingExperimentParams
+import com.bupp.wood_spoon_eaters.experiments.PricingExperimentUseCase
 import com.bupp.wood_spoon_eaters.features.base.SingleLiveEvent
 import com.bupp.wood_spoon_eaters.features.order_checkout.checkout.models.CheckoutAdapterItem
 import com.bupp.wood_spoon_eaters.features.order_checkout.upsale_and_cart.CustomOrderItem
@@ -25,7 +28,8 @@ class CheckoutViewModel(
     private val cartManager: CartManager,
     private val paymentManager: PaymentManager,
     val eaterDataManager: EaterDataManager,
-    private val eventsManager: EventsManager
+    private val eventsManager: EventsManager,
+    private val pricingExperimentUseCase: PricingExperimentUseCase
 ) : ViewModel() {
 
 
@@ -41,6 +45,8 @@ class CheckoutViewModel(
 
     val wsErrorEvent = cartManager.getWsErrorEvent()
     val validationError = SingleLiveEvent<OrderValidationErrorType>()
+
+    val pricingExperimentData: LiveData<PricingExperimentParams> = MutableLiveData(pricingExperimentUseCase.getExperimentParams())
 
     enum class OrderValidationErrorType {
         SHIPPING_METHOD_MISSING,
@@ -66,7 +72,7 @@ class CheckoutViewModel(
         orderItems?.forEach {
             val customCartItem = CustomOrderItem(
                 orderItem = it,
-                cookingSlot = order.cookingSlot
+                cookingSlot = order.cookingSlot,
             )
             list.add(CheckoutAdapterItem(customOrderItem = customCartItem))
         }
@@ -95,7 +101,7 @@ class CheckoutViewModel(
         cartManager.refreshOrderLiveData()
     }
 
-    fun updateDeliveryAt(deliveryAt:Date?){
+    fun updateDeliveryAt(deliveryAt: Date?) {
         cartManager.updateCurrentDeliveryAt(deliveryAt)
         updateOrderParams(OrderRequest(deliveryAt = DateUtils.parseUnixTimestamp(deliveryAt)))
     }

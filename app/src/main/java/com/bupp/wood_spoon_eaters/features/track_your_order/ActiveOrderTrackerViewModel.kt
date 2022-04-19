@@ -12,7 +12,8 @@ import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.common.FlowEventsManager
 import com.bupp.wood_spoon_eaters.di.abs.LiveEventData
-import com.bupp.wood_spoon_eaters.dialogs.cancel_order.CancelOrderDialog
+import com.bupp.wood_spoon_eaters.experiments.PricingExperimentParams
+import com.bupp.wood_spoon_eaters.experiments.PricingExperimentUseCase
 import com.bupp.wood_spoon_eaters.features.active_orders_tracker.sub_screen.OrderUserInfo
 import com.bupp.wood_spoon_eaters.managers.EaterDataManager
 import com.bupp.wood_spoon_eaters.managers.EventsManager
@@ -22,7 +23,6 @@ import com.bupp.wood_spoon_eaters.model.OrderState
 import com.bupp.wood_spoon_eaters.model.RestaurantInitParams
 import com.bupp.wood_spoon_eaters.network.ApiService
 import com.bupp.wood_spoon_eaters.repositories.AppSettingsRepository
-import com.bupp.wood_spoon_eaters.repositories.MetaDataRepository
 import com.bupp.wood_spoon_eaters.repositories.getContactUsPhoneNumber
 import com.google.android.gms.maps.model.*
 import kotlinx.coroutines.Job
@@ -38,7 +38,8 @@ class ActiveOrderTrackerViewModel(
     private val paymentManager: PaymentManager,
     private val appSettingsRepository: AppSettingsRepository,
     private val flowEventsManager: FlowEventsManager,
-    private val eventsManager: EventsManager
+    private val eventsManager: EventsManager,
+    private val pricingExperimentUseCase: PricingExperimentUseCase
 ) : ViewModel() {
 
     var orderId: Long? = null
@@ -47,7 +48,11 @@ class ActiveOrderTrackerViewModel(
 
     val getCurrentOrderDetails: MutableLiveData<GetActiveOrdersEvent> = MutableLiveData()
 
-    data class GetActiveOrdersEvent(val order: Order, val userInfo: OrderUserInfo? = null)
+    data class GetActiveOrdersEvent(
+        val order: Order,
+        val userInfo: OrderUserInfo? = null,
+        val pricingExperimentParams: PricingExperimentParams
+    )
 
     fun getCurrentOrder(orderId: Long?) {
         orderId?.let {
@@ -56,7 +61,13 @@ class ActiveOrderTrackerViewModel(
             orders?.let {
                 val currentOrder = it.find { it.id == orderId }
                 currentOrder?.let {
-                    getCurrentOrderDetails.postValue(GetActiveOrdersEvent(it, getOrderUserInfo()))
+                    getCurrentOrderDetails.postValue(
+                        GetActiveOrdersEvent(
+                            it,
+                            getOrderUserInfo(),
+                            pricingExperimentUseCase.getExperimentParams()
+                        )
+                    )
 //                    repeatRequest()
                 }
             }
@@ -147,7 +158,6 @@ class ActiveOrderTrackerViewModel(
     data class MapData(val bounds: LatLngBounds, val markers: List<MarkerOptions>)
 
 
-
     val mapData = MutableLiveData<MapData>()
     fun onMapReady(context: Context) {
         getCurrentOrderDetails.value?.let {
@@ -211,9 +221,10 @@ class ActiveOrderTrackerViewModel(
     }
 
     data class CancelOrderParam(val orderStage: Int, val orderId: Long?)
+
     val cancelOrderEvent = LiveEventData<CancelOrderParam>()
-    fun onCancelClick(){
-        getCurrentOrderDetails.value?.order?.let{
+    fun onCancelClick() {
+        getCurrentOrderDetails.value?.order?.let {
             var curOrderStage = 1
             when (it.status) {
                 OrderState.RECEIVED -> {
@@ -235,8 +246,8 @@ class ActiveOrderTrackerViewModel(
 
     val hideCancelBtn = MutableLiveData<Boolean>()
     fun checkIfCanCancel() {
-        getCurrentOrderDetails.value?.order?.let{
-            if(it.status == OrderState.DELIVERED){
+        getCurrentOrderDetails.value?.order?.let {
+            if (it.status == OrderState.DELIVERED) {
                 hideCancelBtn.postValue(true)
             }
         }
@@ -274,7 +285,7 @@ class ActiveOrderTrackerViewModel(
 
     fun logCancelClick(type: Int) {
         var cancelFee = 0
-        when(type){
+        when (type) {
             Constants.CANCEL_ORDER_STAGE_2 -> {
                 cancelFee = 50
             }
@@ -282,7 +293,7 @@ class ActiveOrderTrackerViewModel(
                 cancelFee = 100
             }
         }
-        eventsManager.logEvent(Constants.EVENT_ORDERS_CANCEL, mapOf(Pair("cancalation_fee",cancelFee)))
+        eventsManager.logEvent(Constants.EVENT_ORDERS_CANCEL, mapOf(Pair("cancalation_fee", cancelFee)))
     }
 
 }

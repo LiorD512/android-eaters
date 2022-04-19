@@ -1,5 +1,6 @@
 package com.bupp.wood_spoon_eaters.di
 
+import android.content.Context
 import com.bupp.wood_spoon_eaters.dialogs.super_user.SuperUserViewModel
 import com.bupp.wood_spoon_eaters.common.UserSettings
 import com.bupp.wood_spoon_eaters.dialogs.rate_last_order.RateLastOrderViewModel
@@ -27,6 +28,7 @@ import com.bupp.wood_spoon_eaters.bottom_sheets.reviews.ReviewsBSViewModel
 import com.bupp.wood_spoon_eaters.features.main.settings.SettingsViewModel
 import com.bupp.wood_spoon_eaters.bottom_sheets.support_center.SupportViewModel
 import com.bupp.wood_spoon_eaters.custom_views.cuisine_chooser.CuisineChooserViewModel
+import com.bupp.wood_spoon_eaters.experiments.PricingExperimentUseCase
 import com.bupp.wood_spoon_eaters.features.main.search.SearchViewModel
 import com.bupp.wood_spoon_eaters.features.order_checkout.checkout.CheckoutViewModel
 import com.bupp.wood_spoon_eaters.features.order_checkout.promo_code.PromoCodeViewModel
@@ -48,6 +50,8 @@ import org.koin.dsl.module
 
 
 val appModule = module {
+
+    factory { get<Context>().resources }
 
     //global
     single { FcmManager(get()) }
@@ -85,6 +89,8 @@ val appModule = module {
     single { CartManager(get(), get(), get()) }
     single { EaterDataManager(get(), get(), get(), get(), get()) }
 
+    single { PricingExperimentUseCase(get(), get()) }
+
 
     //VIEW MODELS
 
@@ -96,7 +102,7 @@ val appModule = module {
     viewModel { SuperUserViewModel(get(), get()) }
 
     //login
-    viewModel { LoginViewModel(get(), get(), get(), get(), get(), get()) }
+    viewModel { LoginViewModel(get(), get(), get(), get(), get(), get(), get()) }
 
 
     //location
@@ -108,9 +114,9 @@ val appModule = module {
     viewModel { TimePickerViewModel(get()) }
 
     //New Order
-    viewModel { CheckoutViewModel(get(), get(), get(), get()) }
+    viewModel { CheckoutViewModel(get(), get(), get(), get(), get()) }
     viewModel { PromoCodeViewModel(get(), get()) }
-    viewModel { FeesAndTaxViewModel(get()) }
+    viewModel { FeesAndTaxViewModel(get(), get()) }
 
     viewModel { UpSaleNCartViewModel(get(), get(), get(), get()) }
 
@@ -123,13 +129,13 @@ val appModule = module {
 
     viewModel { UpdateRequiredViewModel(get()) }
 
-    viewModel { ActiveOrderTrackerViewModel(get(), get(), get(), get(), get(), get()) }
+    viewModel { ActiveOrderTrackerViewModel(get(), get(), get(), get(), get(), get(), get()) }
     viewModel { CancelOrderViewModel(get()) }
 
     //Profile
     viewModel { MyProfileViewModel(get(), get(), get(), get(), get(), get(), get()) }
     viewModel { EditProfileViewModel(get(), get(), get()) }
-    viewModel { SingleOrderDetailsViewModel(get(), get()) }
+    viewModel { SingleOrderDetailsViewModel(get(), get(), get()) }
     viewModel { OrdersHistoryViewModel(get(), get(), get()) }
     viewModel { CuisineChooserViewModel(get(), get()) }
 

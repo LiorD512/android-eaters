@@ -1,14 +1,11 @@
 package com.bupp.wood_spoon_eaters.features.track_your_order
 
 import android.animation.ValueAnimator
-import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.transition.*
-import android.util.AttributeSet
 import android.util.Log
-import android.view.View
 import androidx.annotation.RequiresApi
 import androidx.constraintlayout.motion.widget.MotionLayout
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -17,13 +14,14 @@ import com.bumptech.glide.load.MultiTransformation
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.request.RequestOptions
 import com.bupp.wood_spoon_eaters.R
-import com.bupp.wood_spoon_eaters.bottom_sheets.fees_and_tax_bottom_sheet.FeesAndTaxBottomSheet
+import com.bupp.wood_spoon_eaters.bottom_sheets.fees_and_tax_bottom_sheet.FeesAndTaxBottomSheetDialog
 import com.bupp.wood_spoon_eaters.bottom_sheets.tool_tip_bottom_sheet.ToolTipBottomSheet
 import com.bupp.wood_spoon_eaters.bottom_sheets.track_order.TrackOrderData
 import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.common.FlowEventsManager
 import com.bupp.wood_spoon_eaters.custom_views.simpler_views.SimpleMotionTransitionListener
 import com.bupp.wood_spoon_eaters.databinding.ActivityTrackYourOrderBinding
+import com.bupp.wood_spoon_eaters.experiments.PricingExperimentParams
 import com.bupp.wood_spoon_eaters.features.active_orders_tracker.sub_screen.OrderTrackDetails
 import com.bupp.wood_spoon_eaters.features.active_orders_tracker.sub_screen.OrderUserInfo
 import com.bupp.wood_spoon_eaters.features.base.BaseActivity
@@ -95,7 +93,7 @@ class TrackYourOrderActivity : BaseActivity(), TrackOrderNewAdapter.TrackOrderNe
             trackOrderProgressStatusTitle.text = statusTitle
             trackOrderProgressStatusSubTitle.text = statusSubTitle
 
-            if(OrderState.values().find { it.name == pbState } != null){
+            if (OrderState.values().find { it.name == pbState } != null) {
                 trackOrderProgressPb.setState(OrderState.valueOf(pbState))
             }
 
@@ -150,7 +148,7 @@ class TrackYourOrderActivity : BaseActivity(), TrackOrderNewAdapter.TrackOrderNe
 
         binding.motionLayout.addTransitionListener(object : SimpleMotionTransitionListener() {
             override fun onTransitionCompleted(motionLayout: MotionLayout?, currentId: Int) {
-                when(currentId){
+                when (currentId) {
                     R.id.scrollStart -> {
                         Log.d("wowTrackOrderFragment", "onAnimationEnd scrollStart")
                         binding.motionLayout.setTransition(R.id.scrollStart, R.id.scrollEnd)
@@ -158,7 +156,7 @@ class TrackYourOrderActivity : BaseActivity(), TrackOrderNewAdapter.TrackOrderNe
 
                         //adjust restaurant title padding
                         val curPadding = binding.trackOrderActMainList.paddingTop
-                        if(curPadding <= Utils.toPx(50)){
+                        if (curPadding <= Utils.toPx(50)) {
                             val varl = ValueAnimator.ofInt(Utils.toPx(30))
                             varl.duration = 250
                             varl.addUpdateListener { animation ->
@@ -201,7 +199,7 @@ class TrackYourOrderActivity : BaseActivity(), TrackOrderNewAdapter.TrackOrderNe
 
     private fun collapseMap() {
         binding.motionLayout.transitionToStart()
-        binding.motionLayout.addTransitionListener(object: SimpleMotionTransitionListener(){
+        binding.motionLayout.addTransitionListener(object : SimpleMotionTransitionListener() {
             override fun onTransitionCompleted(motionLayout: MotionLayout?, currentId: Int) {
                 binding.motionLayout.setTransition(binding.motionLayout.currentState, R.id.scrollEnd)
                 binding.motionLayout.progress = 0f
@@ -210,27 +208,27 @@ class TrackYourOrderActivity : BaseActivity(), TrackOrderNewAdapter.TrackOrderNe
         })
         binding.trackOrderSpace.elevation = 10f
         binding.trackOrderActMainList.setOnTouchListener { v, event -> false }
-        binding.trackOrderSpace.setOnClickListener{
+        binding.trackOrderSpace.setOnClickListener {
             expandMap()
         }
     }
 
     private fun initObservers() {
-        viewModel.getCurrentOrderDetails.observe(this, { result ->
+        viewModel.getCurrentOrderDetails.observe(this) { result ->
             result.order.let {
                 Log.d("wowTrackOrderFragment", "updating orders")
-                updateOrderUi(it, result.userInfo)
+                updateOrderUi(it, result.userInfo, result.pricingExperimentParams)
             }
-        })
-        viewModel.mapData.observe(this, {
+        }
+        viewModel.mapData.observe(this) {
             handleMapData(it)
-        })
-        viewModel.feeAndTaxDialogData.observe(this, {
-            FeesAndTaxBottomSheet.newInstance(it.fee, it.tax, it.minFee).show(supportFragmentManager, Constants.FEES_AND_tAX_BOTTOM_SHEET)
-        })
-        viewModel.chefPageClick.observe(this, {
+        }
+        viewModel.feeAndTaxDialogData.observe(this) {
+            FeesAndTaxBottomSheetDialog.newInstance(it.fee, it.tax, it.minFee).show(supportFragmentManager, Constants.FEES_AND_tAX_BOTTOM_SHEET)
+        }
+        viewModel.chefPageClick.observe(this) {
             startActivity(Intent(this, RestaurantActivity::class.java).putExtra(Constants.ARG_RESTAURANT, it))
-        })
+        }
     }
 
     private fun handleMapData(mapData: ActiveOrderTrackerViewModel.MapData?) {
@@ -246,14 +244,14 @@ class TrackYourOrderActivity : BaseActivity(), TrackOrderNewAdapter.TrackOrderNe
             val padding = ((width * 25) / 100)
 
             val bound = builder.build()
-            try{
+            try {
                 mMap?.moveCamera(CameraUpdateFactory.newLatLngBounds(it.bounds, width, height, padding))
                 mMap?.setOnCameraIdleListener {
                     if (binding.trackOrderMapPreview.alpha > 0) {
                         AnimationUtil().alphaOut(binding.trackOrderMapPreview, customStartDelay = 500)
                     }
                 }
-            }catch (ex: Exception){
+            } catch (ex: Exception) {
                 Log.d(TAG, "error loading map")
                 viewModel.onMapReady(this)
             }
@@ -263,9 +261,10 @@ class TrackYourOrderActivity : BaseActivity(), TrackOrderNewAdapter.TrackOrderNe
 
     private fun updateOrderUi(
         order: Order,
-        userInfo: OrderUserInfo?
+        userInfo: OrderUserInfo?,
+        pricingExperimentParams: PricingExperimentParams
     ) {
-        val adapterDetails = OrderTrackDetails(order, userInfo)
+        val adapterDetails = OrderTrackDetails(order, userInfo, pricingExperimentParams)
 
         binding.trackOrderActTopHeaderRestaurantName.text = order.restaurant?.restaurantName
         binding.trackOrderActTopHeaderDeliveryTime.text = order.etaToDisplay
@@ -274,18 +273,18 @@ class TrackYourOrderActivity : BaseActivity(), TrackOrderNewAdapter.TrackOrderNe
             TrackOrderData(TrackOrderNewAdapter.VIEW_TYPE_DETAILS, adapterDetails),
         )
 
-        with(binding){
+        with(binding) {
             trackOrderProgressPb.setState(order.status)
             trackOrderProgressName.text = order.restaurant?.restaurantName
             trackOrderProgressStatusTitle.text = order.extendedStatus?.title
             trackOrderProgressStatusSubTitle.text = order.extendedStatus?.subtitle
 
-            if(order.status.ordinal >= OrderState.RECEIVED.ordinal){
+            if (order.status.ordinal >= OrderState.RECEIVED.ordinal) {
                 trackOrderActEta.text = order.etaToDisplay
                 AnimationUtil().alphaIn(trackOrderActEta)
             }
 
-            if(order.status.ordinal == OrderState.DELIVERED.ordinal){
+            if (order.status.ordinal == OrderState.DELIVERED.ordinal) {
                 viewModel.endUpdates()
             }
         }

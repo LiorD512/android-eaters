@@ -7,27 +7,15 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.request.RequestListener
 import com.bupp.wood_spoon_eaters.bottom_sheets.track_order.TrackOrderData
 import com.bupp.wood_spoon_eaters.databinding.*
-import com.bupp.wood_spoon_eaters.di.GlideApp
 import com.bupp.wood_spoon_eaters.features.active_orders_tracker.sub_screen.OrderTrackDetails
-import com.bupp.wood_spoon_eaters.features.active_orders_tracker.sub_screen.OrderTrackProgress
 import com.bupp.wood_spoon_eaters.features.order_checkout.checkout.models.CheckoutAdapterItem
+import com.bupp.wood_spoon_eaters.features.order_checkout.checkout.order_items_view.CheckoutOrderItemsView
 import com.bupp.wood_spoon_eaters.features.order_checkout.upsale_and_cart.CustomOrderItem
-import com.bupp.wood_spoon_eaters.model.Order
 import com.bupp.wood_spoon_eaters.utils.DateUtils
 import com.bupp.wood_spoon_eaters.views.WSTitleValueView
 import java.text.DecimalFormat
-import android.R
-import android.graphics.drawable.Drawable
-import androidx.annotation.Nullable
-
-import com.bumptech.glide.load.engine.GlideException
-
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.DataSource
-import com.bupp.wood_spoon_eaters.features.order_checkout.checkout.order_items_view.CheckoutOrderItemsView
 
 
 class TrackOrderNewAdapter(val context: Context, val listener: TrackOrderNewAdapterListener) :
@@ -82,6 +70,7 @@ class TrackOrderNewAdapter(val context: Context, val listener: TrackOrderNewAdap
 //            adapter.submitList(order.orderItems)
             binding.trackOrderDetailsDeliveryFee.setWSTitleValueListener(this@TrackOrderNewAdapter)
             binding.trackOrderDetailsFees.setWSTitleValueListener(this@TrackOrderNewAdapter)
+            binding.trackOrderDetailsFees.setTitle(item.pricingExperimentParams.feeAndTaxTitle)
 //
             binding.trackOrderDetailsSubtotal.setValue(order.subtotal?.formatedValue ?: "")
             binding.trackOrderDetailsDeliveryFee.setValue(order.deliveryFee?.formatedValue ?: "")

@@ -15,7 +15,7 @@ interface ApiService {
     @VERSION("v3")
     @GET("eaters/utils/config")
     suspend fun getAppSettings(
-        @Query("ff") features: String
+        @Query("ff") features: String?
     ): ServerResponse<AppSettings>
 
     //MetaData
@@ -273,4 +273,4 @@ interface ApiService {
 }
 
 suspend fun ApiService.getAppSettings(features: List<String>) =
-    getAppSettings(features = features.joinToString(separator = ","))
+    getAppSettings(features = features.joinToString(separator = ",").takeUnless { it.isBlank() })

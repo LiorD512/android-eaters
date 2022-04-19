@@ -9,7 +9,7 @@ import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.bottom_sheets.clear_cart_dialogs.clear_cart_restaurant.ClearCartCheckoutBottomSheet
-import com.bupp.wood_spoon_eaters.bottom_sheets.fees_and_tax_bottom_sheet.FeesAndTaxBottomSheet
+import com.bupp.wood_spoon_eaters.bottom_sheets.fees_and_tax_bottom_sheet.FeesAndTaxBottomSheetDialog
 import com.bupp.wood_spoon_eaters.bottom_sheets.nationwide_shipping_bottom_sheet.NationwideShippingChooserDialog
 import com.bupp.wood_spoon_eaters.bottom_sheets.time_picker.SingleColumnTimePickerBottomSheet
 import com.bupp.wood_spoon_eaters.bottom_sheets.tool_tip_bottom_sheet.ToolTipBottomSheet
@@ -19,6 +19,7 @@ import com.bupp.wood_spoon_eaters.custom_views.CheckoutHeaderView
 import com.bupp.wood_spoon_eaters.custom_views.CustomDetailsView
 import com.bupp.wood_spoon_eaters.databinding.CheckoutFragmentBinding
 import com.bupp.wood_spoon_eaters.dialogs.*
+import com.bupp.wood_spoon_eaters.experiments.PricingExperimentParams
 import com.bupp.wood_spoon_eaters.features.locations_and_address.address_verification_map.AddressVerificationMapFragment
 import com.bupp.wood_spoon_eaters.features.order_checkout.OrderCheckoutActivity
 import com.bupp.wood_spoon_eaters.features.order_checkout.OrderCheckoutViewModel
@@ -27,13 +28,11 @@ import com.bupp.wood_spoon_eaters.features.order_checkout.checkout.order_items_v
 import com.bupp.wood_spoon_eaters.features.order_checkout.checkout.order_items_view.CheckoutOrderItemsView
 import com.bupp.wood_spoon_eaters.features.order_checkout.upsale_and_cart.*
 import com.bupp.wood_spoon_eaters.model.*
-import com.bupp.wood_spoon_eaters.utils.DateUtils
 import com.bupp.wood_spoon_eaters.views.WSTitleValueView
 import com.stripe.android.model.PaymentMethod
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.text.DecimalFormat
-import java.util.*
 import kotlin.collections.ArrayList
 
 
@@ -69,7 +68,6 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
         binding = CheckoutFragmentBinding.bind(view)
 
         mainViewModel.logPageEvent(FlowEventsManager.FlowEvents.PAGE_VISIT_CHECKOUT)
-
 
         initUi()
         initObservers()
@@ -123,7 +121,7 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
                 override fun onDishSwipedRemove(item: CheckoutAdapterItem) {
                     val orderItemId = item.customOrderItem.orderItem.id
                     val showDialog = viewModel.removeSingleOrderItemId(orderItemId)
-                    if(showDialog){
+                    if (showDialog) {
                         ClearCartCheckoutBottomSheet.newInstance(this@CheckoutFragment)
                             .show(childFragmentManager, Constants.CLEAR_CART_RESTAURANT_DIALOG_TAG)
                     }
@@ -141,39 +139,42 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
     }
 
     private fun initObservers() {
-        viewModel.progressData.observe(viewLifecycleOwner, {
+        viewModel.progressData.observe(viewLifecycleOwner) {
             if (it) {
                 binding!!.checkoutFragmentPb.show()
             } else {
                 binding!!.checkoutFragmentPb.hide()
             }
-        })
-        viewModel.orderLiveData.observe(viewLifecycleOwner, { orderData ->
+        }
+        viewModel.orderLiveData.observe(viewLifecycleOwner) { orderData ->
             handleOrderDetails(orderData)
             initMap(orderData)
-        })
-        viewModel.deliveryDatesLiveData.observe(viewLifecycleOwner, {
+        }
+        viewModel.deliveryDatesLiveData.observe(viewLifecycleOwner) {
             handleOrderDeliveryDates(it)
-        })
-        viewModel.timeChangeEvent.observe(viewLifecycleOwner, {
+        }
+        viewModel.timeChangeEvent.observe(
+            viewLifecycleOwner
+        ) {
             it.getContentIfNotHandled()?.let {
                 openOrderTimeBottomSheet(it)
             }
-        })
-        viewModel.getStripeCustomerCards.observe(viewLifecycleOwner, { cardsEvent ->
+
+        }
+        viewModel.getStripeCustomerCards.observe(viewLifecycleOwner) { cardsEvent ->
             Log.d("wowCheckoutFrag", "getStripeCustomerCards()")
             if (cardsEvent != null) {
                 handleCustomerCards(cardsEvent)
             } else {
                 setEmptyPaymentMethod()
             }
-        })
-        viewModel.feeAndTaxDialogData.observe(viewLifecycleOwner, {
+        }
+        viewModel.feeAndTaxDialogData.observe(viewLifecycleOwner) {
             it.getContentIfNotHandled()?.let { data ->
-                FeesAndTaxBottomSheet.newInstance(data.fee, data.tax, data.minOrderFee).show(childFragmentManager, Constants.FEES_AND_tAX_BOTTOM_SHEET)
+                FeesAndTaxBottomSheetDialog.newInstance(data.fee, data.tax, data.minOrderFee).show(childFragmentManager, Constants.FEES_AND_tAX_BOTTOM_SHEET)
             }
-        })
-        viewModel.shippingMethodsEvent.observe(viewLifecycleOwner, {
+        }
+        viewModel.shippingMethodsEvent.observe(viewLifecycleOwner) {
             it?.let {
                 if (it.isNotEmpty()) {
                     NationwideShippingChooserDialog.newInstance(ArrayList(it)).show(childFragmentManager, Constants.NATIONWIDE_SHIPPING_SELECT_DIALOG)
@@ -181,8 +182,8 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
                     Toast.makeText(requireContext(), "UPS Service is not available at the moment, please try again later", Toast.LENGTH_SHORT).show()
                 }
             }
-        })
-        viewModel.validationError.observe(viewLifecycleOwner, {
+        }
+        viewModel.validationError.observe(viewLifecycleOwner) {
             when (it) {
                 CheckoutViewModel.OrderValidationErrorType.SHIPPING_METHOD_MISSING -> {
                     viewModel.onNationwideShippingSelectClick()
@@ -194,16 +195,19 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
                     mainViewModel.handleMainNavigation(OrderCheckoutViewModel.NavigationEventType.START_LOCATION_AND_ADDRESS_ACTIVITY)
                 }
             }
-        })
-        viewModel.wsErrorEvent.observe(viewLifecycleOwner, {
+        }
+        viewModel.wsErrorEvent.observe(viewLifecycleOwner) {
             handleWSError(it.getContentIfNotHandled())
-        })
-        viewModel.deliveryDatesUi.observe(viewLifecycleOwner, {
+        }
+        viewModel.deliveryDatesUi.observe(viewLifecycleOwner) {
             binding!!.checkoutFragDeliveryTime.updateDeliveryTimeUi(it)
-        })
-        viewModel.orderItemsData.observe(viewLifecycleOwner, {
+        }
+        viewModel.orderItemsData.observe(viewLifecycleOwner) {
             handleOrderItemsData(it)
-        })
+        }
+        viewModel.pricingExperimentData.observe(viewLifecycleOwner) {
+            handlePricingExperiment(it)
+        }
     }
 
     private fun initMap(orderData: Order?) {
@@ -220,6 +224,12 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
     private fun handleOrderItemsData(list: List<CheckoutAdapterItem>) {
         with(binding!!) {
             checkoutFragOrderItemsView.submitList(list)
+        }
+    }
+
+    private fun handlePricingExperiment(pricingParams: PricingExperimentParams) {
+        with(binding!!) {
+            checkoutFragFees.setTitle(pricingParams.feeAndTaxTitle)
         }
     }
 
@@ -411,7 +421,7 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
     }
 
     override fun onClearCartCanceled() {
-       //do nothing
+        //do nothing
     }
 
     override fun onDestroyView() {

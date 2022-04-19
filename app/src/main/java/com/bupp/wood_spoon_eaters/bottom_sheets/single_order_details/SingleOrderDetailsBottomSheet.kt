@@ -8,12 +8,13 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.DialogFragment
 import com.bupp.wood_spoon_eaters.R
-import com.bupp.wood_spoon_eaters.bottom_sheets.fees_and_tax_bottom_sheet.FeesAndTaxBottomSheet
+import com.bupp.wood_spoon_eaters.bottom_sheets.fees_and_tax_bottom_sheet.FeesAndTaxBottomSheetDialog
 import com.bupp.wood_spoon_eaters.bottom_sheets.report_issue.ReportIssueBottomSheet
 import com.bupp.wood_spoon_eaters.bottom_sheets.tool_tip_bottom_sheet.ToolTipBottomSheet
 import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.custom_views.HeaderView
 import com.bupp.wood_spoon_eaters.databinding.SingleOrderDetailsBottomSheetBinding
+import com.bupp.wood_spoon_eaters.experiments.PricingExperimentParams
 import com.bupp.wood_spoon_eaters.features.main.MainActivity
 import com.bupp.wood_spoon_eaters.model.Order
 import com.bupp.wood_spoon_eaters.model.OrderState
@@ -30,6 +31,7 @@ class SingleOrderDetailsBottomSheet : BottomSheetDialogFragment(), HeaderView.He
 
     private var binding: SingleOrderDetailsBottomSheetBinding? = null
     private val viewModel: SingleOrderDetailsViewModel by viewModel()
+
     private var curOrderId: Long = -1
 
 
@@ -106,15 +108,18 @@ class SingleOrderDetailsBottomSheet : BottomSheetDialogFragment(), HeaderView.He
     }
 
     private fun initObservers() {
-        viewModel.singleOrderLiveData.observe(viewLifecycleOwner, {
+        viewModel.singleOrderLiveData.observe(viewLifecycleOwner) {
             handleOrder(it)
-        })
-        viewModel.progressData.observe(viewLifecycleOwner, {
+        }
+        viewModel.progressData.observe(viewLifecycleOwner) {
             handlePb(it)
-        })
-        viewModel.feeAndTaxDialogData.observe(viewLifecycleOwner, {
-            FeesAndTaxBottomSheet.newInstance(it.fee, it.tax, it.minFee).show(childFragmentManager, Constants.FEES_AND_tAX_BOTTOM_SHEET)
-        })
+        }
+        viewModel.feeAndTaxDialogData.observe(viewLifecycleOwner) {
+            FeesAndTaxBottomSheetDialog.newInstance(it.fee, it.tax, it.minFee).show(childFragmentManager, Constants.FEES_AND_tAX_BOTTOM_SHEET)
+        }
+        viewModel.pricingExperimentParamsLiveData.observe(viewLifecycleOwner) {
+            handlePricingExperiment(it)
+        }
     }
 
     private fun handleOrder(order: Order) {
@@ -141,7 +146,7 @@ class SingleOrderDetailsBottomSheet : BottomSheetDialogFragment(), HeaderView.He
                     singleOrderDetailsPromoCode.setValue("${discount?.formatedValue}")
                 }
 
-                if(status == OrderState.CANCELLED){
+                if (status == OrderState.CANCELLED) {
                     singleOrderDetailsRate.isEnabled = false
                     singleOrderDetailsRate.alpha = 0.5f
                 }
@@ -177,12 +182,18 @@ class SingleOrderDetailsBottomSheet : BottomSheetDialogFragment(), HeaderView.He
     }
 
     private fun handlePb(showPb: Boolean) {
-        with(binding!!){
-            if(showPb){
+        with(binding!!) {
+            if (showPb) {
                 singleOrderDetailsPb.show()
             } else {
                 singleOrderDetailsPb.hide()
             }
+        }
+    }
+
+    private fun handlePricingExperiment(experimentParams: PricingExperimentParams) {
+        binding?.apply {
+            singleOrderDetailsFees.setTitle(experimentParams.feeAndTaxTitle)
         }
     }
 

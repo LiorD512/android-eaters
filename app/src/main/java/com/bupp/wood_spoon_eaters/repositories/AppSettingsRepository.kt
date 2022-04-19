@@ -1,6 +1,5 @@
 package com.bupp.wood_spoon_eaters.repositories
 
-import com.bupp.wood_spoon_eaters.BuildConfig
 import com.bupp.wood_spoon_eaters.managers.EventsManager
 import com.bupp.wood_spoon_eaters.model.*
 import com.bupp.wood_spoon_eaters.network.ApiService
