@@ -13,7 +13,7 @@ android {
         targetSdkVersion 30
         applicationId "com.bupp.wood_spoon_eaters"
         versionCode System.getenv('VERSION_CODE') as Integer ?: 1000 // Temporary fallback versionCode to enable local builds
-        versionName "2.6.0"
+        versionName "2.6.1"
     }
 
     buildTypes {
