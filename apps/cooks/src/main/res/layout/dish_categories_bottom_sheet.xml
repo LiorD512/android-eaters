@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:gravity="bottom|center">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        tools:background="@color/white"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Dish category"
+            android:gravity="center"
+            style="@style/LatoBlack15Dark"
+            android:paddingVertical="18dp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/silver"/>
+
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/dishCategoriesList"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            android:layout_marginTop="5dp"
+            android:orientation="vertical"
+            tools:listitem="@layout/item_dish_category"/>
+
+        <com.bupp.wood_spoon_chef.presentation.custom_views.OrangeBtnCornered
+            android:id="@+id/dishCategoriesSelectBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            app:title="Select"/>
+
+    </LinearLayout>
+
+</FrameLayout>

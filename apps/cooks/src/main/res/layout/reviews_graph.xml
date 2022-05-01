@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center"
+    android:orientation="horizontal"
+    tools:paddingHorizontal="15.4dp">
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:paddingEnd="23dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="3dp"
+            android:orientation="horizontal">
+
+            <TextView
+                style="@style/LatoBold13Black"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingEnd="10dp"
+                android:text="5" />
+
+            <com.google.android.material.progressindicator.LinearProgressIndicator
+                android:id="@+id/graph5StarPB"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center|start"
+                android:progress="100"
+                app:trackCornerRadius="3dp"
+                app:trackThickness="6dp"
+                app:indicatorColor="@color/orangeish"
+                app:trackColor="@color/silver"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="3dp"
+            android:orientation="horizontal">
+
+            <TextView
+                style="@style/LatoBold13Black"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingEnd="10dp"
+                android:text="4" />
+
+            <com.google.android.material.progressindicator.LinearProgressIndicator
+                android:id="@+id/graph4StarPB"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center|start"
+                android:progress="100"
+                app:trackCornerRadius="3dp"
+                app:trackThickness="6dp"
+                app:indicatorColor="@color/orangeish"
+                app:trackColor="@color/silver"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="3dp"
+            android:orientation="horizontal">
+
+            <TextView
+                style="@style/LatoBold13Black"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingEnd="10dp"
+                android:text="3" />
+
+            <com.google.android.material.progressindicator.LinearProgressIndicator
+                android:id="@+id/graph3StarPB"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center|start"
+                android:progress="100"
+                app:trackCornerRadius="3dp"
+                app:trackThickness="6dp"
+                app:indicatorColor="@color/orangeish"
+                app:trackColor="@color/silver"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="3dp"
+            android:orientation="horizontal">
+
+            <TextView
+                style="@style/LatoBold13Black"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingEnd="10dp"
+                android:text="2" />
+
+            <com.google.android.material.progressindicator.LinearProgressIndicator
+                android:id="@+id/graph2StarPB"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center|start"
+                android:progress="100"
+                app:trackCornerRadius="3dp"
+                app:trackThickness="6dp"
+                app:indicatorColor="@color/orangeish"
+                app:trackColor="@color/silver"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="3dp"
+            android:orientation="horizontal">
+
+            <TextView
+                style="@style/LatoBold13Black"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingEnd="10dp"
+                android:text="1" />
+
+            <com.google.android.material.progressindicator.LinearProgressIndicator
+                android:id="@+id/graph1StarPB"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center|start"
+                android:progress="100"
+                app:trackCornerRadius="3dp"
+                app:trackThickness="6dp"
+                app:indicatorColor="@color/orangeish"
+                app:trackColor="@color/silver"/>
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:paddingHorizontal="20dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/graphAvgRating"
+            style="@style/LatoBlack30Dark"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="4.8"
+            android:paddingBottom="3dp"
+            android:layout_gravity="end"
+            android:drawablePadding="8dp"
+            android:drawableEnd="@drawable/ic_tool_tip"/>
+
+
+        <com.bupp.wood_spoon_chef.presentation.views.RatingStarsViewOrange
+            android:id="@+id/graphAvgReviewStarts"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/graphAvgReviewCount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingTop="3dp"
+            style="@style/LatoReg13PurpelyGreyTwo"
+            tools:text="679 Reviews"/>
+
+
+    </LinearLayout>
+
+
+</LinearLayout>

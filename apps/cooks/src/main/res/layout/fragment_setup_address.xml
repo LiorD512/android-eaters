@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:animateLayoutChanges="true"
+    android:id="@+id/setupAddressMainLayout"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
+    android:orientation="vertical"
+    tools:context=".features.onboarding.create_account.sub_screen.SetupAddressFragment">
+
+    <TextView
+        android:id="@+id/title"
+        style="@style/LatoBlack23Dark"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Pick up address"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <TextView
+        android:id="@+id/subtitle"
+        style="@style/LatoReg13Black"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15.4dp"
+        android:text="Enter your pick up address. Make sure you are as accurate as possible"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/title"/>
+
+    <com.bupp.wood_spoon_chef.presentation.views.WSEditText
+        android:id="@+id/setupAddressStreet"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30.7dp"
+        app:actionType="ADDRESS_AUTO_COMPLETE"
+        app:hint="Building number and street address"
+        app:error="Please state your address"
+        app:wsIcon="@drawable/icons_location"
+        app:layout_constraintTop_toBottomOf="@id/subtitle"/>
+
+    <com.bupp.wood_spoon_chef.presentation.views.WSEditText
+        android:id="@+id/setupAddressApt"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="27.8dp"
+        app:hint="Details (Apt./ Suite/ Floor)"
+        app:error="Please set your apt number"
+        app:layout_constraintTop_toBottomOf="@id/setupAddressStreet"/>
+
+    <com.bupp.wood_spoon_chef.presentation.views.WSEditText
+        android:id="@+id/setupAddressInfo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="27.8dp"
+        app:hint="Note for our couriers (optional)         Ex: Meet at lobby"
+        app:layout_constraintTop_toBottomOf="@id/setupAddressApt"/>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:maxHeight="117dp"
+        app:layout_constraintBottom_toTopOf="@+id/setupAddressNext"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/setupAddressInfo">
+
+    <com.bupp.wood_spoon_chef.presentation.views.LottieAnimationView
+        android:id="@+id/setupAddressImg"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        app:layout_constraintDimensionRatio="1:1"
+        android:src="@drawable/location_illus"
+        app:layout_constraintBottom_toTopOf="@+id/setupAddressNext"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/setupAddressInfo"
+        app:lottieAnimType="SELECT_ADDRESS" />
+
+    </FrameLayout>
+
+    <com.bupp.wood_spoon_chef.presentation.custom_views.OrangeBtnCornered
+        android:id="@+id/setupAddressNext"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="19.4dp"
+        app:layout_constraintBottom_toTopOf="@+id/setupAddressBack"
+        app:title="Next" />
+
+    <TextView
+        android:id="@+id/setupAddressBack"
+        style="@style/LatoBlack15Orangish"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:letterSpacing="0.03"
+        android:padding="15.4dp"
+        android:text="Back"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

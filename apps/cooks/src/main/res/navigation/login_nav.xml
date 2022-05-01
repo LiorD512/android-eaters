@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/on_boarding_nav"
+    app:startDestination="@id/phoneVerificationFragment">
+
+    <fragment
+        tools:layout="@layout/fragment_phone_verification"
+        android:id="@+id/phoneVerificationFragment"
+        android:name="com.bupp.wood_spoon_chef.presentation.features.onboarding.login.fragments.PhoneVerificationFragment"
+        android:label="PhoneVerificationFragment">
+        <action
+            android:id="@+id/action_phoneVerificationFragment_to_codeFragment"
+            app:destination="@id/codeFragment"
+            app:enterAnim="@anim/slide_right_enter"
+            app:exitAnim="@anim/slide_right_exit"
+            app:popEnterAnim="@anim/slide_left_enter"
+            app:popExitAnim="@anim/slide_left_exit"
+            app:popUpTo="@+id/phoneVerificationFragment"/>
+    </fragment>
+    <fragment
+            android:id="@+id/codeFragment"
+            android:name="com.bupp.wood_spoon_chef.presentation.features.onboarding.login.fragments.CodeFragment"
+            tools:layout="@layout/fragment_code"
+            android:label="CodeFragment">
+
+        <action
+            android:id="@+id/action_codeFragment_to_welcomeFragment"
+            app:destination="@id/welcomeFragment" />
+    </fragment>
+
+
+
+</navigation>

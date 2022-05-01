@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/logoutDialogBkg"
+    android:background="@color/dark_43"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+        <LinearLayout
+            android:background="@drawable/media_chooser_dialog_bkg"
+            android:orientation="vertical"
+            android:layout_gravity="center"
+            android:layout_marginRight="50.9dp"
+            android:layout_marginLeft="50.9dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                style="@style/SemiBold15Dark"
+                android:layout_gravity="center"
+                android:layout_marginTop="23.5dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:text="Sign out"/>
+
+            <TextView
+                android:layout_marginTop="16dp"
+                android:layout_marginRight="15.4dp"
+                android:layout_marginLeft="15.4dp"
+                style="@style/Reg13Dark_50"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="Are you sure you want to logout?"/>
+
+
+            <View
+                android:layout_marginTop="24.2dp"
+                android:layout_height="1dp"
+                android:layout_gravity="bottom"
+                android:layout_marginLeft="7.7dp"
+                android:layout_marginRight="7.7dp"
+                android:background="@color/dark_43"
+                android:layout_width="match_parent"/>
+
+            <TextView
+                android:id="@+id/logoutDialogLogout"
+                style="@style/SemiBold15Red"
+                android:gravity="center"
+                android:layout_width="match_parent"
+                android:layout_height="53dp"
+                android:text="Sign out"/>
+
+            <View
+                android:layout_height="1dp"
+                android:layout_gravity="bottom"
+                android:layout_marginLeft="7.7dp"
+                android:layout_marginRight="7.7dp"
+                android:background="@color/dark_43"
+                android:layout_width="match_parent"/>
+
+            <TextView
+                style="@style/Reg15Dark"
+                android:id="@+id/logoutDialogCancel"
+                android:gravity="center"
+                android:layout_width="match_parent"
+                android:layout_height="53dp"
+                android:text="Cancel"/>
+
+
+        </LinearLayout>
+
+
+
+</FrameLayout>

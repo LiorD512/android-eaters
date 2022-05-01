@@ -1,0 +1,109 @@
+{
+  "project_info": {
+    "project_number": "450619904084",
+    "firebase_url": "https://woodspoon-b1f08.firebaseio.com",
+    "project_id": "woodspoon-b1f08",
+    "storage_bucket": "woodspoon-b1f08.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:450619904084:android:15582c77c264e27b",
+        "android_client_info": {
+          "package_name": "com.bupp.wood_spoon_chef"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "450619904084-ac5n5br97slj52e7h3jjq0qinn684pdd.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.bupp.wood_spoon_chef",
+            "certificate_hash": "082100a517b6402f1a495d03325f6917b4f0f507"
+          }
+        },
+        {
+          "client_id": "450619904084-h5621lrqt04665p009sckk06ta9ecebv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCBG3ygVljucvswV7cfUd_dn8DpODgQ_Q8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "450619904084-h5621lrqt04665p009sckk06ta9ecebv.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "450619904084-sloign118fpudh67av4juo9v1g394pfg.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.woodspoon.cooks",
+                "app_store_id": "1482438801"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:450619904084:android:028cdfa307e7f809",
+        "android_client_info": {
+          "package_name": "com.bupp.wood_spoon_chef.staging"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "450619904084-5l0eo2ogv6tl0rkcqlp1hmbti3tuulqj.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.bupp.wood_spoon_chef.staging",
+            "certificate_hash": "8aceae9f9251333b96da4d46cd68fb9c8f6899f2"
+          }
+        },
+        {
+          "client_id": "450619904084-uc99ioj7fl38s8mp5hfp96br6b5v0gue.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.bupp.wood_spoon_chef.staging",
+            "certificate_hash": "3ec8d8169e6536e49b37f7b3e8baa4298c8846c7"
+          }
+        },
+        {
+          "client_id": "450619904084-h5621lrqt04665p009sckk06ta9ecebv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCBG3ygVljucvswV7cfUd_dn8DpODgQ_Q8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "450619904084-h5621lrqt04665p009sckk06ta9ecebv.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "450619904084-sloign118fpudh67av4juo9v1g394pfg.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.woodspoon.cooks",
+                "app_store_id": "1482438801"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

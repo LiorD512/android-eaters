@@ -1,0 +1,60 @@
+<resources>
+    <string name="view_dialer_2_under_txt">ABC</string>
+    <string name="view_dialer_3_under_txt">DEF</string>
+    <string name="view_dialer_4_under_txt">GHI</string>
+    <string name="view_dialer_5_under_txt">JKL</string>
+    <string name="view_dialer_6_under_txt">MNO</string>
+    <string name="view_dialer_7_under_txt">PQRS</string>
+    <string name="view_dialer_8_under_txt">TUV</string>
+    <string name="view_dialer_9_under_txt">WXYZ</string>
+
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="tool_tip_service_fee_body"><![CDATA[The service fee goes toward helping us pay couriers, provide quality customer support & logistics, process payments, and other costs associated with running our service.]]></string>
+    <string name="tool_tip_service_fee_title">Service fee</string>
+    <string name="tool_tip_ssn_body"><![CDATA[We require the last 4 digits of your Social Security Number to verify your payment account. We don\'t hold this information, it\'s transferred automatically to Stripe (our payment system)]]></string>
+    <string name="tool_tip_profile_flag_body">The flag will be shown next to your profile picture in the platform. That should be a representative of your cooking, culture, cuisine, and personality :)</string>
+    <string name="tool_tip_ssn_title">Social security number</string>
+    <string name="tool_tip_profile_flag_title">State your profile flag</string>
+    <string name="order_view_cancel_order"><u>Cancel order</u></string>
+
+    <string name="support_frag_sms_sentence">""</string>
+
+
+    <string name="welcome_fragment_login_btn">Get started</string>
+
+    <string name="phone_verification_fragment_next_btn">Next</string>
+
+    <string name="code_fragment_help">Haven’t received the code?</string>
+    <string name="code_fragment_next_btn">Next</string>
+
+    <string name="country_chooser_title">Choose country</string>
+
+    <string name="phone_verification_fragment_phone_error">Please enter a valid phone</string>
+    <string name="default_notification_channel_id">woodspoonchefs</string>
+    <string name="tooltip_birthdate">Your birthdate will not be shown on your profile; this is to verify your bank account info</string>
+    <string name="tooltip_ssn">Your SSN is required for verification purposes</string>
+    <string name="tooltip_chef_service_fee"><![CDATA[The service fee goes toward helping us pay couriers, provide quality customer support & logistics, process payments, and other costs associated with running our service.]]></string>
+    <string name="title_item_add_new_cooking_slot_text">Create cooking slot</string>
+    <string name="email_app_not_found_error">E-mail app was not found</string>
+    <string name="orders_dialog_title">Need to Cancel?</string>
+    <string name="orders_dialog_description">We\'re here to help! We\'d love to save this order for you. Please contact support to continue.</string>
+    <string name="orders_dialog_btn_text">Contact Support</string>
+
+
+    <string-array name="custom_months">
+        <item>Jan</item>
+        <item>Feb</item>
+        <item>Mar</item>
+        <item>Apr</item>
+        <item>May</item>
+        <item>Jun</item>
+        <item>Jul</item>
+        <item>Aug</item>
+        <item>Sept</item>
+        <item>Oct</item>
+        <item>Nov</item>
+        <item>Dec</item>
+    </string-array>
+
+</resources>

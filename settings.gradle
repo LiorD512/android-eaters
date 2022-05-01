@@ -1,1 +1,2 @@
 include ':apps:eaters'
+include ':apps:cooks'

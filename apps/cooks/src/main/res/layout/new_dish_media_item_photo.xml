@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="329dp"
+    android:layout_height="wrap_content"
+    android:maxWidth="329dp"
+    android:layout_gravity="center|top"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <FrameLayout
+        app:layout_constraintTop_toTopOf="parent"
+        android:id="@+id/newDishMediaPhotoLayout"
+        android:layout_width="match_parent"
+        android:layout_height="163dp"
+        android:background="@drawable/white_two_rect_9_radius_black_stroke">
+
+        <ImageView
+            android:id="@+id/newDishMediaPhotoIcon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_plate" />
+
+        <ImageView
+            android:id="@+id/newDishMediaPhoto"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="1.4dp" />
+
+    </FrameLayout>
+
+    <TextView
+        app:layout_constraintTop_toBottomOf="@+id/newDishMediaPhotoLayout"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="15.4dp"
+        android:id="@+id/newDishMediaPhotoBtn"
+        style="@style/LatoBold11Orangish"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end|center"
+        android:background="@drawable/rectangle_orangish_12_cornered"
+        android:gravity="center_horizontal"
+        android:letterSpacing="0.03"
+        android:lineSpacingExtra="8.6sp"
+        android:paddingHorizontal="9dp"
+        android:paddingVertical="5dp"
+        android:text="Add photo" />
+
+    <ImageButton
+        android:id="@+id/newDishMediaRemoveBtn"
+        android:visibility="gone"
+        android:layout_margin="5dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:paddingHorizontal="10dp"
+        android:paddingVertical="4dp"
+        android:background="@drawable/rect_silver_10r"
+        android:src="@drawable/ic_delete"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

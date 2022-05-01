@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_marginBottom="@dimen/small_and_a_half"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <com.bupp.wood_spoon_chef.presentation.custom_views.ExpandableMenuItem
+        android:id="@+id/calendarMenuItem"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+</FrameLayout>

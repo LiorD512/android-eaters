@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    android:layout_gravity="center"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="horizontal"
+    android:id="@+id/orangeBtnBackground"
+    android:background="@drawable/rectangle_orange_btn_stroke"
+    android:layout_marginRight="15.4dp"
+    android:layout_marginLeft="15.4dp"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:layout_gravity="center"
+        android:id="@+id/orangeBtnText"
+        style="@style/Bold13Dark"
+        android:padding="17.3dp"
+        tools:text="Next"
+        android:lines="1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+</FrameLayout>

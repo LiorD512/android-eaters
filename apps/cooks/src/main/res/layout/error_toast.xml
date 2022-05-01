@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        xmlns:tools="http://schemas.android.com/tools">
+
+    <TextView
+            android:id="@+id/errorTitle"
+            android:background="@drawable/rectangle_dark_grey_cornered"
+            android:layout_margin="7.7dp"
+            android:paddingVertical="18dp"
+            android:paddingHorizontal="5dp"
+            style="@style/LatoReg15WhiteFive"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:letterSpacing="-0.01"
+            android:lineSpacingExtra="7.7sp"
+            android:gravity="center_horizontal"
+            tools:text="Dish unavailable at your selected time (Now)"/>
+
+</FrameLayout>

@@ -14,19 +14,31 @@ ext {
     material_version = "1.4.0-alpha01"
 
     // Android Sdk and tools
-    targetSdkVersion = 28
-    compileSdkVersion = 31
+    eatersTargetSdkVersion = 28
+    eatersCompileSdkVersion = 31
+    eatersSupportLibraryVersion = '30.0.0'
+    eatersSupportLibraryVersion = '28.0.0'
+
+    cooksTargetSdkVersion = 30
+    cooksCompileSdkVersion = 30
+    cooksSupportLibraryVersion = '30.0.0'
+    eatersSupportLibraryVersion = '28.0.0'
+
     buildToolsVersion = '30.0.2'
-    supportLibraryVersion = '28.0.0'
+
+    minSdkVersion = 25
+
 
     androidArchitectureVersion = "1.1.1"
-
-    appCenterSdkVersion = '4.1.0'
-
 
     // Framework
     okhttp_version = '3.8.1'
     retrofit_version = '2.2.0'
     rxjava_version = '2.1.7'
     anko_version='0.10.4'
+
+
+    // Android Sdk and tools
+
+    appCenterSdkVersion = '4.1.0'
 }

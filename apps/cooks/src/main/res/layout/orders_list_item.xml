@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="17.3dp"
+    android:orientation="vertical">
+
+    <ImageButton
+        android:id="@+id/ordersItemMenu"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right"
+        android:layout_marginRight="10.4dp"
+        android:background="@null"
+        android:paddingTop="21dp"
+        android:paddingRight="5dp"
+        android:paddingBottom="15.4dp"
+        android:src="@drawable/icons_navigation" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:id="@+id/ordersItemNationwideLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_gravity="end"
+            android:layout_marginTop="3dp"
+            android:layout_marginEnd="65dp"
+            android:elevation="3dp"
+            android:orientation="horizontal"
+            android:visibility="gone"
+            tools:visibility="visible">
+
+
+            <TextView
+                style="@style/SemiBold13White"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/orange_bkg_cornered"
+                android:drawableEnd="@drawable/ic_small_tooltip"
+                android:drawablePadding="5dp"
+                android:drawableTint="@color/white"
+                android:elevation="8dp"
+                android:gravity="center"
+                android:letterSpacing="0.03"
+                android:padding="7dp"
+                android:text="Ships nationwide" />
+
+        </LinearLayout>
+
+        <View
+            android:id="@+id/ordersItemNationwideLayoutRect"
+            android:layout_width="5dp"
+            android:layout_height="15dp"
+            android:layout_marginTop="3dp"
+            android:layout_toStartOf="@+id/ordersItemNationwideLayout"
+            android:background="@drawable/nationwide_rect"
+            android:rotation="-180"/>
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="15.4dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginRight="15.4dp"
+            android:layout_marginBottom="15.4dp"
+            android:background="@color/white"
+            android:elevation="8dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="15.4dp"
+                android:orientation="vertical">
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <ImageButton
+                        android:id="@+id/ordersItemShare"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center|right"
+                        android:layout_marginRight="8.6dp"
+                        android:background="@null"
+                        android:src="@drawable/icons_share" />
+
+                    <TextView
+                        android:id="@+id/ordersItemDate"
+                        style="@style/SemiBold15Dark"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center|left"
+                        android:layout_marginLeft="15.3dp"
+                        android:gravity="center_horizontal"
+                        tools:text="Monday, May 20th" />
+
+                </FrameLayout>
+
+                <TextView
+                    android:id="@+id/ordersItemHours"
+                    style="@style/SemiBold15Dark"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center|left"
+                    android:layout_marginLeft="15.3dp"
+                    android:gravity="center_horizontal"
+                    tools:text="6:00 PM - 8:00 PM" />
+
+                <TextView
+                    android:id="@+id/orderItemFreeDelivery"
+                    style="@style/SemiBold15Orangeish"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="15.3dp"
+                    android:layout_marginTop="7.7dp"
+                    android:text="Free delivery"
+                    android:visibility="gone" />
+
+                <com.bupp.wood_spoon_chef.presentation.custom_views.CookingSlotsListView
+                    android:id="@+id/ordersItemMenuItemListView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="15.4dp"
+                    android:layout_marginTop="15.9dp"
+                    android:layout_marginRight="15.4dp"
+                    android:layout_marginBottom="15.6dp" />
+
+            </LinearLayout>
+
+        </androidx.cardview.widget.CardView>
+
+    </RelativeLayout>
+
+</LinearLayout>

@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/newDishBkg"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="center">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginHorizontal="15.4dp"
+        android:background="@drawable/white_rect_7_radius"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/newDishDoneDialogTitle"
+            style="@style/LatoBlack15Dark"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="23dp"
+            android:gravity="center_horizontal"
+            android:letterSpacing="0.03"
+            android:lineSpacingExtra="7.7sp"
+            android:text="Saved as draft!" />
+
+        <TextView
+            android:id="@+id/newDishDoneDialogBody"
+            style="@style/LatoReg13Black"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="23dp"
+            android:gravity="center_horizontal"
+            android:letterSpacing="0.03"
+            android:lineSpacingExtra="7.7sp"
+            android:text="You must finalize and publish this dish before adding it to your menu"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/newDishDoneDialogGotIt"
+            style="@style/LatoBold11Orangish"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="35dp"
+            android:layout_marginBottom="28dp"
+            android:background="@drawable/rectangle_orangish_12_cornered"
+            android:gravity="center_horizontal"
+            android:letterSpacing="0.03"
+            android:lineSpacingExtra="8.6sp"
+            android:padding="5dp"
+            android:text="Got it!" />
+
+    </LinearLayout>
+
+</FrameLayout>

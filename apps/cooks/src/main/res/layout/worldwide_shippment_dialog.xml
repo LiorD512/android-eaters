@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/worldwideDialogBkg"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <FrameLayout
+        android:id="@+id/back"
+        android:background="@color/dark_43"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+    <FrameLayout
+            android:layout_gravity="center"
+            android:background="@drawable/rounded_white_bkg"
+            android:layout_marginRight="50.9dp"
+            android:layout_marginLeft="50.9dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        <ImageView
+                android:padding="5dp"
+                android:id="@+id/worldwideDialogCloseBtn"
+                android:layout_gravity="start"
+                android:layout_marginLeft="15.4dp"
+                android:layout_marginTop="15.4dp"
+                android:src="@drawable/icons_close"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+
+        <LinearLayout
+                android:orientation="vertical"
+                android:layout_marginTop="15dp"
+                android:layout_marginBottom="15dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+            <TextView
+                    android:id="@+id/worldwideDialogMsg"
+                    style="@style/SemiBold13Dark"
+                    android:gravity="center"
+                    android:layout_marginTop="15.4dp"
+                    android:layout_marginRight="25.4dp"
+                    android:layout_marginLeft="25.4dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Nationwide Shipping"/>
+
+            <View
+                    android:layout_marginTop="15dp"
+                    android:layout_marginBottom="15dp"
+                    android:background="@color/purpley_grey"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"/>
+
+            <TextView
+                    android:layout_marginStart="18dp"
+                    android:layout_marginEnd="18dp"
+                    style="@style/Reg13Dark_50"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:letterSpacing="0.03"
+                    android:lineSpacingExtra="6.7sp"
+                    android:gravity="center_horizontal"
+                    android:text="When a customer orders for shipment, all you need to do is prepare, package, and drop the boxed item off at your local UPS store using the pre-paid shipping label that will be sent to your email. For either order placed in advance or the same day, be sure to drop the box off at UPS on or before the customer designated date of order."/>
+        </LinearLayout>
+
+    </FrameLayout>
+
+
+
+</FrameLayout>

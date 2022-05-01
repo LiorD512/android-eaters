@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:paddingBottom="4dp"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+
+        <ImageButton
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:id="@+id/myDishesItemMenu"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:background="@null"
+            android:paddingHorizontal="15.6dp"
+            android:paddingTop="15.4dp"
+            android:paddingBottom="5dp"
+            android:src="@drawable/icons_navigation" />
+
+        <androidx.cardview.widget.CardView
+            app:cardUseCompatPadding="true"
+            app:layout_constraintTop_toBottomOf="@+id/myDishesItemMenu"
+            android:id="@+id/myDishesMainLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginHorizontal="7.4dp"
+            android:layout_marginBottom="7.4dp"
+            android:background="@color/white"
+            app:cardElevation="8dp"
+            app:cardCornerRadius="7.7dp">
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:id="@+id/myDishesItemImg"
+                        android:layout_width="match_parent"
+                        android:layout_height="152.6dp"
+                        android:scaleType="centerCrop" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginBottom="14dp"
+                        android:orientation="horizontal"
+                        android:weightSum="2">
+
+                        <LinearLayout
+                            android:paddingHorizontal="15.4dp"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1.3"
+                            android:gravity="center"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/myDishesItemTitle"
+                                style="@style/LatoBlack15Dark"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="start"
+                                tools:text="Tomato soup" />
+
+                            <TextView
+                                android:id="@+id/myDishesItemCount"
+                                style="@style/LatoReg13Black"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="8dp"
+                                android:layout_gravity="start"
+                                tools:text="0 Dishes sold" />
+
+                        </LinearLayout>
+
+                        <View
+                            android:layout_width="1.4dp"
+                            android:layout_height="match_parent"
+                            android:background="@color/silver" />
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="0.7"
+                            android:gravity="center"
+                            android:orientation="vertical">
+
+                            <TextView
+                                style="@style/LatoBlack15Dark"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:gravity="center_horizontal"
+                                android:text="Total profit" />
+
+                            <TextView
+                                android:id="@+id/myDishesItemProfit"
+                                style="@style/LatoBlack15Orangish"
+                                android:layout_marginTop="8dp"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="$0" />
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <FrameLayout
+                    android:id="@+id/myDishesDraft"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/dark_60"
+                    android:visibility="gone">
+
+                    <TextView
+                        style="@style/LatoBold13White"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center|top"
+                        android:layout_marginTop="51.4dp"
+                        android:drawablePadding="2.4dp"
+                        android:gravity="center_horizontal"
+                        android:letterSpacing="0.03"
+                        android:text="Draft"
+                        app:drawableTopCompat="@drawable/ic_draft" />
+
+                </FrameLayout>
+
+                <FrameLayout
+                    android:id="@+id/myDishesUnPublish"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/dark_60"
+                    android:visibility="gone">
+
+                    <TextView
+                        style="@style/LatoBold13White"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center|top"
+                        android:layout_marginTop="51.4dp"
+                        android:drawablePadding="2.4dp"
+                        android:gravity="center_horizontal"
+                        android:letterSpacing="0.03"
+                        android:text="Unpublished"
+                        app:drawableTopCompat="@drawable/ic_unpublished" />
+
+                </FrameLayout>
+
+
+            </FrameLayout>
+
+        </androidx.cardview.widget.CardView>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

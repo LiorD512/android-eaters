@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:weightSum="5">
+
+    <ImageView
+        android:id="@+id/ratingStarNum1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:paddingHorizontal="2dp"
+        android:src="@drawable/orange_star_selector" />
+
+    <ImageView
+        android:id="@+id/ratingStarNum2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:paddingHorizontal="2dp"
+        android:src="@drawable/orange_star_selector" />
+
+    <ImageView
+        android:id="@+id/ratingStarNum3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:paddingHorizontal="2dp"
+        android:src="@drawable/orange_star_selector" />
+
+    <ImageView
+        android:id="@+id/ratingStarNum4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:paddingHorizontal="2dp"
+        android:src="@drawable/orange_star_selector" />
+
+    <ImageView
+        android:id="@+id/ratingStarNum5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:paddingHorizontal="2dp"
+        android:src="@drawable/orange_star_selector" />
+
+</LinearLayout>

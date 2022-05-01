@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical">
+
+    <com.bupp.wood_spoon_chef.presentation.views.BottomSheetHeaderView
+        android:id="@+id/aboutFragHeader"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:title="About"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/aboutFragDeleteVersion"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="22dp"
+        android:paddingHorizontal="15.4dp"
+        android:paddingBottom="14dp"
+        style="@style/LatoBold13Black"
+        android:text="Version number 3.021"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_marginHorizontal="15.4dp"
+        android:paddingHorizontal="15.4dp"
+        android:background="@color/silver"/>
+
+    <TextView
+        android:id="@+id/aboutFragDeleteAccount"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="22dp"
+        android:paddingHorizontal="15.4dp"
+        android:paddingBottom="14dp"
+        style="@style/LatoBold13Black"
+        android:textColor="@color/coral"
+        android:text="Delete account"/>
+
+    </LinearLayout>
+
+
+</LinearLayout>

@@ -1,0 +1,256 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <com.bupp.wood_spoon_chef.presentation.views.BottomSheetHeaderView
+            android:id="@+id/editKitchenHeader"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:title="Edit my home kitchen" />
+
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/white"
+                android:orientation="vertical"
+                android:paddingBottom="88dp"
+                android:paddingHorizontal="15.4dp">
+
+                <com.bupp.wood_spoon_chef.presentation.views.WSEditText
+                    android:id="@+id/editKitchenRestaurantName"
+                    style="@style/LatoReg13Dark"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15.4dp"
+
+                    android:hint="Home kitchen name"
+                    android:lines="1"
+                    android:paddingVertical="15dp"
+                    app:maxChar="25"
+                    app:title="Home kitchen name" />
+
+                <TextView
+                    style="@style/LatoReg13PurpelyGrey"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Description" />
+
+                <EditText
+                    android:id="@+id/editKitchenAbout"
+                    style="@style/LatoReg13Dark"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4.9dp"
+                    android:background="@drawable/white_two_rect_7_radius"
+                    android:gravity="top|start"
+                    android:hint="Tell your diners about you..."
+                    android:lines="5"
+                    android:padding="15.4dp" />
+
+                <TextView
+                    android:id="@+id/flagTitle"
+                    style="@style/LatoReg13Black"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="23dp"
+                    android:text="This flag will be shown on your home kitchen.\n Represent your cuisine and culture."
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/setupProfileAbout" />
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/editKitchenFlagLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="23dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/flagTitle">
+
+                    <ImageView
+                        android:id="@+id/editKitchenFlag"
+                        android:layout_width="28.8dp"
+                        android:layout_height="28.8dp"
+                        android:layout_marginStart="15.4dp"
+                        android:layout_marginTop="5.3dp"
+                        android:scaleType="fitXY"
+                        app:layout_constraintEnd_toStartOf="@+id/arrow"
+                        app:layout_constraintStart_toStartOf="@id/sep"
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:src="@drawable/country_flag_ad" />
+
+                    <ImageView
+                        android:id="@+id/arrow"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="9.4dp"
+                        android:gravity="start"
+                        android:src="@drawable/ic_arrow_down"
+                        android:textColor="@color/black"
+                        app:layout_constraintBottom_toBottomOf="@+id/editKitchenFlag"
+                        app:layout_constraintStart_toEndOf="@+id/editKitchenFlag"
+                        app:layout_constraintTop_toTopOf="@+id/editKitchenFlag" />
+
+                    <View
+                        android:id="@+id/sep"
+                        android:layout_width="75.8dp"
+                        android:layout_height="1dp"
+                        android:layout_marginStart="15.4dp"
+                        android:layout_marginTop="3dp"
+                        android:layout_marginEnd="25dp"
+                        android:background="@color/light_periwinkle"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/editKitchenFlag" />
+
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+                <FrameLayout
+                    android:id="@+id/editKitchenCoverLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="163dp"
+                    android:layout_marginTop="30.5dp"
+                    android:background="@drawable/white_two_rect_7_radius_black_stroke"
+                    app:layout_constraintEnd_toEndOf="parent">
+
+                    <ImageView
+                        android:id="@+id/editKitchenCoverEmpty"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:paddingTop="37dp"
+                        android:paddingBottom="30dp"
+                        android:src="@drawable/ic_plate" />
+
+                    <ImageView
+                        android:id="@+id/editKitchenCoverPreview"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:padding="1.4dp"
+                        android:scaleType="centerCrop"
+                        android:visibility="gone" />
+
+
+                </FrameLayout>
+
+
+                <TextView
+                    android:id="@+id/editKitchenCoverAddBtn"
+                    style="@style/LatoBold11Orangish"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="16dp"
+                    android:background="@drawable/rectangle_orangish_12_cornered"
+                    android:letterSpacing="0.03"
+                    android:lineSpacingExtra="8.6sp"
+                    android:paddingHorizontal="9dp"
+                    android:paddingVertical="5dp"
+                    android:text="Edit cover photo" />
+
+                <FrameLayout
+                    android:id="@+id/editKitchenVideoLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="163dp"
+                    android:layout_marginTop="30.5dp"
+                    android:background="@drawable/white_two_rect_7_radius_black_stroke"
+                    app:layout_constraintEnd_toEndOf="parent">
+
+                    <ImageView
+                        android:id="@+id/editKitchenVideoEmpty"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:paddingTop="37dp"
+                        android:paddingBottom="30dp"
+                        android:src="@drawable/ic_pot_illus" />
+
+                    <ImageView
+                        android:id="@+id/editKitchenVideoPreview"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:padding="1.4dp"
+                        android:scaleType="centerCrop"
+                        android:visibility="gone" />
+
+                    <TextView
+                        android:id="@+id/editKitchenVideoLength"
+                        style="@style/LatoReg11White"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom|end"
+                        android:layout_margin="7dp"
+                        android:background="@drawable/rect_silver_50_10r"
+                        android:paddingHorizontal="7dp"
+                        android:paddingVertical="2dp"
+                        android:visibility="gone"
+                        tools:text="30:00"
+                        tools:visibility="visible" />
+
+                    <ImageView
+                        android:id="@+id/editKitchenVideoDelete"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="end"
+                        android:layout_margin="7dp"
+                        android:background="@drawable/white_rect_7_radius"
+                        android:paddingHorizontal="8dp"
+                        android:paddingVertical="7dp"
+                        android:src="@drawable/ic_delete"
+                        android:visibility="gone" />
+                </FrameLayout>
+
+
+                <TextView
+                    android:id="@+id/editKitchenVideoAddBtn"
+                    style="@style/LatoBold11Orangish"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginBottom="27dp"
+                    android:background="@drawable/rectangle_orangish_12_cornered"
+                    android:letterSpacing="0.03"
+                    android:lineSpacingExtra="8.6sp"
+                    android:paddingHorizontal="9dp"
+                    android:paddingVertical="5dp"
+                    android:text="Edit video" />
+
+            </LinearLayout>
+
+        </androidx.core.widget.NestedScrollView>
+
+    </LinearLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:paddingTop="20dp"
+        android:background="@drawable/transparent_to_white_80_gradient">
+
+        <com.bupp.wood_spoon_chef.presentation.custom_views.OrangeBtnCornered
+            android:id="@+id/editKitchenSaveBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="15.6dp"
+            android:layout_marginHorizontal="15.4dp"
+            app:title="Save" />
+
+    </FrameLayout>
+
+</FrameLayout>
+
+

@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/notAvailableDialogBkg"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/dark_43">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginLeft="50.9dp"
+        android:layout_marginRight="50.9dp"
+        android:background="@drawable/media_chooser_dialog_bkg"
+        android:orientation="vertical">
+
+        <ImageButton
+            android:id="@+id/notAvailableDialogClose"
+            android:paddingLeft="15.4dp"
+            android:paddingTop="15.4dp"
+            android:background="@null"
+            android:src="@drawable/icons_close"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            style="@style/Reg13Dark"
+            android:layout_gravity="center"
+            android:id="@+id/notAvailableDialogTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:text="When switching to \n
+Not Available, \n
+you will not receive new orders. "/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_gravity="bottom"
+            android:layout_marginLeft="15.4dp"
+            android:layout_marginRight="15.4dp"
+            android:layout_marginTop="17.4dp"
+            android:background="@color/dark_43" />
+
+        <TextView
+            style="@style/Reg13Dark_50"
+            android:gravity="center"
+            android:layout_marginTop="14.8dp"
+            android:layout_marginLeft="15.4dp"
+            android:layout_marginRight="15.4dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Please complete any open orders you have at the dedicated time and switch back whenever you want to start receiving new orders."/>
+
+        <CheckBox
+            android:id="@+id/notAvailableDialogCloseCb"
+            style="@style/Reg13Dark"
+            android:lines="1"
+            android:layout_gravity="center"
+            android:text="Do not show again"
+            android:paddingLeft="7.2dp"
+            android:layout_marginTop="24.4dp"
+            android:layout_marginBottom="24.4dp"
+            android:button="@drawable/rect_checkbox_selector"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent" />
+
+
+    </LinearLayout>
+
+
+</FrameLayout>

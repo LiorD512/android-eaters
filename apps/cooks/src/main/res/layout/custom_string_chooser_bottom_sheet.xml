@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/top_cornered_bkg"
+    android:orientation="vertical">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/customChooserBottomSheetClose"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="15.4dp"
+            android:src="@drawable/icons_close" />
+
+        <TextView
+            style="@style/Bold15Dark"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center_horizontal"
+            android:letterSpacing="0.03"
+            android:paddingVertical="23dp"
+            android:text="Cuisine" />
+
+    </FrameLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/light_periwinkle" />
+
+    <EditText
+        android:id="@+id/customChooserBottomSheetInput"
+        style="@style/LatoReg13Black"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="23dp"
+        android:layout_marginTop="7.7dp"
+        android:hint="Search..."
+        android:imeOptions="actionDone"
+        android:inputType="text"
+        android:lines="1"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/customChooserBottomSheetList"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="7.7dp"
+        android:paddingHorizontal="23dp" />
+
+</LinearLayout>

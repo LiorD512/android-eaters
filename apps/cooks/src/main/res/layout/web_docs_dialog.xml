@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="center"
+    android:orientation="vertical">
+
+    <com.bupp.wood_spoon_chef.presentation.views.BottomSheetHeaderView
+        android:id="@+id/webDocsHeaderView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:background="@color/white"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:id="@+id/webDocsTypesLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal"
+            android:weightSum="2">
+
+            <TextView
+                android:id="@+id/webDocsPrivacy"
+                android:layout_width="0dp"
+                android:layout_height="35dp"
+                android:layout_marginLeft="25dp"
+                android:layout_marginRight="7.7dp"
+                android:layout_weight="1"
+                android:background="@drawable/web_docs_title_selector"
+                android:gravity="center"
+                android:text="Privacy Policy"
+                android:textColor="@color/orange_white_selector" />
+
+            <TextView
+                android:id="@+id/webDocsTerms"
+                android:layout_width="0dp"
+                android:layout_height="35dp"
+                android:layout_marginLeft="7.7dp"
+                android:layout_marginRight="25dp"
+                android:layout_weight="1"
+                android:background="@drawable/web_docs_title_selector"
+                android:gravity="center"
+                android:text="Terms"
+                android:textColor="@color/orange_white_selector" />
+
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="15.4dp"
+            android:background="@color/silver" />
+
+        <WebView
+            android:id="@+id/webDocsWebView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+    </LinearLayout>
+
+</LinearLayout>

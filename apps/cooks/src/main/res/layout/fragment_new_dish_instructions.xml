@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:paddingHorizontal="15.4dp"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/title"
+        style="@style/LatoBlack23Dark"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Set expectations for diners"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.bupp.wood_spoon_chef.presentation.views.WSCounterEditText
+        android:id="@+id/newDishInstructionsInput"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="22.9dp"
+        app:title="Home chef instructions (optional)"
+        app:hint="Ex: Pour dressing over salad to eat."
+        app:maxLines="3"
+        app:maxChar="300"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/title" />
+
+    <com.bupp.wood_spoon_chef.presentation.views.WSEditText
+        android:paddingTop="35dp"
+        android:id="@+id/newDishInstructionsPortionSize"
+        app:layout_constraintTop_toBottomOf="@+id/newDishInstructionsInput"
+        app:layout_constraintStart_toStartOf="parent"
+        app:hint="Ex: Includes 3 tacos"
+        app:title="Portion size"
+        app:maxChar="50"
+        app:error="Please specify portion size."
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <com.bupp.wood_spoon_chef.presentation.custom_views.OrangeBtnCornered
+        android:id="@+id/newDishInstructionsNext"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="19.4dp"
+        app:layout_constraintBottom_toTopOf="@+id/newDishInstructionsBack"
+        app:title="Next" />
+
+    <TextView
+        android:id="@+id/newDishInstructionsBack"
+        style="@style/LatoBlack15Orangish"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:letterSpacing="0.03"
+        android:padding="15.4dp"
+        android:text="Back"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

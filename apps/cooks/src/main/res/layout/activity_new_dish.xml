@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    tools:context=".features.new_dish.NewDishActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <FrameLayout
+            android:id="@+id/newDishHeaderLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageButton
+                android:id="@+id/newDishActClose"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@null"
+                android:padding="15.4dp"
+                android:src="@drawable/icons_close"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:visibility="gone"
+                android:id="@+id/newDishActDraft"
+                style="@style/LatoBold11Orangish"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end|center"
+                android:layout_marginEnd="15.4dp"
+                android:background="@drawable/rectangle_orangish_12_cornered"
+                android:gravity="center_horizontal"
+                android:letterSpacing="0.03"
+                android:lineSpacingExtra="8.6sp"
+                android:paddingHorizontal="9dp"
+                android:paddingVertical="5dp"
+                android:text="Save as a draft" />
+
+        </FrameLayout>
+
+        <com.bupp.wood_spoon_chef.presentation.views.feature_pb.WSFeatureProgressBar
+            android:id="@+id/newDishActFeaturePb"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15.4dp"
+            app:stepsCount="6" />
+
+
+        <fragment
+            android:id="@+id/newDishActContainer"
+            android:name="androidx.navigation.fragment.NavHostFragment"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="23dp"
+            android:layout_weight="1"
+            app:defaultNavHost="true"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:navGraph="@navigation/new_dish_nav" />
+
+    </LinearLayout>
+
+</FrameLayout>

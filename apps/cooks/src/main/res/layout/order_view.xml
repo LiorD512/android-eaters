@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <View
+            android:layout_marginTop="3dp"
+            android:layout_toStartOf="@+id/orderViewNationwideLayout"
+            android:rotation="-180"
+            android:id="@+id/orderViewNationwideLayoutRect"
+            android:background="@drawable/nationwide_rect"
+            android:layout_width="5dp"
+            android:layout_height="15dp"/>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/orderViewCardLayout"
+            android:layout_marginTop="15dp"
+            android:layout_marginLeft="15.4dp"
+            android:layout_marginRight="15.4dp"
+            android:layout_marginBottom="5dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:animateLayoutChanges="true"
+            android:background="@color/white"
+            android:elevation="8dp">
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:visibility="gone"
+                    android:layout_gravity="center"
+                    android:id="@+id/orderViewCancelled"
+                    style="@style/SemiBold21Orangeish"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
+                    android:text="CANCELED" />
+
+                <LinearLayout
+                    android:id="@+id/orderViewMainLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="15.4dp"
+                    android:orientation="vertical">
+
+                    <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="7.7dp">
+
+                        <ImageView
+                            android:id="@+id/orderViewUserImg"
+                            android:layout_width="53.8dp"
+                            android:layout_height="53.8dp" />
+
+                        <FrameLayout
+                            android:visibility="gone"
+                            android:id="@+id/orderViewChatBtn"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="right|center">
+
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content" />
+
+                            <View
+                                android:id="@+id/orderViewChatIndicator"
+                                android:layout_width="10.6dp"
+                                android:layout_height="10.6dp"
+                                android:layout_gravity="top|right"
+                                android:layout_marginTop="10dp"
+                                android:layout_marginRight="5dp"
+                                android:background="@drawable/red_circle" />
+
+                        </FrameLayout>
+
+                    </FrameLayout>
+
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:id="@+id/orderViewNameAndPrice"
+                            style="@style/SemiBold13Dark"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_horizontal"
+                            tools:text="Dana Farchi, $21.5" />
+
+                        <TextView
+                            android:visibility="gone"
+                            android:id="@+id/orderViewFreeDelivery"
+                            style="@style/SemiBold13Orangeish"
+                            android:layout_marginLeft="7.7dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_horizontal"
+                            android:text="(Free Delivery)" />
+
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/orderViewTime"
+                        style="@style/SemiBold15Blue"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="7.9dp"
+                        tools:text="Pickup Time - 6:30 PM" />
+
+                    <TextView
+                        android:visibility="gone"
+                        android:id="@+id/orderViewUtensils"
+                        style="@style/SemiBold13Pink"
+                        android:gravity="center"
+                        android:layout_marginTop="9dp"
+                        android:drawablePadding="8dp"
+                        android:drawableLeft="@drawable/ic_utensiles_alert"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="No Utensiles,Straws, etc."/>
+
+                    <View
+                        android:background="@color/silver"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginTop="15.4dp" />
+
+                    <com.bupp.wood_spoon_chef.presentation.custom_views.orderSlotListView.OrderSlotsListView
+                        android:id="@+id/orderViewSlotsView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="15.4dp"
+                        android:layout_marginBottom="30dp" />
+
+                    <com.bupp.wood_spoon_chef.presentation.custom_views.CounterProgressView
+                        android:id="@+id/orderViewCounter"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="14.4dp"
+                        android:visibility="gone" />
+
+                    <com.bupp.wood_spoon_chef.presentation.custom_views.OrangeBtn
+                        android:id="@+id/orderViewBtn"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:title="Got It" />
+
+                    <ImageView
+                        android:id="@+id/orderViewStatusImg"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="15.4dp"
+                        android:src="@drawable/icons_time"
+                        android:visibility="gone" />
+
+                    <!--<TextView-->
+                    <!--style="@style/SemiBold15Gray"-->
+                    <!--android:id="@+id/orderViewStatusImgText"-->
+                    <!--android:gravity="center"-->
+                    <!--android:visibility="gone"-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="wrap_content" />-->
+
+                    <TextView
+                        android:id="@+id/orderviewCancel"
+                        style="@style/Reg15Dark_50"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="16.3dp"
+                        android:text="@string/order_view_cancel_order" />
+                </LinearLayout>
+
+            </FrameLayout>
+
+        </androidx.cardview.widget.CardView>
+
+        <LinearLayout
+            android:layout_alignParentEnd="true"
+            android:elevation="3dp"
+            android:layout_marginTop="3dp"
+            android:visibility="gone"
+            tools:visibility="visible"
+            android:id="@+id/orderViewNationwideLayout"
+            android:layout_marginEnd="65dp"
+            android:layout_gravity="end"
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+
+            <TextView
+                android:elevation="8dp"
+                android:padding="7dp"
+                android:drawableTint="@color/white"
+                android:gravity="center"
+                android:drawablePadding="5dp"
+                android:drawableEnd="@drawable/ic_small_tooltip"
+                android:background="@drawable/orange_bkg_cornered"
+                style="@style/SemiBold13White"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:letterSpacing="0.03"
+                android:text="Ships nationwide"/>
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+
+
+</FrameLayout>

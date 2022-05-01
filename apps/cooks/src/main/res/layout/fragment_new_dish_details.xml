@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:paddingHorizontal="15.4dp"
+    tools:context=".features.new_dish.fragments.NewDishDetailsFragment">
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingBottom="@dimen/floating_next_skip_buttons_margin">
+
+            <TextView
+                android:id="@+id/title"
+                style="@style/LatoBlack23Dark"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Dish details"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/subTitle"
+                style="@style/LatoReg13Black"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="22.9dp"
+                android:text="How much time do you need before pickup?"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/title" />
+
+            <com.bupp.wood_spoon_chef.presentation.custom_views.RelativeRadioGroup
+                android:id="@+id/newDishDetailsRadioLayout"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15.4dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/subTitle">
+
+                <RadioButton
+                    android:id="@+id/newDishDetailsRadio1"
+                    style="@style/LatoReg13PurpelyGrey"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:text="5-15 mins" />
+
+                <RadioButton
+                    android:id="@+id/newDishDetailsRadio2"
+                    style="@style/LatoReg13PurpelyGrey"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:text="20-30 mins" />
+
+                <RadioButton
+                    android:id="@+id/newDishDetailsRadio3"
+                    style="@style/LatoReg13PurpelyGrey"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/newDishDetailsRadio1"
+                    android:text="35-45 mins" />
+
+                <RadioButton
+                    android:id="@+id/newDishDetailsRadio4"
+                    style="@style/LatoReg13PurpelyGrey"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/newDishDetailsRadio2"
+                    android:layout_centerHorizontal="true"
+                    android:text="45-60 mins" />
+
+
+            </com.bupp.wood_spoon_chef.presentation.custom_views.RelativeRadioGroup>
+
+            <com.bupp.wood_spoon_chef.presentation.views.WSCounterEditText
+                android:id="@+id/newDishDetailsIngredients"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="22.9dp"
+                android:hyphenationFrequency="none"
+                app:hint="Ex:  Chickpeas, tomatoes, green chili, cumin, chaat masala, salt, coriander, red chili powder, canola oil, water, sugar, cardamom, almonds, whole wheat flour."
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/newDishDetailsRadioLayout"
+                app:maxLines="7"
+                app:minChar="50"
+                app:title="Main ingredients" />
+
+            <EditText
+                android:id="@+id/newDishDetailsCategories"
+                style="@style/LatoReg13Black"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="25dp"
+                android:background="@drawable/white_two_rect_15_radius"
+                android:drawableEnd="@drawable/ic_arrow_down"
+                android:drawablePadding="5dp"
+                android:editable="false"
+                android:hint="Select your dish category"
+                android:paddingHorizontal="12dp"
+                android:paddingVertical="8dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/newDishDetailsIngredients" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:orientation="vertical">
+
+        <com.bupp.wood_spoon_chef.presentation.custom_views.OrangeBtnCornered
+            android:id="@+id/newDishDetailsNext"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="19.4dp"
+            app:layout_constraintBottom_toTopOf="@+id/newDishDetailsBack"
+            app:title="Next" />
+
+        <TextView
+            android:id="@+id/newDishDetailsBack"
+            style="@style/LatoBlack15Orangish"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:letterSpacing="0.03"
+            android:padding="15.4dp"
+            android:text="Back"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+    </LinearLayout>
+
+</FrameLayout>

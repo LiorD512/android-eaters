@@ -36,7 +36,7 @@ jobs:
     - name: Build Release AAB
       run: ./gradlew bundleRelease
 
-    - name: Publish To App Center
+    - name: Eaters – Publish To App Center
       if: github.ref == 'refs/heads/develop' || startsWith(github.ref, 'refs/heads/release')
       uses: wzieba/AppCenter-Github-Action@v1.3.2
       with:
@@ -48,16 +48,28 @@ jobs:
         notifyTesters: false
         debug: true
 
+    - name: Cooks – Publish To App Center
+      if: github.ref == 'refs/heads/develop' || startsWith(github.ref, 'refs/heads/release')
+      uses: wzieba/AppCenter-Github-Action@v1.3.2
+      with:
+        appName: Monkeytech/WoodSpoon-Chef-Android
+        token: ${{ secrets.APP_CENTER_TOKEN }}
+        group: WoodSpoon Android Testers
+        file: apps/cooks/build/outputs/apk/debug/cooks-debug.apk
+        releaseNotes: "Staging version.\nBuild number ${{env.VERSION_CODE}}\n ${{ github.event.head_commit.message }}"
+        notifyTesters: false
+        debug: true
+
     - name: Extracting Release App Name
       if: startsWith(github.ref, 'refs/heads/release')
       run: echo "$(echo "RELEASE_APP_NAME=")$(echo ${{github.ref}} | cut -d/ -f4)" >> $GITHUB_ENV
 
     - name: Printing Release App Name
-      if: ${{env.RELEASE_APP_NAME}} != ""
+      if: env.RELEASE_APP_NAME != ''
       run: echo "Releasing app named [$RELEASE_APP_NAME]"
 
-    - name: Sign AAB
-      if: ${{env.RELEASE_APP_NAME}} == "eaters"
+    - name: Eaters – Sign AAB
+      if: env.RELEASE_APP_NAME == 'eaters'
       uses: r0adkll/sign-android-release@v1
       with:
         releaseDirectory: apps/eaters/build/outputs/bundle/release
@@ -66,11 +78,30 @@ jobs:
         keyStorePassword: ${{ secrets.GOOGLE_PLAY_PASSWORD }}
         keyPassword: ${{ secrets.GOOGLE_PLAY_PASSWORD }}
 
-    - name: Deploy to Play Store
-      if: ${{env.RELEASE_APP_NAME}} == "eaters"
+    - name: Eaters – Deploy to Play Store
+      if: env.RELEASE_APP_NAME == 'eaters'
       uses: r0adkll/upload-google-play@v1.0.15
       with:
         serviceAccountJsonPlainText: ${{secrets.GOOGLE_PLAY_PUBLISHING_ACCOUNT}}
         packageName: com.bupp.wood_spoon_eaters
         releaseFiles: apps/eaters/build/outputs/bundle/release/eaters-release.aab
+        track: internal
+
+    - name: Cooks – Sign AAB
+      if: env.RELEASE_APP_NAME == 'cooks'
+      uses: r0adkll/sign-android-release@v1
+      with:
+        releaseDirectory: apps/cooks/build/outputs/bundle/release
+        signingKeyBase64: ${{ secrets.COOKS_GOOGLE_PLAY_SIGNING_KEY }}
+        alias: ${{ secrets.COOKS_GOOGLE_PLAY_ALIAS }}
+        keyStorePassword: ${{ secrets.COOKS_GOOGLE_PLAY_PASSWORD }}
+        keyPassword: ${{ secrets.cooks.GOOGLE_PLAY_PASSWORD }}
+
+    - name: Cooks – Deploy to Play Store
+      if: env.RELEASE_APP_NAME == 'cooks'
+      uses: r0adkll/upload-google-play@v1.0.15
+      with:
+        serviceAccountJsonPlainText: ${{secrets.GOOGLE_PLAY_PUBLISHING_ACCOUNT}}
+        packageName: com.bupp.wood_spoon_chef
+        releaseFiles: apps/cooks/build/outputs/bundle/release/cooks-release.aab
         track: internal

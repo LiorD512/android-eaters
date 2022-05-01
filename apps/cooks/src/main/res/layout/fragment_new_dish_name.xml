@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/white"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingHorizontal="15.4dp"
+    tools:context=".features.new_dish.fragments.NewDishNameFragment">
+
+    <TextView
+        android:id="@+id/title"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        style="@style/LatoBlack23Dark"
+        android:layout_marginTop="15.4dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="New dish"/>
+
+    <com.bupp.wood_spoon_chef.presentation.views.WSEditText
+        android:id="@+id/newDishNameInput"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/title"
+        app:maxChar="20"
+        android:layout_marginTop="15.4dp"
+        app:inputType="INPUT_TYPE_CAP_SENTENCE"
+        app:error="Please enter the dish name"
+        app:title="Dish name"
+        app:hint="Ex: Creamy Tomato Soup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+
+    <com.bupp.wood_spoon_chef.presentation.views.WSCounterEditText
+        android:id="@+id/newDishNameDescription"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="22.9dp"
+        app:hint="Ex: The tomato soup of your dreams! This tomato creation is paired with crunchy croutons to fulfill your soup cravings. Topped with chives and drizzle of olive oil, then finished with a dollop of cream cheese."
+        app:maxLines="7"
+        app:title="Describe the dish…"
+        app:minChar="50"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/newDishNameInput" />
+
+    <com.bupp.wood_spoon_chef.presentation.views.LottieAnimationView
+        app:lottieAnimType="NEW_DISH_NAME"
+        android:layout_marginBottom="7.7dp"
+        app:layout_constraintBottom_toTopOf="@+id/newDishNameNext"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <com.bupp.wood_spoon_chef.presentation.custom_views.OrangeBtnCornered
+        android:layout_marginBottom="14.8dp"
+        android:id="@+id/newDishNameNext"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:title="Next"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

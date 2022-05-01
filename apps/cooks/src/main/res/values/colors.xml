@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="colorPrimary">@color/peacock_blue</color>
+    <color name="colorPrimaryDark">@color/marine_blue</color>
+    <color name="colorAccent">@color/dark</color>
+
+    <color name="transparent">#00000000</color>
+
+    //num pad view
+    <color name="dialer_txt_pressed">@color/white</color>
+    <color name="dialer_txt_normal">#58595B</color>
+    <color name="dailer_background">#AAAAAA</color>
+
+    <color name="peacock_blue">#0255a4</color>
+    <color name="marine_blue">#02386e</color>
+
+    <color name="pinkish">#80ff8b6a</color>
+    <color name="light_pink">#ffe6e7</color>
+    <color name="orangeish">#ff8b41</color>
+    <color name="red">#ff0000</color>
+    <color name="switch_red">#e5455c</color>
+    <color name="black">#000000</color>
+    <color name="black_three">#111111</color>
+    <color name="black_two">#030303</color>
+    <color name="black_5">#0D030303</color>
+    <color name="black_60">#99030303</color>
+    <color name="dark">#252126</color>
+    <color name="dark_three">#29252b</color>
+    <color name="dark_grey">#2a2a2c</color>
+    <color name="dark_43">#2b252126</color>
+    <color name="dark_50">#80252126</color>
+    <color name="dark_60">#99252126</color>
+    <color name="light_grey">#585858</color>
+    <color name="light_grey_two">#a19e9e</color>
+    <color name="charcoal_grey_30">#5c3c3c43</color>
+    <color name="purpley_grey">#929092</color>
+    <color name="silver">#dcdcdf</color>
+    <color name="pale_grey_two">#f6f6f7</color>
+    <color name="silver_20">#33dcdcdf</color>
+    <color name="silver_50">#80dcdcdf</color>
+    <color name="white">#ffffff</color>
+    <color name="white_three">#f0f0f0</color>
+    <color name="white_80">#d9ffffff</color>
+    <color name="light_peach">#ffd5ba</color>
+    <color name="white_95">#f2ffffff</color>
+    <color name="teal_blue">#0097a3</color>
+    <color name="off_white_90">#f2fffaf0</color>
+    <color name="purpley_grey_two">#918f91</color>
+    <color name="switch_green">#26b8a5</color>
+    <color name="orangeish_12">#1fff8b41</color>
+    <color name="orangeish_50">#80ff8b41</color>
+    <color name="greyish_brown">#494949</color>
+    <color name="light_periwinkle">#dcdcdf</color>
+    <color name="coral">#fa4a4a</color>
+    <color name="white_two">#f1f1f1</color>
+    <color name="whiteTwo">#efefef</color>
+    <color name="grey_white_three">#f8f8f8</color>
+    <color name="white_five">#eeeeee</color>
+</resources>
+

@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <com.bupp.wood_spoon_chef.presentation.views.BottomSheetHeaderView
+        android:id="@+id/supportDialogHeader"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:title="Support center" />
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white">
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fillViewport="true">
+
+            <LinearLayout
+                android:id="@+id/supportDialogContentLayout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_message_illus"
+                    android:background="@color/white"
+                    android:layout_margin="20dp"
+                    android:layout_gravity="center"/>
+
+                <TextView
+                    style="@style/LatoBlack17Dark"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="15dp"
+                    android:paddingHorizontal="15.4dp"
+                    android:paddingBottom="20dp"
+                    android:text="We're here to help!"/>
+
+
+                <TextView
+                    android:id="@+id/supportCenterQA"
+                    style="@style/LatoBold13Black"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawableEnd="@drawable/ic_arrow_right"
+                    android:padding="15dp"
+                    android:text="Frequently asked questions"/>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/white_three" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="15.4dp"
+                    android:layout_marginVertical="15dp"
+                    android:gravity="center_horizontal"
+                    android:orientation="horizontal"
+                    android:weightSum="2">
+
+                    <TextView
+                        android:id="@+id/supportDialogCallButton"
+                        style="@style/LatoBold17Orangish"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginEnd="15dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/rectangle_orangish_12_cornered"
+                        android:gravity="center_horizontal"
+                        android:paddingHorizontal="9dp"
+                        android:paddingVertical="17dp"
+                        android:text="Call us" />
+
+                    <TextView
+                        android:id="@+id/supportDialogTextButton"
+                        style="@style/LatoBold17Orangish"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_weight="1"
+                        android:background="@drawable/rectangle_orangish_12_cornered"
+                        android:gravity="center_horizontal"
+                        android:paddingHorizontal="9dp"
+                        android:paddingVertical="17dp"
+                        android:text="Send a text" />
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="10dp"
+                    android:background="@color/silver" />
+
+                <EditText
+                    android:id="@+id/supportDialogCommentInput"
+                    style="@style/LatoReg13Dark"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="30dp"
+                    android:layout_marginHorizontal="15.4dp"
+                    android:background="@drawable/white_two_rect_7_radius"
+                    android:gravity="top|start"
+                    android:hint="Help us get better! send us feedback here."
+                    android:lines="5"
+                    android:padding="15.4dp" />
+
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:layout_weight="1"/>
+
+                <com.bupp.wood_spoon_chef.presentation.custom_views.OrangeBtnCornered
+                    android:id="@+id/supportDialogNext"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginBottom="15.4dp"
+                    android:layout_marginHorizontal="15.4dp"
+                    app:title="Send" />
+
+            </LinearLayout>
+
+        </ScrollView>
+
+    </FrameLayout>
+
+</LinearLayout>

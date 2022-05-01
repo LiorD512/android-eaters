@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/on_boarding_nav"
+    app:startDestination="@id/myDishesFragment">
+    <fragment
+        android:id="@+id/myDishesFragment"
+        android:name="com.bupp.wood_spoon_chef.presentation.features.main.my_dishes.MyDishesFragment"
+        android:label="fragment_my_dishes"
+        app:popUpTo="@+id/myDishesFragment"
+        app:popUpToInclusive="true"
+        tools:layout="@layout/fragment_my_dishes" />
+
+    <fragment
+        android:id="@+id/calendarFragment"
+        android:name="com.bupp.wood_spoon_chef.presentation.features.main.calendar.CalendarFragment"
+        android:label="CalendarFragment"
+        app:popUpTo="@+id/myDishesFragment"
+        app:popUpToInclusive="true"
+        tools:layout="@layout/fragment_calendar" >
+        <action
+            android:id="@+id/action_calendarFragment_to_createCookingSlotFragment"
+            app:destination="@id/createCookingSlotFragment"
+            app:enterAnim="@anim/slide_right_enter"
+            app:exitAnim="@anim/slide_right_exit"
+            app:popEnterAnim="@anim/slide_left_enter"
+            app:popExitAnim="@anim/slide_left_exit"
+            app:popUpTo="@+id/calendarFragment" />
+        <action
+            android:id="@+id/action_calendarFragment_to_cookingSlotDetailsFragment"
+            app:destination="@id/cookingSlotDetailsFragment"
+            app:enterAnim="@anim/slide_right_enter"
+            app:exitAnim="@anim/slide_right_exit"
+            app:popEnterAnim="@anim/slide_left_enter"
+            app:popExitAnim="@anim/slide_left_exit"
+            app:popUpTo="@+id/calendarFragment">
+        </action>
+    </fragment>
+
+    <fragment
+        android:id="@+id/createCookingSlotFragment"
+        android:name="com.bupp.wood_spoon_chef.presentation.features.main.calendar.create_cooking_slot.CreateCookingSlotFragment"
+        android:label="AddCookingSlotFragment"
+        tools:layout="@layout/fragment_create_cooking_slot" >
+        <argument
+            android:name="createCookingSlotFragmentArgument"
+            app:argType="com.bupp.wood_spoon_chef.presentation.features.main.calendar.create_cooking_slot.ArgumentModelCreateCookingSlot" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/cookingSlotDetailsFragment"
+        android:name="com.bupp.wood_spoon_chef.presentation.features.main.calendar.cookingSlotDetails.CookingSlotDetailsFragment"
+        android:label="CookingSlotDetailsFragment"
+        app:popUpTo="@+id/calendarFragment"
+        tools:layout="@layout/fragment_cooking_slot_details" >
+        <action
+            android:id="@+id/action_cookingSlotDetailsFragment_to_createCookingSlotFragment"
+            app:destination="@id/createCookingSlotFragment"
+            app:enterAnim="@anim/slide_right_enter"
+            app:exitAnim="@anim/slide_right_exit"
+            app:popEnterAnim="@anim/slide_left_enter"
+            app:popExitAnim="@anim/slide_left_exit"
+            app:popUpTo="@+id/cookingSlotDetailsFragment" />
+        <argument
+            android:name="cookingSlot"
+            app:argType="com.bupp.wood_spoon_chef.presentation.features.main.calendar.cookingSlotDetails.ArgumentModelCookingSlotDetails" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/ordersFragment"
+        android:name="com.bupp.wood_spoon_chef.presentation.features.main.orders.OrdersFragment"
+        android:label="OrdersFragment"
+        app:popUpTo="@+id/myDishesFragment"
+        app:popUpToInclusive="true"
+        tools:layout="@layout/fragment_orders" >
+
+        <action
+            android:id="@+id/action_orderFragment_to_orderDetailsFragment"
+            app:destination="@id/orderDetailsFragment"
+            app:enterAnim="@anim/slide_right_enter"
+            app:exitAnim="@anim/slide_right_exit"
+            app:popEnterAnim="@anim/slide_left_enter"
+            app:popExitAnim="@anim/slide_left_exit"
+            app:popUpTo="@+id/ordersFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/orderDetailsFragment"
+        android:name="com.bupp.wood_spoon_chef.presentation.features.main.orders.order_details.OrderDetailsFragment"
+        android:label="OrderDetailsFragment"
+        tools:layout="@layout/fragment_order_details">
+        <argument
+            android:name="cookingSlot"
+            app:argType="com.bupp.wood_spoon_chef.presentation.features.main.orders.order_details.ArgumentModelOrderDetails" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/earningsFragment"
+        android:name="com.bupp.wood_spoon_chef.presentation.features.main.earnings.EarningsFragment"
+        android:label="fragment_earnings"
+        app:popUpTo="@+id/myDishesFragment"
+        app:popUpToInclusive="true"
+        tools:layout="@layout/fragment_earnings">
+        <action
+            android:id="@+id/action_earningsFragment_to_earningSummeryDialog"
+            app:destination="@id/earningSummeryDialog"
+            app:enterAnim="@anim/slide_right_enter"
+            app:exitAnim="@anim/slide_right_exit"
+            app:popEnterAnim="@anim/slide_left_enter"
+            app:popExitAnim="@anim/slide_left_exit"
+            app:popUpTo="@+id/earningsFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/profileFragment"
+        android:name="com.bupp.wood_spoon_chef.presentation.features.main.account.AccountFragment"
+        android:label="ProfileFragment"
+        app:popUpTo="@+id/myDishesFragment"
+        app:popUpToInclusive="true"
+        tools:layout="@layout/fragment_account" />
+
+    <dialog
+        android:id="@+id/earningSummeryDialog"
+        android:name="com.bupp.wood_spoon_chef.presentation.features.main.earnings.earnings_summery.EarningsSummeryFragment"
+        android:label="EarningSummeryDialog"
+        tools:layout="@layout/fragment_earnings_summery" />
+
+</navigation>

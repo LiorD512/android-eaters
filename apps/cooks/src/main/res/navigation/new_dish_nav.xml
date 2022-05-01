@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/new_dish_nav.xml"
+    app:startDestination="@id/newDishName">
+
+    <fragment
+        android:id="@+id/newDishName"
+        android:name="com.bupp.wood_spoon_chef.presentation.features.new_dish.fragments.NewDishNameFragment"
+        android:label="newDishName"
+        tools:layout="@layout/fragment_new_dish_name">
+        <action
+            android:id="@+id/action_newDishName_to_newDishDetails"
+            app:destination="@id/newDishDetails"
+            app:enterAnim="@anim/slide_right_enter"
+            app:exitAnim="@anim/slide_right_exit"
+            app:popEnterAnim="@anim/slide_left_enter"
+            app:popExitAnim="@anim/slide_left_exit"
+            app:popUpTo="@+id/newDishName" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/newDishDetails"
+        android:name="com.bupp.wood_spoon_chef.presentation.features.new_dish.fragments.NewDishDetailsFragment"
+        android:label="newDishDetails"
+        tools:layout="@layout/fragment_new_dish_details">
+        <action
+            android:id="@+id/action_newDishDetails_to_newDishInstructions"
+            app:destination="@id/newDishInstructions"
+            app:enterAnim="@anim/slide_right_enter"
+            app:exitAnim="@anim/slide_right_exit"
+            app:popEnterAnim="@anim/slide_left_enter"
+            app:popExitAnim="@anim/slide_left_exit"
+            app:popUpTo="@+id/newDishDetails" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/newDishInstructions"
+        android:name="com.bupp.wood_spoon_chef.presentation.features.new_dish.fragments.NewDishInstructionsFragment"
+        android:label="newDishInstructions"
+        tools:layout="@layout/fragment_new_dish_instructions">
+        <action
+            android:id="@+id/action_newDishInstructions_to_newDishDietary"
+            app:destination="@id/newDishDietary"
+            app:enterAnim="@anim/slide_right_enter"
+            app:exitAnim="@anim/slide_right_exit"
+            app:popEnterAnim="@anim/slide_left_enter"
+            app:popExitAnim="@anim/slide_left_exit"
+            app:popUpTo="@+id/newDishInstructions" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/newDishDietary"
+        android:name="com.bupp.wood_spoon_chef.presentation.features.new_dish.fragments.NewDishDietaryFragment"
+        android:label="newDishDietary"
+        tools:layout="@layout/fragment_new_dish_dietary">
+
+        <action
+            android:id="@+id/action_newDishDietary_to_newDishPrice"
+            app:destination="@id/newDishPrice"
+            app:enterAnim="@anim/slide_right_enter"
+            app:exitAnim="@anim/slide_right_exit"
+            app:popEnterAnim="@anim/slide_left_enter"
+            app:popExitAnim="@anim/slide_left_exit"
+            app:popUpTo="@+id/newDishDietary"/>
+    </fragment>
+
+
+    <fragment
+        android:id="@+id/newDishPrice"
+        android:name="com.bupp.wood_spoon_chef.presentation.features.new_dish.fragments.NewDishPriceFragment"
+        android:label="newDishPrice"
+        tools:layout="@layout/fragment_new_dish_price">
+        <action
+            android:id="@+id/action_newDishPrice_to_newDishMedia"
+            app:destination="@id/newDishMedia"
+            app:enterAnim="@anim/slide_right_enter"
+            app:exitAnim="@anim/slide_right_exit"
+            app:popEnterAnim="@anim/slide_left_enter"
+            app:popExitAnim="@anim/slide_left_exit"
+            app:popUpTo="@+id/newDishPrice"/>
+    </fragment>
+
+    <fragment
+        android:id="@+id/newDishMedia"
+        android:name="com.bupp.wood_spoon_chef.presentation.features.new_dish.fragments.NewDishMediaFragment"
+        android:label="newDishMedia"
+        tools:layout="@layout/fragment_new_dish_media">
+    </fragment>
+
+</navigation>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <CheckBox
+        android:id="@+id/cancelOrderDialogItemCb"
+        style="@style/Reg13Dark"
+        android:lines="1"
+        android:layout_gravity="left"
+        android:text="I am not available"
+        android:paddingLeft="7.2dp"
+        android:layout_marginTop="14.9dp"
+        android:layout_marginBottom="15.4dp"
+        android:button="@drawable/rect_checkbox_selector"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent" />
+
+    <View
+        android:layout_marginRight="7.7dp"
+        android:layout_marginLeft="7.7dp"
+        android:background="@color/silver"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"/>
+
+</LinearLayout>

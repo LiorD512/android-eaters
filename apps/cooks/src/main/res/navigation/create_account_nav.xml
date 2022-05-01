@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/create_account_nav.xml"
+    app:startDestination="@id/detailsFragment">
+
+    <fragment
+        android:id="@+id/detailsFragment"
+        android:name="com.bupp.wood_spoon_chef.presentation.features.onboarding.create_account.sub_screen.SetupDetailsFragment"
+        android:label="fragment_welcome"
+        tools:layout="@layout/fragment_setup_details">
+        <action
+            android:id="@+id/action_detailsFragment_to_setupAddressFragment"
+            app:destination="@id/setupAddressFragment"
+            app:enterAnim="@anim/slide_right_enter"
+            app:exitAnim="@anim/slide_right_exit"
+            app:popEnterAnim="@anim/slide_left_enter"
+            app:popExitAnim="@anim/slide_left_exit"
+            app:popUpTo="@+id/detailsFragment" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/setupAddressFragment"
+        android:name="com.bupp.wood_spoon_chef.presentation.features.onboarding.create_account.sub_screen.SetupAddressFragment"
+        android:label="fragment_setup_address"
+        tools:layout="@layout/fragment_setup_address" >
+
+        <action
+            android:id="@+id/action_setupAddressFragment_to_setupProfileFragment"
+            app:destination="@id/setupProfileFragment"
+            app:enterAnim="@anim/slide_right_enter"
+            app:exitAnim="@anim/slide_right_exit"
+            app:popEnterAnim="@anim/slide_left_enter"
+            app:popExitAnim="@anim/slide_left_exit"
+            app:popUpTo="@+id/setupAddressFragment"/>
+    </fragment>
+    <fragment
+        android:id="@+id/setupProfileFragment"
+        android:name="com.bupp.wood_spoon_chef.presentation.features.onboarding.create_account.sub_screen.SetupProfileFragment"
+        android:label="SetupProfileFragment"
+        tools:layout="@layout/fragment_setup_profile">
+        <action
+            android:id="@+id/action_setupProfileFragment_to_setupVideoFragment"
+            app:destination="@id/setupVideoFragment"
+            app:enterAnim="@anim/slide_right_enter"
+            app:exitAnim="@anim/slide_right_exit"
+            app:popEnterAnim="@anim/slide_left_enter"
+            app:popExitAnim="@anim/slide_left_exit"
+            app:popUpTo="@+id/setupProfileFragment"/>
+    </fragment>
+    <fragment
+        android:id="@+id/setupVideoFragment"
+        android:name="com.bupp.wood_spoon_chef.presentation.features.onboarding.create_account.sub_screen.SetupVideoFragment"
+        android:label="SetupVideoFragment"
+        tools:layout="@layout/fragment_setup_video"/>
+
+</navigation>

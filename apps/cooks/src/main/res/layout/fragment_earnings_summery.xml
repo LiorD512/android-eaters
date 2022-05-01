@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.motion.widget.MotionLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layoutDescription="@xml/fragment_earnings_summery_scene">
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/summeryFragDateBarBackground"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:cardBackgroundColor="@color/white"
+        app:cardElevation="0dp"
+        app:layout_constraintBottom_toBottomOf="@+id/summeryFragDateBar"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" >
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/summeryFragTopHeaderBackground"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginBottom="5dp"
+            app:cardBackgroundColor="@color/white"
+            app:cardElevation="5dp"
+            app:layout_constraintBottom_toBottomOf="@+id/summeryFragTopHeaderBottom"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.cardview.widget.CardView>
+
+    <ImageView
+        android:id="@+id/summeryFragTopHeaderBack"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="15.4dp"
+        android:elevation="8dp"
+        android:src="@drawable/ic_back_grey"
+        app:layout_constraintBottom_toBottomOf="@+id/summeryFragTopHeaderValue"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/summeryFragTopHeaderTitle" />
+
+    <TextView
+        android:id="@+id/summeryFragTopHeaderTitle"
+        style="@style/LatoBlack15DarkGray"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="21dp"
+        android:layout_marginTop="20dp"
+        android:elevation="8dp"
+        android:text="Balance"
+        app:layout_constraintStart_toEndOf="@+id/summeryFragTopHeaderBack"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/summeryFragTopHeaderValue"
+        style="@style/LatoReg13LightGreyTwo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
+        android:elevation="8dp"
+        android:text="$76.00"
+        android:alpha="0"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="@+id/summeryFragTopHeaderTitle"
+        app:layout_constraintTop_toBottomOf="@+id/summeryFragTopHeaderTitle" />
+
+    <androidx.legacy.widget.Space
+        android:id="@+id/summeryFragTopHeaderBottom"
+        android:layout_width="match_parent"
+        android:layout_height="27dp"
+        app:layout_constraintTop_toBottomOf="@id/summeryFragTopHeaderValue" />
+
+    <LinearLayout
+        android:id="@+id/summeryFragDetails"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:orientation="vertical"
+        android:paddingTop="15dp"
+        android:paddingBottom="15dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/summeryFragTopHeaderBottom">
+
+
+        <TextView
+            style="@style/LatoBlack30Black"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="15.8dp"
+            android:layout_marginHorizontal="15.4dp"
+            android:text="$76.00" />
+
+        <TextView
+            style="@style/LatoReg13PurpelyGrey"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="15dp"
+            android:layout_marginHorizontal="15.4dp"
+            android:text="Add your payment method to start getting paid" />
+
+        <com.bupp.wood_spoon_chef.presentation.custom_views.OrangeBtnCornered
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:isOrangeish="true"
+            android:layout_marginHorizontal="15.4dp"
+            android:layout_marginBottom="15dp"
+            app:title="Add payment method"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="7.7dp"
+            android:layout_marginBottom="15.4dp"
+            android:background="@color/white_two"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/LatoBlack17Dark"
+            android:layout_marginHorizontal="15.4dp"
+            android:text="Deliveries"/>
+
+
+    </LinearLayout>
+
+    <com.bupp.wood_spoon_chef.presentation.views.OrderDateTabLayout
+        android:id="@+id/summeryFragDateBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="10dp"
+        android:elevation="7dp"
+        app:layout_constraintTop_toBottomOf="@id/summeryFragDetails"
+        app:layout_constraintStart_toStartOf="parent"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/summeryFragOrderList"
+        android:layout_width="match_parent"
+        android:layout_height="1000dp"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constraintTop_toBottomOf="@id/summeryFragDateBar"
+        android:background="@color/white"/>
+
+
+</androidx.constraintlayout.motion.widget.MotionLayout>

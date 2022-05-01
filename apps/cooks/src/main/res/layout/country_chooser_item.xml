@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:orientation="horizontal"
+        android:paddingVertical="23dp"
+        android:id="@+id/countryChooserLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+    <TextView
+            style="@style/LatoReg15Black"
+            android:id="@+id/countryChooserItem"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:letterSpacing="0.03"
+            android:lineSpacingExtra="4.8sp"
+            tools:text="Ukraine (+380)"/>
+
+    <ImageView
+            android:visibility="gone"
+            android:layout_gravity="end|center"
+            android:id="@+id/countryChooserSelected"
+            android:src="@drawable/ic_check_v"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+</FrameLayout>

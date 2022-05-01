@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:background="@color/white"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/cookingSlotImg"
+            android:layout_marginTop="15.9dp"
+            android:layout_marginBottom="15.4dp"
+            android:layout_gravity="center"
+            android:layout_width="37.9dp"
+            android:layout_height="37.9dp" />
+
+        <TextView
+            android:ellipsize="end"
+            android:id="@+id/cookingSlotTitle"
+            style="@style/Reg15Dark"
+            android:layout_marginLeft="8.4dp"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:lines="1"
+            android:layout_marginRight="7.7dp"
+            android:layout_height="wrap_content"
+            tools:text="Tomato soups"/>
+
+        <TextView
+            style="@style/Reg15Blue"
+            android:layout_gravity="center"
+            android:id="@+id/cookingSlotOrders"
+            android:layout_marginRight="14.8dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="0/10 Orders"/>
+
+    </LinearLayout>
+
+    <View
+        android:id="@+id/cookingSlotSep"
+        android:layout_marginRight="15.4dp"
+        android:layout_marginLeft="15.4dp"
+        android:background="@color/silver"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"/>
+
+</LinearLayout>

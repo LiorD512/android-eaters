@@ -1,0 +1,263 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <com.bupp.wood_spoon_chef.presentation.custom_views.HeaderView
+            android:id="@+id/singleDishHeaderView"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            app:type="HEADER_VIEW_TYPE_TITLE_BACK" />
+
+        <androidx.coordinatorlayout.widget.CoordinatorLayout
+            android:id="@+id/product_detail_main_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <com.google.android.material.appbar.AppBarLayout
+                android:id="@+id/appbar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+
+                <com.google.android.material.appbar.CollapsingToolbarLayout
+                    android:id="@+id/detail_product_collapsing_toolbar"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:clipToPadding="true"
+                    app:expandedTitleMarginStart="220dp"
+                    app:layout_scrollFlags="snap">
+
+                    <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="210dp">
+
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/singleDishTopMediaList"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:background="@color/white" />
+
+                        <me.relex.circleindicator.CircleIndicator2
+                            android:id="@+id/singleDishCircleIndicator"
+                            android:layout_width="match_parent"
+                            android:layout_height="11dp"
+                            android:layout_gravity="bottom"
+                            android:layout_marginBottom="22dp"
+                            app:ci_animator="@animator/circle_indicator_anim"
+                            app:ci_drawable="@drawable/vp_indicator_selected"
+                            app:ci_drawable_unselected="@drawable/vp_indicator_unselected"
+                            app:ci_gravity="center"
+                            app:ci_height="10dp"
+                            app:ci_width="10dp" />
+
+                    </FrameLayout>
+
+
+                    <androidx.appcompat.widget.Toolbar
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:fitsSystemWindows="true"
+                        app:layout_collapseMode="pin"
+                        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+                        app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+                </com.google.android.material.appbar.CollapsingToolbarLayout>
+
+            </com.google.android.material.appbar.AppBarLayout>
+
+            <androidx.core.widget.NestedScrollView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:fillViewport="true"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/white"
+                    android:orientation="vertical">
+
+
+                    <com.bupp.wood_spoon_chef.presentation.views.TitleBodyView
+                        android:id="@+id/singleDishFragNameDetails"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingHorizontal="15.4dp" />
+
+                    <com.bupp.wood_spoon_chef.presentation.views.TitleBodyView
+                        android:id="@+id/singleDishFragPreparationTime"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingHorizontal="15.4dp"
+                        app:title="Preparation time" />
+
+                    <com.bupp.wood_spoon_chef.presentation.views.TitleBodyView
+                        android:id="@+id/singleDishFragIngredients"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingHorizontal="15.4dp"
+                        app:title="Ingredients" />
+
+                    <com.bupp.wood_spoon_chef.presentation.views.TitleBodyView
+                        android:id="@+id/singleDishFragInstructions"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingHorizontal="15.4dp"
+                        android:visibility="gone"
+                        app:title="Instructions" />
+
+                    <com.bupp.wood_spoon_chef.presentation.views.TitleBodyView
+                        android:id="@+id/singleDishFragPortion"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingHorizontal="15.4dp"
+                        app:title="Portion Size" />
+
+                    <LinearLayout
+                        android:id="@+id/singleDishFragDietsLayout"
+                        android:visibility="gone"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <TextView
+                            style="@style/LatoBold15Dark"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="left|center"
+                            android:layout_marginTop="11dp"
+                            android:gravity="center_horizontal"
+                            android:paddingHorizontal="15.4dp"
+                            android:text="Dietary" />
+
+                        <com.bupp.wood_spoon_chef.presentation.views.horizontal_dietary_view.HorizontalDietaryView
+                            android:id="@+id/singleDishFragDiets"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content" />
+
+                        <View
+                            android:id="@+id/titleBodyDivider"
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:layout_marginTop="11.3dp"
+                            android:background="@color/silver_20"
+                            android:paddingHorizontal="15.4dp" />
+
+                    </LinearLayout>
+
+                    <com.bupp.wood_spoon_chef.presentation.views.TitleBodyView
+                        android:id="@+id/singleDishFragAccommodations"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingHorizontal="15.4dp"
+                        android:visibility="gone"
+                        app:title="Accommodations" />
+
+                    <com.bupp.wood_spoon_chef.presentation.views.TitleBodyView
+                        android:id="@+id/singleDishFragCuisine"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingHorizontal="15.4dp"
+                        app:title="Cuisine" />
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="15.4dp"
+                        android:paddingHorizontal="15.4dp">
+
+                        <TextView
+                            android:id="@+id/price_title"
+                            style="@style/SemiBold15Dark"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="left|center"
+                            android:layout_marginTop="11dp"
+                            android:gravity="center_horizontal"
+                            android:text="Price"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <TextView
+                            android:id="@+id/price_dish"
+                            style="@style/Reg15Dark"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="left|center"
+                            android:layout_marginTop="7.8dp"
+                            android:layout_marginBottom="11.3dp"
+                            android:text="Dish price"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/price_title" />
+
+                        <TextView
+                            android:id="@+id/price_service_fee"
+                            style="@style/Reg15Dark"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="left|center"
+                            android:layout_marginTop="7.8dp"
+                            android:layout_marginBottom="11.3dp"
+                            android:text="Service fee"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/price_dish" />
+
+                        <TextView
+                            android:id="@+id/price_total"
+                            style="@style/Bold15Dark"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="left|center"
+                            android:layout_marginTop="7.8dp"
+                            android:layout_marginBottom="11.3dp"
+                            android:text="Total profit"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/price_service_fee" />
+
+
+                        <TextView
+                            android:id="@+id/singleDishFragPriceDish"
+                            style="@style/Reg15Dark"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="35dp"
+                            app:layout_constraintStart_toEndOf="@+id/price_dish"
+                            app:layout_constraintTop_toTopOf="@+id/price_dish"
+                            tools:text="$45.00" />
+
+                        <TextView
+                            android:id="@+id/singleDishFragPriceServiceFee"
+                            style="@style/Reg15Dark"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:layout_constraintStart_toStartOf="@+id/singleDishFragPriceDish"
+                            app:layout_constraintTop_toTopOf="@+id/price_service_fee"
+                            tools:text="$45.00" />
+
+                        <TextView
+                            android:id="@+id/singleDishFragPriceTotal"
+                            style="@style/Bold15Dark"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:layout_constraintStart_toStartOf="@+id/singleDishFragPriceDish"
+                            app:layout_constraintTop_toTopOf="@+id/price_total"
+                            tools:text="$45.00" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+                </LinearLayout>
+
+            </androidx.core.widget.NestedScrollView>
+
+        </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+    </LinearLayout>
+
+</FrameLayout>

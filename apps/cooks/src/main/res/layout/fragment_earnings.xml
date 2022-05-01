@@ -1,0 +1,286 @@
+<FrameLayout android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.bupp.wood_spoon_chef.presentation.features.main.earnings.EarningsFragment">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:orientation="vertical">
+
+        <com.bupp.wood_spoon_chef.presentation.custom_views.HeaderView
+            android:id="@+id/mainActHeaderView"
+            app:title="Earnings"
+            app:type="HEADER_VIEW_TYPE_TITLE_NOTIFICATIONS"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <androidx.cardview.widget.CardView
+            android:layout_marginTop="7.7dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="15.4dp">
+
+            <FrameLayout
+                android:layout_gravity="center"
+                android:layout_marginRight="15.4dp"
+                android:layout_marginLeft="15.4dp"
+                android:layout_marginTop="15.4dp"
+                android:layout_marginBottom="15.4dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/singleOrderFragDay"
+                    style="@style/SemiBold13Dark"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Today"/>
+
+                <TextView
+                    android:id="@+id/singleOrderFragProfit"
+                    style="@style/SemiBold15Blue"
+                    android:layout_gravity="right"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
+                    tools:text="$14.50"/>
+
+            </FrameLayout>
+
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:layout_marginTop="7.7dp"
+            android:layout_width="match_parent"
+            android:layout_height="235dp"
+            android:layout_marginHorizontal="15.4dp">
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <LinearLayout
+                    android:weightSum="3"
+                    android:layout_marginBottom="9dp"
+                    android:layout_marginTop="15.4dp"
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <LinearLayout
+                        android:orientation="vertical"
+                        android:gravity="center"
+                        android:layout_weight="1"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:id="@+id/earningsFragTotal"
+                            style="@style/SemiBold15Dark"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_horizontal"
+                            android:text="$0.0"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_horizontal"
+                            android:text="Total"/>
+
+                    </LinearLayout>
+
+                    <View
+                        android:layout_marginTop="7.7dp"
+                        android:layout_marginBottom="7.7dp"
+                        android:background="@color/dark"
+                        android:layout_width="1dp"
+                        android:layout_height="match_parent"/>
+
+                    <LinearLayout
+                        android:orientation="vertical"
+                        android:gravity="center"
+                        android:layout_weight="1"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:id="@+id/earningsFragWeek"
+                            style="@style/SemiBold15Dark"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_horizontal"
+                            android:text="$0.0"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_horizontal"
+                            android:text="This week"/>
+
+                    </LinearLayout>
+
+                    <View
+                        android:layout_marginTop="7.7dp"
+                        android:layout_marginBottom="7.7dp"
+                        android:background="@color/dark"
+                        android:layout_width="1dp"
+                        android:layout_height="match_parent"/>
+
+                    <LinearLayout
+                        android:orientation="vertical"
+                        android:gravity="center"
+                        android:layout_weight="1"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:id="@+id/earningsFragAvg"
+                            style="@style/SemiBold15Dark"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_horizontal"
+                            android:text="$0.0"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_horizontal"
+                            android:text="Avg.\nPer dish"/>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <com.bupp.wood_spoon_chef.presentation.custom_views.ChartView
+                    android:id="@+id/earningsFragChartView"
+                    android:layout_weight="1"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"/>
+
+            </LinearLayout>
+
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:layout_marginTop="7.7dp"
+            android:layout_width="match_parent"
+            android:layout_height="96dp"
+            android:layout_marginHorizontal="15.4dp">
+
+            <LinearLayout
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <LinearLayout
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
+                    android:orientation="vertical"
+                    android:layout_margin="15.4dp"
+                    android:layout_height="match_parent">
+
+                    <TextView
+                        style="@style/SemiBold15Dark_50"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_horizontal"
+                        android:text="Rank"/>
+
+                    <TextView
+                        style="@style/SemiBold15Dark"
+                        android:id="@+id/earningsFragRank"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_horizontal"
+
+                        android:drawablePadding="7.7dp"
+                        tools:text="45"/>
+
+                    <TextView
+                        android:id="@+id/earningsFragRankTop"
+                        style="@style/Reg13Dark_50"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_horizontal"
+                        tools:text="You’re in the top 40%"/>
+
+
+                </LinearLayout>
+
+                <View
+                    android:layout_margin="15.4dp"
+                    android:background="@color/dark"
+                    android:layout_width="1dp"
+                    android:layout_height="wrap_content"/>
+
+                <LinearLayout
+                    android:gravity="left|center"
+                    android:layout_marginLeft="22.3dp"
+                    android:layout_marginRight="45dp"
+                    android:orientation="vertical"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent">
+
+                    <TextView
+                        style="@style/SemiBold15Dark_50"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_horizontal"
+                        android:text="Orders"/>
+
+                    <TextView
+                        android:id="@+id/earningsFragOrdersCount"
+                        style="@style/SemiBold15Dark"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_horizontal"
+                        android:drawablePadding="7.7dp"
+                        tools:text="45"/>
+
+                    <TextView
+                        android:id="@+id/earningsFragOrdersCountWeek"
+                        style="@style/Reg13Dark_50"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_horizontal"
+                        tools:text="10 this week"/>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </androidx.cardview.widget.CardView>
+
+        <com.bupp.wood_spoon_chef.presentation.custom_views.OrangeBtn
+            android:layout_marginTop="15.4dp"
+            android:visibility="gone"
+            app:title="Cash Out"
+            android:layout_marginHorizontal="15.4dp"
+            android:id="@+id/earningsFragCashOut"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <TextView
+            android:layout_gravity="center"
+            android:layout_marginTop="7.7dp"
+            android:id="@+id/earningsFragPaySched"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="13.4sp"
+            android:layout_marginHorizontal="15.4dp"
+            android:textColor="@color/dark_50"
+            android:letterSpacing="0.03"
+            android:gravity="center_horizontal"
+            tools:text="Payment Scheduled : 5/12"/>
+
+    </LinearLayout>
+
+
+</FrameLayout>

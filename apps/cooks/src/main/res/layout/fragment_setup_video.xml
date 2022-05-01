@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/white"
+    tools:context=".features.onboarding.create_account.sub_screen.SetupVideoFragment">
+
+    <TextView
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        style="@style/LatoBlack23Dark"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Add a cover photo"/>
+
+    <TextView
+        android:layout_marginTop="15.4dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/title"
+        style="@style/LatoReg13Black"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Add a photo that showcases your WoodSpoon brand, like a storefront photo. This photo will be at the top of your WoodSpoon page for customers to see. Please use an aesthetically pleasing photo." />
+
+    <FrameLayout
+        android:id="@+id/coverLayout"
+        android:layout_marginTop="30.5dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:background="@drawable/white_two_rect_7_radius_black_stroke"
+        android:layout_width="match_parent"
+        android:layout_height="163dp">
+
+        <ImageView
+            android:id="@+id/setupCoverEmpty"
+            android:layout_gravity="center"
+            android:paddingTop="37dp"
+            android:paddingBottom="30dp"
+            android:src="@drawable/ic_plate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <ImageView
+            android:id="@+id/setupCoverPreview"
+            android:padding="1.4dp"
+            android:visibility="gone"
+            android:scaleType="centerCrop"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
+
+    </FrameLayout>
+
+
+    <TextView
+        android:id="@+id/setupCoverAddBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:paddingVertical="5dp"
+        android:paddingHorizontal="9dp"
+        android:background="@drawable/rectangle_orangish_12_cornered"
+        style="@style/LatoBold11Orangish"
+        android:letterSpacing="0.03"
+        android:lineSpacingExtra="8.6sp"
+        android:layout_gravity="center_horizontal"
+        android:text="Add cover photo"/>
+
+
+    <TextView
+        android:layout_marginTop="22dp"
+        android:id="@+id/subtitle"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/title"
+        style="@style/LatoReg13Black"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Want to show customers a snippet of you cooking or a video of you introducing yourself? Feel free to add a short video below (optional)." />
+
+    <FrameLayout
+        android:id="@+id/videoLayout"
+        android:layout_marginTop="30.5dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:background="@drawable/white_two_rect_7_radius_black_stroke"
+        android:layout_width="match_parent"
+        android:layout_height="163dp">
+
+        <ImageView
+            android:layout_gravity="center"
+            android:id="@+id/setupVideoEmpty"
+            android:paddingTop="37dp"
+            android:paddingBottom="30dp"
+            android:src="@drawable/ic_pot_illus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <ImageView
+            android:padding="1.4dp"
+            android:visibility="gone"
+            android:scaleType="centerCrop"
+            android:id="@+id/setupVideoPreview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
+        <TextView
+            android:layout_margin="7dp"
+            android:layout_gravity="bottom|end"
+            tools:text="30:00"
+            android:paddingVertical ="2dp"
+            android:paddingHorizontal="7dp"
+            tools:visibility="visible"
+            android:visibility="gone"
+            android:background="@drawable/rect_silver_50_10r"
+            android:id="@+id/setupVideoLength"
+            style="@style/LatoReg11White"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+    </FrameLayout>
+
+
+    <TextView
+        android:id="@+id/setupVideoAddBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:paddingVertical="5dp"
+        android:paddingHorizontal="9dp"
+        android:background="@drawable/rectangle_orangish_12_cornered"
+        style="@style/LatoBold11Orangish"
+        android:letterSpacing="0.03"
+        android:lineSpacingExtra="8.6sp"
+        android:layout_gravity="center_horizontal"
+        android:text="Add video (optional)"/>
+
+    <View
+        android:layout_weight="1"
+        android:layout_width="1dp"
+        android:layout_height="0dp"/>
+
+    <com.bupp.wood_spoon_chef.presentation.custom_views.OrangeBtnCornered
+        android:id="@+id/setupVideoNext"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="19.4dp"
+        android:layout_marginBottom="15.4dp"
+        app:title="Submit restaurant" />
+
+
+</LinearLayout>

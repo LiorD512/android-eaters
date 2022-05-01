@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/newDishBkg"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="center">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:paddingBottom="23dp"
+        android:layout_marginHorizontal="15.4dp"
+        android:background="@drawable/white_rect_7_radius"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/title"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            style="@style/LatoBlack15Dark"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="23dp"
+            android:gravity="center_horizontal"
+            android:letterSpacing="0.03"
+            android:lineSpacingExtra="7.7sp"
+            android:text="To publish a dish,\n
+you’ll need the following" />
+
+        <TextView
+            android:id="@+id/icon1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/title"
+            style="@style/LatoReg13Black"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:drawableStart="@drawable/ic_ingredients_illus"
+            android:drawablePadding="15dp"
+            android:gravity="center"
+            android:text="Main ingredients" />
+
+        <TextView
+            android:id="@+id/icon2"
+            app:layout_constraintTop_toBottomOf="@+id/icon1"
+            app:layout_constraintStart_toStartOf="@+id/icon1"
+            style="@style/LatoReg13Black"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="33dp"
+            android:drawableStart="@drawable/ic_photos_illus"
+            android:drawablePadding="15dp"
+            android:gravity="center"
+            android:text="At least 1 photo" />
+
+        <TextView
+            android:id="@+id/icon3"
+            app:layout_constraintTop_toBottomOf="@+id/icon2"
+            app:layout_constraintStart_toStartOf="@+id/icon2"
+            style="@style/LatoReg13Black"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="23dp"
+            android:drawableStart="@drawable/ic_price_illus"
+            android:drawablePadding="15dp"
+            android:gravity="center"
+            android:text="Desired price" />
+
+        <TextView
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/icon3"
+            android:id="@+id/newDishDialogGotIt"
+            style="@style/LatoBold11Orangish"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:layout_marginBottom="28dp"
+            android:background="@drawable/rectangle_orangish_12_cornered"
+            android:gravity="center_horizontal"
+            android:letterSpacing="0.03"
+            android:padding="9dp"
+            android:text="Got it!" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</FrameLayout>

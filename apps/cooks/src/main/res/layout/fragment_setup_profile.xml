@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/white"
+    android:orientation="vertical"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <TextView
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        style="@style/LatoBlack23Dark"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Build your WoodSpoon brand "/>
+
+    <TextView
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/title"
+        android:layout_marginTop="15.4dp"
+        style="@style/LatoReg13Black"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Give your home kitchen a unique name, which represents you and the dishes you will prepare"/>
+
+    <EditText
+        android:id="@+id/setupProfileRestaurantName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/LatoReg13Dark"
+        android:layout_marginTop="15.4dp"
+        android:maxLines="1"
+        android:inputType="text"
+        android:imeOptions="actionNext"
+        android:maxLength="25"
+        android:nextFocusDown="@id/setupProfileAbout"
+        android:paddingVertical="15dp"
+        android:hint="Home kitchen name" />
+
+    <TextView
+        android:id="@+id/yourStory"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/title"
+        android:layout_marginTop="15.4dp"
+        style="@style/LatoReg13Black"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Tell customers about you and your passion for cooking..."/>
+
+    <EditText
+        android:id="@+id/setupProfileAbout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/LatoReg13Dark"
+        android:layout_marginTop="15.4dp"
+        android:lines="5"
+        android:padding="15.4dp"
+        android:gravity="top|start"
+        android:background="@drawable/white_two_rect_7_radius"
+        android:hint="Tell your diners about you and your food…" />
+
+    <TextView
+        android:id="@+id/flagTitle"
+        app:layout_constraintTop_toBottomOf="@+id/setupProfileAbout"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="23dp"
+        style="@style/LatoReg13Black"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Select a flag that best represents your cuisine or culture. This will be shown on your Home Kitchen profile!"/>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/setupProfileFlagLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="23dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/flagTitle">
+
+        <ImageView
+            android:layout_marginTop="5.3dp"
+            android:id="@+id/setupProfileFlag"
+            android:layout_width="28.8dp"
+            android:layout_height="28.8dp"
+            android:scaleType="fitXY"
+            android:layout_marginStart="15.4dp"
+            tools:src ="@drawable/country_flag_ad"
+            app:layout_constraintEnd_toStartOf="@+id/arrow"
+            app:layout_constraintStart_toStartOf="@id/sep"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/arrow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="9.4dp"
+            android:src="@drawable/ic_arrow_down"
+            android:textColor="@color/black"
+            android:gravity="start"
+            app:layout_constraintBottom_toBottomOf="@+id/setupProfileFlag"
+            app:layout_constraintStart_toEndOf="@+id/setupProfileFlag"
+            app:layout_constraintTop_toTopOf="@+id/setupProfileFlag" />
+
+        <View
+            android:id="@+id/sep"
+            android:layout_width="75.8dp"
+            android:layout_height="1dp"
+            android:layout_marginStart="15.4dp"
+            android:layout_marginEnd="25dp"
+            android:layout_marginTop="3dp"
+            android:background="@color/light_periwinkle"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/setupProfileFlag" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <View
+        android:layout_width="1dp"
+        android:layout_height="0dp"
+        android:layout_weight="1"/>
+
+
+    <com.bupp.wood_spoon_chef.presentation.custom_views.OrangeBtnCornered
+        android:id="@+id/setupProfileNext"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="19.4dp"
+        android:layout_marginBottom="15.4dp"
+        app:layout_constraintBottom_toTopOf="@+id/setupProfileBack"
+        app:title="Next" />
+
+
+</LinearLayout>

@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<MotionScene 
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:motion="http://schemas.android.com/apk/res-auto">
+
+    <Transition
+        motion:constraintSetEnd="@+id/end"
+        motion:constraintSetStart="@id/start"
+        motion:duration="1000">
+
+        <OnSwipe
+            motion:maxAcceleration="5"
+            motion:dragDirection="dragUp"
+            motion:dragScale="1"
+            motion:moveWhenScrollAtTop="true"
+            motion:onTouchUp="autoComplete"
+            motion:touchAnchorId="@id/summeryFragOrderList"
+            motion:touchAnchorSide="top"/>
+        <KeyFrameSet>
+            <KeyAttribute
+                motion:keyPositionType="pathRelative"
+                android:alpha="0"
+                motion:framePosition="70"
+                motion:motionTarget="@+id/summeryFragTopHeaderValue"/>
+            <KeyAttribute
+                motion:keyPositionType="pathRelative"
+                android:alpha="1"
+                motion:framePosition="100"
+                motion:motionTarget="@+id/summeryFragTopHeaderValue"/>
+            <KeyAttribute
+                motion:keyPositionType="pathRelative"
+                android:alpha="1"
+                motion:framePosition="0"
+                motion:motionTarget="@+id/summeryFragDetails"/>
+            <KeyAttribute
+                motion:keyPositionType="pathRelative"
+                android:alpha="1"
+                motion:framePosition="70"
+                motion:motionTarget="@+id/summeryFragDetails"/>
+            <KeyAttribute
+                motion:keyPositionType="pathRelative"
+                android:alpha="0"
+                motion:framePosition="80"
+                motion:motionTarget="@+id/summeryFragDetails"/>
+            <KeyAttribute
+                motion:keyPositionType="pathRelative"
+                android:elevation="5dp"
+                motion:framePosition="0"
+                motion:motionTarget="@+id/summeryFragTopHeaderBackground"/>
+            <KeyAttribute
+                motion:keyPositionType="pathRelative"
+                android:elevation="5dp"
+                motion:framePosition="70"
+                motion:motionTarget="@+id/summeryFragTopHeaderBackground"/>
+            <KeyAttribute
+                motion:keyPositionType="pathRelative"
+                android:elevation="0dp"
+                motion:framePosition="80"
+                motion:motionTarget="@+id/summeryFragTopHeaderBackground"/>
+            <KeyAttribute
+                motion:keyPositionType="pathRelative"
+                android:elevation="0dp"
+                motion:framePosition="90"
+                motion:motionTarget="@+id/summeryFragDateBarBackground"/>
+            <KeyAttribute
+                motion:keyPositionType="pathRelative"
+                android:elevation="5dp"
+                motion:framePosition="100"
+                motion:motionTarget="@+id/summeryFragDateBarBackground"/>
+        </KeyFrameSet>
+    </Transition>
+
+    <ConstraintSet android:id="@+id/start">
+        <Constraint
+            android:layout_height="0dp"
+            motion:layout_constraintStart_toStartOf="parent"
+            motion:layout_constraintTop_toTopOf="parent"
+            android:layout_marginBottom="5dp"
+            motion:layout_constraintBottom_toBottomOf="@+id/summeryFragTopHeaderBottom"
+            android:layout_width="match_parent"
+            android:id="@+id/summeryFragTopHeaderBackground" />
+    </ConstraintSet>
+
+    <ConstraintSet android:id="@+id/end">
+        <Constraint
+            android:id="@+id/summeryFragDetails"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:alpha="0"
+            motion:layout_constraintStart_toStartOf="parent"
+            motion:layout_constraintBottom_toBottomOf="@id/summeryFragTopHeaderBottom" />
+        <Constraint
+            android:id="@+id/summeryFragTopHeaderValue"
+            android:elevation="7dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="visible"
+            motion:layout_constraintTop_toBottomOf="@+id/summeryFragTopHeaderTitle"
+            motion:layout_constraintStart_toStartOf="@+id/summeryFragTopHeaderTitle"
+            android:layout_marginTop="2dp" />
+    </ConstraintSet>
+</MotionScene>

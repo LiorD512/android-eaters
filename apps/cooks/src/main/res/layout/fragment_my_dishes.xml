@@ -1,0 +1,150 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/silver_20"
+    tools:context="com.bupp.wood_spoon_chef.presentation.features.main.my_dishes.MyDishesFragment">
+
+    <LinearLayout
+        android:visibility="gone"
+        android:id="@+id/myDishesFragEmptyLayout"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <FrameLayout
+            android:layout_marginTop="73.9dp"
+            android:background="@drawable/my_dishes_background_pic"
+            android:layout_width="match_parent"
+            android:layout_height="270dp">
+
+            <LinearLayout
+                android:layout_marginRight="15.4dp"
+                android:layout_marginLeft="15.4dp"
+                android:layout_marginTop="62.6dp"
+                android:background="@color/off_white_90"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/myDishesFragName"
+                    android:layout_marginRight="30dp"
+                    android:layout_marginLeft="30dp"
+                    android:layout_marginTop="24dp"
+                    android:layout_marginBottom="15.4dp"
+                    android:text="Hey Neta"
+                    android:gravity="center"
+                    style="@style/SemiBold13Dark"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+                <View
+                    android:background="@color/dark"
+                    android:layout_marginRight="7.7dp"
+                    android:layout_marginLeft="7.7dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"/>
+
+                <TextView
+                    style="@style/Reg13Dark"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="15.4dp"
+                    android:layout_marginBottom="23.1dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
+                    android:text="You do not have any dishes yet…\n
+Get started and add your first dish "/>
+
+            </LinearLayout>
+
+        </FrameLayout>
+
+        <View
+            android:layout_weight="1"
+            android:layout_width="1dp"
+            android:layout_height="0dp"/>
+
+        <com.bupp.wood_spoon_chef.presentation.custom_views.OrangeBtnCornered
+            android:layout_marginHorizontal="15.4dp"
+            app:title="Add a Dish"
+            android:layout_marginBottom="38.4dp"
+            android:id="@+id/myDishesFragAddDish"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:background="@color/white"
+        android:id="@+id/myDishesFragDishesLayout"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.bupp.wood_spoon_chef.presentation.custom_views.HeaderView
+            android:id="@+id/mainActHeaderView"
+            app:title="Dishes"
+            app:type="HEADER_VIEW_TYPE_TITLE_ADD"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <LinearLayout
+            android:layout_marginTop="23dp"
+            android:layout_marginHorizontal="15.4dp"
+            android:background="@drawable/white_two_rect_7_radius"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="48dp">
+
+            <ImageView
+                android:layout_marginStart="15.4dp"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_search"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+            <EditText
+                android:id="@+id/myDishesFragSearchInput"
+                android:paddingEnd="15.4dp"
+                android:paddingStart="7.7dp"
+                android:background="@null"
+                android:hint="Search for a dish…"
+                style="@style/LatoReg13PurpelyGrey"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"/>
+
+        </LinearLayout>
+
+        <View
+            android:layout_marginTop="23dp"
+            android:paddingBottom="23dp"
+            android:background="@color/white_two"
+            android:layout_width="match_parent"
+            android:layout_height="7.7dp"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            tools:visibility="gone"
+            android:clipToPadding="false"
+            android:id="@+id/myDishesFragList"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
+        <TextView
+            android:id="@+id/myDishesFragSearchEmpty"
+            android:visibility="gone"
+            android:layout_marginTop="55dp"
+            android:layout_gravity="center"
+            style="@style/LatoReg13PurpelyGrey"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:letterSpacing="0.03"
+            android:lineSpacingExtra="6.7sp"
+            android:text="No dishes found"/>
+
+    </LinearLayout>
+
+</FrameLayout>

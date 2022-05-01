@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/bottomViewLayout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:orientation="horizontal"
+        android:weightSum="5">
+
+        <com.bupp.wood_spoon_chef.presentation.custom_views.BottomBarButton
+            android:id="@+id/bottomViewOrders"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            app:icon="@drawable/bottom_view_orders_selector"
+            app:title="Orders" />
+
+
+        <com.bupp.wood_spoon_chef.presentation.custom_views.BottomBarButton
+            android:id="@+id/bottomViewCalender"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            app:icon="@drawable/bottom_view_calender_selector"
+            app:title="Calendar" />
+
+        <com.bupp.wood_spoon_chef.presentation.custom_views.BottomBarButton
+            android:id="@+id/bottomViewDishes"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            app:icon="@drawable/bottom_view_dishes_selector"
+            app:title="Dishes" />
+
+        <com.bupp.wood_spoon_chef.presentation.custom_views.BottomBarButton
+            android:id="@+id/bottomViewEarnings"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            app:icon="@drawable/bottom_view_earnings_selector"
+            app:title="Earnings" />
+
+        <com.bupp.wood_spoon_chef.presentation.custom_views.BottomBarButton
+            android:id="@+id/bottomViewProfile"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            app:icon="@drawable/bottom_view_profile_selector"
+            app:title="Account" />
+
+
+    </LinearLayout>
+
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_gravity="top"
+        android:background="@color/pale_grey_two"/>
+
+</FrameLayout>

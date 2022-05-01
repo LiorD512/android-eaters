@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:paddingHorizontal="15.4dp"
+    tools:context=".features.new_dish.fragments.NewDishPriceFragment">
+
+    <TextView
+        android:id="@+id/title"
+        style="@style/LatoBlack23Dark"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Select a price for your dish"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.blackcat.currencyedittext.CurrencyEditText
+        android:inputType="number"
+        android:id="@+id/newDishPriceInput"
+        style="@style/LatoBlack17Black"
+        android:layout_width="157dp"
+        android:layout_height="wrap_content"
+        android:letterSpacing="0.03"
+        android:lineSpacingExtra="2.9sp"
+        android:hint="$0.00"
+        android:background="@null"
+        android:gravity="center"
+        android:layout_marginTop="31dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/title"/>
+
+    <View
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_marginTop="4dp"
+        android:background="@color/purpley_grey"
+        app:layout_constraintTop_toBottomOf="@+id/newDishPriceInput"
+        app:layout_constraintStart_toStartOf="@+id/newDishPriceInput"
+        app:layout_constraintEnd_toEndOf="@+id/newDishPriceInput"/>
+
+    <TextView
+        android:gravity="center"
+        android:layout_marginTop="53dp"
+        android:id="@+id/priceText"
+        app:layout_constraintTop_toBottomOf="@+id/newDishPriceInput"
+        app:layout_constraintStart_toStartOf="parent"
+        style="@style/LatoReg13Black"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:letterSpacing="0.03"
+        android:text="Dish price"/>
+
+    <TextView
+        android:id="@+id/newDishPriceDishPrice"
+        app:layout_constraintTop_toTopOf="@+id/priceText"
+        app:layout_constraintEnd_toEndOf="parent"
+        style="@style/LatoReg13Black"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="$0.00"/>
+
+    <TextView
+        android:gravity="center"
+        android:drawablePadding="8dp"
+        android:drawableEnd="@drawable/ic_tool_tip"
+        android:layout_marginTop="24dp"
+        android:id="@+id/chefFeeText"
+        app:layout_constraintTop_toBottomOf="@+id/priceText"
+        app:layout_constraintStart_toStartOf="parent"
+        style="@style/LatoReg13Black"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:letterSpacing="0.03"
+        android:text="Chef service fee"/>
+
+    <TextView
+        android:id="@+id/newDishPriceDishChefFee"
+        app:layout_constraintTop_toTopOf="@+id/chefFeeText"
+        app:layout_constraintEnd_toEndOf="parent"
+        style="@style/LatoReg13Black"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="$0.00"/>
+
+    <TextView
+        android:layout_marginTop="19dp"
+        android:id="@+id/totalText"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/chefFeeText"
+        style="@style/LatoBlack17Dark"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:letterSpacing="0.03"
+        android:text="Total profit"/>
+
+    <TextView
+        android:id="@+id/newDishPriceDishTotal"
+        app:layout_constraintTop_toTopOf="@+id/totalText"
+        app:layout_constraintEnd_toEndOf="parent"
+        style="@style/LatoBlack17Dark"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="$0.00"/>
+
+    <com.bupp.wood_spoon_chef.presentation.views.LottieAnimationView
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginBottom="22.8dp"
+        app:layout_constraintBottom_toTopOf="@+id/newDishPriceNext"
+        app:lottieAnimType="NEW_DISH_PRICE"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+
+    <com.bupp.wood_spoon_chef.presentation.custom_views.OrangeBtnCornered
+        android:id="@+id/newDishPriceNext"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="19.4dp"
+        app:layout_constraintBottom_toTopOf="@+id/newDishPriceBack"
+        app:title="Next" />
+
+    <TextView
+        android:id="@+id/newDishPriceBack"
+        style="@style/LatoBlack15Orangish"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:letterSpacing="0.03"
+        android:padding="15.4dp"
+        android:text="Back"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

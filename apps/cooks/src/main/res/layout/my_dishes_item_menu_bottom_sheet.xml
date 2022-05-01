@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/dishChooserDialogBkg"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <FrameLayout
+        android:id="@+id/back"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/dark_43" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center|bottom"
+        android:layout_marginLeft="7.7dp"
+        android:layout_marginRight="7.7dp"
+        android:layout_marginBottom="7.4dp"
+        android:background="@drawable/media_chooser_dialog_bkg"
+        android:orientation="vertical">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/dishChooserDialogTitle"
+                style="@style/SemiBold15Dark"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:paddingTop="24dp"
+                android:paddingBottom="22.7dp" />
+
+            <ImageView
+                android:id="@+id/dishChooserDialogClose"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center|left"
+                android:layout_marginLeft="15.4dp"
+                android:padding="5dp"
+                android:src="@drawable/icons_close" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:layout_gravity="bottom"
+                android:background="@color/dark" />
+
+        </FrameLayout>
+
+        <TextView
+            android:id="@+id/dishChooserDialogHistory"
+            style="@style/Reg15Dark"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:paddingTop="22.6dp"
+            android:paddingBottom="22.7dp"
+            android:text="Order history"
+            android:visibility="gone" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_gravity="bottom"
+            android:layout_marginLeft="7.7dp"
+            android:layout_marginRight="7.7dp"
+            android:background="@color/dark_43"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/dishChooserDialogEdit"
+            style="@style/Reg15Dark"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:paddingTop="22.6dp"
+            android:paddingBottom="22.7dp"
+            android:text="Edit dish" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_gravity="bottom"
+            android:layout_marginLeft="7.7dp"
+            android:layout_marginRight="7.7dp"
+            android:background="@color/dark_43" />
+
+        <TextView
+            android:id="@+id/dishChooserDialogDuplicate"
+            style="@style/Reg15Dark"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:paddingTop="22.6dp"
+            android:paddingBottom="22.7dp"
+            android:text="Duplicate dish" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_gravity="bottom"
+            android:layout_marginLeft="7.7dp"
+            android:layout_marginRight="7.7dp"
+            android:background="@color/dark_43" />
+
+        <FrameLayout
+            android:visibility="gone"
+            android:id="@+id/dishChooserDialogActivate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                style="@style/Reg15Dark"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:paddingTop="22.6dp"
+                android:paddingBottom="22.7dp"
+                android:text="Publish dish" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_gravity="bottom"
+                android:layout_marginLeft="7.7dp"
+                android:layout_marginRight="7.7dp"
+                android:background="@color/dark_43" />
+
+        </FrameLayout>
+
+        <FrameLayout
+            android:visibility="gone"
+            android:id="@+id/dishChooserDialogUnPublish"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                style="@style/Reg15Dark"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:paddingTop="22.6dp"
+                android:paddingBottom="22.7dp"
+                android:text="Unpublish dish" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_gravity="bottom"
+                android:layout_marginLeft="7.7dp"
+                android:layout_marginRight="7.7dp"
+                android:background="@color/dark_43" />
+
+        </FrameLayout>
+
+
+        <TextView
+            android:id="@+id/dishChooserDialogHide"
+            style="@style/Reg15Red"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:paddingTop="22.6dp"
+            android:paddingBottom="22.7dp"
+            android:text="Delete dish" />
+
+    </LinearLayout>
+
+</FrameLayout>

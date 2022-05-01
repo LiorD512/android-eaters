@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:animateLayoutChanges="true"
+    android:background="@color/white">
+
+    <TextView
+        tools:visibility="visible"
+        android:visibility="gone"
+        tools:text="custom title"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/wsEditTextCounter"
+        app:layout_constraintTop_toTopOf="parent"
+        style="@style/LatoReg13Black"
+        android:textColor="@color/purpley_grey"
+        android:id="@+id/wsEditTextTitle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"/>
+
+    <TextView
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/wsEditTextUnderline"
+        android:layout_marginBottom="9dp"
+        android:id="@+id/wsEditTextCounter"
+        style="@style/LatoBlack11Black"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center|right"
+        android:layout_marginTop="3.4dp"
+        tools:text="0/40"/>
+
+    <FrameLayout
+        tools:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@+id/wsEditTextUnderline"
+        app:layout_constraintStart_toStartOf="parent"
+        android:id="@+id/prefixLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp">
+
+        <EditText
+            android:id="@+id/wsEditTextPrefix"
+            style="@style/LatoBold13Black"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@null"
+            android:focusable="false"
+            android:gravity="center"
+            android:letterSpacing="0.03"
+            android:paddingTop="11dp"
+            android:paddingBottom="2dp"
+            android:text="+1"
+            tools:visibility="visible"
+            android:visibility="gone"/>
+
+        <ImageView
+            android:id="@+id/wsEditIcon"
+            android:visibility="gone"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+    </FrameLayout>
+
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/wsEditTextBkg"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:animateLayoutChanges="true"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/prefixLayout"
+        app:layout_constraintTop_toBottomOf="@+id/wsEditTextTitle">
+
+        <EditText
+            android:id="@+id/wsEditTextInput"
+            style="@style/LatoBold13Black"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@null"
+            android:imeOptions="actionNext"
+            android:letterSpacing="0.03"
+            android:paddingTop="9dp"
+            android:paddingBottom="2dp"
+            android:textColorHint="@color/purpley_grey"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="hint here" />
+
+        <ImageView
+            android:id="@+id/wsEditTextErrorIcon"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_gravity="end|bottom"
+            android:alpha="0"
+            android:background="@null"
+            android:paddingBottom="-2dp"
+            android:src="@drawable/ic_error"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/wsEditTextTooltip"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:alpha="1" />
+
+        <ImageView
+            android:id="@+id/wsEditTextCheck"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_gravity="end|center"
+            android:alpha="0"
+            android:background="@null"
+            android:src="@drawable/ic_validation_check"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/wsEditTextTooltip"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:alpha="1" />
+
+        <ImageView
+            android:visibility="gone"
+            android:id="@+id/wsEditTextTooltip"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_gravity="end|center"
+            android:background="@null"
+            android:src="@drawable/ic_tool_tip"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <View
+        android:id="@+id/wsEditTextUnderline"
+        android:layout_width="0dp"
+        android:layout_height="1.4dp"
+        android:background="@color/light_periwinkle"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/wsEditTextBkg" />
+
+    <TextView
+        android:id="@+id/wsEditTextErrorText"
+        style="@style/Reg11Coral"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_marginEnd="5dp"
+        android:alpha="0"
+        android:gravity="start"
+        android:textColor="@color/red"
+        app:layout_constraintEnd_toStartOf="@+id/wsEditTextCounter"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/wsEditTextCounter"
+        tools:alpha="1"
+        tools:text="This is a custom error text ok ok ok." />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

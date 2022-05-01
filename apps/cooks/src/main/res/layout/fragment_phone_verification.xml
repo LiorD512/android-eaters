@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <ImageButton
+        android:background="@null"
+        android:padding="15.4dp"
+        android:id="@+id/verificationFragCloseBtn"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:src="@drawable/icons_close"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+
+    <TextView
+        android:id="@+id/title"
+        style="@style/LatoBlack23Dark"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="7.7dp"
+        android:letterSpacing="0.03"
+        android:paddingStart="15.4dp"
+        android:text="Enter Your Mobile Number"
+        app:layout_constraintTop_toBottomOf="@+id/verificationFragCloseBtn"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/subtitle"
+        style="@style/LatoReg13Black"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15.2dp"
+        android:letterSpacing="0.03"
+        android:lineSpacingExtra="6.7sp"
+        android:paddingStart="15.4dp"
+        android:text="You will receive an SMS to confirm your \nphone number"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/title" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="36dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/subtitle">
+
+        <TextView
+            android:layout_marginTop="5.3dp"
+            android:id="@+id/verificationFragFlag"
+            android:layout_width="28.8dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15.4dp"
+            android:textSize="23sp"
+            app:layout_constraintEnd_toStartOf="@+id/arrow"
+            app:layout_constraintStart_toStartOf="@id/sep"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/arrow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="9.4dp"
+            android:src="@drawable/ic_arrow_down"
+            android:textColor="@color/black"
+            android:gravity="start"
+            app:layout_constraintBottom_toBottomOf="@+id/verificationFragFlag"
+            app:layout_constraintStart_toEndOf="@+id/verificationFragFlag"
+            app:layout_constraintTop_toTopOf="@+id/verificationFragFlag" />
+
+        <View
+            android:id="@+id/sep"
+            android:layout_width="75.8dp"
+            android:layout_height="1dp"
+            android:layout_marginStart="15.4dp"
+            android:layout_marginEnd="25dp"
+
+            android:background="@color/light_periwinkle"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/verificationFragFlag" />
+
+        <com.bupp.wood_spoon_chef.presentation.views.WSEditText
+            android:layout_marginTop="7.3dp"
+            android:id="@+id/verificationFragmentInput"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="25dp"
+            app:error="@string/phone_verification_fragment_phone_error"
+            app:hint="Mobile number"
+            app:inputType="PHONE"
+            android:layout_marginEnd="15.4dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/sep"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10.7dp"
+        android:gravity="center"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toTopOf="@+id/verificationFragmentNext">
+
+        <TextView
+            style="@style/LatoReg11Black"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:letterSpacing="0.03"
+            android:lineSpacingExtra="8.6sp"
+            android:text="By continuing you confirm our" />
+
+        <TextView
+            android:id="@+id/verificationFragmentTerms"
+            style="@style/LatoBold11Orangish"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:background="@drawable/pale_grey_cornered_rect"
+            android:gravity="center_horizontal"
+            android:letterSpacing="0.03"
+            android:lineSpacingExtra="8.6sp"
+            android:paddingHorizontal="9dp"
+            android:paddingVertical="5dp"
+            android:text="Terms of use" />
+
+    </LinearLayout>
+
+    <com.bupp.wood_spoon_chef.presentation.custom_views.OrangeBtnCornered
+        android:id="@+id/verificationFragmentNext"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:paddingHorizontal="15.4dp"
+        android:paddingBottom="7.4dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:title="@string/phone_verification_fragment_next_btn" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+

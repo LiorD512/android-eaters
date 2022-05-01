@@ -1,0 +1,119 @@
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/silver_20">
+
+    <com.bupp.wood_spoon_chef.presentation.custom_views.HeaderView
+        android:id="@+id/mainActHeaderView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:title="Orders"
+        app:type="HEADER_VIEW_TYPE_TITLE_NOTIFICATIONS" />
+
+    <LinearLayout
+        android:id="@+id/ordersFragEmptyLayout"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/mainActHeaderView"
+        tools:visibility="gone">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="270dp"
+            android:layout_marginTop="73.9dp"
+            android:background="@drawable/my_dishes_background_pic">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15.4dp"
+                android:layout_marginTop="62.6dp"
+                android:layout_marginRight="15.4dp"
+                android:background="@color/off_white_90"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/ordersFragEmptyTitle"
+                    style="@style/SemiBold13Dark"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="30dp"
+                    android:layout_marginTop="24dp"
+                    android:layout_marginRight="30dp"
+                    android:layout_marginBottom="15.4dp"
+                    android:gravity="center"
+                    android:text="Hey" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginLeft="7.7dp"
+                    android:layout_marginRight="7.7dp"
+                    android:background="@color/dark" />
+
+                <TextView
+                    style="@style/Reg13Dark"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="15.4dp"
+                    android:layout_marginBottom="23.1dp"
+                    android:gravity="center_horizontal"
+                    android:text="You have no upcoming orders…\n
+Go to your calendar to set up your cooking slots
+  " />
+
+            </LinearLayout>
+
+        </FrameLayout>
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+        <com.bupp.wood_spoon_chef.presentation.custom_views.OrangeBtnCornered
+            android:id="@+id/ordersFragCalendar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="15.4dp"
+            android:layout_marginBottom="38.4dp"
+            app:title="Calendar" />
+
+    </LinearLayout>
+
+<!--    <LinearLayout-->
+<!--        android:id="@+id/ordersFragCookingSlotsLayout"-->
+<!--        android:layout_width="0dp"-->
+<!--        android:layout_height="0dp"-->
+<!--        android:background="@color/white"-->
+<!--        android:orientation="vertical"-->
+<!--        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/mainActHeaderView">-->
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/ordersFragList"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            tools:itemCount="2"
+            tools:listitem="@layout/orders_list_item"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/mainActHeaderView"/>
+
+<!--    </LinearLayout>-->
+
+</androidx.constraintlayout.widget.ConstraintLayout>

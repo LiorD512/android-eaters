@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/top_cornered_bkg"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/header"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardElevation="4dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageButton
+                    android:id="@+id/createAccountHelpClose"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@null"
+                    android:padding="15.4dp"
+                    android:src="@drawable/icons_close" />
+
+                <TextView
+                    style="@style/LatoBlack15Dark"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:gravity="center_horizontal"
+                    android:letterSpacing="0.03"
+                    android:text="We&apos;re here to help" />
+
+            </FrameLayout>
+
+        </androidx.cardview.widget.CardView>
+
+        <ImageView
+            android:id="@+id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="22.4dp"
+            android:src="@drawable/ic_message_illus"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/header" />
+
+        <LinearLayout
+            android:id="@+id/nameLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="15.4dp"
+            android:layout_marginTop="38dp"
+            android:orientation="horizontal"
+            android:weightSum="2"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/title">
+
+            <com.bupp.wood_spoon_chef.presentation.views.WSEditText
+                android:id="@+id/createAccountHelpFirstName"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="15.4dp"
+                android:layout_weight="1"
+                app:error="Please add your first name"
+                app:hint="First name"
+                app:inputType="INPUT_TYPE_FULL_NAME" />
+
+            <com.bupp.wood_spoon_chef.presentation.views.WSEditText
+                android:id="@+id/createAccountHelpLastName"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                app:error="Please add your last name"
+                app:hint="Last name"
+                app:inputType="INPUT_TYPE_FULL_NAME" />
+
+        </LinearLayout>
+
+        <com.bupp.wood_spoon_chef.presentation.views.WSEditText
+            android:id="@+id/createAccountHelpEmail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="15.4dp"
+            app:error="Please insert a valid email"
+            app:hint="Email address"
+            app:inputType="MAIL"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/nameLayout" />
+
+        <EditText
+            android:id="@+id/createAccountHelpInput"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="15.4dp"
+            android:layout_marginTop="30dp"
+            android:background="@drawable/white_two_rect_7_radius"
+            android:gravity="top|start"
+            android:hint="Let us know how we can help you…"
+            android:lines="5"
+            android:padding="15.4dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/createAccountHelpEmail" />
+
+        <View
+            android:id="@+id/space"
+            android:layout_width="1dp"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            app:layout_constraintBottom_toTopOf="@+id/createAccountHelpSend"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/createAccountHelpInput" />
+
+        <com.bupp.wood_spoon_chef.presentation.custom_views.OrangeBtnCornered
+            android:id="@+id/createAccountHelpSend"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="15.4dp"
+            android:layout_marginTop="55dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:title="Send" />
+
+    </LinearLayout>
+
+</FrameLayout>

@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/profileMenuMyAddress"
+            style="@style/LatoBold13Black"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawableEnd="@drawable/ic_arrow_right"
+            android:padding="15dp"
+            android:text="My addresses" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/white_three" />
+
+        <TextView
+            android:id="@+id/profileMenuEditAccount"
+            style="@style/LatoBold13Black"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawableEnd="@drawable/ic_arrow_right"
+            android:padding="15dp"
+            android:text="Edit my account" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/white_three" />
+
+        <TextView
+            android:id="@+id/profileMenuEditKitchen"
+            style="@style/LatoBold13Black"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawableEnd="@drawable/ic_arrow_right"
+            android:padding="15dp"
+            android:text="Edit my home kitchen" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/white_three" />
+
+        <TextView
+            android:id="@+id/profileMenuPayment"
+            style="@style/LatoBold13Black"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawableEnd="@drawable/ic_arrow_right"
+            android:padding="15dp"
+            android:text="Payment" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/white_three" />
+
+        <TextView
+            android:id="@+id/profileMenuNotifications"
+            style="@style/LatoBold13Black"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawableEnd="@drawable/ic_arrow_right"
+            android:padding="15dp"
+            android:text="Notifications"
+            android:visibility="gone" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/white_three"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/profileMenuPrivacy"
+            style="@style/LatoBold13Black"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawableEnd="@drawable/ic_arrow_right"
+            android:padding="15dp"
+            android:text="Privacy Policy &#38; Terms" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/white_three" />
+
+        <TextView
+            android:id="@+id/profileMenuHelp"
+            style="@style/LatoBold13Black"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawableEnd="@drawable/ic_arrow_right"
+            android:padding="15dp"
+            android:text="Help" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/white_three" />
+
+        <TextView
+            android:id="@+id/profileMenuAbout"
+            style="@style/LatoBold13Black"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawableEnd="@drawable/ic_arrow_right"
+            android:padding="15dp"
+            android:text="About" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/white_three" />
+
+        <TextView
+            android:id="@+id/profileMenuSignOut"
+            style="@style/LatoBold13Black"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="15dp"
+            android:text="Sign out"
+            android:textColor="@color/coral" />
+
+    </LinearLayout>
+
+</FrameLayout>

@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        android:orientation="vertical"
+        tools:context=".features.new_dish.fragments.NewDishPriceFragment">
+
+
+        <TextView
+            android:id="@+id/title"
+            style="@style/LatoBlack23Dark"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="15.4dp"
+            android:text="Add photos"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/subtitle"
+            style="@style/LatoReg13Black"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15.4dp"
+            android:paddingHorizontal="15.4dp"
+            android:text="Food photos are best captured in daylight next to a bright window. Plate dish with a plain/white background. Take a photo directly above to best showcase your dish"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/title" />
+
+        <FrameLayout
+            android:id="@+id/newDishMainPhotoLayout"
+            android:layout_width="match_parent"
+            android:layout_height="163dp"
+            android:layout_marginHorizontal="15.4dp"
+            android:layout_marginTop="15.4dp"
+            android:background="@drawable/white_two_rect_9_radius_black_stroke"
+            app:layout_constraintTop_toBottomOf="@+id/subtitle">
+
+            <ImageView
+                android:id="@+id/newDishMainPhotoIcon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_plate" />
+
+            <ImageView
+                android:id="@+id/newDishMainPhoto"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="1.4dp" />
+
+        </FrameLayout>
+
+
+        <TextView
+            android:id="@+id/newDishMainPhotoBtn"
+            style="@style/LatoBold11Orangish"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="15.4dp"
+            android:background="@drawable/rectangle_orangish_12_cornered"
+            android:gravity="center_horizontal"
+            android:letterSpacing="0.03"
+            android:lineSpacingExtra="8.6sp"
+            android:paddingHorizontal="9dp"
+            android:paddingVertical="5dp"
+            android:text="Add main photo"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/newDishMainPhotoLayout" />
+
+        <TextView
+            android:id="@+id/subtitle2"
+            style="@style/LatoReg13Black"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="22.8dp"
+            android:paddingHorizontal="15.4dp"
+            android:text="Have any additional photos or videos of your dish?\nYou can add 2 more photos and one video here"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/newDishMainPhotoBtn" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/newDishMediaList"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15.4dp"
+            android:layout_marginBottom="15.4dp"
+            android:clipToPadding="false"
+            android:paddingHorizontal="15.4dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/subtitle2" />
+
+
+        <com.bupp.wood_spoon_chef.presentation.custom_views.OrangeBtnCornered
+            android:id="@+id/newDishMediaPublish"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="19.4dp"
+            android:paddingHorizontal="15.4dp"
+            app:layout_constraintBottom_toTopOf="@+id/newDishMediaBack"
+            app:title="Publish dish" />
+
+        <TextView
+            android:id="@+id/newDishMediaBack"
+            style="@style/LatoBlack15Orangish"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:letterSpacing="0.03"
+            android:padding="15.4dp"
+            android:paddingHorizontal="15.4dp"
+            android:text="Back"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+    </LinearLayout>
+
+</androidx.core.widget.NestedScrollView>

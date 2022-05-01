@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical">
+
+    <com.bupp.wood_spoon_chef.presentation.views.BottomSheetHeaderView
+        android:id="@+id/aboutFragHeader"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:title="Payment"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        android:paddingHorizontal="15.4dp"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:id="@+id/paymentBankAccount"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="22dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/LatoBold13Black"
+                android:drawableStart="@drawable/ic_bank"
+                android:drawablePadding="3dp"
+                android:gravity="bottom"
+                android:paddingBottom="3dp"
+                android:text="Link bank account"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="5dp"
+                style="@style/LatoReg13Black"
+                android:drawablePadding="5dp"
+                android:paddingBottom="16dp"
+                android:drawableEnd="@drawable/ic_arrow_right"
+                android:text="Receive your payout once a week without paying a fee"/>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/white_three"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+</LinearLayout>

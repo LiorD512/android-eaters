@@ -8,6 +8,7 @@ keystore.properties
 
 # Log/OS Files
 *.log
+**/.DS_Store
 
 # Android Studio generated files and folders
 captures/
@@ -18,6 +19,7 @@ output.json
 
 # IntelliJ
 *.iml
+*.idea
 .idea/
 misc.xml
 deploymentTargetDropDown.xml
@@ -27,9 +29,13 @@ render.experimental.xml
 *.jks
 *.keystore
 
+# Google Services (e.g. APIs or Firebase)
+#google-services.json
+
 # Android Profiling
 *.hprof
 
-# generated apks
-/app/release
-/app/debug
+#output apks
+*/debug
+*/prodFlavor
+*/release

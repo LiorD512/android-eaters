@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/transparent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_marginHorizontal="7.7dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/white_rect_7_radius"
+        android:orientation="vertical"
+        android:paddingTop="12dp">
+
+        <TextView
+            style="@style/LatoBold11Greyish"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:letterSpacing="0.03"
+            android:lineSpacingExtra="8.6sp"
+            android:paddingHorizontal="15.4dp"
+            android:text="You must finalize and publish this dish before adding it to your menu." />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="8.7dp"
+            android:background="@color/silver" />
+
+        <TextView
+            android:id="@+id/saveAsDraftSave"
+            style="@style/LatoReg15Black"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:letterSpacing="0.03"
+            android:lineSpacingExtra="7.7sp"
+            android:paddingVertical="20dp"
+            android:text="Save as draft"
+            android:textColor="@color/black" />
+
+    </LinearLayout>
+
+    <TextView
+        android:layout_marginHorizontal="7.7dp"
+        android:id="@+id/saveAsDraftCancel"
+        android:layout_marginTop="7.6dp"
+        android:paddingVertical="20dp"
+        android:background="@drawable/white_rect_7_radius"
+        style="@style/LatoBold15Coral"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:letterSpacing="0.03"
+        android:gravity="center_horizontal"
+        android:text="Cancel"/>
+
+</LinearLayout>

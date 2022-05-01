@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <com.bupp.wood_spoon_chef.presentation.views.BottomSheetHeaderView
+        android:id="@+id/reviewBottomSheetHeader"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        android:background="@color/white">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+
+            <com.bupp.wood_spoon_chef.presentation.views.ReviewsGraphView
+                android:id="@+id/reviewBottomSheetGraph"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="23dp"
+                android:paddingBottom="30dp"
+                android:paddingHorizontal="15.4dp" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/reviewBottomSheetReviewList"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|right"
+                android:clipToPadding="false"
+                android:paddingBottom="5dp"
+                android:layout_marginHorizontal="15.4dp"
+                tools:listitem="@layout/reviews_item" />
+
+            <!--            <FrameLayout-->
+
+            <!--                    android:id="@+id/reviewBottomSheetNoNetwork"-->
+            <!--                    android:layout_width="match_parent"-->
+            <!--                    android:layout_height="match_parent"-->
+            <!--                    android:paddingBottom="100dp"-->
+            <!--                    android:visibility="gone">-->
+
+            <!--                <include-->
+            <!--                        android:id="@+id/reviewBottomSheetNoNetworkLayout"-->
+            <!--                        layout="@layout/feed_adapter_no_network_item"/>-->
+
+            <!--            </FrameLayout>-->
+
+
+        </LinearLayout>
+
+
+    </androidx.core.widget.NestedScrollView>
+
+    <com.bupp.wood_spoon_chef.presentation.custom_views.OrangeBtnCornered
+        android:id="@+id/reviewsBottomSheetBtn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:layout_marginHorizontal="15.4dp"
+        android:layout_marginBottom="15.4dp"
+        android:visibility="gone"
+        app:title="Show all 21 reviews" />
+
+</LinearLayout>
+
+
+

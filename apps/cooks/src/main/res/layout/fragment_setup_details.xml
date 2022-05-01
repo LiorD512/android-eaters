@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:weightSum="1"
+    android:orientation="vertical"
+    android:background="@color/white"
+    tools:context=".features.onboarding.create_account.sub_screen.SetupDetailsFragment">
+
+    <TextView
+        style="@style/LatoBlack23Dark"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:letterSpacing="0.03"
+        android:text="Become a home chef"/>
+
+    <TextView
+        android:layout_marginTop="15.4dp"
+        style="@style/LatoReg13Black"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Let’s get you started. Enter your profile picture, name, email address, birthdate and ssn."/>
+
+    <com.bupp.wood_spoon_chef.presentation.custom_views.UserImageView
+        android:id="@+id/setupDetailsUserImageView"
+        android:layout_marginTop="30dp"
+        android:layout_gravity="center"
+        app:imageSize="BIG"
+        app:placeHolder="@drawable/cook_place_holder"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <TextView
+        android:layout_marginTop="8dp"
+        android:id="@+id/setupDetailsChangePicture"
+        android:paddingVertical="5dp"
+        android:paddingHorizontal="9dp"
+        android:background="@drawable/rectangle_orangish_12_cornered"
+        android:layout_gravity="center"
+        style="@style/LatoBold11Orangish"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:letterSpacing="0.03"
+        android:lineSpacingExtra="8.6sp"
+        android:gravity="center_horizontal"
+        android:text="Add photo"/>
+
+    <LinearLayout
+        android:weightSum="2"
+        android:layout_marginTop="30dp"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.bupp.wood_spoon_chef.presentation.views.WSEditText
+            android:id="@+id/setupDetailsFirstName"
+            android:layout_marginEnd="15.4dp"
+            app:hint="First name"
+            app:error="Please add your first name"
+            app:inputType="INPUT_TYPE_FULL_NAME"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"/>
+
+        <com.bupp.wood_spoon_chef.presentation.views.WSEditText
+            android:id="@+id/setupDetailsLastName"
+            app:hint="Last name"
+            app:error="Please add your last name"
+            app:inputType="INPUT_TYPE_FULL_NAME"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"/>
+
+    </LinearLayout>
+
+    <com.bupp.wood_spoon_chef.presentation.views.WSEditText
+        android:id="@+id/setupDetailsEmail"
+        app:hint="Email address"
+        app:error="Please insert a valid email"
+        app:inputType="MAIL"
+        android:layout_marginTop="31dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <LinearLayout
+        android:weightSum="2"
+        android:layout_marginTop="31dp"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.bupp.wood_spoon_chef.presentation.views.WSEditText
+            android:id="@+id/setupDetailsBirthdate"
+            app:layout_constraintTop_toBottomOf="@+id/subtitle"
+            app:hint="Your birthdate"
+            app:error="Please add your birth date"
+            android:layout_marginEnd="14dp"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"/>
+
+        <com.bupp.wood_spoon_chef.presentation.views.WSEditText
+            android:id="@+id/setupDetailsSsn"
+            app:layout_constraintTop_toBottomOf="@+id/setupPaymentBirthdate"
+            app:inputType="NUMBER"
+            app:hint="Last 4 digits of SSN"
+            app:error="Please add your social security number"
+            app:maxChar="4"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            app:imeOptions="0x00000006"
+            android:layout_height="wrap_content"/>
+
+    </LinearLayout>
+
+    <View
+        android:layout_weight="1"
+        android:layout_width="1dp"
+        android:layout_height="0dp"/>
+
+    <com.bupp.wood_spoon_chef.presentation.custom_views.OrangeBtnCornered
+        android:layout_marginBottom="15.4dp"
+        android:id="@+id/setupDetailsSave"
+        app:title="Next"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+</LinearLayout>

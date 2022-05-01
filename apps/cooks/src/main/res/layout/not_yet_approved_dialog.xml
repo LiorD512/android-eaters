@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/notApprovedDialogBkg"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <FrameLayout
+        android:id="@+id/back"
+        android:background="@color/dark_43"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+    <LinearLayout
+        android:background="@drawable/media_chooser_dialog_bkg"
+        android:orientation="vertical"
+        android:layout_gravity="center"
+        android:layout_marginRight="50.9dp"
+        android:layout_marginLeft="50.9dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            style="@style/LatoReg15PurpelyGrey"
+            android:gravity="center"
+            android:layout_marginTop="25.4dp"
+            android:layout_marginRight="25.4dp"
+            android:layout_marginLeft="25.4dp"
+            android:layout_marginBottom="15.4dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Please wait for your account to be verified. We'll send you a notification after verification"/>
+
+        <TextView
+            android:id="@+id/notApprovedDialogOk"
+            style="@style/LatoBold11Orangish"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginBottom="15.4dp"
+            android:background="@drawable/rectangle_orangish_12_cornered"
+            android:gravity="center_horizontal"
+            android:letterSpacing="0.03"
+            android:lineSpacingExtra="8.6sp"
+            android:paddingHorizontal="9dp"
+            android:paddingVertical="5dp"
+            android:text="Got it" />
+
+    </LinearLayout>
+
+</FrameLayout>

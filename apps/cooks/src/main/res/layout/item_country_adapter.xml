@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingHorizontal="15.4dp"
+    android:paddingTop="28dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:paddingBottom="23dp">
+
+        <ImageView
+            android:id="@+id/itemCountryFlagIcon"
+            android:layout_width="23dp"
+            android:layout_height="23dp"
+            android:scaleType="fitXY"
+            tools:src="@drawable/country_flag_ad"/>
+
+        <TextView
+            android:id="@+id/itemCountryName"
+            style="@style/LatoReg15Black"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingStart="8dp"
+            tools:text="Unites States" />
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_gravity="bottom"
+        android:background="@color/silver" />
+
+
+</FrameLayout>

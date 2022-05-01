@@ -1,0 +1,110 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <com.bupp.wood_spoon_chef.presentation.views.BottomSheetHeaderView
+                android:id="@+id/editAccountHeader"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:title="Edit account" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:orientation="vertical"
+                android:paddingHorizontal="15.4dp">
+
+                <com.bupp.wood_spoon_chef.presentation.custom_views.UserImageView
+                    android:id="@+id/editAccountUserImageView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="30dp"
+                    app:imageSize="BIG"
+                    app:placeHolder="@drawable/cook_place_holder" />
+
+                <TextView
+                    android:id="@+id/editAccountChangePicture"
+                    style="@style/LatoBold11Orangish"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="8dp"
+                    android:background="@drawable/rectangle_orangish_12_cornered"
+                    android:gravity="center_horizontal"
+                    android:letterSpacing="0.03"
+                    android:lineSpacingExtra="8.6sp"
+                    android:paddingHorizontal="9dp"
+                    android:paddingVertical="5dp"
+                    android:text="Edit photo" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:orientation="horizontal">
+
+                    <com.bupp.wood_spoon_chef.presentation.views.WSEditText
+                        android:id="@+id/editAccountFirstName"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="15.4dp"
+                        android:layout_weight="1"
+                        app:error="Please add your first name"
+                        app:inputType="INPUT_TYPE_FULL_NAME"
+                        app:title="First name" />
+
+                    <com.bupp.wood_spoon_chef.presentation.views.WSEditText
+                        android:id="@+id/editAccountLastName"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        app:error="Please add your last name"
+                        app:inputType="INPUT_TYPE_FULL_NAME"
+                        app:title="Last name" />
+
+                </LinearLayout>
+
+                <com.bupp.wood_spoon_chef.presentation.views.WSEditText
+                    android:id="@+id/editAccountEmail"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="23dp"
+                    app:error="Please add your last name"
+                    app:inputType="MAIL"
+                    app:title="Email address" />
+
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="0dp"
+                    android:layout_weight="1" />
+
+                <com.bupp.wood_spoon_chef.presentation.custom_views.OrangeBtnCornered
+                    android:id="@+id/editAccountSave"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:layout_marginTop="50dp"
+                    android:layout_marginBottom="14.9dp"
+                    app:title="Save" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+</FrameLayout>
+
