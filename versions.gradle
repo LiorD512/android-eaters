@@ -14,15 +14,11 @@ ext {
     material_version = "1.4.0-alpha01"
 
     // Android Sdk and tools
-    eatersTargetSdkVersion = 28
+    eatersTargetSdkVersion = 30
     eatersCompileSdkVersion = 31
-    eatersSupportLibraryVersion = '30.0.0'
-    eatersSupportLibraryVersion = '28.0.0'
 
     cooksTargetSdkVersion = 30
-    cooksCompileSdkVersion = 30
-    cooksSupportLibraryVersion = '30.0.0'
-    eatersSupportLibraryVersion = '28.0.0'
+    cooksCompileSdkVersion = 31
 
     buildToolsVersion = '30.0.2'
 
