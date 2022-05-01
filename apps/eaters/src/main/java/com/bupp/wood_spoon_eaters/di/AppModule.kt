@@ -64,7 +64,7 @@ val appModule = module {
     single { MetaDataRepository(get()) }
     single { MetaDataRepositoryImpl(get(), get()) }
     single<AppSettingsRepository> { AppSettingsRepositoryImpl(get(), get(), StaticFeatureFlagsListProvider(), get()) }
-    single { FeedRepository(get(), get(), get(), get()) }
+    single { FeedRepository(get(), get(), get()) }
     single { FeedRepositoryImpl(get(), get()) }
     single { UserRepositoryImpl(get(), get()) }
     single { RestaurantRepository(get()) }
@@ -123,7 +123,7 @@ val appModule = module {
     //main
     viewModel { MainViewModel(get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get()) }
     viewModel { FeedViewModel(get(), get(), get(), get(), get()) }
-    viewModel { SearchViewModel(get(), get(), get(), get(), get()) }
+    viewModel { SearchViewModel(get(), get(), get()) }
     viewModel { ReportIssueViewModel(get(), get(), get()) }
     viewModel { RateLastOrderViewModel(get()) }
 

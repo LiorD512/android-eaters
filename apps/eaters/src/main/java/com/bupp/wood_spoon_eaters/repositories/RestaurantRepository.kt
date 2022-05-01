@@ -28,19 +28,15 @@ class RestaurantRepository(private val apiService: RestaurantRepositoryImpl) {
         result.let {
             return when (result) {
                 is ResultHandler.NetworkError -> {
-                    Log.d(TAG, "getRestaurant - NetworkError")
                     RestaurantResult(RestaurantRepoStatus.SERVER_ERROR)
                 }
                 is ResultHandler.GenericError -> {
-                    Log.d(TAG, "getRestaurant - GenericError")
                     RestaurantResult(RestaurantRepoStatus.SOMETHING_WENT_WRONG)
                 }
                 is ResultHandler.Success -> {
-                    Log.d(TAG, "getRestaurant - Success")
                     RestaurantResult(RestaurantRepoStatus.SUCCESS, result.value.data)
                 }
                 else -> {
-                    Log.d(TAG, "getRestaurant - wsError")
                     RestaurantResult(RestaurantRepoStatus.SOMETHING_WENT_WRONG)
                 }
             }
@@ -54,19 +50,15 @@ class RestaurantRepository(private val apiService: RestaurantRepositoryImpl) {
         result.let {
             return when (result) {
                 is ResultHandler.NetworkError -> {
-                    Log.d(FeedRepository.TAG, "getCookReview - NetworkError")
                     ReviewResult(RestaurantRepoStatus.SERVER_ERROR)
                 }
                 is ResultHandler.GenericError -> {
-                    Log.d(FeedRepository.TAG, "getCookReview - GenericError")
                     ReviewResult(RestaurantRepoStatus.SOMETHING_WENT_WRONG)
                 }
                 is ResultHandler.Success -> {
-                    Log.d(FeedRepository.TAG, "getCookReview - Success")
                     ReviewResult(RestaurantRepoStatus.SUCCESS, result.value.data)
                 }
                 else -> {
-                    Log.d(FeedRepository.TAG, "getCookReview - wsError")
                     ReviewResult(RestaurantRepoStatus.SOMETHING_WENT_WRONG)
                 }
             }
@@ -80,19 +72,15 @@ class RestaurantRepository(private val apiService: RestaurantRepositoryImpl) {
         result.let {
             return when (result) {
                 is ResultHandler.NetworkError -> {
-                    Log.d(TAG, "getRestaurant - NetworkError")
                     RestaurantResult(RestaurantRepoStatus.SERVER_ERROR)
                 }
                 is ResultHandler.GenericError -> {
-                    Log.d(TAG, "getRestaurant - GenericError")
                     RestaurantResult(RestaurantRepoStatus.SOMETHING_WENT_WRONG)
                 }
                 is ResultHandler.Success -> {
-                    Log.d(TAG, "getRestaurant - Success")
                     RestaurantResult(RestaurantRepoStatus.SUCCESS)
                 }
                 else -> {
-                    Log.d(TAG, "getRestaurant - wsError")
                     RestaurantResult(RestaurantRepoStatus.SOMETHING_WENT_WRONG)
                 }
             }
@@ -106,27 +94,18 @@ class RestaurantRepository(private val apiService: RestaurantRepositoryImpl) {
         result.let {
             return when (result) {
                 is ResultHandler.NetworkError -> {
-                    Log.d(TAG, "getRestaurant - NetworkError")
                     RestaurantResult(RestaurantRepoStatus.SERVER_ERROR)
                 }
                 is ResultHandler.GenericError -> {
-                    Log.d(TAG, "getRestaurant - GenericError")
                     RestaurantResult(RestaurantRepoStatus.SOMETHING_WENT_WRONG)
                 }
                 is ResultHandler.Success -> {
-                    Log.d(TAG, "getRestaurant - Success")
                     RestaurantResult(RestaurantRepoStatus.SUCCESS)
                 }
                 else -> {
-                    Log.d(TAG, "getRestaurant - wsError")
                     RestaurantResult(RestaurantRepoStatus.SOMETHING_WENT_WRONG)
                 }
             }
         }
     }
-
-    companion object {
-        const val TAG = "wowFeedRepo"
-    }
-
 }

@@ -25,7 +25,8 @@ import me.ibrahimsn.lib.util.clear
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class SearchFragment : Fragment(R.layout.fragment_search), FeedMainAdapter.FeedMainAdapterListener {
+class SearchFragment : Fragment(R.layout.fragment_search),
+    FeedMainAdapter.FeedMainAdapterListener {
 
     private val mainViewModel by sharedViewModel<MainViewModel>()
     val viewModel by viewModel<SearchViewModel>()
@@ -42,7 +43,7 @@ class SearchFragment : Fragment(R.layout.fragment_search), FeedMainAdapter.FeedM
     }
 
     private fun initUi() {
-        with(binding!!){
+        with(binding!!) {
             searchAdapter = FeedMainAdapter(this@SearchFragment)
             searchFragList.apply {
                 layoutManager = LinearLayoutManager(requireContext())
@@ -50,7 +51,7 @@ class SearchFragment : Fragment(R.layout.fragment_search), FeedMainAdapter.FeedM
                 adapter = searchAdapter
             }
 
-            searchFragInput.addTextChangedListener(object: SimpleTextWatcher(){
+            searchFragInput.addTextChangedListener(object : SimpleTextWatcher() {
                 override fun afterTextChanged(s: Editable) {
                     if (s.isEmpty()) {
                         val face = ResourcesCompat.getFont(requireContext(), R.font.lato_reg)
@@ -65,15 +66,15 @@ class SearchFragment : Fragment(R.layout.fragment_search), FeedMainAdapter.FeedM
                 }
             })
 
-            searchFragInput.addTextChangedListener(object: AutoCompleteTextWatcher(){
+            searchFragInput.addTextChangedListener(object : AutoCompleteTextWatcher() {
                 override fun handleInputString(str: String) {
-                    if(str.isNotEmpty()){
-                        if(str.startsWith(" ")){
+                    if (str.isNotEmpty()) {
+                        if (str.startsWith(" ")) {
                             handleInputString(str.substring(1))
-                        }else{
+                        } else {
                             viewModel.searchInput(str)
                         }
-                    }else{
+                    } else {
                         viewModel.postDefaultData()
                     }
                 }
@@ -84,13 +85,13 @@ class SearchFragment : Fragment(R.layout.fragment_search), FeedMainAdapter.FeedM
             }
 
             searchFragInput.setOnFocusChangeListener { view, b ->
-                if(b){
+                if (b) {
                     viewModel.logEvent(Constants.EVENT_SEARCH_QUERY_CLICK)
                 }
             }
 
             searchFragInput.setOnEditorActionListener { _, actionId, _ ->
-                when(actionId){
+                when (actionId) {
                     IME_ACTION_DONE -> {
                         closeKeyboard()
                         return@setOnEditorActionListener true
@@ -104,17 +105,13 @@ class SearchFragment : Fragment(R.layout.fragment_search), FeedMainAdapter.FeedM
     }
 
     private fun initObservers() {
-        viewModel.searchResultData.observe(viewLifecycleOwner, {
+        viewModel.searchResultData.observe(viewLifecycleOwner) {
             it.feedData?.let { it1 -> searchAdapter?.setDataList(it1) }
-        })
-        mainViewModel.refreshSearchData.observe(viewLifecycleOwner, {
+        }
+        mainViewModel.refreshSearchData.observe(viewLifecycleOwner) {
             viewModel.getSearchTags()
             viewModel.getRecentOrders()
-        })
-//        viewModel.getFinalAddressParams().observe(viewLifecycleOwner, {
-//            viewModel.getSearchTags()
-//            viewModel.getRecentOrders()
-//        })
+        }
     }
 
     override fun onDestroy() {
@@ -150,9 +147,9 @@ class SearchFragment : Fragment(R.layout.fragment_search), FeedMainAdapter.FeedM
 
     override fun onRefreshFeedClick() {
         val input = binding!!.searchFragInput.text.toString()
-        if(input.isNullOrBlank()){
+        if (input.isNullOrBlank()) {
             viewModel.postDefaultData()
-        }else{
+        } else {
             viewModel.searchInput(input)
         }
     }
@@ -166,7 +163,6 @@ class SearchFragment : Fragment(R.layout.fragment_search), FeedMainAdapter.FeedM
 //        viewModel.showDefaultSearchData()
 
     }
-
 
 
 }

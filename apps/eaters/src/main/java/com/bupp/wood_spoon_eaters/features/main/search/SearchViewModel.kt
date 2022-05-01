@@ -15,15 +15,17 @@ import com.bupp.wood_spoon_eaters.repositories.MetaDataRepository
 import kotlinx.coroutines.launch
 
 class SearchViewModel(
-    private val metaDataRepository: MetaDataRepository, private val feedDataManager: FeedDataManager,
-    private val feedRepository: FeedRepository, private val flowEventsManager: FlowEventsManager,
+    private val feedDataManager: FeedDataManager,
+    private val feedRepository: FeedRepository,
     private val eventsManager: EventsManager
 ) : ViewModel() {
 
-    //    val searchLiveData = MutableLiveData<List<SearchBaseItem>>()
-    val searchResultData: MutableLiveData<SearchLiveData> = MutableLiveData()
+    data class SearchLiveData(
+        val feedData: List<FeedAdapterItem>?,
+        val isLargeItems: Boolean = false
+    )
 
-    data class SearchLiveData(val feedData: List<FeedAdapterItem>?, val isLargeItems: Boolean = false)
+    val searchResultData: MutableLiveData<SearchLiveData> = MutableLiveData()
 
     private var searchTagData: MutableList<FeedAdapterItem> = mutableListOf()
     private var orderAgainData: List<FeedAdapterItem> = emptyList()
@@ -37,18 +39,6 @@ class SearchViewModel(
         searchDefaultData[SECTION_TAGS] = mutableListOf()
         searchDefaultData[SECTION_RECENT_ORDERS] = listOf()
     }
-
-    //    private var curOrderAgainData: List<FeedAdapterItem>? = null
-    fun getFinalAddressParams() = feedDataManager.getFinalAddressLiveDataParam()
-
-//    fun showDefaultSearchData() {
-//        val defaultData = mutableListOf<FeedAdapterItem>()
-//        defaultData.add(getSearchTagsAdapterItems())
-//        curOrderAgainData?.let {
-//        defaultData.add(FeedAdapterTitle(title = "My recent orders", -1))
-//            defaultData.addAll(it) }
-//        searchResultData.postValue(SearchLiveData(defaultData))
-//    }
 
     fun postDefaultData() {
         searchDefaultData.clear()
@@ -74,11 +64,6 @@ class SearchViewModel(
         }
     }
 
-//    private fun getSearchTagsAdapterItems(): FeedAdapterSearchTag {
-//        val searchTags = metaDataRepository.getSearchTags()
-//        return FeedAdapterSearchTag(tags = searchTags)
-//    }
-
     fun getSearchTags() {
         searchTagData.clear()
         viewModelScope.launch {
@@ -88,14 +73,13 @@ class SearchViewModel(
                 when (searchTagsResult.type) {
                     FeedRepository.FeedRepoStatus.SERVER_ERROR -> {
                         MTLogger.c(TAG, "getSearchTags - NetworkError")
-//                      searchResultData.postValue(SearchLiveData(listOf(FeedAdapterNoNetworkSection(0)), result.isLargeItems))
                     }
                     FeedRepository.FeedRepoStatus.SOMETHING_WENT_WRONG -> {
                         MTLogger.c(TAG, "getSearchTags - GenericError")
                     }
                     FeedRepository.FeedRepoStatus.SUCCESS -> {
                         MTLogger.c(TAG, "getSearchTags - SUCCESS")
-                        if(searchTagsResult.tags?.isNullOrEmpty() == false){
+                        if (searchTagsResult.tags?.isNullOrEmpty() == false) {
                             searchTagData = mutableListOf(FeedAdapterSearchTag(tags = searchTagsResult.tags))
                         }
                         postDefaultData()
@@ -116,14 +100,13 @@ class SearchViewModel(
                 when (recentOrderResult.type) {
                     FeedRepository.FeedRepoStatus.SERVER_ERROR -> {
                         MTLogger.c(TAG, "getRecentOrders - NetworkError")
-                        //                    searchResultData.postValue(SearchLiveData(listOf(FeedAdapterNoNetworkSection(0)), result.isLargeItems))
                     }
                     FeedRepository.FeedRepoStatus.SOMETHING_WENT_WRONG -> {
                         MTLogger.c(TAG, "getRecentOrders - GenericError")
                     }
                     FeedRepository.FeedRepoStatus.SUCCESS -> {
                         MTLogger.c(TAG, "getRecentOrders - SUCCESS")
-                        orderAgainData = recentOrderResult.feed!!
+                        orderAgainData = recentOrderResult.feed
                         postDefaultData()
                     }
                     else -> {
@@ -133,17 +116,6 @@ class SearchViewModel(
             }
         }
     }
-
-//    private fun getRecentOrderAdapterItems(): List<FeedAdapterItem>{
-//        val recentOrderItems = mutableListOf<FeedAdapterItem>()
-//        val recentOrders = getRecentOrders()
-//        recentOrders.forEach {
-//            //todo - fix this when server is ready
-////            recentOrderItems.add(FeedAdapterRestaurant(restaurantSection = it))
-//        }
-//        return recentOrderItems
-//    }
-
 
     fun searchInput(input: String) {
         viewModelScope.launch {
@@ -165,8 +137,8 @@ class SearchViewModel(
                         handleHrefApiCalls(result.feed, hrefCount, input)
                     } else {
                         searchResultData.postValue(SearchLiveData(result.feed, result.isLargeItems))
-                        val restaurants = result.feed?.filter { it.type == FeedAdapterViewType.RESTAURANT }
-                        logQueryResult(input, restaurants?.size ?: 0)
+                        val restaurants = result.feed.filter { it.type == FeedAdapterViewType.RESTAURANT }
+                        logQueryResult(input, restaurants.size)
                     }
                 }
                 else -> {
@@ -208,8 +180,8 @@ class SearchViewModel(
                                 MTLogger.c(TAG, "handleHrefApiCalls - Success counter: $counter, hrefCounter: $hrefCount")
                                 if (counter == hrefCount) {
                                     searchResultData.postValue(SearchLiveData(feedRepository.feed, isLargeItems = feedRepository.isLargeItems))
-                                    val restaurants = feedRepository.feed?.filter { it.type == FeedAdapterViewType.RESTAURANT }
-                                    logQueryResult(input, restaurants?.size ?: 0)
+                                    val restaurants = feedRepository.feed.filter { it.type == FeedAdapterViewType.RESTAURANT }
+                                    logQueryResult(input, restaurants.size)
                                 }
                             }
                             else -> {
@@ -254,15 +226,6 @@ class SearchViewModel(
     fun logEvent(eventName: String, params: Map<String, String>? = null) {
         eventsManager.logEvent(eventName, params)
     }
-
-
-//    private fun getSendOtpData(isSuccess: Boolean): Map<String, String> {
-//        val data = mutableMapOf<String, String>()
-//        data["number"] = this.phonePrefix+this.phone
-//        data["success"] = isSuccess.toString()
-//        return data
-//    }
-
 
     companion object {
         const val TAG = "wowSearchVM"
