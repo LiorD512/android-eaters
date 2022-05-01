@@ -93,12 +93,13 @@ object CountryCodeUtils {
                 247 -> return "LV"
                 255 -> return "UA"
             }
-        } catch (ignored: ClassNotFoundException) {
-        } catch (ignored: NoSuchMethodException) {
-        } catch (ignored: IllegalAccessException) {
-        } catch (ignored: InvocationTargetException) {
-        } catch (ignored: NullPointerException) {
         }
+        catch (ignored: ClassNotFoundException) { }
+        catch (ignored: NoSuchMethodException) { }
+        catch (ignored: IllegalAccessException) { }
+        catch (ignored: InvocationTargetException) { }
+        catch (ignored: NullPointerException) { }
+        catch (ignored: StringIndexOutOfBoundsException) { }
         return null
     }
 
