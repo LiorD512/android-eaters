@@ -2,6 +2,7 @@ package com.bupp.wood_spoon_chef.data.remote.model
 
 import android.net.Uri
 import android.os.Parcelable
+import androidx.annotation.Keep
 import com.bupp.wood_spoon_chef.di.abs.SerializeNulls
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
@@ -259,6 +260,7 @@ data class DishRequest(
     }
 }
 
+@Keep
 enum class NewDishStatus {
     NEW_DISH,
     EDIT_DISH,
@@ -287,6 +289,7 @@ data class DishPricing(
 ) : Parcelable
 
 @Parcelize
+@Keep
 enum class DishStatus: Parcelable {
     @Json(name = "draft")
     DRAFT,
@@ -300,7 +303,7 @@ enum class DishStatus: Parcelable {
     @Json(name = "removed")
     REMOVED,
 }
-
+@Keep
 enum class DishUpdatedDialogStatus {
     DRAFT_PUBLISH,
     NEW_DISH_PUBLISH,
