@@ -10,22 +10,33 @@ import com.bupp.wood_spoon_eaters.common.FlowEventsManager
 import com.bupp.wood_spoon_eaters.common.MTLogger
 import com.bupp.wood_spoon_eaters.di.abs.ProgressData
 import com.bupp.wood_spoon_eaters.managers.CampaignManager
-import com.bupp.wood_spoon_eaters.managers.EventsManager
+import com.bupp.wood_spoon_eaters.managers.EatersAnalyticsTracker
 import com.bupp.wood_spoon_eaters.managers.FeedDataManager
 import com.bupp.wood_spoon_eaters.model.*
 import com.bupp.wood_spoon_eaters.repositories.FeedRepository
 import com.bupp.wood_spoon_eaters.utils.DateUtils
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.cancel
-import kotlinx.coroutines.cancelChildren
 import kotlinx.coroutines.launch
 
+data class FeedLiveData(
+    val feedData: List<FeedAdapterItem>?,
+    val isLargeItems: Boolean = false
+)
+
 class FeedViewModel(
-    private val feedDataManager: FeedDataManager, private val feedRepository: FeedRepository, private val flowEventsManager: FlowEventsManager,
-    campaignManager: CampaignManager, private val eventsManager: EventsManager
+    private val feedDataManager: FeedDataManager,
+    private val feedRepository: FeedRepository,
+    private val flowEventsManager: FlowEventsManager,
+    campaignManager: CampaignManager,
+    private val eatersAnalyticsTracker: EatersAnalyticsTracker
 ): ViewModel() {
 
     val progressData = ProgressData()
+    val feedUiStatusLiveData = feedDataManager.getFeedUiStatus()
+    val campaignLiveData = campaignManager.getCampaignLiveData()
+    val feedSkeletonEvent = MutableLiveData<FeedLiveData>()
+    val feedResultData: MutableLiveData<FeedLiveData> = MutableLiveData()
+    var feedJobs: MutableList<Job> = mutableListOf()
 
     fun initFeed(){
         feedSkeletonEvent.postValue(getSkeletonItems())
@@ -38,9 +49,6 @@ class FeedViewModel(
 
     fun getLocationLiveData() = feedDataManager.getLocationLiveData()
     fun getFinalAddressParams() = feedDataManager.getFinalAddressLiveDataParam()
-
-    val feedUiStatusLiveData = feedDataManager.getFeedUiStatus()
-    val campaignLiveData = campaignManager.getCampaignLiveData()
 
     fun refreshFeedByLocationIfNeeded() {
         feedDataManager.refreshFeedByLocationIfNeeded()
@@ -57,12 +65,6 @@ class FeedViewModel(
         val feedRequest = feedDataManager.getLastFeedRequest()
         getFeedWith(feedRequest)
     }
-
-
-    val feedSkeletonEvent = MutableLiveData<FeedLiveData>()
-    val feedResultData: MutableLiveData<FeedLiveData> = MutableLiveData()
-
-    var feedJobs: MutableList<Job> = mutableListOf()
 
     private suspend fun runFeedJob(feedRequest: FeedRequest) {
         if(validFeedRequest(feedRequest)) {
@@ -96,7 +98,6 @@ class FeedViewModel(
         }
     }
 
-    data class FeedLiveData(val feedData: List<FeedAdapterItem>?, val isLargeItems: Boolean = false)
     private fun getFeedWith(feedRequest: FeedRequest) {
         MTLogger.c(TAG, "getFeedWith - ${feedRequest.lat} - ${feedRequest.lng}")
         if(feedJobs.size > 0){
@@ -163,10 +164,6 @@ class FeedViewModel(
         return (feedRequest.lat != null && feedRequest.lng != null) || feedRequest.addressId != null
     }
 
-//    fun getEaterFirstName(): String?{
-//        return feedDataManager.getUser()?.firstName
-//    }
-
     fun onTimePickerChanged(deliveryTimeParam: SingleColumnTimePickerBottomSheet.DeliveryTimeParam?) {
         feedDataManager.onTimePickerChanged(deliveryTimeParam)
         logEvent(Constants.EVENT_CHANGE_DELIVERY_DATE, getDateChangedData(deliveryTimeParam))
@@ -176,10 +173,10 @@ class FeedViewModel(
     fun logEvent(eventName: String, params: Map<String, String>? = null) {
         when(eventName){
             Constants.EVENT_CHANGE_DELIVERY_DATE -> {
-                eventsManager.logEvent(eventName, params)
+                eatersAnalyticsTracker.logEvent(eventName, params)
             }
             else -> {
-                eventsManager.logEvent(eventName)
+                eatersAnalyticsTracker.logEvent(eventName)
             }
         }
     }
@@ -191,10 +188,8 @@ class FeedViewModel(
         return data
     }
 
-
     companion object{
         const val TAG = "wowFeedVM"
     }
-
 
 }

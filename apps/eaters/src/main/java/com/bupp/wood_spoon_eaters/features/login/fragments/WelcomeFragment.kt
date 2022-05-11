@@ -10,7 +10,8 @@ import com.bupp.wood_spoon_eaters.features.login.LoginViewModel
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 
-class   WelcomeFragment : Fragment(R.layout.fragment_welcome) {
+@Deprecated("Use new OnboardingFragment.kt")
+class  WelcomeFragment : Fragment(R.layout.fragment_welcome) {
 
     private var binding: FragmentWelcomeBinding? = null
     private val viewModel: LoginViewModel by sharedViewModel()
@@ -20,7 +21,7 @@ class   WelcomeFragment : Fragment(R.layout.fragment_welcome) {
         binding = FragmentWelcomeBinding.bind(view)
         binding!!.welcomeFragmentLogin.setOnClickListener { onLoginClick() }
 
-        viewModel.logPageEvent(FlowEventsManager.FlowEvents.PAGE_VISIT_ON_BOARDING)
+        viewModel.trackPageEvent(FlowEventsManager.FlowEvents.PAGE_VISIT_ON_BOARDING)
 
     }
 
@@ -32,6 +33,4 @@ class   WelcomeFragment : Fragment(R.layout.fragment_welcome) {
         binding = null
         super.onDestroyView()
     }
-
-
 }

@@ -6,13 +6,12 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.di.abs.LiveEventData
-import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.RestaurantPageViewModel
-import com.bupp.wood_spoon_eaters.managers.EventsManager
+import com.bupp.wood_spoon_eaters.managers.EatersAnalyticsTracker
 import com.bupp.wood_spoon_eaters.model.WSError
 import com.bupp.wood_spoon_eaters.repositories.RestaurantRepository
 import kotlinx.coroutines.launch
 
-class ReviewsBSViewModel(private val restaurantRepository: RestaurantRepository, private val eventsManager: EventsManager) : ViewModel() {
+class ReviewsBSViewModel(private val restaurantRepository: RestaurantRepository, private val eatersAnalyticsTracker: EatersAnalyticsTracker) : ViewModel() {
 
     var restaurantId: Long = -1
     var restaurantName = ""
@@ -65,7 +64,7 @@ class ReviewsBSViewModel(private val restaurantRepository: RestaurantRepository,
     }
 
     fun logOpenScreenEvent() {
-        eventsManager.logEvent(Constants.EVENT_REVIEW_SUMMERY_CLICK)
+        eatersAnalyticsTracker.logEvent(Constants.EVENT_REVIEW_SUMMERY_CLICK)
     }
 
     companion object{

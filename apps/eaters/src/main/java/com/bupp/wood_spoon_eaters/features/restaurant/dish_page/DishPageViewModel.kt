@@ -10,7 +10,7 @@ import com.bupp.wood_spoon_eaters.di.abs.LiveEventData
 import com.bupp.wood_spoon_eaters.di.abs.ProgressData
 import com.bupp.wood_spoon_eaters.model.DishInitParams
 import com.bupp.wood_spoon_eaters.managers.CartManager
-import com.bupp.wood_spoon_eaters.managers.EventsManager
+import com.bupp.wood_spoon_eaters.managers.EatersAnalyticsTracker
 import com.bupp.wood_spoon_eaters.model.FullDish
 import com.bupp.wood_spoon_eaters.model.MenuItem
 import com.bupp.wood_spoon_eaters.model.OrderItem
@@ -24,7 +24,7 @@ class DishPageViewModel(
     private val userRepository: UserRepository,
     private val cartManager: CartManager,
     private val flowEventsManager: FlowEventsManager,
-    private val eventsManager: EventsManager
+    private val eatersAnalyticsTracker: EatersAnalyticsTracker
 ) : ViewModel() {
 
     private var isEditMode = false
@@ -98,7 +98,7 @@ class DishPageViewModel(
                 getFullDish(menuItemId = extras.menuItem.id)
             }
 
-            eventsManager.logEvent(Constants.EVENT_CLICK_ON_DISH, getDishClicked(extras))
+            eatersAnalyticsTracker.logEvent(Constants.EVENT_CLICK_ON_DISH, getDishClicked(extras))
 
         } else if (extras.orderItem != null){
             currentFragmentState = DishFragmentState.UPDATE_DISH
@@ -200,7 +200,7 @@ class DishPageViewModel(
 
     fun onPerformClearCart() {
         Log.d("orderFlow - dishPage","onPerformClearCart")
-        eventsManager.logEvent(Constants.EVENT_CLEAR_CART)
+        eatersAnalyticsTracker.logEvent(Constants.EVENT_CLEAR_CART)
         cartManager.onCartCleared()
         viewModelScope.launch {
             val startNewCartAction = cartManager.checkForPendingActions()
@@ -261,7 +261,7 @@ class DishPageViewModel(
                         val result = cartManager.addOrUpdateCart(quantity, it, note)
                         if (result == OrderRepository.OrderRepoStatus.ADD_NEW_DISH_SUCCESS){
                             cartManager.forceCookingSlotChange(cookingSlotId)
-                            eventsManager.logEvent(Constants.EVENT_ADD_DISH, getAddDishData(note))
+                            eatersAnalyticsTracker.logEvent(Constants.EVENT_ADD_DISH, getAddDishData(note))
                             onFinishDishPage.postValue(FinishNavigation.FINISH_AND_BACK)
                         }else if(result == OrderRepository.OrderRepoStatus.UPDATE_ORDER_SUCCESS) {
                             onFinishDishPage.postValue(FinishNavigation.FINISH_AND_BACK)
@@ -301,22 +301,22 @@ class DishPageViewModel(
     }
 
     fun logPageEvent(eventType: FlowEventsManager.FlowEvents) {
-        flowEventsManager.logPageEvent(eventType)
+        flowEventsManager.trackPageEvent(eventType)
     }
 
     fun logEvent(eventName: String) {
         when(eventName){
             Constants.EVENT_CHANGE_DISH_QUANTITY -> {
-                eventsManager.logEvent(eventName, getDishQuantityData())
+                eatersAnalyticsTracker.logEvent(eventName, getDishQuantityData())
             }
             else -> {
-                eventsManager.logEvent(eventName)
+                eatersAnalyticsTracker.logEvent(eventName)
             }
         }
     }
 
     private fun logUpdateDish() {
-        eventsManager.logEvent(Constants.EVENT_UPDATE_DISH, getUpdateDishData())
+        eatersAnalyticsTracker.logEvent(Constants.EVENT_UPDATE_DISH, getUpdateDishData())
     }
 
     private fun getUpdateDishData(): Map<String, String> {

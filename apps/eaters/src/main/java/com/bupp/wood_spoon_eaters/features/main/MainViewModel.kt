@@ -15,7 +15,7 @@ import kotlinx.coroutines.launch
 class MainViewModel(
     private val appSettingsRepository: AppSettingsRepository, private val feedDataManager: FeedDataManager,
     val eaterDataManager: EaterDataManager, private val campaignManager: CampaignManager, private val paymentManager: PaymentManager,
-    private val userRepository: UserRepository, globalErrorManager: GlobalErrorManager, private var eventsManager: EventsManager,
+    private val userRepository: UserRepository, globalErrorManager: GlobalErrorManager, private var eatersAnalyticsTracker: EatersAnalyticsTracker,
     private val flowEventsManager: FlowEventsManager, private val cartManager: CartManager, private val restaurantRepository: RestaurantRepository,
 ) : ViewModel() {
 
@@ -24,7 +24,7 @@ class MainViewModel(
     }
 
     fun logPageEvent(eventType: FlowEventsManager.FlowEvents) {
-        flowEventsManager.logPageEvent(eventType)
+        flowEventsManager.trackPageEvent(eventType)
     }
 
     val mainNavigationEvent = MutableLiveData<MainNavigationEvent>()
@@ -147,7 +147,7 @@ class MainViewModel(
         val shareUrl = campaign?.shareUrl
         val shareText = campaign?.shareText ?: ""
         shareEvent.postValue("$shareText \n $shareUrl")
-        eventsManager.logEvent(Constants.EVENT_CAMPAIGN_INVITE)
+        eatersAnalyticsTracker.logEvent(Constants.EVENT_CAMPAIGN_INVITE)
     }
 
     fun deleteAccount() {
@@ -197,7 +197,7 @@ class MainViewModel(
         data["section_index"] = restaurantInitParams.sectionOrder.toString()
         data["home_chef_index"] = restaurantInitParams.restaurantOrderInSection.toString()
         data["dish_tapped_index"] = restaurantInitParams.dishIndexInRestaurant.toString()
-        eventsManager.logEvent(Constants.EVENT_CLICK_RESTAURANT, data)
+        eatersAnalyticsTracker.logEvent(Constants.EVENT_CLICK_RESTAURANT, data)
     }
 
     fun forceFeedRefresh() {
@@ -209,11 +209,11 @@ class MainViewModel(
     }
 
     fun logEvent(eventName: String) {
-        eventsManager.logEvent(eventName)
+        eatersAnalyticsTracker.logEvent(eventName)
     }
 
     fun logDeepLinkEvent(restaurantId: Long) {
-        eventsManager.logEvent(Constants.EVENT_OPEN_DEEP_LINK, mapOf(Pair("home_chef_id", restaurantId)))
+        eatersAnalyticsTracker.logEvent(Constants.EVENT_OPEN_DEEP_LINK, mapOf(Pair("home_chef_id", restaurantId)))
     }
 
     val refreshSearchData = MutableLiveData<Boolean>()

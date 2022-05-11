@@ -29,7 +29,11 @@ import com.bupp.wood_spoon_eaters.features.main.settings.SettingsViewModel
 import com.bupp.wood_spoon_eaters.bottom_sheets.support_center.SupportViewModel
 import com.bupp.wood_spoon_eaters.custom_views.cuisine_chooser.CuisineChooserViewModel
 import com.bupp.wood_spoon_eaters.experiments.PricingExperimentUseCase
+import com.bupp.wood_spoon_eaters.domain.FeatureFlagDynamicContentUseCase
+import com.bupp.wood_spoon_eaters.domain.GetOnboardingSlideListUseCase
+import com.bupp.wood_spoon_eaters.domain.GetOnboardingVideoPathUseCase
 import com.bupp.wood_spoon_eaters.features.main.search.SearchViewModel
+import com.bupp.wood_spoon_eaters.features.onboarding.OnboardingViewModel
 import com.bupp.wood_spoon_eaters.features.order_checkout.checkout.CheckoutViewModel
 import com.bupp.wood_spoon_eaters.features.order_checkout.promo_code.PromoCodeViewModel
 import com.bupp.wood_spoon_eaters.features.order_checkout.OrderCheckoutViewModel
@@ -45,6 +49,8 @@ import com.bupp.wood_spoon_eaters.network.base_repos.*
 import com.bupp.wood_spoon_eaters.network.result_handler.ErrorManger
 import com.bupp.wood_spoon_eaters.network.result_handler.ResultManager
 import com.bupp.wood_spoon_eaters.repositories.*
+import com.google.firebase.analytics.ktx.analytics
+import com.google.firebase.ktx.Firebase
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
@@ -77,9 +83,14 @@ val appModule = module {
     single { CampaignRepository(get(), get()) }
     single { CampaignRepositoryImpl(get(), get()) }
 
+    //useCase
+    single { PricingExperimentUseCase(get(), get()) }
+    single { FeatureFlagDynamicContentUseCase(get()) }
+    single { GetOnboardingVideoPathUseCase(get()) }
+    single { GetOnboardingSlideListUseCase() }
+
     //managers
     single { GlobalErrorManager() }
-    single { EventsManager(get()) }
     single { PaymentManager(get(), get()) }
     single { LocationManager(get(), get()) }
     single { CampaignManager(get()) }
@@ -88,11 +99,11 @@ val appModule = module {
     single { FeedDataManager(get(), get(), get()) }
     single { CartManager(get(), get(), get()) }
     single { EaterDataManager(get(), get(), get(), get(), get()) }
-
-    single { PricingExperimentUseCase(get(), get()) }
-
-
     //VIEW MODELS
+
+    // analytics
+    single { Firebase.analytics }
+    single { EatersAnalyticsTracker(get(), get()) }
 
     //bottom sheet
     viewModel { AddressMenuViewModel(get(), get(), get()) }
@@ -103,7 +114,7 @@ val appModule = module {
 
     //login
     viewModel { LoginViewModel(get(), get(), get(), get(), get(), get(), get()) }
-
+    viewModel { OnboardingViewModel(get(), get(), get(), get()) }
 
     //location
     viewModel { LocationAndAddressViewModel(get(), get(), get(), get(), get()) }
@@ -156,7 +167,5 @@ val appModule = module {
 
     //Review Activity
     viewModel { ReviewsViewModel(get(), get(), get()) }
-
-
 }
 

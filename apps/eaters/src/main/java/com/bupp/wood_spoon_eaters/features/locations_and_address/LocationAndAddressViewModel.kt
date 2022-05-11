@@ -9,7 +9,7 @@ import com.bupp.wood_spoon_eaters.common.Constants.Companion.EVENT_LOCATION_PERM
 import com.bupp.wood_spoon_eaters.common.FlowEventsManager
 import com.bupp.wood_spoon_eaters.di.abs.ProgressData
 import com.bupp.wood_spoon_eaters.managers.EaterDataManager
-import com.bupp.wood_spoon_eaters.managers.EventsManager
+import com.bupp.wood_spoon_eaters.managers.EatersAnalyticsTracker
 import com.bupp.wood_spoon_eaters.managers.GlobalErrorManager
 import com.bupp.wood_spoon_eaters.managers.location.LocationManager
 import com.bupp.wood_spoon_eaters.model.Address
@@ -23,7 +23,7 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.libraries.places.api.model.Place
 import kotlinx.coroutines.launch
 
-class LocationAndAddressViewModel(val eaterDataManager: EaterDataManager, private val userRepository: UserRepository, private val eventsManager: EventsManager,
+class LocationAndAddressViewModel(val eaterDataManager: EaterDataManager, private val userRepository: UserRepository, private val eatersAnalyticsTracker: EatersAnalyticsTracker,
                                   private val flowEventsManager: FlowEventsManager, private val globalErrorManager: GlobalErrorManager) : ViewModel() {
 
 
@@ -213,7 +213,7 @@ class LocationAndAddressViewModel(val eaterDataManager: EaterDataManager, privat
     }
 
     fun locationPermissionEvent(isAllowPermission: Boolean) {
-        eventsManager.logEvent(EVENT_LOCATION_PERMISSION, getEventData(isAllowPermission))
+        eatersAnalyticsTracker.logEvent(EVENT_LOCATION_PERMISSION, getEventData(isAllowPermission))
     }
 
 
@@ -224,7 +224,7 @@ class LocationAndAddressViewModel(val eaterDataManager: EaterDataManager, privat
     }
 
     fun logPageEvent(eventType: FlowEventsManager.FlowEvents) {
-        flowEventsManager.logPageEvent(eventType)
+        flowEventsManager.trackPageEvent(eventType)
     }
 
     companion object{

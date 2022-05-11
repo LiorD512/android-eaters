@@ -16,7 +16,7 @@ import com.bupp.wood_spoon_eaters.experiments.PricingExperimentParams
 import com.bupp.wood_spoon_eaters.experiments.PricingExperimentUseCase
 import com.bupp.wood_spoon_eaters.features.active_orders_tracker.sub_screen.OrderUserInfo
 import com.bupp.wood_spoon_eaters.managers.EaterDataManager
-import com.bupp.wood_spoon_eaters.managers.EventsManager
+import com.bupp.wood_spoon_eaters.managers.EatersAnalyticsTracker
 import com.bupp.wood_spoon_eaters.managers.PaymentManager
 import com.bupp.wood_spoon_eaters.model.Order
 import com.bupp.wood_spoon_eaters.model.OrderState
@@ -38,7 +38,7 @@ class ActiveOrderTrackerViewModel(
     private val paymentManager: PaymentManager,
     private val appSettingsRepository: AppSettingsRepository,
     private val flowEventsManager: FlowEventsManager,
-    private val eventsManager: EventsManager,
+    private val eatersAnalyticsTracker: EatersAnalyticsTracker,
     private val pricingExperimentUseCase: PricingExperimentUseCase
 ) : ViewModel() {
 
@@ -272,15 +272,15 @@ class ActiveOrderTrackerViewModel(
 
 
     fun logPageEvent(eventType: FlowEventsManager.FlowEvents) {
-        flowEventsManager.logPageEvent(eventType)
+        flowEventsManager.trackPageEvent(eventType)
     }
 
     fun logEvent(eventName: String) {
-        eventsManager.logEvent(eventName)
+        eatersAnalyticsTracker.logEvent(eventName)
     }
 
     fun logOnHelpClick() {
-        eventsManager.logEvent(Constants.EVENT_TRACK_ORDER_HELP_CLICK)
+        eatersAnalyticsTracker.logEvent(Constants.EVENT_TRACK_ORDER_HELP_CLICK)
     }
 
     fun logCancelClick(type: Int) {
@@ -293,7 +293,7 @@ class ActiveOrderTrackerViewModel(
                 cancelFee = 100
             }
         }
-        eventsManager.logEvent(Constants.EVENT_ORDERS_CANCEL, mapOf(Pair("cancalation_fee", cancelFee)))
+        eatersAnalyticsTracker.logEvent(Constants.EVENT_ORDERS_CANCEL, mapOf(Pair("cancalation_fee", cancelFee)))
     }
 
 }

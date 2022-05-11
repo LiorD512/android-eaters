@@ -2,7 +2,7 @@ package com.bupp.wood_spoon_eaters.features.locations_and_address.select_address
 
 import androidx.lifecycle.MutableLiveData
 import com.bupp.wood_spoon_eaters.managers.EaterDataManager
-import com.bupp.wood_spoon_eaters.managers.EventsManager
+import com.bupp.wood_spoon_eaters.managers.EatersAnalyticsTracker
 import com.bupp.wood_spoon_eaters.common.UserSettings
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -12,7 +12,7 @@ import com.bupp.wood_spoon_eaters.model.Address
 import com.bupp.wood_spoon_eaters.model.AddressRequest
 import kotlinx.coroutines.launch
 
-class SelectAddressViewModel(val settings: UserSettings, val eaterDataManager: EaterDataManager, val eventsManager: EventsManager) : ViewModel(){
+class SelectAddressViewModel(val settings: UserSettings, val eaterDataManager: EaterDataManager, val eatersAnalyticsTracker: EatersAnalyticsTracker) : ViewModel(){
 
     fun getFinalAddressParams() = eaterDataManager.getFinalAddressLiveDataParam()
 

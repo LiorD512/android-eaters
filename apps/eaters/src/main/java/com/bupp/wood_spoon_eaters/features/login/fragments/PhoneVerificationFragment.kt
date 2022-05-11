@@ -27,7 +27,7 @@ class PhoneVerificationFragment : Fragment(R.layout.fragment_phone_verification)
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentPhoneVerificationBinding.bind(view)
 
-        viewModel.logPageEvent(FlowEventsManager.FlowEvents.PAGE_VISIT_GET_OTF_CODE)
+        viewModel.trackPageEvent(FlowEventsManager.FlowEvents.PAGE_VISIT_GET_OTF_CODE)
 
         initUi()
         initObservers()

@@ -4,10 +4,9 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.bupp.wood_spoon_eaters.common.Constants
-import com.bupp.wood_spoon_eaters.common.FlowEventsManager
 import com.bupp.wood_spoon_eaters.di.abs.ProgressData
 import com.bupp.wood_spoon_eaters.features.base.SingleLiveEvent
-import com.bupp.wood_spoon_eaters.managers.EventsManager
+import com.bupp.wood_spoon_eaters.managers.EatersAnalyticsTracker
 import com.bupp.wood_spoon_eaters.model.ReportTopic
 import com.bupp.wood_spoon_eaters.model.Reports
 import com.bupp.wood_spoon_eaters.repositories.MetaDataRepository
@@ -15,7 +14,7 @@ import com.bupp.wood_spoon_eaters.repositories.OrderRepository
 import kotlinx.coroutines.launch
 
 class ReportIssueViewModel(private val orderRepository: OrderRepository, val metaDataRepository: MetaDataRepository,
-    private val eventsManager: EventsManager) : ViewModel() {
+    private val eatersAnalyticsTracker: EatersAnalyticsTracker) : ViewModel() {
 
     val progressData = ProgressData()
     private var currentOrderId: Long = -1
@@ -48,7 +47,7 @@ class ReportIssueViewModel(private val orderRepository: OrderRepository, val met
     }
 
     fun logOpenScreenEvent() {
-        eventsManager.logEvent(Constants.EVENT_ORDER_REPORT_ISSUE_CLICK)
+        eatersAnalyticsTracker.logEvent(Constants.EVENT_ORDER_REPORT_ISSUE_CLICK)
     }
 
 }

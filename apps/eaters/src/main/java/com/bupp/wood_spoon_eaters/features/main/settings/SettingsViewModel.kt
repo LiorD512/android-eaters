@@ -82,6 +82,6 @@ class SettingsViewModel(private val userSettings: UserSettings, val userReposito
     }
 
     fun logPageEvent(eventType: FlowEventsManager.FlowEvents) {
-        flowEventsManager.logPageEvent(eventType)
+        flowEventsManager.trackPageEvent(eventType)
     }
 }

@@ -11,8 +11,9 @@ import com.bupp.wood_spoon_eaters.repositories.CampaignRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
-class CampaignManager(private val campaignRepository: CampaignRepository) {
-
+class CampaignManager(
+    private val campaignRepository: CampaignRepository
+) {
 
     private val campaignLiveData = MutableLiveData<List<Campaign>?>()
     fun getCampaignLiveData() = campaignLiveData
@@ -51,12 +52,12 @@ class CampaignManager(private val campaignRepository: CampaignRepository) {
                 return when (result) {
                     is ResultHandler.Success -> {
                         MTLogger.c(TAG, "validateReferralToken - Success")
-                        referralToken =  null
+                        referralToken = null
                         true
                     }
                     is ResultHandler.WSCustomError -> {
                         MTLogger.c(TAG, "validateReferralToken - wsError")
-                        referralToken =  null
+                        referralToken = null
                         false
                     }
                     else -> {
@@ -81,18 +82,18 @@ class CampaignManager(private val campaignRepository: CampaignRepository) {
         MTLogger.c(TAG, "checkCampaignFor: $curEvent")
         curCampaigns?.let {
             val campaigns = it.filter { it.isMatchingEvent(curEvent) }
-            if(campaigns.isNotEmpty()){
+            if (campaigns.isNotEmpty()) {
                 MTLogger.c(TAG, "checkCampaignFor: $curEvent FOUND!")
                 campaignLiveData.postValue(campaigns)
 
                 campaigns.forEach { campaign ->
-                    if(campaign.status != UserInteractionStatus.SEEN){
+                    if (campaign.status != UserInteractionStatus.SEEN) {
                         campaign.userInteractionId?.let {
                             updateCampaignStatus(it, UserInteractionStatus.SEEN)
                         }
                     }
                 }
-            }else{
+            } else {
                 campaignLiveData.postValue(null)
             }
         }

@@ -99,8 +99,8 @@ class LoginActivity : BaseActivity() {
 
 
     private fun redirectToCreateAccountFromWelcome() {
-        if(findNavController(R.id.loginActContainer).currentDestination?.id == R.id.welcomeFragment){
-            findNavController(R.id.loginActContainer).navigate(R.id.action_welcomeFragment_to_createAccountFragment)
+        if(findNavController(R.id.loginActContainer).currentDestination?.id == R.id.onboardingFragment){
+            findNavController(R.id.loginActContainer).navigate(R.id.action_onboardingFragment_to_createAccountFragment)
         }
     }
 
@@ -111,8 +111,8 @@ class LoginActivity : BaseActivity() {
     }
 
     private fun redirectToPhoneVerification() {
-        if(findNavController(R.id.loginActContainer).currentDestination?.id == R.id.welcomeFragment){
-            findNavController(R.id.loginActContainer).navigate(R.id.action_welcomeFragment_to_phoneVerificationFragment)
+        if(findNavController(R.id.loginActContainer).currentDestination?.id == R.id.onboardingFragment){
+            findNavController(R.id.loginActContainer).navigate(R.id.action_onboardingFragment_to_phoneVerificationFragment)
         }
     }
 

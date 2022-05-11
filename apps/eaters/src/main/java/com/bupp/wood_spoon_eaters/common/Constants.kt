@@ -1,7 +1,5 @@
 package com.bupp.wood_spoon_eaters.common
 
-import com.squareup.moshi.Json
-
 class Constants {
     companion object {
 
@@ -197,6 +195,7 @@ class Constants {
         const val EVENT_SWIPE_BETWEEN_DISHES = "swipe_between_dishes_feed"
         const val EVENT_CLICK_RESTAURANT = "click_on_home_chef"
         const val EVENT_CLICK_ON_DISH = "click_on_dish"
+        const val EVENT_TIME_SPENT_IN_ONBOARDING = "event_time_spent_in_onboarding"
         const val EVENT_CAMPAIGN_INVITE = "campaign_invite"
         const val EVENT_ORDER_PLACED = "order_placed"
         const val EVENT_CLICK_VIDEO_IN_RESTAURANT = "click_video_in_home_chef"

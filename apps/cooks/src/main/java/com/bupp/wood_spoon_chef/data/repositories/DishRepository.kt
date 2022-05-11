@@ -1,7 +1,7 @@
 package com.bupp.wood_spoon_chef.data.repositories
 
 import com.bupp.wood_spoon_chef.common.Constants
-import com.bupp.wood_spoon_chef.managers.EventsManager
+import com.bupp.wood_spoon_chef.managers.ChefAnalyticsTracker
 import com.bupp.wood_spoon_chef.data.remote.model.Dish
 import com.bupp.wood_spoon_chef.data.remote.model.DishRequest
 import com.bupp.wood_spoon_chef.data.remote.network.ApiService
@@ -14,7 +14,7 @@ import java.util.*
 open class DishRepository(
     service: ApiService,
     responseHandler: ResponseHandler,
-    private val eventsManager: EventsManager,
+    private val chefAnalyticsTracker: ChefAnalyticsTracker,
     private val userRepository: UserRepository
 ) : DishRepositoryImp(service, responseHandler) {
 
@@ -51,7 +51,7 @@ open class DishRepository(
     suspend fun postDishDraft(dishRequest: DishRequest): ResponseResult<Dish> {
         val result = super.postDish(dishRequest)
         if (result is ResponseSuccess) {
-            eventsManager.logEvent(
+            chefAnalyticsTracker.trackEvent(
                 Constants.EVENTS_NEW_DISH,
                 getNewDishEventsParam(dishId = dishRequest.id, type = "draft")
             )
@@ -62,7 +62,7 @@ open class DishRepository(
     override suspend fun updateDish(dishRequest: DishRequest): ResponseResult<Dish> {
         val result = super.updateDish(dishRequest)
         if (result is ResponseSuccess) {
-            eventsManager.logEvent(
+            chefAnalyticsTracker.trackEvent(
                 Constants.EVENTS_EDIT_DISH,
                 getDishEventsParam(dishId = dishRequest.id)
             )
@@ -73,7 +73,7 @@ open class DishRepository(
      override suspend fun publishDish(dishId: Long): ResponseResult<Dish> {
         val dishResponse = super.publishDish(dishId)
         if (dishResponse is ResponseSuccess) {
-                eventsManager.logEvent(
+                chefAnalyticsTracker.trackEvent(
                     Constants.EVENTS_NEW_DISH,
                     getNewDishEventsParam(dishId = dishId, type = "published")
                 )
@@ -84,7 +84,7 @@ open class DishRepository(
     override suspend fun unPublishDish(dishId: Long): ResponseResult<Any> {
         val result = super.unPublishDish(dishId)
         if (result is ResponseSuccess) {
-            eventsManager.logEvent(
+            chefAnalyticsTracker.trackEvent(
                 Constants.EVENTS_NEW_DISH,
                 getNewDishEventsParam(dishId = dishId, type = "unpublished")
             )

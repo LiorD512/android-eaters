@@ -1,16 +1,17 @@
 package com.bupp.wood_spoon_eaters.common
 
-import android.util.Log
 import com.bupp.wood_spoon_eaters.managers.CampaignManager
-import com.bupp.wood_spoon_eaters.managers.EventsManager
+import com.bupp.wood_spoon_eaters.managers.EatersAnalyticsTracker
 
-class FlowEventsManager(private val campaignManager: CampaignManager, private val eventsManager: EventsManager) {
+class FlowEventsManager(
+    private val campaignManager: CampaignManager,
+    private val eatersAnalyticsTracker: EatersAnalyticsTracker
+) {
 
-    enum class FlowEvents{
+    enum class FlowEvents {
         DEEP_LINK_TOKEN_UPDATED,
         VISIT_FEED,
         VISIT_PROFILE,
-
 
         PAGE_VISIT_ON_BOARDING,
         PAGE_VISIT_GET_OTF_CODE,
@@ -34,21 +35,14 @@ class FlowEventsManager(private val campaignManager: CampaignManager, private va
         PAGE_VISIT_HOME_CHEF,
         PAGE_VISIT_DISH,
         PAGE_VISIT_CART,
-
     }
 
-    fun logPageEvent(curEvent: FlowEvents){
-        Log.d(TAG, "current event fired: $curEvent")
-        eventsManager.onFlowEventFired(curEvent)
+    fun trackPageEvent(curEvent: FlowEvents) {
+        eatersAnalyticsTracker.onFlowEventFired(curEvent)
     }
 
-    suspend fun fireEvent(curEvent: FlowEvents){
+    suspend fun fireEvent(curEvent: FlowEvents) {
         campaignManager.onFlowEventFired(curEvent)
-        eventsManager.onFlowEventFired(curEvent)
+        eatersAnalyticsTracker.onFlowEventFired(curEvent)
     }
-
-    companion object{
-        const val TAG = "wowFlowEventsManager"
-    }
-
 }

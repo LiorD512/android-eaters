@@ -1,17 +1,15 @@
 package com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page
 
 import android.util.Log
-import androidx.core.content.ContextCompat
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.bupp.wood_spoon_eaters.bottom_sheets.reviews.Review
 import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.di.abs.LiveEventData
 import com.bupp.wood_spoon_eaters.di.abs.ProgressData
 import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.models.*
 import com.bupp.wood_spoon_eaters.managers.CartManager
-import com.bupp.wood_spoon_eaters.managers.EventsManager
+import com.bupp.wood_spoon_eaters.managers.EatersAnalyticsTracker
 import com.bupp.wood_spoon_eaters.managers.FeatureFlagManager
 import com.bupp.wood_spoon_eaters.managers.FeedDataManager
 import com.bupp.wood_spoon_eaters.model.*
@@ -27,7 +25,7 @@ class RestaurantPageViewModel(
     private val restaurantRepository: RestaurantRepository,
     private val cartManager: CartManager,
     private val feedDataManager: FeedDataManager,
-    private val eventsManager: EventsManager,
+    private val eatersAnalyticsTracker: EatersAnalyticsTracker,
     private val metaDataManager: MetaDataRepository,
     private val featureFlagManager: FeatureFlagManager
 ) : ViewModel() {
@@ -440,7 +438,7 @@ class RestaurantPageViewModel(
     }
 
     fun onPerformClearCart() {
-        eventsManager.logEvent(Constants.EVENT_CLEAR_CART)
+        eatersAnalyticsTracker.logEvent(Constants.EVENT_CLEAR_CART)
         cartManager.onCartCleared()
         viewModelScope.launch {
             cartManager.checkForPendingActions()
@@ -473,16 +471,16 @@ class RestaurantPageViewModel(
     fun logEvent(eventName: String) {
         when (eventName) {
             Constants.EVENT_LIKE_RESTAURANT -> {
-                eventsManager.logEvent(eventName, getLikeRestaurantData())
+                eatersAnalyticsTracker.logEvent(eventName, getLikeRestaurantData())
             }
             Constants.EVENT_SHARE_RESTAURANT -> {
-                eventsManager.logEvent(eventName, getLikeRestaurantData())
+                eatersAnalyticsTracker.logEvent(eventName, getLikeRestaurantData())
             }
             Constants.EVENT_CHANGE_COOKING_SLOT_DATE -> {
-                eventsManager.logEvent(eventName, getCookingSlotChangeData())
+                eatersAnalyticsTracker.logEvent(eventName, getCookingSlotChangeData())
             }
             else -> {
-                eventsManager.logEvent(eventName)
+                eatersAnalyticsTracker.logEvent(eventName)
             }
         }
     }

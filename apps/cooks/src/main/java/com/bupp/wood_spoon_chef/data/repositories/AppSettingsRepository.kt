@@ -1,6 +1,6 @@
 package com.bupp.wood_spoon_chef.data.repositories
 
-import com.bupp.wood_spoon_chef.managers.EventsManager
+import com.bupp.wood_spoon_chef.managers.ChefAnalyticsTracker
 import com.bupp.wood_spoon_chef.data.remote.model.AppSetting
 import com.bupp.wood_spoon_chef.data.remote.model.Price
 import timber.log.Timber
@@ -32,7 +32,7 @@ fun AppSettingsRepository.appSettingOrFeatureFlag(key: String) = featureFlag(key
 
 internal class AppSettingsRepositoryImpl(
     private val metaDataRepository: MetaDataRepository,
-    private val eventsManager: EventsManager
+    private val chefAnalyticsTracker: ChefAnalyticsTracker
 ) : AppSettingsRepository {
 
     private fun getAppSettings() = metaDataRepository.getMetaDataObject()?.let {
@@ -49,7 +49,7 @@ internal class AppSettingsRepositoryImpl(
     override fun appSetting(key: String): Any? {
         val value = appSettings.firstOrNull { it.key == key }?.value
         if (value == null) {
-            eventsManager.logEvent(
+            chefAnalyticsTracker.trackEvent(
                     MissingKeyErrorEventName,
                     mapOf(
                             "key" to key

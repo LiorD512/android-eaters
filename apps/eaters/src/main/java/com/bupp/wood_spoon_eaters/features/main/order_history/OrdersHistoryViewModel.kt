@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.managers.EaterDataManager
-import com.bupp.wood_spoon_eaters.managers.EventsManager
+import com.bupp.wood_spoon_eaters.managers.EatersAnalyticsTracker
 import com.bupp.wood_spoon_eaters.model.Order
 import com.bupp.wood_spoon_eaters.repositories.OrderRepository
 import kotlinx.coroutines.Job
@@ -15,7 +15,7 @@ import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 
 class OrdersHistoryViewModel(val orderRepository: OrderRepository, val eaterDataManager: EaterDataManager,
-private val eventsManager: EventsManager) : ViewModel() {
+private val eatersAnalyticsTracker: EatersAnalyticsTracker) : ViewModel() {
 
     private var refreshRepeatedJob: Job? = null
     val TAG = "wowOrderHistoryVM"
@@ -170,7 +170,7 @@ private val eventsManager: EventsManager) : ViewModel() {
 
 
     fun logEvent(eventName: String, params: Map<String, String>? = null) {
-        eventsManager.logEvent(eventName, params)
+        eatersAnalyticsTracker.logEvent(eventName, params)
     }
 
 

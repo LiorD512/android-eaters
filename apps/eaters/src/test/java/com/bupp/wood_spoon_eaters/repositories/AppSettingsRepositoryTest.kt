@@ -3,7 +3,7 @@ package com.bupp.wood_spoon_eaters.repositories
 import com.bupp.wood_spoon_eaters.MainCoroutineRule
 import com.bupp.wood_spoon_eaters.di.abs.AppSettingAdapter
 import com.bupp.wood_spoon_eaters.di.abs.SerializeNulls
-import com.bupp.wood_spoon_eaters.managers.EventsManager
+import com.bupp.wood_spoon_eaters.managers.EatersAnalyticsTracker
 import com.bupp.wood_spoon_eaters.model.*
 import com.bupp.wood_spoon_eaters.network.ApiService
 import com.bupp.wood_spoon_eaters.network.result_handler.ErrorManger
@@ -39,7 +39,7 @@ class AppSettingsRepositoryTest {
     var mainCoroutineRule = MainCoroutineRule()
     private val testDispatcher = TestCoroutineDispatcher()
 
-    lateinit var eventsManager: EventsManager
+    lateinit var eatersAnalyticsTracker: EatersAnalyticsTracker
 
     lateinit var appSettingsRepository: AppSettingsRepository
 
@@ -72,8 +72,8 @@ class AppSettingsRepositoryTest {
         val apiService = retrofit.create(ApiService::class.java)
 
         val errorManger: ErrorManger = mock()
-        eventsManager = mock()
-        appSettingsRepository = AppSettingsRepositoryImpl(apiService, ResultManager(errorManger), StaticFeatureFlagsListProvider(), eventsManager)
+        eatersAnalyticsTracker = mock()
+        appSettingsRepository = AppSettingsRepositoryImpl(apiService, ResultManager(errorManger), StaticFeatureFlagsListProvider(), eatersAnalyticsTracker)
     }
 
     @After

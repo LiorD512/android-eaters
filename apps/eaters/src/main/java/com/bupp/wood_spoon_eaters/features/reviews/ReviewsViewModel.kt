@@ -6,17 +6,16 @@ import androidx.lifecycle.viewModelScope
 import com.bupp.wood_spoon_eaters.bottom_sheets.reviews.ReviewRequest
 import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.di.abs.LiveEventData
-import com.bupp.wood_spoon_eaters.managers.EventsManager
+import com.bupp.wood_spoon_eaters.managers.EatersAnalyticsTracker
 import com.bupp.wood_spoon_eaters.di.abs.ProgressData
 import com.bupp.wood_spoon_eaters.model.Order
 import com.bupp.wood_spoon_eaters.model.WSError
 import com.bupp.wood_spoon_eaters.repositories.OrderRepository
 import com.bupp.wood_spoon_eaters.repositories.UserRepository
-import com.bupp.wood_spoon_eaters.utils.Utils.getErrorsMsg
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class ReviewsViewModel(private val orderRepository: OrderRepository, private val userRepository: UserRepository, private val eventsManager: EventsManager) : ViewModel() {
+class ReviewsViewModel(private val orderRepository: OrderRepository, private val userRepository: UserRepository, private val eatersAnalyticsTracker: EatersAnalyticsTracker) : ViewModel() {
 
     val progressData = ProgressData()
     val navigationEvent = LiveEventData<NavigationEvent>()
@@ -77,7 +76,7 @@ class ReviewsViewModel(private val orderRepository: OrderRepository, private val
     }
 
     fun logEvent(eventName: String) {
-        eventsManager.logEvent(eventName)
+        eatersAnalyticsTracker.logEvent(eventName)
     }
 
     fun logReviewSentEvent(ratingStars: Int, review: String, comment: String){
@@ -85,7 +84,7 @@ class ReviewsViewModel(private val orderRepository: OrderRepository, private val
         data["rating_stars"] = ratingStars.toString()
         data["review_comment"] = review
         data["note_for_woodspoon"] = comment
-        eventsManager.logEvent(Constants.EVENT_REVIEW_SUBMIT, data)
+        eatersAnalyticsTracker.logEvent(Constants.EVENT_REVIEW_SUBMIT, data)
     }
 
 

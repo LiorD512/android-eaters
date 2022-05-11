@@ -25,6 +25,7 @@ import com.bupp.wood_spoon_eaters.features.restaurant.RestaurantActivity
 import com.bupp.wood_spoon_eaters.features.reviews.review_activity.ReviewActivity
 import com.bupp.wood_spoon_eaters.features.splash.SplashActivity
 import com.bupp.wood_spoon_eaters.managers.CartManager
+import com.bupp.wood_spoon_eaters.managers.FloatingCartEvent
 import com.bupp.wood_spoon_eaters.managers.GlobalErrorManager
 import com.bupp.wood_spoon_eaters.model.*
 import com.bupp.wood_spoon_eaters.utils.Utils
@@ -247,7 +248,7 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
         }
     }
 
-    private fun handleFloatingBtnEvent(event: CartManager.FloatingCartEvent?) {
+    private fun handleFloatingBtnEvent(event: FloatingCartEvent?) {
         event?.let {
             with(binding) {
                 mainActFloatingCartBtn.setWSFloatingBtnListener(this@MainActivity)

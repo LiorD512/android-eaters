@@ -3,7 +3,7 @@ package com.bupp.wood_spoon_chef.data.repositories
 import androidx.lifecycle.MutableLiveData
 import com.bupp.wood_spoon_chef.common.Constants
 import com.bupp.wood_spoon_chef.data.local.MemoryDataSource
-import com.bupp.wood_spoon_chef.managers.EventsManager
+import com.bupp.wood_spoon_chef.managers.ChefAnalyticsTracker
 import com.bupp.wood_spoon_chef.data.remote.model.Cook
 import com.bupp.wood_spoon_chef.data.remote.model.CookRequest
 import com.bupp.wood_spoon_chef.data.remote.network.ApiService
@@ -18,7 +18,7 @@ class UserRepository(
     service: ApiService,
     responseHandler: ResponseHandler,
     private val userSettings: UserSettings,
-    private val eventsManager: EventsManager,
+    private val chefAnalyticsTracker: ChefAnalyticsTracker,
     private val memoryDataSource: MemoryDataSource
 ) : UserRepositoryImp(service, responseHandler) {
 
@@ -58,7 +58,7 @@ class UserRepository(
         val result = getMe()
         if (result is ResponseSuccess) {
             val cook = result.data
-            eventsManager.initSegment(cook, cook?.pickupAddress)
+            chefAnalyticsTracker.initSegment(cook, cook?.pickupAddress)
             saveCurrentChef(cook)
         }
     }
@@ -80,8 +80,8 @@ class UserRepository(
         if (result is ResponseSuccess) {
             val cook = result.data
             saveCurrentChef(cook)
-            eventsManager.initSegment(cook, cook?.pickupAddress)
-            eventsManager.logEvent(Constants.EVENTS_CREATED_COOKING_SLOT, getEventsParam())
+            chefAnalyticsTracker.initSegment(cook, cook?.pickupAddress)
+            chefAnalyticsTracker.trackEvent(Constants.EVENTS_CREATED_COOKING_SLOT, getEventsParam())
         }
         return result
     }

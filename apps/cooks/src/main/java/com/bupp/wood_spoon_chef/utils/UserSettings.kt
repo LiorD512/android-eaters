@@ -6,14 +6,14 @@ import android.content.SharedPreferences
 import com.bupp.wood_spoon_chef.BuildConfig
 import com.bupp.wood_spoon_chef.common.Constants
 import com.bupp.wood_spoon_chef.presentation.features.splash.SplashActivity
-import com.bupp.wood_spoon_chef.managers.EventsManager
+import com.bupp.wood_spoon_chef.managers.ChefAnalyticsTracker
 import com.bupp.wood_spoon_chef.data.remote.model.Cook
 import com.bupp.wood_spoon_chef.utils.extensions.clearStack
 
 
 class UserSettings(
     private val sharedPreferences: SharedPreferences,
-    private val eventsManager: EventsManager
+    private val chefAnalyticsTracker: ChefAnalyticsTracker
 ) {
 
     private val defaultToken = BuildConfig.DEFAULT_TOKEN
@@ -51,7 +51,7 @@ class UserSettings(
         val intent = Intent(activity, SplashActivity::class.java)
         intent.clearStack()
         activity.startActivity(intent)
-        eventsManager.logout()
+        chefAnalyticsTracker.logout()
     }
 
 

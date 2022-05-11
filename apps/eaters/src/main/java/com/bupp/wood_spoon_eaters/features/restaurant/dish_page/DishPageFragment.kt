@@ -20,6 +20,8 @@ import com.bupp.wood_spoon_eaters.features.restaurant.dish_page.adapters.DishAva
 import com.bupp.wood_spoon_eaters.features.restaurant.dish_page.adapters.DishPhotosAdapter
 import com.bupp.wood_spoon_eaters.features.restaurant.dish_page.adapters.ModificationsListAdapter
 import com.bupp.wood_spoon_eaters.managers.CartManager
+import com.bupp.wood_spoon_eaters.managers.ClearCartDialogType
+import com.bupp.wood_spoon_eaters.managers.ClearCartEvent
 import com.bupp.wood_spoon_eaters.model.*
 import com.bupp.wood_spoon_eaters.utils.AnimationUtil
 import com.bupp.wood_spoon_eaters.utils.showErrorToast
@@ -221,14 +223,14 @@ class DishPageFragment : Fragment(R.layout.fragment_dish_page),
         }
     }
 
-    private fun handleClearCartEvent(event: LiveEvent<CartManager.ClearCartEvent>) {
+    private fun handleClearCartEvent(event: LiveEvent<ClearCartEvent>) {
         event.getContentIfNotHandled()?.let {
             when (it.dialogType) {
-                CartManager.ClearCartDialogType.CLEAR_CART_DIFFERENT_COOKING_SLOT -> {
+                ClearCartDialogType.CLEAR_CART_DIFFERENT_COOKING_SLOT -> {
                     ClearCartCookingSlotBottomSheet.newInstance(it.curData, it.newData, this)
                         .show(childFragmentManager, Constants.CLEAR_CART_COOKING_SLOT_DIALOG_TAG)
                 }
-                CartManager.ClearCartDialogType.CLEAR_CART_DIFFERENT_RESTAURANT -> {
+                ClearCartDialogType.CLEAR_CART_DIFFERENT_RESTAURANT -> {
                     ClearCartRestaurantBottomSheet.newInstance(it.curData, it.newData, this)
                         .show(childFragmentManager, Constants.CLEAR_CART_RESTAURANT_DIALOG_TAG)
                 }

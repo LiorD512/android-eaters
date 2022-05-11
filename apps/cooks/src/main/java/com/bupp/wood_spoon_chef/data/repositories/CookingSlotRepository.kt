@@ -1,7 +1,7 @@
 package com.bupp.wood_spoon_chef.data.repositories
 
 import com.bupp.wood_spoon_chef.common.Constants
-import com.bupp.wood_spoon_chef.managers.EventsManager
+import com.bupp.wood_spoon_chef.managers.ChefAnalyticsTracker
 import com.bupp.wood_spoon_chef.data.remote.model.CookingSlot
 import com.bupp.wood_spoon_chef.data.remote.model.CookingSlotRequest
 import com.bupp.wood_spoon_chef.data.remote.network.ApiService
@@ -11,7 +11,7 @@ import com.bupp.wood_spoon_chef.data.remote.network.base.ResponseSuccess
 import com.bupp.wood_spoon_chef.data.repositories.base_repos.CookingSlotRepositoryImp
 
 class CookingSlotRepository(
-    private val eventsManager: EventsManager,
+    private val chefAnalyticsTracker: ChefAnalyticsTracker,
     private val userRepository: UserRepository,
     service: ApiService,
     responseHandler: ResponseHandler
@@ -20,7 +20,7 @@ class CookingSlotRepository(
     override suspend fun postCookingSlot(cookingSlotRequest: CookingSlotRequest): ResponseResult<CookingSlot> {
         val result = super.postCookingSlot(cookingSlotRequest)
         if (result is ResponseSuccess) {
-            eventsManager.logEvent(
+            chefAnalyticsTracker.trackEvent(
                 Constants.EVENTS_CREATED_COOKING_SLOT,
                 getCreateEventsParam(cookingSlotId = result.data?.id)
             )
@@ -34,7 +34,7 @@ class CookingSlotRepository(
     ): ResponseResult<CookingSlot> {
         val result = super.updateCookingSlot(id, cookingSlotRequest)
         if (result is ResponseSuccess) {
-            eventsManager.logEvent(
+            chefAnalyticsTracker.trackEvent(
                 Constants.EVENTS_EDIT_COOKING_SLOT,
                 getEditEventsParam(dishId = id)
             )

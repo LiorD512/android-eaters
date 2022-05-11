@@ -25,7 +25,7 @@ import com.bupp.wood_spoon_chef.presentation.features.new_dish.NewDishViewModel
 import com.bupp.wood_spoon_chef.presentation.features.onboarding.create_account.CreateAccountViewModel
 import com.bupp.wood_spoon_chef.presentation.features.onboarding.login.LoginViewModel
 import com.bupp.wood_spoon_chef.presentation.features.splash.SplashViewModel
-import com.bupp.wood_spoon_chef.managers.EventsManager
+import com.bupp.wood_spoon_chef.managers.ChefAnalyticsTracker
 import com.bupp.wood_spoon_chef.managers.MediaUploadManager
 import com.bupp.wood_spoon_chef.data.remote.network.ErrorManger
 import com.bupp.wood_spoon_chef.data.remote.network.ResponseHandler
@@ -34,6 +34,8 @@ import com.bupp.wood_spoon_chef.data.repositories.AppSettingsRepositoryImpl
 import com.bupp.wood_spoon_chef.domain.GetSupportNumberUseCase
 import com.bupp.wood_spoon_chef.domain.IsCallSupportByCancelingOrderUseCase
 import com.bupp.wood_spoon_chef.utils.UserSettings
+import com.google.firebase.analytics.ktx.analytics
+import com.google.firebase.ktx.Firebase
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
@@ -59,10 +61,13 @@ val appModule = module {
     //Managers
     single { UserSettings(get(), get()) }
     single { FcmManager(get()) }
-    single { EventsManager(get()) }
     single { MediaUploadManager(get(), get(), get()) }
     single { ResponseHandler(get()) }
     single { ErrorManger(get()) }
+
+    // analytics
+    single { Firebase.analytics }
+    single { ChefAnalyticsTracker(get(), get()) }
 
     //VIEW MODELS
     //splash and getCode

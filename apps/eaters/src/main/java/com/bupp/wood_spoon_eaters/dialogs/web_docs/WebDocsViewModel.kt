@@ -5,23 +5,26 @@ import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.common.FlowEventsManager
 import com.bupp.wood_spoon_eaters.repositories.*
 
-class WebDocsViewModel(private val appSettingsRepository: AppSettingsRepository, private val flowEventsManager: FlowEventsManager) : ViewModel() {
+class WebDocsViewModel(
+    private val appSettingsRepository: AppSettingsRepository,
+    private val flowEventsManager: FlowEventsManager
+) : ViewModel() {
 
     fun getUrl(type: Int): String {
-        when(type){
-            Constants.WEB_DOCS_TERMS ->{
-                flowEventsManager.logPageEvent(FlowEventsManager.FlowEvents.PAGE_VISIT_PRIVACY_POLICY)
-                return appSettingsRepository.getTermsOfServiceUrl()
+        return when (type) {
+            Constants.WEB_DOCS_TERMS -> {
+                flowEventsManager.trackPageEvent(FlowEventsManager.FlowEvents.PAGE_VISIT_PRIVACY_POLICY)
+                appSettingsRepository.getTermsOfServiceUrl()
             }
-            Constants.WEB_DOCS_PRIVACY ->{
-                flowEventsManager.logPageEvent(FlowEventsManager.FlowEvents.PAGE_VISIT_PRIVACY_POLICY)
-                return appSettingsRepository.getPrivacyPolicyUrl()
+            Constants.WEB_DOCS_PRIVACY -> {
+                flowEventsManager.trackPageEvent(FlowEventsManager.FlowEvents.PAGE_VISIT_PRIVACY_POLICY)
+                appSettingsRepository.getPrivacyPolicyUrl()
             }
-            Constants.WEB_DOCS_QA ->{
-                flowEventsManager.logPageEvent(FlowEventsManager.FlowEvents.PAGE_VISIT_QA)
-                return appSettingsRepository.getQaUrl()
+            Constants.WEB_DOCS_QA -> {
+                flowEventsManager.trackPageEvent(FlowEventsManager.FlowEvents.PAGE_VISIT_QA)
+                appSettingsRepository.getQaUrl()
             }
-            else -> return ""
+            else -> ""
         }
     }
 

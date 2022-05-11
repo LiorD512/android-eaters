@@ -12,11 +12,9 @@ import com.bupp.wood_spoon_eaters.common.FlowEventsManager
 import com.bupp.wood_spoon_eaters.common.MTLogger
 import com.bupp.wood_spoon_eaters.custom_views.simpler_views.SimpleTextWatcher
 import com.bupp.wood_spoon_eaters.databinding.FragmentCodeBinding
-import com.bupp.wood_spoon_eaters.databinding.FragmentDishPageBinding
 import com.bupp.wood_spoon_eaters.features.login.LoginViewModel
 import com.bupp.wood_spoon_eaters.model.ErrorEventType
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
-
 
 class CodeFragment : Fragment(R.layout.fragment_code) {
 
@@ -28,11 +26,10 @@ class CodeFragment : Fragment(R.layout.fragment_code) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentCodeBinding.bind(view)
 
-        viewModel.logPageEvent(FlowEventsManager.FlowEvents.PAGE_VISIT_VERIFY_OTF_CODE)
+        viewModel.trackPageEvent(FlowEventsManager.FlowEvents.PAGE_VISIT_VERIFY_OTF_CODE)
 
         initObservers()
         initUi()
-
     }
 
     override fun onResume() {
@@ -41,16 +38,16 @@ class CodeFragment : Fragment(R.layout.fragment_code) {
     }
 
     private fun initObservers() {
-        viewModel.errorEvents.observe(viewLifecycleOwner, {
-            when(it){
+        viewModel.errorEvents.observe(viewLifecycleOwner) {
+            when (it) {
                 ErrorEventType.CODE_EMPTY -> {
                     binding?.codeFragInputError?.visibility = View.VISIBLE
                 }
             }
-        })
-        viewModel.userData.observe(viewLifecycleOwner, {
+        }
+        viewModel.userData.observe(viewLifecycleOwner) {
             binding?.codeFragNumber?.text = "+$it"
-        })
+        }
     }
 
     @SuppressLint("SetTextI18n")

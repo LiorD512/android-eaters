@@ -30,8 +30,7 @@ import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.dish_secti
 import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.dish_sections.DividerItemDecoratorDish
 import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.dish_sections.adapters.RPAdapterCuisine
 import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.models.DishSectionSingleDish
-import com.bupp.wood_spoon_eaters.managers.CartManager
-import com.bupp.wood_spoon_eaters.managers.FeatureFlagManager
+import com.bupp.wood_spoon_eaters.managers.*
 import com.bupp.wood_spoon_eaters.model.*
 import com.bupp.wood_spoon_eaters.utils.Utils
 import com.bupp.wood_spoon_eaters.utils.showErrorToast
@@ -291,7 +290,7 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
         }
     }
 
-    private fun handleFloatingBtnEvent(event: CartManager.FloatingCartEvent?) {
+    private fun handleFloatingBtnEvent(event: FloatingCartEvent?) {
         event?.let {
             binding!!.restaurantFragFloatingCartBtn.updateFloatingCartButton(it.restaurantName, it.allOrderItemsQuantity)
         }
@@ -305,14 +304,14 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
         }
     }
 
-    private fun handleClearCartEvent(event: LiveEvent<CartManager.ClearCartEvent>) {
+    private fun handleClearCartEvent(event: LiveEvent<ClearCartEvent>) {
         event.getContentIfNotHandled()?.let {
             when (it.dialogType) {
-                CartManager.ClearCartDialogType.CLEAR_CART_DIFFERENT_RESTAURANT -> {
+                ClearCartDialogType.CLEAR_CART_DIFFERENT_RESTAURANT -> {
                     ClearCartRestaurantBottomSheet.newInstance(it.curData, it.newData, this)
                         .show(childFragmentManager, Constants.CLEAR_CART_RESTAURANT_DIALOG_TAG)
                 }
-                CartManager.ClearCartDialogType.CLEAR_CART_DIFFERENT_COOKING_SLOT -> {
+                ClearCartDialogType.CLEAR_CART_DIFFERENT_COOKING_SLOT -> {
                     ClearCartCookingSlotBottomSheet.newInstance(it.curData, it.newData, this)
                         .show(childFragmentManager, Constants.CLEAR_CART_COOKING_SLOT_DIALOG_TAG)
                 }

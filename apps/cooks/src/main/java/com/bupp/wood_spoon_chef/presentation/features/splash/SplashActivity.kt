@@ -55,7 +55,7 @@ class SplashActivity : BaseActivity(), UpdateRequiredDialog.UpdateRequiredDialog
     }
 
     private fun initObservers() {
-        viewModel.splashEvent.observe(this, { splashEvent ->
+        viewModel.splashEvent.observe(this) { splashEvent ->
             val event = splashEvent.getContentIfNotHandled()
             event?.let {
                 when (it) {
@@ -77,11 +77,11 @@ class SplashActivity : BaseActivity(), UpdateRequiredDialog.UpdateRequiredDialog
                 }
             }
 
-        })
+        }
 
-        viewModel.errorEvent.observe(this, {
+        viewModel.errorEvent.observe(this) {
             handleErrorEvent(it, binding?.root)
-        })
+        }
     }
 
 

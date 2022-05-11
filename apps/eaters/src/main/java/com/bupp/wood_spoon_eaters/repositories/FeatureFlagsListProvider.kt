@@ -15,7 +15,8 @@ fun AppSettingsRepository.featureFlag(key: FeatureFlagKey) = featureFlag(key.key
 @Keep
 enum class EatersFeatureFlags(override val key: String) : FeatureFlagKey {
     TestMobileShowBuildNumber(key = "test_mobile_show_build_number"),
-    EatersFeeInPrice(key = "backend_eaters_dish_pricing_with_fee")
+    EatersFeeInPrice(key = "backend_eaters_dish_pricing_with_fee"),
+    OnboardingDynamicScrollableContent(key = "android_eater_onboarding_dynamic_scrollable_content")
 }
 
 class StaticFeatureFlagsListProvider : FeatureFlagsListProvider {

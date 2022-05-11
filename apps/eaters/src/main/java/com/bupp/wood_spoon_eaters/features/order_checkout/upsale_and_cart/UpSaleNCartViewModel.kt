@@ -7,7 +7,7 @@ import com.bupp.wood_spoon_eaters.common.FlowEventsManager
 import com.bupp.wood_spoon_eaters.di.abs.LiveEventData
 import com.bupp.wood_spoon_eaters.managers.CartManager
 import com.bupp.wood_spoon_eaters.managers.EaterDataManager
-import com.bupp.wood_spoon_eaters.managers.EventsManager
+import com.bupp.wood_spoon_eaters.managers.EatersAnalyticsTracker
 import com.bupp.wood_spoon_eaters.repositories.OrderRepository
 import kotlinx.coroutines.launch
 
@@ -15,7 +15,7 @@ class UpSaleNCartViewModel(
     val cartManager: CartManager,
     val eaterDataManager: EaterDataManager,
     private val flowEventsManager: FlowEventsManager,
-    private val eventsManager: EventsManager
+    private val eatersAnalyticsTracker: EatersAnalyticsTracker
 ) : ViewModel() {
 
     var currentPageState = PageState.CART
@@ -137,15 +137,15 @@ class UpSaleNCartViewModel(
     }
 
     fun logPageEvent(eventType: FlowEventsManager.FlowEvents) {
-        flowEventsManager.logPageEvent(eventType)
+        flowEventsManager.trackPageEvent(eventType)
     }
 
     fun logSwipeDishInCart(eventName: String, item: CustomOrderItem) {
-        eventsManager.logEvent(eventName, getSwipeDishData(item))
+        eatersAnalyticsTracker.logEvent(eventName, getSwipeDishData(item))
     }
 
     fun logEvent(eventName: String) {
-        eventsManager.logEvent(eventName)
+        eatersAnalyticsTracker.logEvent(eventName)
     }
 
     private fun getSwipeDishData(item: CustomOrderItem): Map<String, String> {

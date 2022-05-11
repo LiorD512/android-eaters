@@ -14,7 +14,7 @@ import com.bupp.wood_spoon_eaters.features.order_checkout.checkout.models.Checko
 import com.bupp.wood_spoon_eaters.features.order_checkout.upsale_and_cart.CustomOrderItem
 import com.bupp.wood_spoon_eaters.managers.CartManager
 import com.bupp.wood_spoon_eaters.managers.EaterDataManager
-import com.bupp.wood_spoon_eaters.managers.EventsManager
+import com.bupp.wood_spoon_eaters.managers.EatersAnalyticsTracker
 import com.bupp.wood_spoon_eaters.managers.PaymentManager
 import com.bupp.wood_spoon_eaters.model.*
 import com.bupp.wood_spoon_eaters.repositories.OrderRepository
@@ -28,7 +28,7 @@ class CheckoutViewModel(
     private val cartManager: CartManager,
     private val paymentManager: PaymentManager,
     val eaterDataManager: EaterDataManager,
-    private val eventsManager: EventsManager,
+    private val eatersAnalyticsTracker: EatersAnalyticsTracker,
     private val pricingExperimentUseCase: PricingExperimentUseCase
 ) : ViewModel() {
 

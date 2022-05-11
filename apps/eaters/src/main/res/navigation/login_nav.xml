@@ -3,30 +3,31 @@
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:id="@+id/on_boarding_nav"
-        app:startDestination="@id/welcomeFragment">
+        app:startDestination="@id/onboardingFragment">
 
     <fragment
-            android:id="@+id/welcomeFragment"
-            android:name="com.bupp.wood_spoon_eaters.features.login.fragments.WelcomeFragment"
-            android:label="fragment_welcome"
-            tools:layout="@layout/fragment_welcome">
+            android:id="@+id/onboardingFragment"
+            android:name="com.bupp.wood_spoon_eaters.features.onboarding.OnboardingFragment"
+            android:label="fragment_onboarding"
+            tools:layout="@layout/fragment_onboarding">
         <action
-                android:id="@+id/action_welcomeFragment_to_phoneVerificationFragment"
+                android:id="@+id/action_onboardingFragment_to_phoneVerificationFragment"
                 app:destination="@id/phoneVerificationFragment"
                 app:enterAnim="@anim/slide_right_enter"
                 app:exitAnim="@anim/slide_right_exit"
                 app:popEnterAnim="@anim/slide_left_enter"
                 app:popExitAnim="@anim/slide_left_exit"
-                app:popUpTo="@+id/welcomeFragment"/>
+                app:popUpTo="@+id/onboardingFragment" />
         <action
-                android:id="@+id/action_welcomeFragment_to_createAccountFragment"
+                android:id="@+id/action_onboardingFragment_to_createAccountFragment"
                 app:destination="@id/createAccountFragment" />
+
     </fragment>
     <fragment
             android:id="@+id/codeFragment"
             android:name="com.bupp.wood_spoon_eaters.features.login.fragments.CodeFragment"
-            tools:layout="@layout/fragment_code"
-            android:label="CodeFragment">
+            android:label="CodeFragment"
+            tools:layout="@layout/fragment_code">
         <action
                 android:id="@+id/action_codeFragment_to_createAccountFragment"
                 app:destination="@id/createAccountFragment"
@@ -34,13 +35,13 @@
                 app:exitAnim="@anim/slide_right_exit"
                 app:popEnterAnim="@anim/slide_left_enter"
                 app:popExitAnim="@anim/slide_left_exit"
-                app:popUpTo="@+id/codeFragment"/>
+                app:popUpTo="@+id/codeFragment" />
     </fragment>
     <fragment
-            tools:layout="@layout/fragment_phone_verification"
             android:id="@+id/phoneVerificationFragment"
             android:name="com.bupp.wood_spoon_eaters.features.login.fragments.PhoneVerificationFragment"
-            android:label="PhoneVerificationFragment">
+            android:label="PhoneVerificationFragment"
+            tools:layout="@layout/fragment_phone_verification">
         <action
                 android:id="@+id/action_phoneVerificationFragment_to_codeFragment"
                 app:destination="@id/codeFragment"
@@ -48,19 +49,18 @@
                 app:exitAnim="@anim/slide_right_exit"
                 app:popEnterAnim="@anim/slide_left_enter"
                 app:popExitAnim="@anim/slide_left_exit"
-                app:popUpTo="@+id/phoneVerificationFragment"/>
+                app:popUpTo="@+id/phoneVerificationFragment" />
     </fragment>
     <fragment
             android:id="@+id/createAccountFragment"
             android:name="com.bupp.wood_spoon_eaters.features.login.fragments.CreateAccountFragment"
-            tools:layout="@layout/fragment_create_account"
             android:label="CreateAccountFragment"
             app:enterAnim="@anim/slide_right_enter"
             app:exitAnim="@anim/slide_right_exit"
             app:popEnterAnim="@anim/slide_left_enter"
             app:popExitAnim="@anim/slide_left_exit"
-            app:popUpTo="@+id/CodeFragment">
-    </fragment>
+            app:popUpTo="@+id/CodeFragment"
+            tools:layout="@layout/fragment_create_account"></fragment>
 
 
 </navigation>

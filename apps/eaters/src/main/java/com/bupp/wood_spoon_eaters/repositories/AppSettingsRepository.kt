@@ -1,6 +1,6 @@
 package com.bupp.wood_spoon_eaters.repositories
 
-import com.bupp.wood_spoon_eaters.managers.EventsManager
+import com.bupp.wood_spoon_eaters.managers.EatersAnalyticsTracker
 import com.bupp.wood_spoon_eaters.model.*
 import com.bupp.wood_spoon_eaters.network.ApiService
 import com.bupp.wood_spoon_eaters.network.getAppSettings
@@ -45,7 +45,7 @@ internal class AppSettingsRepositoryImpl(
     private val apiService: ApiService,
     private val resultManager: ResultManager,
     private val featureListProvider: FeatureFlagsListProvider,
-    private val eventsManager: EventsManager
+    private val eatersAnalyticsTracker: EatersAnalyticsTracker
 ) : AppSettingsRepository {
 
     private val _state = MutableStateFlow<AppSettingsRepoState>(AppSettingsRepoState.NotInitialized)
@@ -90,7 +90,7 @@ internal class AppSettingsRepositoryImpl(
     override fun appSetting(key: String): Any? {
         val value = appSettings.firstOrNull { it.key == key }?.value
         if (value == null) {
-            eventsManager.logEvent(
+            eatersAnalyticsTracker.logEvent(
                 MissingKeyErrorEventName,
                 mapOf(
                     "key" to key

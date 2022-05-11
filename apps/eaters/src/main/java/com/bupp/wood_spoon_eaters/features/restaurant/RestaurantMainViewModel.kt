@@ -12,14 +12,14 @@ import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.dish_searc
 import com.bupp.wood_spoon_eaters.model.DishInitParams
 import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.models.DishSectionSingleDish
 import com.bupp.wood_spoon_eaters.managers.CartManager
-import com.bupp.wood_spoon_eaters.managers.EventsManager
+import com.bupp.wood_spoon_eaters.managers.EatersAnalyticsTracker
 import com.bupp.wood_spoon_eaters.managers.FeatureFlagManager
 import com.bupp.wood_spoon_eaters.model.CookingSlot
 import com.bupp.wood_spoon_eaters.model.MenuItem
 
 class RestaurantMainViewModel(
     private val flowEventsManager: FlowEventsManager,
-    private val eventsManager: EventsManager,
+    private val eatersAnalyticsTracker: EatersAnalyticsTracker,
     cartManager: CartManager,
     featureFlagManager: FeatureFlagManager
     ) : ViewModel() {
@@ -90,18 +90,18 @@ class RestaurantMainViewModel(
     }
 
     fun logPageEvent(eventType: FlowEventsManager.FlowEvents) {
-        flowEventsManager.logPageEvent(eventType)
+        flowEventsManager.trackPageEvent(eventType)
     }
 
     fun logDishSwipeEvent(eventName: String, item: DishSectionSingleDish) {
-        eventsManager.logEvent(eventName, getDishSwipedData(item))
+        eatersAnalyticsTracker.logEvent(eventName, getDishSwipedData(item))
     }
 
     fun logClickVideo(fullName: String, id: Long) {
         val data = mutableMapOf<String, String>()
         data["home_chef_name"] = fullName
         data["home_chef_id"] = id.toString()
-        eventsManager.logEvent(Constants.EVENT_CLICK_VIDEO_IN_RESTAURANT, data)
+        eatersAnalyticsTracker.logEvent(Constants.EVENT_CLICK_VIDEO_IN_RESTAURANT, data)
     }
 
     private fun getDishSwipedData(item: DishSectionSingleDish): Map<String, String> {

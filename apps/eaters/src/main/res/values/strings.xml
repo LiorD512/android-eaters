@@ -157,4 +157,13 @@
     <string name="by_dishes_restaurants_chefs_or_dietary">By dishes, restaurants, chefs or dietary</string>
     <string name="fees_and_estimated_tax_title">Fees &amp; Estimated tax</string>
     <string name="estimated_tax_title">Estimated tax</string>
+
+    <string name="text_title_onboarding_1">Homemade dishes delivered to your door</string>
+    <string name="text_description_onboarding_1">WoodSpoon’s Home Chefs want to share mouth-watering meals with you.</string>
+    <string name="text_title_onboarding_2">Order right now or plan ahead</string>
+    <string name="text_description_onboarding_2">All of our dishes are made to order and deliver to your doorstep, ready to eat.</string>
+    <string name="text_title_onboarding_3">Enjoy home-cooked food made just for you</string>
+    <string name="text_description_onboarding_3">Prepared with the love our Home Chefs give their own families.</string>
+    <string name="btn_sign_in_onboarding">Sign in</string>
+
 </resources>

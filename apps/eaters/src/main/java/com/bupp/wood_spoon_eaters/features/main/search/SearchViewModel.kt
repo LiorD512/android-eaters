@@ -4,20 +4,17 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.bupp.wood_spoon_eaters.common.Constants
-import com.bupp.wood_spoon_eaters.common.FlowEventsManager
 import com.bupp.wood_spoon_eaters.common.MTLogger
-import com.bupp.wood_spoon_eaters.features.main.order_history.OrdersHistoryViewModel
-import com.bupp.wood_spoon_eaters.managers.EventsManager
+import com.bupp.wood_spoon_eaters.managers.EatersAnalyticsTracker
 import com.bupp.wood_spoon_eaters.managers.FeedDataManager
 import com.bupp.wood_spoon_eaters.model.*
 import com.bupp.wood_spoon_eaters.repositories.FeedRepository
-import com.bupp.wood_spoon_eaters.repositories.MetaDataRepository
 import kotlinx.coroutines.launch
 
 class SearchViewModel(
     private val feedDataManager: FeedDataManager,
     private val feedRepository: FeedRepository,
-    private val eventsManager: EventsManager
+    private val eatersAnalyticsTracker: EatersAnalyticsTracker
 ) : ViewModel() {
 
     data class SearchLiveData(
@@ -224,7 +221,7 @@ class SearchViewModel(
     }
 
     fun logEvent(eventName: String, params: Map<String, String>? = null) {
-        eventsManager.logEvent(eventName, params)
+        eatersAnalyticsTracker.logEvent(eventName, params)
     }
 
     companion object {

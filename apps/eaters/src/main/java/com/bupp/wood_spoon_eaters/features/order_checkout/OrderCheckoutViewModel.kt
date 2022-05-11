@@ -2,7 +2,6 @@ package com.bupp.wood_spoon_eaters.features.order_checkout
 
 import android.content.Context
 import android.util.Log
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavDirections
@@ -13,10 +12,8 @@ import com.bupp.wood_spoon_eaters.di.abs.LiveEventData
 import com.bupp.wood_spoon_eaters.di.abs.ProgressData
 import com.bupp.wood_spoon_eaters.features.order_checkout.checkout.CheckoutFragmentDirections
 import com.bupp.wood_spoon_eaters.features.order_checkout.upsale_and_cart.CustomOrderItem
-import com.bupp.wood_spoon_eaters.features.restaurant.RestaurantMainViewModel
-import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.RestaurantPageFragmentDirections
 import com.bupp.wood_spoon_eaters.managers.CartManager
-import com.bupp.wood_spoon_eaters.managers.EventsManager
+import com.bupp.wood_spoon_eaters.managers.EatersAnalyticsTracker
 import com.bupp.wood_spoon_eaters.managers.PaymentManager
 import com.bupp.wood_spoon_eaters.model.DishInitParams
 import com.bupp.wood_spoon_eaters.repositories.OrderRepository
@@ -29,7 +26,7 @@ class OrderCheckoutViewModel(
     private val paymentManager: PaymentManager,
     private val cartManager: CartManager,
     private val flowEventsManager: FlowEventsManager,
-private val eventsManager: EventsManager) : ViewModel() {
+private val eatersAnalyticsTracker: EatersAnalyticsTracker) : ViewModel() {
 
 
     val navigationEvent = LiveEventData<NavigationEvent>()
@@ -90,15 +87,15 @@ private val eventsManager: EventsManager) : ViewModel() {
             result?.let {
                 when (result.type) {
                     OrderRepository.OrderRepoStatus.UPDATE_ORDER_SUCCESS -> {
-                        eventsManager.logEvent(Constants.EVENT_UPDATE_DELIVERY_ADDRESS, mapOf(Pair("success", true)))
+                        eatersAnalyticsTracker.logEvent(Constants.EVENT_UPDATE_DELIVERY_ADDRESS, mapOf(Pair("success", true)))
                     }
                     OrderRepository.OrderRepoStatus.UPDATE_ORDER_FAILED -> {
-                        eventsManager.logEvent(Constants.EVENT_UPDATE_DELIVERY_ADDRESS, mapOf(Pair("success", false)))
+                        eatersAnalyticsTracker.logEvent(Constants.EVENT_UPDATE_DELIVERY_ADDRESS, mapOf(Pair("success", false)))
                     }
                     OrderRepository.OrderRepoStatus.WS_ERROR -> {
                         cartManager.onLocationInvalid()
                         cartManager.handleWsError(result.wsError)
-                        eventsManager.logEvent(Constants.EVENT_UPDATE_DELIVERY_ADDRESS, mapOf(Pair("success", false)))
+                        eatersAnalyticsTracker.logEvent(Constants.EVENT_UPDATE_DELIVERY_ADDRESS, mapOf(Pair("success", false)))
                     }
                     else -> {
                     }
@@ -108,15 +105,15 @@ private val eventsManager: EventsManager) : ViewModel() {
     }
 
     fun logPageEvent(eventType: FlowEventsManager.FlowEvents) {
-        flowEventsManager.logPageEvent(eventType)
+        flowEventsManager.trackPageEvent(eventType)
     }
 
     fun logEvent(eventName: String) {
-        eventsManager.logEvent(eventName)
+        eatersAnalyticsTracker.logEvent(eventName)
     }
 
     fun logChangeTime(date: Date?) {
-        eventsManager.logEvent(Constants.EVENT_CHANGE_DELIVERY_TIME, getChangedTimeData(date))
+        eatersAnalyticsTracker.logEvent(Constants.EVENT_CHANGE_DELIVERY_TIME, getChangedTimeData(date))
     }
 
     private fun getChangedTimeData(date: Date?): Map<String, String> {

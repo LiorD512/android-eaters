@@ -1,7 +1,6 @@
 package com.bupp.wood_spoon_eaters.features.login.fragments
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.fragment.app.Fragment
 import com.bupp.wood_spoon_eaters.R
@@ -24,7 +23,7 @@ class CreateAccountFragment : Fragment(R.layout.fragment_create_account), WSEdit
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentCreateAccountBinding.bind(view)
 
-        viewModel.logPageEvent(FlowEventsManager.FlowEvents.PAGE_VISIT_CREATE_ACCOUNT)
+        viewModel.trackPageEvent(FlowEventsManager.FlowEvents.PAGE_VISIT_CREATE_ACCOUNT)
 
         initUi()
     }

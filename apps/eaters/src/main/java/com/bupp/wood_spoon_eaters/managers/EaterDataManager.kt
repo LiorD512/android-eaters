@@ -11,11 +11,10 @@ import com.bupp.wood_spoon_eaters.repositories.EaterDataRepository
 import com.bupp.wood_spoon_eaters.repositories.UserRepository
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
-import timber.log.Timber
 
 
 class EaterDataManager(
-    val context: Context, private val locationManager: LocationManager, private val eventsManager: EventsManager,
+    val context: Context, private val locationManager: LocationManager, private val eatersAnalyticsTracker: EatersAnalyticsTracker,
     private val userRepository: UserRepository, private val eaterDataRepository: EaterDataRepository
 ): LifecycleObserver {
 
@@ -181,11 +180,11 @@ class EaterDataManager(
 
     fun refreshSegment() {
         val curAddress = locationManager.getLastChosenAddress()
-        eventsManager.initSegment(currentEater, curAddress)
+        eatersAnalyticsTracker.initSegment(currentEater, curAddress)
     }
 
     fun logUxCamEvent(eventName: String, params: Map<String, String>? = null) {
-        eventsManager.logEvent(eventName, params)
+        eatersAnalyticsTracker.logEvent(eventName, params)
     }
 
     fun getCartAddressId(): Long? {

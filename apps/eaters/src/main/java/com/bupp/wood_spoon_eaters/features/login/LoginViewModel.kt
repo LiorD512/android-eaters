@@ -1,7 +1,6 @@
 package com.bupp.wood_spoon_eaters.features.login
 
 import android.content.Context
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -11,7 +10,7 @@ import com.bupp.wood_spoon_eaters.common.MTLogger
 import com.bupp.wood_spoon_eaters.di.abs.LiveEventData
 import com.bupp.wood_spoon_eaters.di.abs.ProgressData
 import com.bupp.wood_spoon_eaters.fcm.FcmManager
-import com.bupp.wood_spoon_eaters.managers.EventsManager
+import com.bupp.wood_spoon_eaters.managers.EatersAnalyticsTracker
 import com.bupp.wood_spoon_eaters.managers.PaymentManager
 import com.bupp.wood_spoon_eaters.model.CountriesISO
 import com.bupp.wood_spoon_eaters.model.EaterRequest
@@ -21,9 +20,8 @@ import com.bupp.wood_spoon_eaters.repositories.MetaDataRepository
 import com.bupp.wood_spoon_eaters.repositories.UserRepository
 import kotlinx.coroutines.launch
 
-
 class LoginViewModel(
-    private val eventsManager: EventsManager,
+    private val eatersAnalyticsTracker: EatersAnalyticsTracker,
     private val userRepository: UserRepository,
     private val flowEventsManager: FlowEventsManager,
     private val metaDataRepository: MetaDataRepository,
@@ -77,7 +75,7 @@ class LoginViewModel(
     }
 
     fun directToPhoneFrag() {
-        eventsManager.logEvent(Constants.EVENT_CLICK_GET_STARTED)
+        eatersAnalyticsTracker.logEvent(Constants.EVENT_CLICK_GET_STARTED)
         navigationEvent.postRawValue(NavigationEventType.OPEN_PHONE_SCREEN)
     }
 
@@ -86,7 +84,6 @@ class LoginViewModel(
         navigationEvent.postRawValue(NavigationEventType.OPEN_CODE_SCREEN)
     }
 
-    //phone verification methods
     private fun validatePhoneData(): Boolean {
         var isValid = true
         if (phone.isNullOrEmpty() || phonePrefix.isNullOrEmpty()) {
@@ -103,24 +100,20 @@ class LoginViewModel(
                 val userRepoResult = userRepository.sendPhoneVerification(phonePrefix!!+phone!!)
                 when (userRepoResult.type) {
                     UserRepository.UserRepoStatus.SERVER_ERROR -> {
-                        Log.d("wowLoginVM", "NetworkError")
                         errorEvents.postValue(ErrorEventType.SERVER_ERROR)
-                        eventsManager.logEvent(Constants.EVENT_SEND_OTP, getSendOtpData(false))
+                        eatersAnalyticsTracker.logEvent(Constants.EVENT_SEND_OTP, getSendOtpData(false))
                     }
                     UserRepository.UserRepoStatus.INVALID_PHONE -> {
-                        Log.d("wowLoginVM", "GenericError")
                         errorEvents.postValue(ErrorEventType.INVALID_PHONE)
-                        eventsManager.logEvent(Constants.EVENT_SEND_OTP, getSendOtpData(false))
+                        eatersAnalyticsTracker.logEvent(Constants.EVENT_SEND_OTP, getSendOtpData(false))
                     }
                     UserRepository.UserRepoStatus.SUCCESS -> {
-                        Log.d("wowLoginVM", "Success")
-                        eventsManager.logEvent(Constants.EVENT_SEND_OTP, getSendOtpData(true))
+                        eatersAnalyticsTracker.logEvent(Constants.EVENT_SEND_OTP, getSendOtpData(true))
                         directToCodeFrag()
                     }
                     else -> {
-                        Log.d("wowLoginVM", "NetworkError")
                         errorEvents.postValue(ErrorEventType.SERVER_ERROR)
-                        eventsManager.logEvent(Constants.EVENT_SEND_OTP, getSendOtpData(false))
+                        eatersAnalyticsTracker.logEvent(Constants.EVENT_SEND_OTP, getSendOtpData(false))
                     }
                 }
                 progressData.endProgress()
@@ -143,19 +136,15 @@ class LoginViewModel(
                 val userRepoResult = userRepository.sendPhoneVerification(phonePrefix!!+phone!!)
                 when (userRepoResult.type) {
                     UserRepository.UserRepoStatus.SERVER_ERROR -> {
-                        Log.d("wowLoginVM", "NetworkError")
                         errorEvents.postValue(ErrorEventType.SERVER_ERROR)
                     }
                     UserRepository.UserRepoStatus.INVALID_PHONE -> {
-                        Log.d("wowLoginVM", "GenericError")
                         errorEvents.postValue(ErrorEventType.INVALID_PHONE)
                     }
                     UserRepository.UserRepoStatus.SUCCESS -> {
-                        Log.d("wowLoginVM", "Success")
                         navigationEvent.postRawValue(NavigationEventType.CODE_RESENT)
                     }
                     else -> {
-                        Log.d("wowLoginVM", "NetworkError")
                         errorEvents.postValue(ErrorEventType.SERVER_ERROR)
                     }
                 }
@@ -163,8 +152,6 @@ class LoginViewModel(
             }
         }
     }
-
-    //code verification methods
 
     fun sendPhoneAndCodeNumber(context: Context) {
         if (!code.isNullOrEmpty()) {
@@ -175,32 +162,28 @@ class LoginViewModel(
                     val userRepoResult = userRepository.sendCodeAndPhoneVerification(phonePrefix!!+phone, code!!)
                     when (userRepoResult.type) {
                         UserRepository.UserRepoStatus.SERVER_ERROR -> {
-                            Log.d("wowLoginVM", "sendPhoneAndCodeNumber - NetworkError")
                             errorEvents.postValue(ErrorEventType.SERVER_ERROR)
-                            eventsManager.logEvent(Constants.EVENT_VERIFY_OTP, getSendOtpData(false))
+                            eatersAnalyticsTracker.logEvent(Constants.EVENT_VERIFY_OTP, getSendOtpData(false))
                         }
                         UserRepository.UserRepoStatus.WRONG_PASSWORD -> {
-                            Log.d("wowLoginVM", "sendPhoneAndCodeNumber - GenericError")
                             errorEvents.postValue(ErrorEventType.WRONG_PASSWORD)
-                            eventsManager.logEvent(Constants.EVENT_VERIFY_OTP, getSendOtpData(false))
+                            eatersAnalyticsTracker.logEvent(Constants.EVENT_VERIFY_OTP, getSendOtpData(false))
                         }
                         UserRepository.UserRepoStatus.SUCCESS -> {
-                            Log.d("wowLoginVM", "sendPhoneAndCodeNumber - Success")
                             metaDataRepository.initMetaData()
                             appSettingsRepository.initAppSettings()
                             if (userRepository.isUserSignedUp()) {
                                 paymentManager.initPaymentManager(context)
                                 navigationEvent.postRawValue(NavigationEventType.OPEN_MAIN_ACT)
-                                eventsManager.logEvent(Constants.EVENT_ON_EXISTING_USER_LOGIN_SUCCESS)
+                                eatersAnalyticsTracker.logEvent(Constants.EVENT_ON_EXISTING_USER_LOGIN_SUCCESS)
                             } else {
                                 navigationEvent.postRawValue(NavigationEventType.OPEN_SIGNUP_SCREEN)
                             }
-                            eventsManager.logEvent(Constants.EVENT_VERIFY_OTP, getSendOtpData(true))
+                            eatersAnalyticsTracker.logEvent(Constants.EVENT_VERIFY_OTP, getSendOtpData(true))
                         }
                         else -> {
-                            Log.d("wowLoginVM", "NetworkError")
                             errorEvents.postValue(ErrorEventType.SERVER_ERROR)
-                            eventsManager.logEvent(Constants.EVENT_VERIFY_OTP, getSendOtpData(false))
+                            eatersAnalyticsTracker.logEvent(Constants.EVENT_VERIFY_OTP, getSendOtpData(false))
                         }
                     }
                     progressData.endProgress()
@@ -233,29 +216,24 @@ class LoginViewModel(
             val userRepoResult = userRepository.updateEater(eater)
             when (userRepoResult.type) {
                 UserRepository.UserRepoStatus.SERVER_ERROR -> {
-                    Log.d("wowLoginVM", "NetworkError")
                     errorEvents.postValue(ErrorEventType.SERVER_ERROR)
-                    eventsManager.logEvent(Constants.EVENT_CREATE_ACCOUNT, getCreateAccountEventData(false))
+                    eatersAnalyticsTracker.logEvent(Constants.EVENT_CREATE_ACCOUNT, getCreateAccountEventData(false))
                 }
                 UserRepository.UserRepoStatus.SOMETHING_WENT_WRONG -> {
-                    Log.d("wowLoginVM", "GenericError")
                     errorEvents.postValue(ErrorEventType.SOMETHING_WENT_WRONG)
-                    eventsManager.logEvent(Constants.EVENT_CREATE_ACCOUNT, getCreateAccountEventData(false))
+                    eatersAnalyticsTracker.logEvent(Constants.EVENT_CREATE_ACCOUNT, getCreateAccountEventData(false))
                 }
                 UserRepository.UserRepoStatus.SUCCESS -> {
-                    Log.d("wowLoginVM", "Success")
                     val eater = userRepoResult.eater
                     paymentManager.initPaymentManager(context)
                     deviceDetailsManager.refreshPushNotificationToken()
                     navigationEvent.postRawValue(NavigationEventType.OPEN_MAIN_ACT)
-                    eventsManager.logEvent(Constants.EVENT_ON_EXISTING_USER_LOGIN_SUCCESS)
-//                    eventsManager.sendRegistrationCompletedEvent()
-                    eventsManager.logEvent(Constants.EVENT_CREATE_ACCOUNT, getCreateAccountEventData(true, eater?.id))
+                    eatersAnalyticsTracker.logEvent(Constants.EVENT_ON_EXISTING_USER_LOGIN_SUCCESS)
+                    eatersAnalyticsTracker.logEvent(Constants.EVENT_CREATE_ACCOUNT, getCreateAccountEventData(true, eater?.id))
                 }
                 else -> {
-                    Log.d("wowLoginVM", "NetworkError")
                     errorEvents.postValue(ErrorEventType.SERVER_ERROR)
-                    eventsManager.logEvent(Constants.EVENT_CREATE_ACCOUNT, getCreateAccountEventData(false))
+                    eatersAnalyticsTracker.logEvent(Constants.EVENT_CREATE_ACCOUNT, getCreateAccountEventData(false))
                 }
             }
             progressData.endProgress()
@@ -268,9 +246,7 @@ class LoginViewModel(
         return data
     }
 
-    fun logPageEvent(eventType: FlowEventsManager.FlowEvents) {
-        flowEventsManager.logPageEvent(eventType)
+    fun trackPageEvent(eventType: FlowEventsManager.FlowEvents) {
+        flowEventsManager.trackPageEvent(eventType)
     }
-
-
 }
