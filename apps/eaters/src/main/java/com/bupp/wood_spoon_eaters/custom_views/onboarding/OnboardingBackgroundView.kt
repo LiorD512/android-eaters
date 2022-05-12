@@ -34,7 +34,7 @@ class OnboardingBackgroundView @JvmOverloads constructor(
     private lateinit var scope: CoroutineScope
     private val job = Job()
     private var slideList: List<SliderContentPage> = emptyList()
-    private var flipSlideInterval = 3000L
+    private var flipSlideInterval = 6000L
     private var parallaxShiftInterval = 80L
     private var showedSlideIndex = 0
 
