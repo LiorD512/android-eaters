@@ -199,12 +199,4 @@ class MetaDataRepository(
         }
         return ""
     }
-
-    fun isSupportCancellationEnabled(): Boolean {
-        for (settings in getSettings()) {
-            if (settings.key == "mobile_orders_call_support_cancellation")
-                return settings.value as Boolean
-        }
-        return false
-    }
 }
