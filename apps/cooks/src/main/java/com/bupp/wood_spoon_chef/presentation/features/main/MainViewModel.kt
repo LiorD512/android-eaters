@@ -14,6 +14,15 @@ import com.bupp.wood_spoon_chef.utils.UserSettings
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
+data class GetActiveCookingSlotEvent(
+    val isSuccess: Boolean,
+    val cookingSlots: CookingSlot?
+)
+
+enum class NavigationEventType {
+    SCROLL_TO_LOGOUT
+}
+
 class MainViewModel(
     val settings: UserSettings,
     val metaDataRepository: MetaDataRepository,
@@ -23,14 +32,8 @@ class MainViewModel(
 ) : BaseViewModel() {
 
     val navigationEvent: MutableLiveData<NavigationEventType> = MutableLiveData()
-
-    enum class NavigationEventType {
-        SCROLL_TO_LOGOUT
-    }
-
     val getActiveCookingSlot: MutableLiveData<GetActiveCookingSlotEvent> = MutableLiveData()
-
-    data class GetActiveCookingSlotEvent(val isSuccess: Boolean, val cookingSlots: CookingSlot?)
+    val notApprovedEvent = MutableLiveData<Boolean>()
 
     fun getActiveCookingSlot() {
         viewModelScope.launch(Dispatchers.IO) {
@@ -54,7 +57,6 @@ class MainViewModel(
         }
     }
 
-    val notApprovedEvent = MutableLiveData<Boolean>()
     fun isChefPending(): Boolean {
         val isPending = userRepository.isPendingApproval()
         if (isPending) {

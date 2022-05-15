@@ -14,7 +14,7 @@ android {
         targetSdkVersion rootProject.ext.cooksTargetSdkVersion
         applicationId "com.bupp.wood_spoon_chef"
         versionCode System.getenv('VERSION_CODE') as Integer ?: 1000 // Temporary fallback versionCode to enable local builds
-        versionName "1.9.0"
+        versionName "1.9.1"
     }
 
     buildTypes {

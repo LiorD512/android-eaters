@@ -11,6 +11,7 @@ import com.bupp.wood_spoon_chef.R
 import com.bupp.wood_spoon_chef.common.Constants
 import com.bupp.wood_spoon_chef.common.navigateToCallApp
 import com.bupp.wood_spoon_chef.common.navigateToSMSApp
+import com.bupp.wood_spoon_chef.data.remote.model.Address
 import com.bupp.wood_spoon_chef.presentation.custom_views.BottomBarView
 import com.bupp.wood_spoon_chef.presentation.custom_views.HeaderView
 import com.bupp.wood_spoon_chef.databinding.ActivityMainBinding
@@ -23,11 +24,13 @@ import com.bupp.wood_spoon_chef.presentation.features.new_dish.NewDishActivity
 import com.bupp.wood_spoon_chef.presentation.features.onboarding.create_account.CreateAccountActivity
 import com.bupp.wood_spoon_chef.presentation.features.onboarding.create_account.CreateAccountViewModel
 import com.bupp.wood_spoon_chef.data.remote.model.CookingSlot
+import com.bupp.wood_spoon_chef.data.remote.model.Event
 import com.bupp.wood_spoon_chef.data.remote.network.base.CustomError
 import com.bupp.wood_spoon_chef.presentation.features.main.orders.OrdersFragmentDirections
 import com.bupp.wood_spoon_chef.presentation.features.main.orders.order_details.ArgumentModelOrderDetails
 import com.bupp.wood_spoon_chef.utils.media_utils.MediaUtils
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import java.util.*
 
 class MainActivity : BaseActivity(),
     WelcomeDialog.WelcomeDialogListener,
@@ -85,7 +88,7 @@ class MainActivity : BaseActivity(),
         viewModel.getActiveCookingSlot.observe(this) { event ->
             if (event.isSuccess) {
                 event.cookingSlots?.let {
-                    openActiveCookingSlot(event.cookingSlots)
+                    openActiveCookingSlot(it)
                 }
             }
         }
