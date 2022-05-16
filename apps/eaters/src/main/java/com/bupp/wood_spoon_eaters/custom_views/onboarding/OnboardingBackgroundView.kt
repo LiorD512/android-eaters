@@ -46,8 +46,8 @@ class OnboardingBackgroundView @JvmOverloads constructor(
         scope.launch(job) {
             repeat(Int.MAX_VALUE) {
                 if (isImageSliding) {
-                    prepareImageFlipper()
                     binding.ivFlipper.showNext()
+                    prepareImageFlipper()
                 }
 
                 delay(parallaxShiftInterval)
