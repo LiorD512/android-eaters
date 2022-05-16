@@ -62,7 +62,7 @@ class OnboardingFragment : Fragment(R.layout.fragment_onboarding) {
     private fun showVideoBackground(path: Uri) {
         binding?.let {
             with(it.sliderFadeInOut) {
-                showSliderAnimation(isImageSliding = false, isTextSliding = true)
+                showSliderAnimation(isImageSliding = false, isTextSliding = false)
                 showVideoBackground(path)
             }
         }
@@ -71,7 +71,7 @@ class OnboardingFragment : Fragment(R.layout.fragment_onboarding) {
     private fun showStaticContentBackground(sliderContentPage: SliderContentPage) {
         binding?.let {
             with(it.sliderFadeInOut) {
-                showSliderAnimation(isImageSliding = false, isTextSliding = true)
+                showSliderAnimation(isImageSliding = false, isTextSliding = false)
                 showStaticBackground(sliderContentPage)
             }
         }
