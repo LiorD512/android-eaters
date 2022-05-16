@@ -30,6 +30,7 @@ import com.bupp.wood_spoon_eaters.bottom_sheets.support_center.SupportViewModel
 import com.bupp.wood_spoon_eaters.custom_views.cuisine_chooser.CuisineChooserViewModel
 import com.bupp.wood_spoon_eaters.experiments.PricingExperimentUseCase
 import com.bupp.wood_spoon_eaters.domain.FeatureFlagDynamicContentUseCase
+import com.bupp.wood_spoon_eaters.domain.GetOnboardingAppSettingsSlidesDelayUseCase
 import com.bupp.wood_spoon_eaters.domain.GetOnboardingSlideListUseCase
 import com.bupp.wood_spoon_eaters.domain.GetOnboardingVideoPathUseCase
 import com.bupp.wood_spoon_eaters.features.main.search.SearchViewModel
@@ -88,6 +89,7 @@ val appModule = module {
     single { FeatureFlagDynamicContentUseCase(get()) }
     single { GetOnboardingVideoPathUseCase(get()) }
     single { GetOnboardingSlideListUseCase() }
+    single { GetOnboardingAppSettingsSlidesDelayUseCase(get()) }
 
     //managers
     single { GlobalErrorManager() }
@@ -114,7 +116,7 @@ val appModule = module {
 
     //login
     viewModel { LoginViewModel(get(), get(), get(), get(), get(), get(), get()) }
-    viewModel { OnboardingViewModel(get(), get(), get(), get()) }
+    viewModel { OnboardingViewModel(get(), get(), get(), get(), get()) }
 
     //location
     viewModel { LocationAndAddressViewModel(get(), get(), get(), get(), get()) }

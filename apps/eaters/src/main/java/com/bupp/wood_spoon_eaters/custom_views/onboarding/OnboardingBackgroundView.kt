@@ -14,6 +14,7 @@ import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.coroutineScope
 import com.bupp.wood_spoon_eaters.databinding.ViewBackgroundOnboardingBinding
 import kotlinx.coroutines.*
+import kotlin.properties.Delegates
 
 data class SliderContentPage(
     val bgImageResources: Int,
@@ -34,7 +35,7 @@ class OnboardingBackgroundView @JvmOverloads constructor(
     private lateinit var scope: CoroutineScope
     private val job = Job()
     private var slideList: List<SliderContentPage> = emptyList()
-    private var flipSlideInterval = 6000L
+    private var flipSlideInterval by Delegates.notNull<Long>()
     private var parallaxShiftInterval = 80L
     private var showedSlideIndex = 0
 
@@ -122,6 +123,10 @@ class OnboardingBackgroundView @JvmOverloads constructor(
 
     fun setupSlideList(list: List<SliderContentPage>) {
         slideList = list
+    }
+
+    fun setupFlipSlideInterval(interval: Long) {
+        flipSlideInterval = interval
     }
 
     override fun onDetachedFromWindow() {

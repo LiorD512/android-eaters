@@ -38,6 +38,7 @@ class OnboardingFragment : Fragment(R.layout.fragment_onboarding) {
     private fun setupSliderView() {
         binding?.sliderFadeInOut?.let {
             it.registerLifecycleOwner(lifecycle)
+            it.setupFlipSlideInterval(viewModel.backgroundAnimationDelay)
             it.setupSlideList(viewModel.slideList)
         }
     }

@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.custom_views.onboarding.SliderContentPage
 import com.bupp.wood_spoon_eaters.domain.FeatureFlagDynamicContentUseCase
+import com.bupp.wood_spoon_eaters.domain.GetOnboardingAppSettingsSlidesDelayUseCase
 import com.bupp.wood_spoon_eaters.domain.GetOnboardingSlideListUseCase
 import com.bupp.wood_spoon_eaters.domain.GetOnboardingVideoPathUseCase
 import com.bupp.wood_spoon_eaters.domain.comon.execute
@@ -28,10 +29,12 @@ class OnboardingViewModel(
     private val featureFlagDynamicContentUseCase: FeatureFlagDynamicContentUseCase,
     private val getOnboardingVideoPathUseCase: GetOnboardingVideoPathUseCase,
     getOnboardingSlideListUseCase: GetOnboardingSlideListUseCase,
+    getOnboardingAppSettingsSlidesDelay: GetOnboardingAppSettingsSlidesDelayUseCase,
     private val eatersAnalyticsTracker: EatersAnalyticsTracker
 ) : ViewModel() {
 
     val slideList = getOnboardingSlideListUseCase.execute()
+    val backgroundAnimationDelay = getOnboardingAppSettingsSlidesDelay.execute()
 
     private var _featureFlagDynamicContentFlow = MutableStateFlow<OnboardingBackgroundViewState>(
         OnboardingBackgroundViewState.StaticContendBackground(slideList.first())

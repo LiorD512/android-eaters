@@ -114,3 +114,12 @@ fun AppSettingsRepository.getCloudinaryTransformations(): CloudinaryTransformati
     }
     return null
 }
+
+
+fun AppSettingsRepository.getOnboardingSlideDelay(): Double {
+//    for (settings in getSettings()) {
+//        if (settings.key == "mobile_onboarding_animation_delay")
+//            return ((settings.value!!) as BigDecimal).toDouble()
+//    }
+    return 0.0
+}
