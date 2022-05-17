@@ -69,7 +69,7 @@
                     android:shadowRadius="4"
                     android:text="@string/text_title_onboarding_2"
                     android:textColor="#ffffff"
-                    android:textSize="30sp"
+                    android:textSize="28.8sp"
                     android:textStyle="normal" />
 
             <com.google.android.material.textview.MaterialTextView
@@ -82,7 +82,7 @@
                     android:fontFamily="@font/lato_reg"
                     android:gravity="center_horizontal"
                     android:letterSpacing="0.03"
-                    android:lineSpacingExtra="6sp"
+                    android:lineSpacingExtra="5.8sp"
                     android:text="@string/text_description_onboarding_2"
                     android:textColor="#ffffff"
                     android:textSize="18sp"
