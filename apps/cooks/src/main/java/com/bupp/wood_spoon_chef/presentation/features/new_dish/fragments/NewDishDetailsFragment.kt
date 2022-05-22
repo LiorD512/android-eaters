@@ -35,7 +35,6 @@ class NewDishDetailsFragment : BaseFragment(R.layout.fragment_new_dish_details),
             newDishDetailsNext.setOnClickListener {
                 if (allFieldsValid()) {
                     saveCurrentStep()
-                    Log.d("wow", "wow")
                 }
             }
             newDishDetailsBack.setOnClickListener {
@@ -81,14 +80,14 @@ class NewDishDetailsFragment : BaseFragment(R.layout.fragment_new_dish_details),
 
 
     private fun initObservers() {
-        viewModel.curDishLiveData.observe(viewLifecycleOwner, {
+        viewModel.curDishLiveData.observe(viewLifecycleOwner) {
             loadUnSavedData(it)
-        })
-        viewModel.saveDraftEvent.observe(viewLifecycleOwner, {
+        }
+        viewModel.saveDraftEvent.observe(viewLifecycleOwner) {
             it.getContentIfNotHandled()?.let {
                 saveCurrentStep(true)
             }
-        })
+        }
     }
 
     private fun allFieldsValid(): Boolean {

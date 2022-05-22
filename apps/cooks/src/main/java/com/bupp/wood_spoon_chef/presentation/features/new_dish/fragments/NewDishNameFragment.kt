@@ -36,9 +36,9 @@ class NewDishNameFragment : BaseFragment(R.layout.fragment_new_dish_name) {
     }
 
     private fun initObservers() {
-        viewModel.curDishLiveData.observe(viewLifecycleOwner, {
+        viewModel.curDishLiveData.observe(viewLifecycleOwner) {
             loadUnSavedData(it)
-        })
+        }
     }
 
     private fun allFieldsValid(): Boolean {

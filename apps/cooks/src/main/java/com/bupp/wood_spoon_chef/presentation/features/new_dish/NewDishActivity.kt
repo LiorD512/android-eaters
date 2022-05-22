@@ -15,8 +15,10 @@ import com.bupp.wood_spoon_chef.data.remote.network.base.CustomError
 import com.bupp.wood_spoon_chef.utils.media_utils.MediaUtils
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class NewDishActivity : BaseActivity(), SaveAsDraftBottomSheet.SaveAsDraftListener,
-    DiscardDishBottomSheet.DiscardDishListener, DishUpdatedDialog.DishUpdateListener,
+class NewDishActivity : BaseActivity(),
+    SaveAsDraftBottomSheet.SaveAsDraftListener,
+    DiscardDishBottomSheet.DiscardDishListener,
+    DishUpdatedDialog.DishUpdateListener,
     MediaUtils.MediaUtilListener {
 
     val viewModel by viewModel<NewDishViewModel>()
@@ -57,7 +59,7 @@ class NewDishActivity : BaseActivity(), SaveAsDraftBottomSheet.SaveAsDraftListen
     }
 
     private fun initObservers() {
-        viewModel.navigationEvent.observe(this, {
+        viewModel.navigationEvent.observe(this) {
             when (it) {
                 NewDishViewModel.NavigationEventType.NAME_TO_DETAILS -> {
                     binding!!.newDishActFeaturePb.nextStep()
@@ -82,14 +84,14 @@ class NewDishActivity : BaseActivity(), SaveAsDraftBottomSheet.SaveAsDraftListen
                 }
                 else -> {}
             }
-        })
-        viewModel.newDishDoneDialogEvent.observe(this, {
+        }
+        viewModel.newDishDoneDialogEvent.observe(this) {
             it?.let {
                 val dialog = DishUpdatedDialog.newInstance(it.title, it.body)
                 dialog.show(supportFragmentManager, Constants.NEW_DISH_DONE_DIALOG)
             }
-        })
-        viewModel.dishStatusEvent.observe(this, {
+        }
+        viewModel.dishStatusEvent.observe(this) {
             if (it.isEdit) {
                 if (!it.isDraft) {
                     binding!!.newDishHeaderLayout.removeView(binding!!.newDishActDraft)
@@ -97,14 +99,14 @@ class NewDishActivity : BaseActivity(), SaveAsDraftBottomSheet.SaveAsDraftListen
             } else {
                 NewDishDialog().show(supportFragmentManager, Constants.NEW_DISH_DIALOG)
             }
-        })
-        viewModel.progressData.observe(this, {
+        }
+        viewModel.progressData.observe(this) {
             handleProgressBar(it)
-        })
-        viewModel.errorEvent.observe(this, {
+        }
+        viewModel.errorEvent.observe(this) {
             handleErrorEvent(it, binding?.root)
-        })
-        viewModel.navigationEvent.observe(this, {
+        }
+        viewModel.navigationEvent.observe(this) {
             when (it) {
                 NewDishViewModel.NavigationEventType.OPEN_VIDEO_CHOOSER_DIALOG -> {
                     mediaUtil.startVideoFetcher()
@@ -114,7 +116,7 @@ class NewDishActivity : BaseActivity(), SaveAsDraftBottomSheet.SaveAsDraftListen
                 }
                 else -> {}
             }
-        })
+        }
     }
 
     override fun onBackPressed() {
