@@ -1,4 +1,4 @@
-package com.bupp.wood_spoon_chef.managers
+package com.bupp.wood_spoon_chef.analytics
 
 import android.content.Context
 import android.os.Bundle

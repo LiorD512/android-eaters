@@ -6,7 +6,7 @@ import android.content.SharedPreferences
 import com.bupp.wood_spoon_chef.BuildConfig
 import com.bupp.wood_spoon_chef.common.Constants
 import com.bupp.wood_spoon_chef.presentation.features.splash.SplashActivity
-import com.bupp.wood_spoon_chef.managers.ChefAnalyticsTracker
+import com.bupp.wood_spoon_chef.analytics.ChefAnalyticsTracker
 import com.bupp.wood_spoon_chef.data.remote.model.Cook
 import com.bupp.wood_spoon_chef.utils.extensions.clearStack
 

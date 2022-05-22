@@ -1,6 +1,6 @@
 package com.bupp.wood_spoon_chef.data.repositories
 
-import com.bupp.wood_spoon_chef.managers.ChefAnalyticsTracker
+import com.bupp.wood_spoon_chef.analytics.ChefAnalyticsTracker
 import com.bupp.wood_spoon_chef.data.remote.model.AppSetting
 import com.bupp.wood_spoon_chef.data.remote.model.Price
 import timber.log.Timber

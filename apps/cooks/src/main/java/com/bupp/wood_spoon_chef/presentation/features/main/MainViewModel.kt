@@ -2,6 +2,11 @@ package com.bupp.wood_spoon_chef.presentation.features.main
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.bupp.wood_spoon_chef.analytics.ChefAnalyticsTracker
+import com.bupp.wood_spoon_chef.analytics.TrackedArea.Companion.BOTTOM_TABS
+import com.bupp.wood_spoon_chef.analytics.TrackedEvents
+import com.bupp.wood_spoon_chef.analytics.TrackedEvents.BottomTabs.CLICK_ON_BOTTOM_TAB_ORDERS
+import com.bupp.wood_spoon_chef.analytics.event.AnalyticsEvent
 import com.bupp.wood_spoon_chef.presentation.features.base.BaseViewModel
 import com.bupp.wood_spoon_chef.data.remote.model.CookingSlot
 import com.bupp.wood_spoon_chef.data.remote.network.ErrorManger
@@ -11,6 +16,7 @@ import com.bupp.wood_spoon_chef.data.repositories.CookingSlotRepository
 import com.bupp.wood_spoon_chef.data.repositories.MetaDataRepository
 import com.bupp.wood_spoon_chef.data.repositories.UserRepository
 import com.bupp.wood_spoon_chef.utils.UserSettings
+import io.shipbook.shipbooksdk.Log
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -28,7 +34,7 @@ class MainViewModel(
     val metaDataRepository: MetaDataRepository,
     val userRepository: UserRepository,
     private val cookingSlotRepository: CookingSlotRepository,
-    private val errorManger: ErrorManger
+    private val chefAnalyticsTracker: ChefAnalyticsTracker
 ) : BaseViewModel() {
 
     val navigationEvent: MutableLiveData<NavigationEventType> = MutableLiveData()
@@ -75,5 +81,11 @@ class MainViewModel(
 
     fun onHeaderSettingsClick() {
         navigationEvent.postValue(NavigationEventType.SCROLL_TO_LOGOUT)
+    }
+
+    fun trackBottomTabClick(analyticsEvent: AnalyticsEvent) {
+        if (analyticsEvent.trackedArea == BOTTOM_TABS) {
+            chefAnalyticsTracker.trackEvent(analyticsEvent.trackedEvent)
+        }
     }
 }

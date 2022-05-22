@@ -1,6 +1,9 @@
 package com.bupp.wood_spoon_chef.presentation.features.splash
 
 import androidx.lifecycle.viewModelScope
+import com.bupp.wood_spoon_chef.analytics.ChefAnalyticsTracker
+import com.bupp.wood_spoon_chef.analytics.TrackedArea
+import com.bupp.wood_spoon_chef.analytics.event.AnalyticsEvent
 import com.bupp.wood_spoon_chef.di.abs.LiveEventData
 import com.bupp.wood_spoon_chef.fcm.FcmManager
 import com.bupp.wood_spoon_chef.presentation.features.base.BaseViewModel
@@ -11,7 +14,8 @@ import kotlinx.coroutines.launch
 class SplashViewModel(
     private val userRepository: UserRepository,
     private val metaDataRepository: MetaDataRepository,
-    private val deviceDetailsManager: FcmManager
+    private val deviceDetailsManager: FcmManager,
+    private val chefAnalyticsTracker: ChefAnalyticsTracker
 ) : BaseViewModel() {
 
     val splashEvent: LiveEventData<SplashEventType> = LiveEventData()
@@ -66,7 +70,11 @@ class SplashViewModel(
         }
     }
 
-
+    fun trackAnalyticsEvent(analyticsEvent: AnalyticsEvent) {
+        if (analyticsEvent.trackedArea == TrackedArea.ONBOARDING) {
+            chefAnalyticsTracker.trackEvent(analyticsEvent.trackedEvent)
+        }
+    }
 }
 
 

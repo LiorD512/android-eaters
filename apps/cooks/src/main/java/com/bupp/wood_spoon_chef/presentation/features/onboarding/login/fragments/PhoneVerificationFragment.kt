@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import com.bupp.wood_spoon_chef.R
+import com.bupp.wood_spoon_chef.analytics.event.phone_number_verification.PhoneNumberVerificationOnNextClickEvent
 import com.bupp.wood_spoon_chef.common.Constants
 import com.bupp.wood_spoon_chef.databinding.FragmentPhoneVerificationBinding
 import com.bupp.wood_spoon_chef.presentation.dialogs.web_docs.WebDocsDialog
@@ -19,8 +20,8 @@ import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 
 class PhoneVerificationFragment : BaseFragment(R.layout.fragment_phone_verification),
-    CountryCodeChooserBottomSheet.CountryCodeListener, WSEditText.WSEditTextListener {
-
+    CountryCodeChooserBottomSheet.CountryCodeListener,
+    WSEditText.WSEditTextListener {
 
     var binding: FragmentPhoneVerificationBinding? = null
     private val viewModel: LoginViewModel by sharedViewModel()
@@ -28,27 +29,28 @@ class PhoneVerificationFragment : BaseFragment(R.layout.fragment_phone_verificat
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentPhoneVerificationBinding.bind(view)
-
-
         initUi()
         initObservers()
     }
 
     private fun initObservers() {
-        viewModel.phoneFieldErrorEvent.observe(viewLifecycleOwner, { event ->
+        viewModel.phoneFieldErrorEvent.observe(viewLifecycleOwner) { event ->
             event.getContentIfNotHandled()?.let { it ->
                 if (it) {
                     binding?.verificationFragmentInput?.showError()
+                    viewModel.trackAnalyticsEvent(PhoneNumberVerificationOnNextClickEvent(
+                        isSuccess = false)
+                    )
                 }
             }
-        })
-        viewModel.countryCodeEvent.observe(viewLifecycleOwner, {
+        }
+        viewModel.countryCodeEvent.observe(viewLifecycleOwner) {
             viewModel.setUserPhonePrefix("${it.country_code}")
             binding?.apply {
                 verificationFragmentInput.setPrefix("+${it.country_code}  ")
                 verificationFragFlag.text = it.flag
             }
-        })
+        }
     }
 
     private fun initUi() {
@@ -122,9 +124,5 @@ class PhoneVerificationFragment : BaseFragment(R.layout.fragment_phone_verificat
 
     override fun clearClassVariables() {
         binding = null
-    }
-
-    companion object {
-        const val TAG = "wowPhoneVerification"
     }
 }

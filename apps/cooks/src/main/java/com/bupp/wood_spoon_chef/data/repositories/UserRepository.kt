@@ -3,7 +3,7 @@ package com.bupp.wood_spoon_chef.data.repositories
 import androidx.lifecycle.MutableLiveData
 import com.bupp.wood_spoon_chef.common.Constants
 import com.bupp.wood_spoon_chef.data.local.MemoryDataSource
-import com.bupp.wood_spoon_chef.managers.ChefAnalyticsTracker
+import com.bupp.wood_spoon_chef.analytics.ChefAnalyticsTracker
 import com.bupp.wood_spoon_chef.data.remote.model.Cook
 import com.bupp.wood_spoon_chef.data.remote.model.CookRequest
 import com.bupp.wood_spoon_chef.data.remote.network.ApiService
@@ -89,8 +89,7 @@ class UserRepository(
     suspend fun updateCook(cook: CookRequest): ResponseResult<Cook> {
         val result = postMe(cook)
         if (result is ResponseSuccess) {
-            val cook = result.data
-            saveCurrentChef(cook)
+            saveCurrentChef(result.data)
         }
         return result
     }

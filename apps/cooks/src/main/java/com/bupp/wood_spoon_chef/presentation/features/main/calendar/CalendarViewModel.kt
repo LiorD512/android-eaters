@@ -2,6 +2,9 @@ package com.bupp.wood_spoon_chef.presentation.features.main.calendar
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.bupp.wood_spoon_chef.analytics.ChefAnalyticsTracker
+import com.bupp.wood_spoon_chef.analytics.TrackedArea
+import com.bupp.wood_spoon_chef.analytics.event.AnalyticsEvent
 import com.bupp.wood_spoon_chef.data.remote.model.CookingSlotSlim
 import com.bupp.wood_spoon_chef.data.remote.network.base.ResponseError
 import com.bupp.wood_spoon_chef.data.remote.network.base.ResponseResult
@@ -21,7 +24,8 @@ import kotlin.collections.HashMap
 
 class CalendarViewModel(
     private val userRepository: UserRepository,
-    private val cookingSlotRepository: CookingSlotRepository
+    private val cookingSlotRepository: CookingSlotRepository,
+    private val chefAnalyticsTracker: ChefAnalyticsTracker
 ) : BaseViewModel() {
 
     private val _selectedDateFlow = userRepository.getLastSelectedCalendarDateFlow()
@@ -145,6 +149,12 @@ class CalendarViewModel(
             ResponseSuccess(
                 calendarEventsLaveData.value?.get(DateTime(firstDayOfMonth).monthOfYearAsShortText())
             )
+        }
+    }
+
+    fun trackAnalyticsEvent(analyticsEvent: AnalyticsEvent) {
+        if (analyticsEvent.trackedArea == TrackedArea.CALENDAR) {
+            chefAnalyticsTracker.trackEvent(analyticsEvent.trackedEvent)
         }
     }
 }

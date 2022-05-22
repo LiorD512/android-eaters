@@ -5,6 +5,7 @@ import android.os.Bundle
 import androidx.navigation.findNavController
 import com.bupp.wood_spoon_chef.BuildConfig
 import com.bupp.wood_spoon_chef.R
+import com.bupp.wood_spoon_chef.analytics.event.phone_number_verification.PhoneNumberVerificationOnNextClickEvent
 import com.bupp.wood_spoon_chef.databinding.ActivityLoginBinding
 import com.bupp.wood_spoon_chef.presentation.features.base.BaseActivity
 import com.bupp.wood_spoon_chef.presentation.features.main.MainActivity
@@ -35,17 +36,20 @@ class LoginActivity : BaseActivity() {
     }
 
     private fun initObservers() {
-        viewModel.navigationEvent.observe(this, {
+        viewModel.navigationEvent.observe(this) {
             it?.let {
                 when (it) {
                     LoginViewModel.NavigationEventType.OPEN_CODE_SCREEN -> {
                         redirectToCodeVerification()
+                        viewModel.trackAnalyticsEvent(
+                            PhoneNumberVerificationOnNextClickEvent(
+                            isSuccess = true)
+                        )
                     }
                     LoginViewModel.NavigationEventType.START_CREATE_ACCOUNT_ACTIVITY -> {
                         redirectToCreateAccount()
                     }
                     LoginViewModel.NavigationEventType.CODE_RESENT -> {
-//                        Toast.makeText(this, "Code sent!", Toast.LENGTH_SHORT).show()
                     }
                     LoginViewModel.NavigationEventType.OPEN_MAIN_ACT -> {
                         val intent = Intent(this, MainActivity::class.java)
@@ -55,11 +59,11 @@ class LoginActivity : BaseActivity() {
                     else -> {}
                 }
             }
-        })
+        }
 
-        viewModel.errorEvent.observe(this, {
+        viewModel.errorEvent.observe(this) {
             handleErrorEvent(it, binding.root)
-        })
+        }
 
         viewModel.progressData.observe(this, {
             handleProgressBar(it)

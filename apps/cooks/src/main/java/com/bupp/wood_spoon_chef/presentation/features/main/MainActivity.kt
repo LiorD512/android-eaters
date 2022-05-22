@@ -8,6 +8,7 @@ import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.navigation.findNavController
 import com.bupp.wood_spoon_chef.R
+import com.bupp.wood_spoon_chef.analytics.event.bottomTab.*
 import com.bupp.wood_spoon_chef.common.Constants
 import com.bupp.wood_spoon_chef.common.navigateToCallApp
 import com.bupp.wood_spoon_chef.common.navigateToSMSApp
@@ -190,6 +191,7 @@ class MainActivity : BaseActivity(),
         if (!viewModel.isChefPending()) {
             with(binding) {
                 mainActBottomView.selectTab(Constants.BOTTOM_VIEW_ORDERS)
+                viewModel.trackBottomTabClick(BottomTabOrdersEvent())
             }
         }
     }
@@ -198,6 +200,8 @@ class MainActivity : BaseActivity(),
         if (!viewModel.isChefPending()) {
             with(binding) {
                 mainActBottomView.selectTab(Constants.BOTTOM_VIEW_CALENDER, cookingSlot)
+                viewModel.trackBottomTabClick(BottomTabCalendarEvent())
+
             }
         }
     }
@@ -205,6 +209,7 @@ class MainActivity : BaseActivity(),
     override fun onDishesClick() {
         with(binding) {
             mainActBottomView.selectTab(Constants.BOTTOM_VIEW_DISHES)
+            viewModel.trackBottomTabClick(BottomTabDishesEvent())
         }
     }
 
@@ -212,6 +217,7 @@ class MainActivity : BaseActivity(),
         if (!viewModel.isChefPending()) {
             with(binding) {
                 mainActBottomView.selectTab(Constants.BOTTOM_VIEW_EARNINGS)
+                viewModel.trackBottomTabClick(BottomTabEarningsEvent())
             }
         }
     }
@@ -219,6 +225,7 @@ class MainActivity : BaseActivity(),
     override fun onProfileClick() {
         with(binding) {
             mainActBottomView.selectTab(Constants.BOTTOM_VIEW_PROFILE)
+            viewModel.trackBottomTabClick(BottomTabAccountEvent())
         }
     }
 

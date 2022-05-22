@@ -12,6 +12,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bupp.wood_spoon_chef.R
+import com.bupp.wood_spoon_chef.analytics.event.dishes.*
 import com.bupp.wood_spoon_chef.common.Constants
 import com.bupp.wood_spoon_chef.presentation.custom_views.HeaderView
 import com.bupp.wood_spoon_chef.presentation.custom_views.SimpleTextWatcher
@@ -28,9 +29,12 @@ import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 
 class MyDishesFragment : BaseFragment(R.layout.fragment_my_dishes),
-    DishUpdatedDialog.DishUpdateListener, MyDishesAdapter.MyDishesAdapterListener,
-    HideDishDialog.HideDishDialogListener, WelcomeDialog.WelcomeDialogListener,
-    MyDishItemMenuBottomSheet.DishChooserListener, HeaderView.HeaderViewListener {
+    DishUpdatedDialog.DishUpdateListener,
+    MyDishesAdapter.MyDishesAdapterListener,
+    HideDishDialog.HideDishDialogListener,
+    WelcomeDialog.WelcomeDialogListener,
+    MyDishItemMenuBottomSheet.DishChooserListener,
+    HeaderView.HeaderViewListener {
 
     //activityForResult
     private val afterNewDishResult =
@@ -65,6 +69,9 @@ class MyDishesFragment : BaseFragment(R.layout.fragment_my_dishes),
                     viewModel.filterList(s.toString())
                 }
             })
+            myDishesFragSearchInput.setOnClickListener {
+                viewModel.trackAnalyticsEvent(DishesClickOnSearchInputEvent())
+            }
 
             myDishesFragList.layoutManager = LinearLayoutManager(context)
             adapter = MyDishesAdapter(requireContext(), this@MyDishesFragment)
@@ -74,10 +81,10 @@ class MyDishesFragment : BaseFragment(R.layout.fragment_my_dishes),
     }
 
     private fun initObservers() {
-        viewModel.progressData.observe(viewLifecycleOwner, {
+        viewModel.progressData.observe(viewLifecycleOwner) {
             handleProgressBar(it)
-        })
-        viewModel.getDishesEvent.observe(viewLifecycleOwner, { event ->
+        }
+        viewModel.getDishesEvent.observe(viewLifecycleOwner) { event ->
             event?.let {
                 if (it.isEmpty()) {
                     loadEmptyList()
@@ -85,8 +92,8 @@ class MyDishesFragment : BaseFragment(R.layout.fragment_my_dishes),
                     loadMyDishes(it)
                 }
             }
-        })
-        viewModel.filterDishesEvent.observe(viewLifecycleOwner, { event ->
+        }
+        viewModel.filterDishesEvent.observe(viewLifecycleOwner) { event ->
             event?.let {
                 if (it.isEmpty()) {
                     loadFilterEmptyList()
@@ -94,20 +101,20 @@ class MyDishesFragment : BaseFragment(R.layout.fragment_my_dishes),
                     loadMyDishes(it)
                 }
             }
-        })
-        viewModel.itemMenuEvent.observe(viewLifecycleOwner, { event ->
+        }
+        viewModel.itemMenuEvent.observe(viewLifecycleOwner) { event ->
             event.getContentIfNotHandled()?.let {
                 val dishChooserDialog = MyDishItemMenuBottomSheet.newInstance(it.status)
                 dishChooserDialog.show(childFragmentManager, Constants.DISH_CHOOSER_DIALOG_TAG)
             }
-        })
-        viewModel.dishUpdateEvent.observe(viewLifecycleOwner, {
+        }
+        viewModel.dishUpdateEvent.observe(viewLifecycleOwner) {
             it.getContentIfNotHandled()?.let { event ->
                 DishUpdatedDialog.newInstance(event.title, event.body)
                     .show(childFragmentManager, Constants.NEW_DISH_DONE_DIALOG)
             }
-        })
-        viewModel.editDishEvent.observe(viewLifecycleOwner, { event ->
+        }
+        viewModel.editDishEvent.observe(viewLifecycleOwner) { event ->
             event?.getContentIfNotHandled()?.let {
                 afterNewDishResult.launch(
                     Intent(
@@ -116,10 +123,10 @@ class MyDishesFragment : BaseFragment(R.layout.fragment_my_dishes),
                     ).putExtra(NewDishActivity.EDIT_DISH_PARAM, it)
                 )
             }
-        })
-        viewModel.errorEvent.observe(viewLifecycleOwner, {
+        }
+        viewModel.errorEvent.observe(viewLifecycleOwner) {
             handleErrorEvent(it, binding?.root)
-        })
+        }
     }
 
     private fun loadMyDishes(dishes: List<Dish>?) {
@@ -138,7 +145,11 @@ class MyDishesFragment : BaseFragment(R.layout.fragment_my_dishes),
             myDishesFragName.text = viewModel.getGreetingsText()
             myDishesFragDishesLayout.visibility = GONE
             myDishesFragEmptyLayout.visibility = VISIBLE
-            myDishesFragAddDish.setOnClickListener { addNewDish() }
+
+            myDishesFragAddDish.setOnClickListener {
+                viewModel.trackAnalyticsEvent(DishesClickOnCreateDishButtonEvent())
+                addNewDish()
+            }
         }
     }
 
@@ -187,19 +198,23 @@ class MyDishesFragment : BaseFragment(R.layout.fragment_my_dishes),
         when (result) {
             Constants.DISH_CHOOSER_EDIT -> {
                 viewModel.onEditDishClick()
+                viewModel.trackAnalyticsEvent(DishesClickOnItemMenuEditEvent())
             }
             Constants.DISH_CHOOSER_HIDE -> {
                 val hideDishDialog = HideDishDialog(this)
                 hideDishDialog.show(childFragmentManager, Constants.HIDE_DISH_DIALOG_TAG)
+                viewModel.trackAnalyticsEvent(DishesClickOnItemMenuDeleteEvent())
             }
             Constants.DISH_CHOOSER_ACTIVATE -> {
                 viewModel.publishDish()
             }
             Constants.DISH_CHOOSER_UNPUBLISH -> {
                 viewModel.unPublishDish()
+                viewModel.trackAnalyticsEvent(DishesClickOnItemMenuUnpublishEvent())
             }
             Constants.DISH_CHOOSER_DUPLICATE -> {
                 viewModel.duplicateDish()
+                viewModel.trackAnalyticsEvent(DishesClickOnItemMenuDuplicateEvent())
             }
         }
     }

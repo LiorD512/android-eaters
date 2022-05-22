@@ -2,6 +2,10 @@ package com.bupp.wood_spoon_chef.presentation.features.onboarding.login
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.bupp.wood_spoon_chef.analytics.ChefAnalyticsTracker
+import com.bupp.wood_spoon_chef.analytics.TrackedArea
+import com.bupp.wood_spoon_chef.analytics.event.AnalyticsEvent
+import com.bupp.wood_spoon_chef.analytics.event.phone_number_verification.PhoneNumberVerificationOnNextClickEvent
 import com.bupp.wood_spoon_chef.common.MTLogger
 import com.bupp.wood_spoon_chef.di.abs.LiveEventData
 import com.bupp.wood_spoon_chef.presentation.features.base.BaseViewModel
@@ -15,7 +19,8 @@ import kotlinx.coroutines.launch
 
 class LoginViewModel(
     private val userRepository: UserRepository,
-    private val metaDataRepository: MetaDataRepository
+    private val metaDataRepository: MetaDataRepository,
+    private val chefAnalyticsTracker: ChefAnalyticsTracker
 ) : BaseViewModel() {
 
     var phone: String? = null
@@ -145,8 +150,18 @@ class LoginViewModel(
         }
     }
 
-    companion object {
-        const val TAG = "wowLoginVM"
+    fun trackAnalyticsEvent(analyticsEvent: AnalyticsEvent) {
+        if (analyticsEvent.trackedArea == TrackedArea.PHONE_VERIFICATION) {
+            when (analyticsEvent) {
+                is PhoneNumberVerificationOnNextClickEvent -> {
+                    chefAnalyticsTracker.trackEvent(
+                        analyticsEvent.trackedEvent, mapOf(
+                            "success" to analyticsEvent.isSuccess
+                        )
+                    )
+                }
+            }
+        }
     }
 
 }

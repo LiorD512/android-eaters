@@ -2,6 +2,9 @@ package com.bupp.wood_spoon_chef.presentation.features.main.my_dishes
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.bupp.wood_spoon_chef.analytics.ChefAnalyticsTracker
+import com.bupp.wood_spoon_chef.analytics.TrackedArea
+import com.bupp.wood_spoon_chef.analytics.event.AnalyticsEvent
 import com.bupp.wood_spoon_chef.di.abs.LiveEventData
 import com.bupp.wood_spoon_chef.presentation.features.base.BaseViewModel
 import com.bupp.wood_spoon_chef.data.remote.model.Dish
@@ -14,19 +17,30 @@ import com.bupp.wood_spoon_chef.data.repositories.UserRepository
 import com.bupp.wood_spoon_chef.utils.UserSettings
 import kotlinx.coroutines.launch
 
+data class NewDishDoneDialogData(
+    val title: String,
+    val body: String? = null
+)
+
+data class ItemMenuData(
+    val status: DishStatus?
+    )
+
 class MyDishesViewModel(
     val settings: UserSettings,
     private val userRepository: UserRepository,
-    private val dishRepository: DishRepository
+    private val dishRepository: DishRepository,
+    private val chefAnalyticsTracker: ChefAnalyticsTracker
 ) : BaseViewModel() {
 
     private var currentSelectedDish: Dish? = null
 
     val dishUpdateEvent = LiveEventData<NewDishDoneDialogData>()
     val editDishEvent = LiveEventData<Long?>()
-
     val getDishesEvent: MutableLiveData<List<Dish>?> = MutableLiveData()
     val filterDishesEvent: MutableLiveData<List<Dish>?> = MutableLiveData()
+    val itemMenuEvent = LiveEventData<ItemMenuData>()
+
     fun getMyDishes() {
         progressData.startProgress()
         viewModelScope.launch {
@@ -42,7 +56,6 @@ class MyDishesViewModel(
         progressData.endProgress()
     }
 
-
     fun filterList(input: String) {
         filterDishesEvent.postValue(dishRepository.filterDishes(input))
     }
@@ -52,10 +65,6 @@ class MyDishesViewModel(
         return "Hey $name"
     }
 
-    //Menu methods
-    data class ItemMenuData(val status: DishStatus?)
-
-    val itemMenuEvent = LiveEventData<ItemMenuData>()
     fun onItemMenuClick(selectedDish: Dish?) {
         this.currentSelectedDish = selectedDish
         itemMenuEvent.postRawValue(ItemMenuData(selectedDish?.status))
@@ -135,9 +144,6 @@ class MyDishesViewModel(
         }
     }
 
-
-    data class NewDishDoneDialogData(val title: String, val body: String? = null)
-
     private fun getDoneDialogData(status: DishUpdatedDialogStatus): NewDishDoneDialogData {
         return when (status) {
             DishUpdatedDialogStatus.DRAFT_PUBLISH -> {
@@ -158,8 +164,10 @@ class MyDishesViewModel(
         }
     }
 
-    companion object {
-        const val TAG = "wowMyDishesVM"
+    fun trackAnalyticsEvent(analyticsEvent: AnalyticsEvent) {
+        if (analyticsEvent.trackedArea == TrackedArea.DISHES) {
+            chefAnalyticsTracker.trackEvent(analyticsEvent.trackedEvent)
+        }
     }
 
 }

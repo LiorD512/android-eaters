@@ -439,7 +439,6 @@ class NewDishViewModel(
             viewModelScope.launch {
                 when (val response = dishRepo.getDishById(editDishId)) {
                     is ResponseSuccess -> {
-                        Log.d(LoginViewModel.TAG, "GetDishesEvent - Success")
                         val dish = response.data
                         dish?.let {
                             this@NewDishViewModel.dishRequest = it.toDishRequest()

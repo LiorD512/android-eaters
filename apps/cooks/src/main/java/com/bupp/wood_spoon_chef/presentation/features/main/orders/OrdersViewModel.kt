@@ -2,24 +2,38 @@ package com.bupp.wood_spoon_chef.presentation.features.main.orders
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.bupp.wood_spoon_chef.analytics.ChefAnalyticsTracker
+import com.bupp.wood_spoon_chef.analytics.TrackedArea
+import com.bupp.wood_spoon_chef.analytics.TrackedEvents
+import com.bupp.wood_spoon_chef.analytics.event.AnalyticsEvent
 import com.bupp.wood_spoon_chef.presentation.features.base.BaseViewModel
 import com.bupp.wood_spoon_chef.data.remote.model.CookingSlot
+import com.bupp.wood_spoon_chef.data.remote.model.DishPricing
 import com.bupp.wood_spoon_chef.data.remote.network.base.ResponseError
 import com.bupp.wood_spoon_chef.data.remote.network.base.ResponseSuccess
 import com.bupp.wood_spoon_chef.data.repositories.CookingSlotRepository
 import com.bupp.wood_spoon_chef.data.repositories.UserRepository
 import com.bupp.wood_spoon_chef.utils.DateUtils
+import io.shipbook.shipbooksdk.Log
 import kotlinx.coroutines.launch
+
+data class ApiOrdersEvent(
+    val isSuccess: Boolean,
+    val cookingSlots: List<CookingSlot>? = null
+)
+
+data class CancelCookingSlotEvent(
+    val isSuccess: Boolean = true
+)
 
 class OrdersViewModel(
     val userRepository: UserRepository,
-    private val cookingSlotRepository: CookingSlotRepository
+    private val cookingSlotRepository: CookingSlotRepository,
+    private val chefAnalyticsTracker: ChefAnalyticsTracker
 ) : BaseViewModel() {
 
     val getCookingSlotEvent: MutableLiveData<ApiOrdersEvent> = MutableLiveData()
-
-    data class ApiOrdersEvent(val isSuccess: Boolean, val cookingSlots: List<CookingSlot>? = null)
-
+    val cancelCookingSlotEvent: MutableLiveData<CancelCookingSlotEvent> = MutableLiveData()
 
     fun getTraceableCookingSlots() {
         viewModelScope.launch {
@@ -44,9 +58,6 @@ class OrdersViewModel(
         return "$text \n $inviteUrl"
     }
 
-    data class CancelCookingSlotEvent(val isSuccess: Boolean = true)
-
-    val cancelCookingSlotEvent: MutableLiveData<CancelCookingSlotEvent> = MutableLiveData()
     fun cancelCookingSlot(cookingSlotId: Long) {
         viewModelScope.launch {
             progressData.startProgress()
@@ -67,9 +78,9 @@ class OrdersViewModel(
         return "Hey ${userRepository.getUserData().value?.firstName}"
     }
 
-
-    companion object {
-        const val TAG = "wowOrdersVM"
+    fun trackAnalyticsEvent(analyticsEvent: AnalyticsEvent) {
+        if (analyticsEvent.trackedArea == TrackedArea.ORDERS) {
+            chefAnalyticsTracker.trackEvent(analyticsEvent.trackedEvent)
+        }
     }
-
 }

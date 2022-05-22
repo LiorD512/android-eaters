@@ -21,7 +21,6 @@ class SingleDishViewModel(private val dishRepository: DishRepository, private va
         viewModelScope.launch {
             when (val response = dishRepository.getDishById(dishId)) {
                 is ResponseSuccess -> {
-                    Log.d(LoginViewModel.TAG, "GetDishesEvent - Success")
                     val dish = response.data
                     dish?.let {
                         getDishEvent.postValue(dish)

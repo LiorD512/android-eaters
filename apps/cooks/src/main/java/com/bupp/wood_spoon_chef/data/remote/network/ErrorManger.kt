@@ -1,7 +1,7 @@
 package com.bupp.wood_spoon_chef.data.remote.network
 
 import com.bupp.wood_spoon_chef.data.remote.network.base.*
-import com.bupp.wood_spoon_chef.managers.ChefAnalyticsTracker
+import com.bupp.wood_spoon_chef.analytics.ChefAnalyticsTracker
 
 class ErrorManger(private val chefAnalyticsTracker: ChefAnalyticsTracker) {
 

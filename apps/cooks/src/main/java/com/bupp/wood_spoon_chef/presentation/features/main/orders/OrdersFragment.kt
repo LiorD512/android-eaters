@@ -7,6 +7,7 @@ import android.widget.Toast
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bupp.wood_spoon_chef.R
+import com.bupp.wood_spoon_chef.analytics.event.orders.*
 import com.bupp.wood_spoon_chef.common.Constants
 import com.bupp.wood_spoon_chef.databinding.FragmentOrdersBinding
 import com.bupp.wood_spoon_chef.presentation.features.base.BaseFragment
@@ -32,6 +33,7 @@ class OrdersFragment : BaseFragment(R.layout.fragment_orders),
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        viewModel.trackAnalyticsEvent(OrdersScreenOpenedEvent())
 
         binding = FragmentOrdersBinding.bind(view)
 
@@ -45,6 +47,7 @@ class OrdersFragment : BaseFragment(R.layout.fragment_orders),
         binding?.apply {
             ordersFragCalendar.setOnClickListener {
                 (activity as MainActivity).onCalenderClick()
+                viewModel.trackAnalyticsEvent(OrdersEmptyListClickOnCalendarEvent())
             }
         }
     }
@@ -89,8 +92,10 @@ class OrdersFragment : BaseFragment(R.layout.fragment_orders),
     private fun handleData(cookingSlots: List<CookingSlot>) {
         if (cookingSlots.isNotEmpty()) {
             showCookingSlotsList(cookingSlots)
+            viewModel.trackAnalyticsEvent(OrdersListOpenedEvent())
         } else {
             showEmptyLayout()
+            viewModel.trackAnalyticsEvent(OrdersEmptyListOpenedEvent())
         }
     }
 
@@ -115,6 +120,8 @@ class OrdersFragment : BaseFragment(R.layout.fragment_orders),
     }
 
     override fun onCookingSlotClicked(cookingSlot: CookingSlot) {
+        viewModel.trackAnalyticsEvent(OrdersClickOnItemEvent())
+
         findNavController().apply {
             val action = OrdersFragmentDirections.actionOrderFragmentToOrderDetailsFragment(
                 ArgumentModelOrderDetails(argCookingSlot = cookingSlot)
@@ -139,20 +146,24 @@ class OrdersFragment : BaseFragment(R.layout.fragment_orders),
     override fun onCookingSlotShareClick(cookingSlot: CookingSlot) {
         val text = viewModel.getShareText(cookingSlot)
         Utils.shareText(requireActivity(), text)
+        viewModel.trackAnalyticsEvent(OrdersClickOnItemShareEvent())
     }
 
     override fun onCookingSlotMenuClick(cookingSlot: CookingSlot) {
         val cookingSlotChooserDialog = CookingSlotChooserDialog(cookingSlot, this)
         cookingSlotChooserDialog.show(childFragmentManager, Constants.COOKING_SLOT_CHOOSER_TAG)
+        viewModel.trackAnalyticsEvent(OrdersClickOnItemMenuEvent())
     }
 
     override fun onCancelCookingSlot(cookingSlot: CookingSlot) {
         this.lastClickedCookingSlot = cookingSlot
         viewModel.cancelCookingSlot(cookingSlot.id)
+        viewModel.trackAnalyticsEvent(OrdersClickOnItemMenuCancelSlotEvent())
     }
 
     override fun onEditCookingSlot(cookingSlot: CookingSlot) {
         (activity as MainActivity).startEditCookingSlot(cookingSlot)
+        viewModel.trackAnalyticsEvent(OrdersClickOnItemMenuEditSlotEvent())
     }
 
     override fun clearClassVariables() {

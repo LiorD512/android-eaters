@@ -1,7 +1,7 @@
 package com.bupp.wood_spoon_chef.data.repositories
 
 import com.bupp.wood_spoon_chef.common.Constants
-import com.bupp.wood_spoon_chef.managers.ChefAnalyticsTracker
+import com.bupp.wood_spoon_chef.analytics.ChefAnalyticsTracker
 import com.bupp.wood_spoon_chef.data.remote.model.Dish
 import com.bupp.wood_spoon_chef.data.remote.model.DishRequest
 import com.bupp.wood_spoon_chef.data.remote.network.ApiService

@@ -36,13 +36,13 @@ class CodeFragment : BaseFragment(R.layout.fragment_code) {
     }
 
     private fun initObservers() {
-        viewModel.emptyCodeEvent.observe(viewLifecycleOwner, { event ->
+        viewModel.emptyCodeEvent.observe(viewLifecycleOwner) { event ->
             event.getContentIfNotHandled()?.let { empty ->
                 if (empty) {
                     binding?.codeFragInputError?.visibility = View.VISIBLE
                 }
             }
-        })
+        }
     }
 
     private fun initUi() {

@@ -25,7 +25,7 @@ import com.bupp.wood_spoon_chef.presentation.features.new_dish.NewDishViewModel
 import com.bupp.wood_spoon_chef.presentation.features.onboarding.create_account.CreateAccountViewModel
 import com.bupp.wood_spoon_chef.presentation.features.onboarding.login.LoginViewModel
 import com.bupp.wood_spoon_chef.presentation.features.splash.SplashViewModel
-import com.bupp.wood_spoon_chef.managers.ChefAnalyticsTracker
+import com.bupp.wood_spoon_chef.analytics.ChefAnalyticsTracker
 import com.bupp.wood_spoon_chef.managers.MediaUploadManager
 import com.bupp.wood_spoon_chef.data.remote.network.ErrorManger
 import com.bupp.wood_spoon_chef.data.remote.network.ResponseHandler
@@ -71,8 +71,8 @@ val appModule = module {
 
     //VIEW MODELS
     //splash and getCode
-    viewModel { SplashViewModel(get(), get(), get()) }
-    viewModel { LoginViewModel(get(), get()) }
+    viewModel { SplashViewModel(get(), get(), get(), get()) }
+    viewModel { LoginViewModel(get(), get(), get()) }
     viewModel { CreateAccountViewModel(get(), get(), get(), get()) }
     viewModel { UpdateRequiredViewModel(get()) }
     viewModel { SuperUserViewModel(get()) }
@@ -82,15 +82,15 @@ val appModule = module {
     viewModel { MainViewModel(get(), get(), get(), get(), get()) }
 
     //tabs
-    viewModel { MyDishesViewModel(get(), get(), get()) }
-    viewModel { OrdersViewModel(get(), get()) }
+    viewModel { MyDishesViewModel(get(), get(), get(), get()) }
+    viewModel { OrdersViewModel(get(), get(), get()) }
     viewModel { OrderDetailsViewModel(get(), get(), get(), get(), get()) }
 
     //new Dish
     viewModel { NewDishViewModel(get(), get(), get()) }
 
     //calendar
-    viewModel { CalendarViewModel(get(), get()) }
+    viewModel { CalendarViewModel(get(), get(), get()) }
 
     //calendar CookingSlotDetailsBottomSheet
     viewModel { CreateCookingSlotViewModel(get(), get()) }

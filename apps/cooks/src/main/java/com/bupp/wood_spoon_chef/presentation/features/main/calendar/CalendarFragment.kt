@@ -6,6 +6,8 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bupp.wood_spoon_chef.R
+import com.bupp.wood_spoon_chef.analytics.event.calendar.CalendarClickOnNeedHelpEvent
+import com.bupp.wood_spoon_chef.analytics.event.calendar.CalendarCreateCookingSlotEvent
 import com.bupp.wood_spoon_chef.common.Constants
 import com.bupp.wood_spoon_chef.presentation.custom_views.WowCalendarView
 import com.bupp.wood_spoon_chef.databinding.FragmentCalendarBinding
@@ -82,6 +84,7 @@ class CalendarFragment : BaseFragment(R.layout.fragment_calendar),
                 requireContext(), mutableListOf(), this@CalendarFragment
             )
             calendarSupportCenterButton.setOnClickListener {
+                viewModel.trackAnalyticsEvent(CalendarClickOnNeedHelpEvent())
                 SupportBottomSheet().show(childFragmentManager, Constants.SUPPORT_BOTTOM_SHEET)
             }
         }
@@ -123,6 +126,8 @@ class CalendarFragment : BaseFragment(R.layout.fragment_calendar),
     }
 
     override fun onCreateCookingSlotClick() {
+        viewModel.trackAnalyticsEvent(CalendarCreateCookingSlotEvent())
+
         selectedDate?.let {
             findNavController().apply {
                 val action =
