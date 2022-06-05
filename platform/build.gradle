@@ -1,0 +1,14 @@
+plugins {
+    id 'java-platform'
+}
+
+
+dependencies {
+    constraints {
+        def koin_version = '3.2.0'
+        api "io.insert-koin:koin-core:$koin_version"
+        api "io.insert-koin:koin-android:$koin_version"
+        api "io.insert-koin:koin-android-compat:$koin_version"
+        api "io.insert-koin:koin-androidx-workmanager:$koin_version"
+    }
+}

@@ -1,26 +1,17 @@
-apply plugin: 'com.android.application'
-apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-kapt'
-apply plugin: 'kotlin-parcelize'
+apply from: "${rootProject.projectDir}/common-app.gradle"
+
 apply plugin: 'androidx.navigation.safeargs'
-apply plugin: 'com.google.gms.google-services'
-apply plugin: 'com.google.firebase.crashlytics'
 
 android {
 
-    compileSdkVersion rootProject.ext.cooksCompileSdkVersion
     defaultConfig {
-        minSdkVersion rootProject.ext.minSdkVersion
-        targetSdkVersion rootProject.ext.cooksTargetSdkVersion
         applicationId "com.bupp.wood_spoon_chef"
-        versionCode System.getenv('VERSION_CODE') as Integer ?: 1000 // Temporary fallback versionCode to enable local builds
         versionName "1.9.1"
     }
 
     buildTypes {
         debug {
             debuggable true
-            manifestPlaceholders["isTestMode"] = "true"
 
             buildConfigField "String", "BASE_URL", '"https://api.staging.eatwoodspoon.com/api/VERSION/"'
             buildConfigField "String", "DEFAULT_TOKEN", '"66004d627beeaa63a8c3e815f9f320562026d6a8f27bd4a6"'
@@ -33,16 +24,11 @@ android {
             buildConfigField "String", "SHIPBOOK_APP_KEY", '"0bcfcdd88b46283e4594888a34ac0203"'
 
             resValue "string", "app_name", "Staging-WoodSpoon"
-            applicationIdSuffix = ".staging"
         }
 
         release {
-            debuggable false
-            shrinkResources true
-            minifyEnabled true
             resValue "string", "app_name", "WoodSpoon Chef"
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            manifestPlaceholders["isTestMode"] = "false"
 
             buildConfigField "String", "BASE_URL", '"https://api.production.eatwoodspoon.com/api/VERSION/"'
             buildConfigField "String", "DEFAULT_TOKEN", '"d49e1591d8d090222d4fdcf48ac1fff323c91c37fa52d704"'
@@ -55,22 +41,12 @@ android {
             buildConfigField "String", "SHIPBOOK_APP_KEY", '"5d7db5b446d582132d82c86ec1757a8f"'
         }
     }
-
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
-    }
-
-    kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_1_8.toString()
-    }
-
-    buildFeatures {
-        viewBinding true
-    }
 }
 
 dependencies {
+
+    implementation project(path: ':core:analytics')
+
     // Android Support
 //    implementation 'androidx.appcompat:appcompat:1.3.0'
 
@@ -151,9 +127,10 @@ dependencies {
     implementation "com.squareup.moshi:moshi:1.12.0"
     implementation 'com.jakewharton.retrofit:retrofit2-kotlin-coroutines-adapter:0.9.2'
     kapt 'com.squareup.moshi:moshi-kotlin-codegen:1.12.0'
-    implementation "io.insert-koin:koin-core:$koin_version"
-    implementation "io.insert-koin:koin-android:3.1.6"
-    implementation "io.insert-koin:koin-androidx-workmanager:3.1.6"
+
+    implementation "io.insert-koin:koin-core"
+    implementation "io.insert-koin:koin-android"
+    implementation "io.insert-koin:koin-androidx-workmanager"
 
     //AppCenter
     implementation "com.microsoft.appcenter:appcenter-analytics:$appCenterSdkVersion"

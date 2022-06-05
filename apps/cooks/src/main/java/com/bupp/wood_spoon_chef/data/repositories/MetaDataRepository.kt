@@ -10,6 +10,7 @@ import com.bupp.wood_spoon_chef.data.remote.network.base.ResponseSuccess
 import com.bupp.wood_spoon_chef.data.remote.network.getMetaData
 import com.bupp.wood_spoon_chef.data.repositories.base_repos.BaseMetaDataRepository
 import com.bupp.wood_spoon_chef.utils.parseStringToTime
+import com.eatwoodspoon.analytics.app_attributes.AppAttributesDataSource
 import java.math.BigDecimal
 import java.util.*
 
@@ -17,12 +18,18 @@ class MetaDataRepository(
     private val service: ApiService,
     private val responseHandler: ResponseHandler,
     private val featureListProvider: FeatureFlagsListProvider,
+    private val appAttributesDataSource: AppAttributesDataSource
 ) : BaseMetaDataRepository {
 
     private var metaDataObject: MetaDataModel? = null
 
     override suspend fun getMetaData(): ResponseResult<MetaDataModel> {
-        return responseHandler.safeApiCall { service.getMetaData(featureListProvider.getFeatureFlagsList()) }
+        return responseHandler.safeApiCall {
+            service.getMetaData(
+                featureListProvider.getFeatureFlagsList(),
+                appAttributesDataSource.appAttributes
+            )
+        }
     }
 
     suspend fun initMetaData() {
@@ -165,7 +172,7 @@ class MetaDataRepository(
             val myCurrVersion = getNumberFromStr(versionName)
             val minimumVersion = getNumberFromStr(minVersion)
             MTLogger.c(
-                    "curVersion: $myCurrVersion, minimum version: $minimumVersion"
+                "curVersion: $myCurrVersion, minimum version: $minimumVersion"
             )
             return myCurrVersion < minimumVersion
         }

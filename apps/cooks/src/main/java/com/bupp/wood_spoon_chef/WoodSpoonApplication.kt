@@ -4,6 +4,7 @@ import android.app.Application
 import com.bupp.wood_spoon_chef.common.MTLogger
 import com.bupp.wood_spoon_chef.di.appModule
 import com.bupp.wood_spoon_chef.di.networkModule
+import com.eatwoodspoon.analytics.analyticsModule
 import com.microsoft.appcenter.AppCenter
 import com.microsoft.appcenter.crashes.Crashes
 import com.microsoft.appcenter.distribute.Distribute
@@ -37,7 +38,7 @@ class WoodSpoonApplication : Application() {
         startKoin {
             androidContext(this@WoodSpoonApplication)
             androidLogger(if (BuildConfig.DEBUG) Level.ERROR else Level.NONE)
-            modules(appModule, networkModule)
+            modules(appModule + networkModule + analyticsModule)
         }
 
         AppCenter.start(

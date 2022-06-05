@@ -210,7 +210,8 @@ interface ApiService {
 
     @GET("cooks/utils/meta")
     suspend fun getMetaData(
-      @Query("ff") features: String?
+      @Query("ff") features: String?,
+      @Query("user_attrs") userAttributes: String?
     ): ServerResponse<MetaDataModel>
 
     /** Events Repository **/
@@ -260,5 +261,8 @@ interface ApiService {
     ): ServerResponse<Any>
 }
 
-suspend fun ApiService.getMetaData(features: List<String>) =
-        getMetaData(features = features.joinToString(separator = ","))
+suspend fun ApiService.getMetaData(features: List<String>, userAttributes: Map<String, Any>) =
+        getMetaData(
+            features = features.joinToString(separator = ","),
+            userAttributes = userAttributes.entries.joinToString(separator = ",") { "${it.key}=${it.value}" }.ifBlank { null }
+        )

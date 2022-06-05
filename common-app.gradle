@@ -1,0 +1,50 @@
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-kapt'
+apply plugin: 'kotlin-parcelize'
+apply plugin: 'com.google.gms.google-services'
+apply plugin: 'com.google.firebase.crashlytics'
+
+android {
+    compileSdkVersion rootProject.ext.compileSdkVersion
+    defaultConfig {
+        minSdkVersion rootProject.ext.minSdkVersion
+        targetSdkVersion rootProject.ext.targetSdkVersion
+        versionCode System.getenv('VERSION_CODE') as Integer ?: 1000 // Temporary fallback versionCode to enable local builds
+    }
+
+    buildTypes {
+        debug {
+            debuggable true
+            manifestPlaceholders["isTestMode"] = "true"
+            applicationIdSuffix = ".staging"
+        }
+
+        release {
+            debuggable false
+            shrinkResources true
+            minifyEnabled true
+            manifestPlaceholders["isTestMode"] = "false"
+        }
+    }
+
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_11.toString()
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
+    }
+
+    buildFeatures {
+        viewBinding true
+    }
+}
+
+dependencies {
+    implementation platform (project(':platform'))
+    androidTestImplementation platform (project(':platform'))
+    testImplementation platform (project(':platform'))
+    kapt platform (project(':platform'))
+}

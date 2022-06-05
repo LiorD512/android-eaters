@@ -29,6 +29,7 @@
             android:theme="@style/AppTheme"
             android:usesCleartextTraffic="true"
             tools:ignore="GoogleAppIndexingWarning"
+            android:networkSecurityConfig="@xml/network_security_config"
             tools:replace="supportsRtl, fullBackupContent, allowBackup">
         <activity
                 android:name=".features.track_your_order.TrackYourOrderActivity"

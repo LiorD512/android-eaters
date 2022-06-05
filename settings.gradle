@@ -1,2 +1,4 @@
+include ':platform'
 include ':apps:eaters'
 include ':apps:cooks'
+include ':core:analytics'

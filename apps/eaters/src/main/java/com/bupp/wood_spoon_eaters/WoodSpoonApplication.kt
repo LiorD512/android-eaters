@@ -4,6 +4,7 @@ import android.app.Application
 import com.bupp.wood_spoon_eaters.common.MTLogger
 import com.bupp.wood_spoon_eaters.di.appModule
 import com.bupp.wood_spoon_eaters.di.networkModule
+import com.eatwoodspoon.analytics.analyticsModule
 import com.facebook.FacebookSdk
 import com.facebook.LoggingBehavior
 import com.microsoft.appcenter.AppCenter
@@ -34,7 +35,7 @@ class WoodSpoonApplication : Application() {
         startKoin {
             androidLogger()
             androidContext(this@WoodSpoonApplication)
-            koin.loadModules(listOf(appModule, networkModule))
+            modules(appModule + networkModule + analyticsModule)
         }
 
         initShipBook()
@@ -51,9 +52,9 @@ class WoodSpoonApplication : Application() {
         Branch.getAutoInstance(this)
         Branch.enableTestMode()
 
-        if(BuildConfig.DEBUG){
+        if (BuildConfig.DEBUG) {
             UXCam.optOutOverall()
-        }else{
+        } else {
             UXCam.startWithKey(getString(R.string.ux_cam_app_key))
         }
 

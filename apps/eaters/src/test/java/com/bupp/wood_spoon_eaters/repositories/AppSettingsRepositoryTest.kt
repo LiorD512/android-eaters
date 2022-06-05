@@ -8,6 +8,7 @@ import com.bupp.wood_spoon_eaters.model.*
 import com.bupp.wood_spoon_eaters.network.ApiService
 import com.bupp.wood_spoon_eaters.network.result_handler.ErrorManger
 import com.bupp.wood_spoon_eaters.network.result_handler.ResultManager
+import com.eatwoodspoon.analytics.app_attributes.AppAttributesDataSource
 import com.google.gson.Gson
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import com.squareup.moshi.Moshi
@@ -71,9 +72,19 @@ class AppSettingsRepositoryTest {
 
         val apiService = retrofit.create(ApiService::class.java)
 
+        val appAttributesDataSource = object : AppAttributesDataSource {
+            override val appAttributes: Map<String, Any> = emptyMap()
+        }
+
         val errorManger: ErrorManger = mock()
         eatersAnalyticsTracker = mock()
-        appSettingsRepository = AppSettingsRepositoryImpl(apiService, ResultManager(errorManger), StaticFeatureFlagsListProvider(), eatersAnalyticsTracker)
+        appSettingsRepository = AppSettingsRepositoryImpl(
+            apiService,
+            ResultManager(errorManger),
+            StaticFeatureFlagsListProvider(),
+            appAttributesDataSource,
+            eatersAnalyticsTracker
+        )
     }
 
     @After
@@ -126,7 +137,16 @@ class AppSettingsRepositoryTest {
         appSettingsRepository.initAppSettings(testDispatcher)
         assert(appSettingsRepository.priceAppSetting(settingKey) == null)
 
-        mockWebServer.enqueue(settings = listOf(AppSetting(id = 1, settingKey, data_type = AppSettingKnownTypes.price.name, "not_price")))
+        mockWebServer.enqueue(
+            settings = listOf(
+                AppSetting(
+                    id = 1,
+                    settingKey,
+                    data_type = AppSettingKnownTypes.price.name,
+                    "not_price"
+                )
+            )
+        )
         appSettingsRepository.initAppSettings(testDispatcher)
         assert(appSettingsRepository.priceAppSetting(settingKey) == null)
     }
@@ -134,11 +154,29 @@ class AppSettingsRepositoryTest {
     private fun testIntSettingFlag() = runBlocking {
         val settingKey = "my_setting"
 
-        mockWebServer.enqueue(settings = listOf(AppSetting(id = 1, settingKey, data_type = AppSettingKnownTypes.integer.name, 555)))
+        mockWebServer.enqueue(
+            settings = listOf(
+                AppSetting(
+                    id = 1,
+                    settingKey,
+                    data_type = AppSettingKnownTypes.integer.name,
+                    555
+                )
+            )
+        )
         appSettingsRepository.initAppSettings(testDispatcher)
         assert(appSettingsRepository.intAppSetting(settingKey) == 555)
 
-        mockWebServer.enqueue(settings = listOf(AppSetting(id = 1, settingKey, data_type = AppSettingKnownTypes.integer.name, 555.0)))
+        mockWebServer.enqueue(
+            settings = listOf(
+                AppSetting(
+                    id = 1,
+                    settingKey,
+                    data_type = AppSettingKnownTypes.integer.name,
+                    555.0
+                )
+            )
+        )
         appSettingsRepository.initAppSettings(testDispatcher)
         assert(appSettingsRepository.intAppSetting(settingKey) == 555)
 
@@ -146,7 +184,16 @@ class AppSettingsRepositoryTest {
         appSettingsRepository.initAppSettings(testDispatcher)
         assert(appSettingsRepository.intAppSetting(settingKey) == null)
 
-        mockWebServer.enqueue(settings = listOf(AppSetting(id = 1, settingKey, data_type = AppSettingKnownTypes.integer.name, "not_integer")))
+        mockWebServer.enqueue(
+            settings = listOf(
+                AppSetting(
+                    id = 1,
+                    settingKey,
+                    data_type = AppSettingKnownTypes.integer.name,
+                    "not_integer"
+                )
+            )
+        )
         appSettingsRepository.initAppSettings(testDispatcher)
         assert(appSettingsRepository.intAppSetting(settingKey) == null)
     }
@@ -154,7 +201,16 @@ class AppSettingsRepositoryTest {
     private fun testBooleanSettingFlag() = runBlocking {
         val settingKey = "my_setting"
 
-        mockWebServer.enqueue(settings = listOf(AppSetting(id = 1, settingKey, data_type = AppSettingKnownTypes.boolean.name, true)))
+        mockWebServer.enqueue(
+            settings = listOf(
+                AppSetting(
+                    id = 1,
+                    settingKey,
+                    data_type = AppSettingKnownTypes.boolean.name,
+                    true
+                )
+            )
+        )
         appSettingsRepository.initAppSettings(testDispatcher)
         assert(appSettingsRepository.booleanAppSetting(settingKey) == true)
 
@@ -162,7 +218,16 @@ class AppSettingsRepositoryTest {
         appSettingsRepository.initAppSettings(testDispatcher)
         assert(appSettingsRepository.booleanAppSetting(settingKey) == null)
 
-        mockWebServer.enqueue(settings = listOf(AppSetting(id = 1, settingKey, data_type = AppSettingKnownTypes.boolean.name, "not_bool")))
+        mockWebServer.enqueue(
+            settings = listOf(
+                AppSetting(
+                    id = 1,
+                    settingKey,
+                    data_type = AppSettingKnownTypes.boolean.name,
+                    "not_bool"
+                )
+            )
+        )
         appSettingsRepository.initAppSettings(testDispatcher)
         assert(appSettingsRepository.booleanAppSetting(settingKey) == null)
     }
@@ -170,7 +235,16 @@ class AppSettingsRepositoryTest {
     private fun testStringSettingFlag() = runBlocking {
         val settingKey = "my_setting"
 
-        mockWebServer.enqueue(settings = listOf(AppSetting(id = 1, settingKey, data_type = AppSettingKnownTypes.string.name, "http://example.com")))
+        mockWebServer.enqueue(
+            settings = listOf(
+                AppSetting(
+                    id = 1,
+                    settingKey,
+                    data_type = AppSettingKnownTypes.string.name,
+                    "http://example.com"
+                )
+            )
+        )
         appSettingsRepository.initAppSettings(testDispatcher)
         assert(appSettingsRepository.stringAppSetting(settingKey) == "http://example.com")
 
@@ -178,7 +252,16 @@ class AppSettingsRepositoryTest {
         appSettingsRepository.initAppSettings(testDispatcher)
         assert(appSettingsRepository.stringAppSetting(settingKey) == null)
 
-        mockWebServer.enqueue(settings = listOf(AppSetting(id = 1, settingKey, data_type = AppSettingKnownTypes.string.name, 5)))
+        mockWebServer.enqueue(
+            settings = listOf(
+                AppSetting(
+                    id = 1,
+                    settingKey,
+                    data_type = AppSettingKnownTypes.string.name,
+                    5
+                )
+            )
+        )
         appSettingsRepository.initAppSettings(testDispatcher)
         assert(appSettingsRepository.stringAppSetting(settingKey) == null)
     }
@@ -187,7 +270,16 @@ class AppSettingsRepositoryTest {
     fun testMissingPropertyErrorReporting() = runBlocking {
         val settingKey = "my_setting"
 
-        mockWebServer.enqueue(settings = listOf(AppSetting(id = 1, settingKey, data_type = AppSettingKnownTypes.string.name, "http://example.com")))
+        mockWebServer.enqueue(
+            settings = listOf(
+                AppSetting(
+                    id = 1,
+                    settingKey,
+                    data_type = AppSettingKnownTypes.string.name,
+                    "http://example.com"
+                )
+            )
+        )
         appSettingsRepository.initAppSettings(testDispatcher)
         assert(appSettingsRepository.stringAppSetting("other_key") == null)
 
@@ -234,7 +326,10 @@ class AppSettingsRepositoryTest {
     }
 }
 
-private fun MockWebServer.enqueue(settings: List<AppSetting>? = null, ff: Map<String, Boolean>? = null) {
+private fun MockWebServer.enqueue(
+    settings: List<AppSetting>? = null,
+    ff: Map<String, Boolean>? = null
+) {
 
     val gson = Gson()
     val response = ServerResponse(

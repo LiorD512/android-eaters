@@ -15,7 +15,8 @@ interface ApiService {
     @VERSION("v3")
     @GET("eaters/utils/config")
     suspend fun getAppSettings(
-        @Query("ff") features: String?
+        @Query("ff") features: String?,
+        @Query("user_attrs") userAttributes: String?
     ): ServerResponse<AppSettings>
 
     //MetaData
@@ -272,5 +273,8 @@ interface ApiService {
     ): ResponseBody
 }
 
-suspend fun ApiService.getAppSettings(features: List<String>) =
-    getAppSettings(features = features.joinToString(separator = ",").takeUnless { it.isBlank() })
+suspend fun ApiService.getAppSettings(features: List<String>, userAttributes: Map<String, Any>) =
+    getAppSettings(
+        features = features.joinToString(separator = ",").takeUnless { it.isBlank() },
+        userAttributes = userAttributes.entries.joinToString(separator = ",") { "${it.key}=${it.value}" }.ifBlank { null }
+    )

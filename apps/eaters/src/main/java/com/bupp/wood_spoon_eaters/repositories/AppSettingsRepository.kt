@@ -6,6 +6,7 @@ import com.bupp.wood_spoon_eaters.network.ApiService
 import com.bupp.wood_spoon_eaters.network.getAppSettings
 import com.bupp.wood_spoon_eaters.network.result_handler.ResultHandler
 import com.bupp.wood_spoon_eaters.network.result_handler.ResultManager
+import com.eatwoodspoon.analytics.app_attributes.AppAttributesDataSource
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -45,6 +46,7 @@ internal class AppSettingsRepositoryImpl(
     private val apiService: ApiService,
     private val resultManager: ResultManager,
     private val featureListProvider: FeatureFlagsListProvider,
+    private val appAttributesDataSource: AppAttributesDataSource,
     private val eatersAnalyticsTracker: EatersAnalyticsTracker
 ) : AppSettingsRepository {
 
@@ -53,7 +55,7 @@ internal class AppSettingsRepositoryImpl(
 
     private suspend fun getAppSetting(): ResultHandler<ServerResponse<AppSettings>> {
         return resultManager.safeApiCall {
-            apiService.getAppSettings(featureListProvider.getFeatureFlagsList())
+            apiService.getAppSettings(featureListProvider.getFeatureFlagsList(), appAttributesDataSource.appAttributes)
         }
     }
 

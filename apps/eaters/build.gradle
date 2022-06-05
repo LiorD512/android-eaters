@@ -1,46 +1,31 @@
-apply plugin: 'com.android.application'
-apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-kapt'
-apply plugin: 'kotlin-parcelize'
-apply plugin: 'com.google.gms.google-services'
-apply plugin: 'com.google.firebase.crashlytics'
+apply from: "${rootProject.projectDir}/common-app.gradle"
+
 apply plugin: "androidx.navigation.safeargs.kotlin"
 
 android {
-    compileSdkVersion rootProject.ext.eatersCompileSdkVersion
+
     defaultConfig {
         minSdkVersion 26
-        targetSdkVersion 30
         applicationId "com.bupp.wood_spoon_eaters"
-        versionCode System.getenv('VERSION_CODE') as Integer ?: 1000 // Temporary fallback versionCode to enable local builds
         versionName "2.6.2"
     }
 
     buildTypes {
         debug {
-            debuggable true
-            manifestPlaceholders["isTestMode"] = "true"
 
             buildConfigField "String", "BASE_URL", '"https://api.staging.eatwoodspoon.com/api/VERSION/"'
             buildConfigField "String", "DEFAULT_TOKEN", '"37fb7781d13515de191c3d4749118705311b71c4a539d593"'
-
             buildConfigField "String", "TAG", '"HomeEaters_Staging"'
             buildConfigField "String", "SHIPBOOK_APP_ID", '"620bc0e8244a8956dfc02096"'
             buildConfigField "String", "SHIPBOOK_APP_KEY", '"ed8fdb9f6cc94159fb1afe3a6140315b"'
 
             resValue "string", "app_name", "Staging-WoodSpoonEaters"
-            applicationIdSuffix = ".staging"
         }
         release {
-            debuggable false
-            shrinkResources true
-            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            manifestPlaceholders["isTestMode"] = "false"
 
             buildConfigField "String", "BASE_URL", '"https://api.production.eatwoodspoon.com/api/VERSION/"'
             buildConfigField "String", "DEFAULT_TOKEN", '"9fa2df5e19ca2c5452f1a8361d463ac2c4297ad35bc5cdfd"'
-
             buildConfigField "String", "TAG", '"HomeEaters_Production"'
             buildConfigField "String", "SHIPBOOK_APP_ID", '"620bc0e04bdba41a60f3540c"'
             buildConfigField "String", "SHIPBOOK_APP_KEY", '"3a270a6df019054845206ae471c89461"'
@@ -48,22 +33,12 @@ android {
             resValue "string", "app_name", "WoodSpoon"
         }
     }
-
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_11
-        targetCompatibility JavaVersion.VERSION_11
-    }
-
-    kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_11.toString()
-    }
-
-    buildFeatures {
-        viewBinding true
-    }
 }
 
 dependencies {
+
+    implementation project(path: ':core:analytics')
+
     implementation 'androidx.appcompat:appcompat:1.3.1'
 
     // Android
@@ -168,9 +143,9 @@ dependencies {
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$kotlinCoroutineVersion"
 
     //di
-    implementation "io.insert-koin:koin-android:$koin_version"
-    implementation "io.insert-koin:koin-android-compat:$koin_version"
-    implementation "io.insert-koin:koin-androidx-workmanager:$koin_version"
+    implementation "io.insert-koin:koin-android"
+    implementation "io.insert-koin:koin-android-compat"
+    implementation "io.insert-koin:koin-androidx-workmanager"
 
     //AppCenter
     implementation "com.microsoft.appcenter:appcenter-crashes:${appCenterSdkVersion}"

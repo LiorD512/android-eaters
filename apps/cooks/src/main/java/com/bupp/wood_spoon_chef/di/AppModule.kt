@@ -50,7 +50,7 @@ val appModule = module {
 
     //Repo
     single { UserRepository(get(), get(), get(), get(), get()) }
-    single { MetaDataRepository(get(), get(), StaticFeatureFlagsListProvider()) }
+    single { MetaDataRepository(get(), get(), StaticFeatureFlagsListProvider(), get()) }
     single<AppSettingsRepository> { AppSettingsRepositoryImpl(get(), get()) }
     single { DishRepository(get(), get(), get(), get()) }
     single { CookingSlotRepository(get(), get(), get(), get()) }

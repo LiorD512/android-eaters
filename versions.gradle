@@ -1,7 +1,6 @@
 ext {
     // Kotlin
     kotlin_version = '1.5.30'
-    koin_version = '3.1.2'
 
     nav_version = "2.3.5"
 
@@ -14,11 +13,8 @@ ext {
     material_version = "1.4.0-alpha01"
 
     // Android Sdk and tools
-    eatersTargetSdkVersion = 30
-    eatersCompileSdkVersion = 31
-
-    cooksTargetSdkVersion = 30
-    cooksCompileSdkVersion = 31
+    targetSdkVersion = 30
+    compileSdkVersion = 31
 
     buildToolsVersion = '30.0.2'
 

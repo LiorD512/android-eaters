@@ -9,7 +9,7 @@ keystore.properties
 # Log/OS Files
 *.log
 **/.DS_Store
-
+git
 # Android Studio generated files and folders
 captures/
 .externalNativeBuild/
@@ -20,7 +20,7 @@ output.json
 # IntelliJ
 *.iml
 *.idea
-/.idea/misc.xml
+/.idea
 deploymentTargetDropDown.xml
 render.experimental.xml
 
