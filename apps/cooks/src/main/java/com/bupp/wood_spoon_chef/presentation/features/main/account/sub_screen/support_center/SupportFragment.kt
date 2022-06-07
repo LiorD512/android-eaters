@@ -1,5 +1,6 @@
 package com.bupp.wood_spoon_chef.presentation.features.main.account.sub_screen.support_center
 
+import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -66,14 +67,13 @@ class SupportBottomSheet : TopCorneredBottomSheet() {
         val title = viewModel.getMailTitle()
         val address = viewModel.getAdminMailAddress()
         val intent = Intent(Intent.ACTION_SENDTO)
-        intent.type = "message/rfc822"
-        intent.data = Uri.parse("mailto:$address")
-        intent.putExtra(Intent.EXTRA_EMAIL, arrayListOf(address))
+        intent.data = Uri.parse("mailto:")
+        intent.putExtra(Intent.EXTRA_EMAIL, arrayOf(address))
         intent.putExtra(Intent.EXTRA_SUBJECT, title)
         intent.putExtra(Intent.EXTRA_TEXT, text)
-        if (intent.resolveActivity(requireActivity().packageManager) != null) {
+        try {
             startActivity(intent)
-        } else {
+        }catch (ex: ActivityNotFoundException){
             binding?.supportDialogContentLayout?.let {
                 showErrorToast(getString(R.string.email_app_not_found_error), it)
             }
