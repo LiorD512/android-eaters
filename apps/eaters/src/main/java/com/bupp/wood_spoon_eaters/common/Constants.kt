@@ -5,6 +5,8 @@ class Constants {
 
         const val FEED_SECTION_TYPE_COUPONS = "available_coupons"
         const val FEED_SECTION_TYPE_RESTAURANT = "restaurant_overview"
+        const val FEED_SECTION_TYPE_HERO = "hero"
+        const val FEED_SECTION_TYPE_QUICK_LINK = "quick_link"
         const val FEED_EMPTY_NO_CHEF = "feed_empty_no_chefs"
         const val SECTION_EMPTY_NO_CHEF = "section_empty_no_chefs"
         const val SECTION_EMPTY_SEARCH = "section_empty_no_matches"

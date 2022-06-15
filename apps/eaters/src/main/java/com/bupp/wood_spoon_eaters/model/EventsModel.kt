@@ -26,6 +26,7 @@ data class Event(
 @Parcelize
 @JsonClass(generateAdapter = true)
 data class Campaign(
+    @Json(name = "campaign_id") val campaignId: String?,
     @Json(name = "user_interaction_id") val userInteractionId: Long?,
     @Json(name = "user_interaction_status") val status: UserInteractionStatus?,
     @Json(name = "name") val name: String?,
@@ -81,17 +82,6 @@ enum class CampaignButtonAction{
     @Json(name = "acknowledge") ACKNOWLEDGE,
     @Json(name = "jump_to_link ") JUMP_TO_LINK,
 }
-
-//@Parcelize
-//data class Campaign(
-//    @Json(name = "id") val id: Long,
-//    @Json(name = "name") val name: String,
-//    @Json(name = "description") val description: String,
-//    @Json(name = "thumbnail") val thumbnail: String,
-//    @Json(name = "share_button_text") val shareBtnText: String?,
-//    @Json(name = "share_text") val shareText: String?,
-//    @Json(name = "invite_url") val inviteUrl: String?
-//):Parcelable
 
 @JsonClass(generateAdapter = true)
 data class ActiveCampaign(

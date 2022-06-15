@@ -11,6 +11,7 @@ import com.bupp.wood_spoon_eaters.bottom_sheets.time_picker.SingleColumnTimePick
 import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.common.FlowEventsManager
 import com.bupp.wood_spoon_eaters.databinding.FragmentFeedBinding
+import com.bupp.wood_spoon_eaters.features.main.MainNavigationEvent
 import com.bupp.wood_spoon_eaters.features.main.MainViewModel
 import com.bupp.wood_spoon_eaters.features.main.feed.adapters.FeedMainAdapter
 import com.bupp.wood_spoon_eaters.model.RestaurantInitParams
@@ -22,12 +23,11 @@ import it.sephiroth.android.library.xtooltip.ClosePolicy
 import it.sephiroth.android.library.xtooltip.Tooltip
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import java.util.*
-
 
 class FeedFragment : Fragment(R.layout.fragment_feed),
-     FeedHeaderView.FeedHeaderViewListener, FeedMainAdapter.FeedMainAdapterListener, SingleColumnTimePickerBottomSheet.TimePickerListener {
-
+    FeedHeaderView.FeedHeaderViewListener,
+    FeedMainAdapter.FeedMainAdapterListener,
+    SingleColumnTimePickerBottomSheet.TimePickerListener {
 
     companion object {
         fun newInstance() = FeedFragment()
@@ -51,7 +51,6 @@ class FeedFragment : Fragment(R.layout.fragment_feed),
         viewModel.initFeed()
     }
 
-
     private fun initUi() {
         with(binding!!) {
             feedFragHeader.setFeedHeaderViewListener(this@FeedFragment)
@@ -63,54 +62,50 @@ class FeedFragment : Fragment(R.layout.fragment_feed),
         }
     }
 
-
     private fun initObservers() {
-        viewModel.getFinalAddressParams().observe(viewLifecycleOwner, {
+        viewModel.getFinalAddressParams().observe(viewLifecycleOwner) {
             binding!!.feedFragHeader.setAddress(it?.shortTitle)
-        })
-        viewModel.feedSkeletonEvent.observe(viewLifecycleOwner, {
+        }
+        viewModel.feedSkeletonEvent.observe(viewLifecycleOwner) {
             it.feedData?.let { skeletons ->
                 handleFeedResult(skeletons)
             }
-        })
-        viewModel.feedResultData.observe(viewLifecycleOwner, { event ->
+        }
+        viewModel.feedResultData.observe(viewLifecycleOwner) { event ->
             handleFeedUi(event.isLargeItems)
             event.feedData?.let { handleFeedResult(it) }
-        })
-        viewModel.feedUiStatusLiveData.observe(viewLifecycleOwner, {
+        }
+        viewModel.feedUiStatusLiveData.observe(viewLifecycleOwner) {
             handleFeedBannerUi(it)
-        })
-        viewModel.getLocationLiveData().observe(viewLifecycleOwner, {
-            Log.d(TAG, "getLocationLiveData observer called")
+        }
+        viewModel.getLocationLiveData().observe(viewLifecycleOwner) {
             viewModel.refreshFeedByLocationIfNeeded()
-        })
-        viewModel.getFinalAddressParams().observe(viewLifecycleOwner, {
+        }
+        viewModel.getFinalAddressParams().observe(viewLifecycleOwner) {
             viewModel.refreshFeedForNewAddress(Address(id = it.id, lat = it.lat, lng = it.lng))
-        })
-
-        viewModel.campaignLiveData.observe(viewLifecycleOwner, { campaigns ->
+        }
+        viewModel.campaignLiveData.observe(viewLifecycleOwner) { campaigns ->
             handleShareCampaign(campaigns)
-        })
-        mainViewModel.onFloatingBtnHeightChange.observe(viewLifecycleOwner, {
+        }
+        mainViewModel.onFloatingBtnHeightChange.observe(viewLifecycleOwner) {
             binding!!.feedFragList.setPadding(0, Utils.toPx(16), 0, Utils.toPx(80))
-        })
-        mainViewModel.forceFeedRefresh.observe(viewLifecycleOwner, {
+        }
+        mainViewModel.forceFeedRefresh.observe(viewLifecycleOwner) {
             viewModel.onPullToRefresh()
-        })
-        mainViewModel.scrollFeedToTop.observe(viewLifecycleOwner, {
+        }
+        mainViewModel.scrollFeedToTop.observe(viewLifecycleOwner) {
             binding!!.feedFragList.smoothScrollToPosition(0)
-        })
+        }
     }
 
     private fun handleFeedUi(isLargeItems: Boolean) {
-        Log.d(TAG, "handleFeedUi: $isLargeItems")
         if(!isLargeItems){
             binding!!.feedFragList.enableSnapping(isLargeItems)
         }
     }
 
     override fun onHeaderAddressClick() {
-        mainViewModel.handleMainNavigation(MainViewModel.MainNavigationEvent.START_LOCATION_AND_ADDRESS_ACTIVITY)
+        mainViewModel.handleMainNavigation(MainNavigationEvent.START_LOCATION_AND_ADDRESS_ACTIVITY)
     }
 
     override fun onHeaderDateClick() {
@@ -129,9 +124,7 @@ class FeedFragment : Fragment(R.layout.fragment_feed),
             campaigns.forEach { campaign ->
                 campaign.viewTypes?.forEach { viewType ->
                     when (viewType) {
-                        CampaignViewType.FEED -> {
-//                            binding.feedFragSectionsView.initShareCampaign(campaign)
-                        }
+                        CampaignViewType.FEED -> { }
                     }
                 }
             }
@@ -165,32 +158,17 @@ class FeedFragment : Fragment(R.layout.fragment_feed),
     private fun handleFeedResult(feedArr: List<FeedAdapterItem>) {
         binding!!.feedFragRefreshLayout.isRefreshing = false
         feedAdapter.setDataList(feedArr)
-//        binding.feedFragEmptyLayout.visibility = View.GONE
     }
 
     override fun onChangeAddressClick() {
         mainViewModel.startLocationAndAddressAct()
     }
 
-
-//    @SuppressLint("SetTextI18n")
-//    private fun showEmptyLayout() {
-//        with(binding) {
-//            feedFragList.visibility = View.GONE
-//            feedFragEmptyLayout.visibility = View.VISIBLE
-//            feedFragEmptyLayout.setOnClickListener {
-//                mainViewModel.startLocationAndAddressAct()
-//            }
-//        }
-//    }
-
     private fun handleBannerEvent(bannerType: Int) {
         bannerType.let {
             Log.d(TAG, "handleBannerEvent: $bannerType")
             when (bannerType) {
-                Constants.NO_BANNER -> {
-//                    tooltip?.dismiss()
-                }
+                Constants.NO_BANNER -> { }
                 Constants.BANNER_KNOWN_ADDRESS -> {
                     showBanner(getString(R.string.banner_known_address))
                 }
@@ -233,10 +211,13 @@ class FeedFragment : Fragment(R.layout.fragment_feed),
         }
     }
 
-
     //Feed main adapter interface
     override fun onShareBannerClick(campaign: Campaign) {
-        mainViewModel.onShareCampaignClick(campaign)
+        mainViewModel.onShareCampaignClick(campaign.shareUrl,campaign.shareText)
+    }
+
+    override fun onHeroBannerClick(hero: FeedHeroItemSection) {
+        mainViewModel.onShareCampaignClick(hero.url, hero.text)
     }
 
     override fun onRestaurantClick(restaurantInitParams: RestaurantInitParams) {
@@ -256,9 +237,7 @@ class FeedFragment : Fragment(R.layout.fragment_feed),
         comingSoonData.successSubtitle?.let{
             showErrorToast(it, binding!!.root, Toast.LENGTH_LONG)
         }
-        //viewModel.onComingSoonBtnClick(zoneId)
     }
-
 
     override fun onResume() {
         super.onResume()

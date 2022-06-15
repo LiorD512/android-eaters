@@ -28,11 +28,8 @@ import com.bupp.wood_spoon_eaters.bottom_sheets.reviews.ReviewsBSViewModel
 import com.bupp.wood_spoon_eaters.features.main.settings.SettingsViewModel
 import com.bupp.wood_spoon_eaters.bottom_sheets.support_center.SupportViewModel
 import com.bupp.wood_spoon_eaters.custom_views.cuisine_chooser.CuisineChooserViewModel
+import com.bupp.wood_spoon_eaters.domain.*
 import com.bupp.wood_spoon_eaters.experiments.PricingExperimentUseCase
-import com.bupp.wood_spoon_eaters.domain.FeatureFlagDynamicContentUseCase
-import com.bupp.wood_spoon_eaters.domain.GetOnboardingAppSettingsSlidesDelayUseCase
-import com.bupp.wood_spoon_eaters.domain.GetOnboardingSlideListUseCase
-import com.bupp.wood_spoon_eaters.domain.GetOnboardingVideoPathUseCase
 import com.bupp.wood_spoon_eaters.features.main.search.SearchViewModel
 import com.bupp.wood_spoon_eaters.features.onboarding.OnboardingViewModel
 import com.bupp.wood_spoon_eaters.features.order_checkout.checkout.CheckoutViewModel
@@ -71,7 +68,7 @@ val appModule = module {
     single { MetaDataRepository(get()) }
     single { MetaDataRepositoryImpl(get(), get()) }
     single<AppSettingsRepository> { AppSettingsRepositoryImpl(get(), get(), StaticFeatureFlagsListProvider(), get(), get()) }
-    single { FeedRepository(get(), get(), get()) }
+    single { FeedRepository(get(), get(), get(), get()) }
     single { FeedRepositoryImpl(get(), get()) }
     single { UserRepositoryImpl(get(), get()) }
     single { RestaurantRepository(get()) }
@@ -90,6 +87,7 @@ val appModule = module {
     single { GetOnboardingVideoPathUseCase(get()) }
     single { GetOnboardingSlideListUseCase() }
     single { GetOnboardingAppSettingsSlidesDelayUseCase(get()) }
+    single { FeatureFlagLongFeedUseCase(get()) }
 
     //managers
     single { GlobalErrorManager() }
@@ -135,7 +133,7 @@ val appModule = module {
 
     //main
     viewModel { MainViewModel(get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get()) }
-    viewModel { FeedViewModel(get(), get(), get(), get(), get()) }
+    viewModel { FeedViewModel(get(), get(), get(), get(), get(), get()) }
     viewModel { SearchViewModel(get(), get(), get()) }
     viewModel { ReportIssueViewModel(get(), get(), get()) }
     viewModel { RateLastOrderViewModel(get()) }

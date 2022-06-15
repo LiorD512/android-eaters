@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/feedHeroSectionLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+    <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/feedHeroSectionViewPager"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clipChildren="false"
+            android:clipToPadding="false"
+            android:paddingHorizontal="5dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    <me.relex.circleindicator.CircleIndicator3
+            android:id="@+id/feedHeroSectionIndicator"
+            android:layout_width="match_parent"
+            android:layout_height="10dp"
+            app:ci_animator="@anim/circle_indicator_anim"
+            app:ci_drawable="@drawable/dark_indicator_selected"
+            app:ci_drawable_unselected="@drawable/dark_indicator_unselected"
+            app:ci_gravity="center"
+            app:ci_height="6dp"
+            app:ci_margin="3dp"
+            app:ci_width="6dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/feedHeroSectionViewPager" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

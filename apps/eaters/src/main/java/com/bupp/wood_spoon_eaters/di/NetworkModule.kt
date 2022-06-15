@@ -84,6 +84,8 @@ fun provideRetrofit(client: OkHttpClient, flavorConfig: FlavorConfigManager): Re
                 .withSubtype(FeedSingleEmptySection::class.java, Constants.SECTION_EMPTY_NO_CHEF)
                 .withSubtype(FeedSearchEmptySection::class.java, Constants.SECTION_EMPTY_SEARCH)
                 .withSubtype(FeedComingSoonSection::class.java, Constants.SECTION_COMING_SOON)
+                .withSubtype(FeedHeroItemSection::class.java, Constants.FEED_SECTION_TYPE_HERO)
+                .withSubtype(QuickLinkItem::class.java, Constants.FEED_SECTION_TYPE_QUICK_LINK)
 //                .withFallbackJsonAdapter(MoshiNullableSectionAdapter())
         )
         .add(Date::class.java, Rfc3339DateJsonAdapter().nullSafe())

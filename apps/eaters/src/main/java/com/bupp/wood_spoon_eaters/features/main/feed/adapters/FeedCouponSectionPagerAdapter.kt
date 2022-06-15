@@ -15,10 +15,11 @@ import com.bupp.wood_spoon_eaters.databinding.ShareBannerBinding
 import com.bupp.wood_spoon_eaters.model.Campaign
 
 
-class FeedCouponSectionPagerAdapter(val listener: FeedCouponSectionListener) :
-    ListAdapter<Campaign, RecyclerView.ViewHolder>(DiffCallback()) {
+class FeedCouponSectionPagerAdapter(
+    val listener: FeedCouponSectionListener
+) : ListAdapter<Campaign, RecyclerView.ViewHolder>(DiffCallback()) {
 
-    interface FeedCouponSectionListener{
+    interface FeedCouponSectionListener {
         fun onShareBannerClick(campaign: Campaign?)
     }
 

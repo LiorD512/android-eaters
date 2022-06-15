@@ -1,6 +1,5 @@
 package com.bupp.wood_spoon_eaters.features.main.feed
 
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -9,6 +8,8 @@ import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.common.FlowEventsManager
 import com.bupp.wood_spoon_eaters.common.MTLogger
 import com.bupp.wood_spoon_eaters.di.abs.ProgressData
+import com.bupp.wood_spoon_eaters.domain.comon.execute
+import com.bupp.wood_spoon_eaters.domain.FeatureFlagLongFeedUseCase
 import com.bupp.wood_spoon_eaters.managers.CampaignManager
 import com.bupp.wood_spoon_eaters.managers.EatersAnalyticsTracker
 import com.bupp.wood_spoon_eaters.managers.FeedDataManager
@@ -16,6 +17,7 @@ import com.bupp.wood_spoon_eaters.model.*
 import com.bupp.wood_spoon_eaters.repositories.FeedRepository
 import com.bupp.wood_spoon_eaters.utils.DateUtils
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 data class FeedLiveData(
@@ -24,6 +26,7 @@ data class FeedLiveData(
 )
 
 class FeedViewModel(
+    private val featureFlagLongFeedUseCase: FeatureFlagLongFeedUseCase,
     private val feedDataManager: FeedDataManager,
     private val feedRepository: FeedRepository,
     private val flowEventsManager: FlowEventsManager,
@@ -55,9 +58,7 @@ class FeedViewModel(
     }
 
     fun refreshFeedForNewAddress(address: Address) {
-        Log.d(TAG,"refreshFeedForNewAddress: $address")
         val feedRequest = feedDataManager.getFeedRequestWithAddress(address)
-        Log.d(TAG,"refreshFeedForNewAddress feedRequest: $feedRequest")
         getFeedWith(feedRequest)
     }
 
@@ -66,10 +67,11 @@ class FeedViewModel(
         getFeedWith(feedRequest)
     }
 
-    private suspend fun runFeedJob(feedRequest: FeedRequest) {
+    private suspend fun runFeedJob(feedRequest: FeedRequest, isLongFeed: Boolean) {
         if(validFeedRequest(feedRequest)) {
             feedSkeletonEvent.postValue(getSkeletonItems())
-            val feedRepository = feedRepository.getFeed(feedRequest)
+            val feedRepository = feedRepository.getFeed(feedRequest, isLongFeed)
+
             when (feedRepository.type) {
                 FeedRepository.FeedRepoStatus.SERVER_ERROR -> {
                     MTLogger.c(TAG, "getFeedWith - NetworkError")
@@ -104,7 +106,11 @@ class FeedViewModel(
             feedJobs[0].cancel()
             feedJobs.clear()
         }
-        val feedJob = viewModelScope.launch { runFeedJob(feedRequest) }
+        val feedJob = viewModelScope.launch {
+            featureFlagLongFeedUseCase.execute().collectLatest { isLongFeed ->
+                runFeedJob(feedRequest, isLongFeed)
+            }
+        }
         feedJobs.add(feedJob)
     }
 

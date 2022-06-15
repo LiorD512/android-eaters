@@ -1,8 +1,6 @@
 package com.bupp.wood_spoon_eaters.model
 
 import android.os.Parcelable
-import com.bupp.wood_spoon_eaters.features.main.search.SearchBaseItem
-import com.bupp.wood_spoon_eaters.features.main.search.SearchViewType
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 import kotlinx.parcelize.Parcelize
@@ -18,7 +16,9 @@ data class FeedSection(
     var id: Long? = null,
     var title: String? = null,
     var full_href: String? = null,
-    var collections: MutableList<FeedSectionCollectionItem>? = null
+    var collections: MutableList<FeedSectionCollectionItem>? = null,
+    @Json(name = "section_type")
+    var sectionType: String? = null
 ): Parcelable
 
 sealed class FeedSectionCollectionItem(
@@ -92,7 +92,28 @@ data class FeedNoChefSectionTest(
     @Json(name = "action") val action: String?
 ): Parcelable
 
+@Parcelize
+@JsonClass(generateAdapter = true)
+data class FeedHeroItemSection(
+    override val full_href: String? = null,
+    override val items: List<FeedRestaurantSectionItem>? = null,
 
+    var title: String?,
+    var text: String?,
+    var url: String?,
+    var image: WSImage?,
+) : Parcelable, FeedSectionCollectionItem(FeedModelsViewType.HERO)
+
+@Parcelize
+@JsonClass(generateAdapter = true)
+data class QuickLinkItem(
+    override val items: List<FeedRestaurantSectionItem>? = null,
+    override val full_href: String? = null,
+    var title: String?,
+    var text: String?,
+    var url: String?,
+    var image: WSImage?,
+): Parcelable, FeedSectionCollectionItem(FeedModelsViewType.QUICK_LINK)
 
 @Parcelize
 @JsonClass(generateAdapter = true)
@@ -198,6 +219,10 @@ enum class FeedModelsViewType {
     EMPTY_SEARCH,
     @Json(name = "coming_soon")
     COMING_SONG,
+    @Json(name = "hero")
+    HERO,
+    @Json(name = "quick_link")
+    QUICK_LINK
 }
 
 enum class FeedRestaurantSectionItemViewType{
@@ -215,6 +240,8 @@ enum class FeedAdapterViewType {
     TITLE,
     SEARCH_TITLE,
     COUPONS,
+    HERO,
+    QUICK_LINK,
     RESTAURANT,
     RESTAURANT_LARGE,
     EMPTY_FEED,
@@ -258,6 +285,11 @@ data class FeedAdapterSearchTitle(
 data class FeedAdapterCoupons(
     val couponSection: FeedCampaignSection, override val id: Long?
 ) : Parcelable, FeedAdapterItem(FeedAdapterViewType.COUPONS)
+
+@Parcelize
+data class FeedAdapterHero(
+    val heroList: MutableList<FeedHeroItemSection>, override val id: Long?
+) : Parcelable, FeedAdapterItem(FeedAdapterViewType.HERO)
 
 @Parcelize
 data class FeedAdapterRestaurant(

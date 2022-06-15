@@ -14,9 +14,7 @@ import com.bupp.wood_spoon_eaters.custom_views.simpler_views.SimpleTextWatcher
 import com.bupp.wood_spoon_eaters.databinding.FragmentSearchBinding
 import com.bupp.wood_spoon_eaters.features.main.MainViewModel
 import com.bupp.wood_spoon_eaters.features.main.feed.adapters.FeedMainAdapter
-import com.bupp.wood_spoon_eaters.model.Campaign
-import com.bupp.wood_spoon_eaters.model.FeedComingSoonSection
-import com.bupp.wood_spoon_eaters.model.RestaurantInitParams
+import com.bupp.wood_spoon_eaters.model.*
 import com.bupp.wood_spoon_eaters.utils.AnimationUtil
 import com.bupp.wood_spoon_eaters.utils.Utils
 import com.bupp.wood_spoon_eaters.utils.closeKeyboard
@@ -134,6 +132,10 @@ class SearchFragment : Fragment(R.layout.fragment_search),
     }
 
     override fun onShareBannerClick(campaign: Campaign) {
+        //do nothing
+    }
+
+    override fun onHeroBannerClick(hero: FeedHeroItemSection) {
         //do nothing
     }
 

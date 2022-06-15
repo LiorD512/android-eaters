@@ -80,7 +80,16 @@ interface ApiService {
 
     @VERSION("v4")
     @GET("eaters/me/feed")
-    suspend fun getFeed(
+    suspend fun getFeedV4(
+        @Query("lat") lat: Double? = null,
+        @Query("lng") lng: Double? = null,
+        @Query("address_id") addressId: Long? = null,
+        @Query("timestamp") timestamp: String? = null
+    ): ServerResponse<FeedResult>
+
+    @VERSION("v5")
+    @GET("eaters/me/feed")
+    suspend fun getFeedV5(
         @Query("lat") lat: Double? = null,
         @Query("lng") lng: Double? = null,
         @Query("address_id") addressId: Long? = null,

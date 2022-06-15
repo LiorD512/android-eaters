@@ -194,6 +194,10 @@ class DishSearchFragment : Fragment(R.layout.fragment_dish_search), FeedMainAdap
         //do nothing
     }
 
+    override fun onHeroBannerClick(hero: FeedHeroItemSection) {
+        //do nothing
+    }
+
     override fun onChangeAddressClick() {
         //do nothing
     }

@@ -12,12 +12,45 @@ import com.stripe.android.model.PaymentMethod
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
+
+enum class MainNavigationEvent {
+    START_LOCATION_AND_ADDRESS_ACTIVITY,
+    START_PAYMENT_METHOD_ACTIVITY,
+    INITIALIZE_STRIPE,
+    LOGOUT,
+    OPEN_CAMERA_UTIL_IMAGE
+}
+
 class MainViewModel(
-    private val appSettingsRepository: AppSettingsRepository, private val feedDataManager: FeedDataManager,
-    val eaterDataManager: EaterDataManager, private val campaignManager: CampaignManager, private val paymentManager: PaymentManager,
-    private val userRepository: UserRepository, globalErrorManager: GlobalErrorManager, private var eatersAnalyticsTracker: EatersAnalyticsTracker,
-    private val flowEventsManager: FlowEventsManager, private val cartManager: CartManager, private val restaurantRepository: RestaurantRepository,
+    private val appSettingsRepository: AppSettingsRepository,
+    private val feedDataManager: FeedDataManager,
+    val eaterDataManager: EaterDataManager,
+    private val campaignManager: CampaignManager,
+    private val paymentManager: PaymentManager,
+    private val userRepository: UserRepository,
+    globalErrorManager: GlobalErrorManager,
+    private var eatersAnalyticsTracker: EatersAnalyticsTracker,
+    private val flowEventsManager: FlowEventsManager,
+    private val cartManager: CartManager,
+    private val restaurantRepository: RestaurantRepository,
 ) : ViewModel() {
+
+    val shareEvent = MutableLiveData<String>()
+    val mainNavigationEvent = MutableLiveData<MainNavigationEvent>()
+    val floatingCartBtnEvent = cartManager.getFloatingCartBtnEvent()
+
+    val globalErrorLiveData = globalErrorManager.getGlobalErrorLiveData()
+    val campaignLiveData = campaignManager.getCampaignLiveData()
+
+    val startRestaurantActivity = MutableLiveData<RestaurantInitParams>()
+    val forceFeedRefresh = MutableLiveData<Boolean>()
+    val scrollFeedToTop = MutableLiveData<Boolean>()
+    val stripeInitializationEvent = paymentManager.getStripeInitializationEvent()
+    val getTraceableOrder = eaterDataManager.getTraceableOrders()
+    val getTriggers = eaterDataManager.getTriggers()
+    val mediaUtilsResultLiveData = MutableLiveData<MediaUtils.MediaUtilResult>()
+    val onFloatingBtnHeightChange = MutableLiveData<Boolean>()
+    val refreshSearchData = MutableLiveData<Boolean>()
 
     init {
         eaterDataManager.refreshSegment()
@@ -27,46 +60,20 @@ class MainViewModel(
         flowEventsManager.trackPageEvent(eventType)
     }
 
-    val mainNavigationEvent = MutableLiveData<MainNavigationEvent>()
-
-    enum class MainNavigationEvent {
-        START_LOCATION_AND_ADDRESS_ACTIVITY,
-        START_PAYMENT_METHOD_ACTIVITY,
-        INITIALIZE_STRIPE,
-        LOGOUT,
-        OPEN_CAMERA_UTIL_IMAGE
-    }
-
-
     fun handleMainNavigation(type: MainNavigationEvent) {
         mainNavigationEvent.postValue(type)
     }
-
 
     fun startLocationAndAddressAct() {
         mainNavigationEvent.postValue(MainNavigationEvent.START_LOCATION_AND_ADDRESS_ACTIVITY)
     }
 
-    val floatingCartBtnEvent = cartManager.getFloatingCartBtnEvent()
-
-    val globalErrorLiveData = globalErrorManager.getGlobalErrorLiveData()
-    val campaignLiveData = campaignManager.getCampaignLiveData()
-
-    val startRestaurantActivity = MutableLiveData<RestaurantInitParams>()
-    val forceFeedRefresh = MutableLiveData<Boolean>()
-    val scrollFeedToTop = MutableLiveData<Boolean>()
-
     fun getFinalAddressParams() = eaterDataManager.getFinalAddressLiveDataParam()
 
-    //stripe
-    val stripeInitializationEvent = paymentManager.getStripeInitializationEvent()
     fun startStripeOrReInit() {
-        MTLogger.c(TAG, "startStripeOrReInit")
         if (paymentManager.hasStripeInitialized) {
-            Log.d(TAG, "start payment method")
             mainNavigationEvent.postValue(MainNavigationEvent.START_PAYMENT_METHOD_ACTIVITY)
         } else {
-            MTLogger.c(TAG, "re init stripe")
             mainNavigationEvent.postValue(MainNavigationEvent.INITIALIZE_STRIPE)
         }
     }
@@ -76,11 +83,6 @@ class MainViewModel(
             paymentManager.initPaymentManagerWithListener(context)
         }
     }
-
-    private val TAG = "wowMainVM"
-
-
-    val getTraceableOrder = eaterDataManager.getTraceableOrders()
 
     fun checkForActiveOrder() {
         viewModelScope.launch {
@@ -93,8 +95,6 @@ class MainViewModel(
             campaignManager.onFlowEventFired(FlowEventsManager.FlowEvents.VISIT_FEED)
         }
     }
-
-    val getTriggers = eaterDataManager.getTriggers()
 
     fun getRestaurant(id: Long) {
         viewModelScope.launch(Dispatchers.IO) {
@@ -142,10 +142,7 @@ class MainViewModel(
         paymentManager.updateSelectedPaymentMethod(context, paymentMethod)
     }
 
-    val shareEvent = MutableLiveData<String>()
-    fun onShareCampaignClick(campaign: Campaign?) {
-        val shareUrl = campaign?.shareUrl
-        val shareText = campaign?.shareText ?: ""
+    fun onShareCampaignClick(shareUrl: String?, shareText: String?) {
         shareEvent.postValue("$shareText \n $shareUrl")
         eatersAnalyticsTracker.logEvent(Constants.EVENT_CAMPAIGN_INVITE)
     }
@@ -167,13 +164,11 @@ class MainViewModel(
         }
     }
 
-    val mediaUtilsResultLiveData = MutableLiveData<MediaUtils.MediaUtilResult>()
     fun onMediaUtilsResultSuccess(result: MediaUtils.MediaUtilResult) {
         //use this liveData when using MediaUtils out side of MainActivity scope (for example - EditProfileBottomSheet)
         mediaUtilsResultLiveData.postValue(result)
     }
 
-    val onFloatingBtnHeightChange = MutableLiveData<Boolean>()
     fun onFloatingCartStateChanged(isShowing: Boolean) {
         onFloatingBtnHeightChange.postValue(isShowing)
     }
@@ -216,7 +211,6 @@ class MainViewModel(
         eatersAnalyticsTracker.logEvent(Constants.EVENT_OPEN_DEEP_LINK, mapOf(Pair("home_chef_id", restaurantId)))
     }
 
-    val refreshSearchData = MutableLiveData<Boolean>()
     fun refreshSearchData() {
         refreshSearchData.postValue(true)
     }

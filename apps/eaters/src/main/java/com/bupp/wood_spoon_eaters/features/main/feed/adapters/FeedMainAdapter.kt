@@ -16,14 +16,20 @@ import com.bupp.wood_spoon_eaters.model.*
 import com.bupp.wood_spoon_eaters.views.abs.RecyclerHorizontalIndicatorDecoration
 import com.github.rubensousa.gravitysnaphelper.GravitySnapHelper
 
-class FeedMainAdapter(val listener: FeedMainAdapterListener) : RecyclerView.Adapter<RecyclerView.ViewHolder>(),
-    FeedCouponSectionPagerAdapter.FeedCouponSectionListener, FeedAdapterRestaurantViewHolder.FeedAdapterRestaurantViewHolderListener,
-    FeedAdapterLargeRestaurantViewHolder.FeedAdapterRestaurantViewHolderListener, FeedRestaurantDishPagerAdapter.FeedRestaurantDishPagerAdapterListener,
+class FeedMainAdapter(
+    val listener: FeedMainAdapterListener
+) : RecyclerView.Adapter<RecyclerView.ViewHolder>(),
+    FeedCouponSectionPagerAdapter.FeedCouponSectionListener,
+    FeedAdapterRestaurantViewHolder.FeedAdapterRestaurantViewHolderListener,
+    FeedAdapterLargeRestaurantViewHolder.FeedAdapterRestaurantViewHolderListener,
+    FeedRestaurantDishPagerAdapter.FeedRestaurantDishPagerAdapterListener,
+    FeedHeroSectionPagerAdapter.FeedHeroSectionListener,
     SearchTagsAdapter.SearchTagsAdapterListener {
 
     private val dataList: MutableList<FeedAdapterItem> = mutableListOf()
+
     @SuppressLint("NotifyDataSetChanged")
-    fun setDataList(dataList: List<FeedAdapterItem>){
+    fun setDataList(dataList: List<FeedAdapterItem>) {
         this.dataList.clear()
         this.dataList.addAll(dataList)
         notifyDataSetChanged()
@@ -31,6 +37,7 @@ class FeedMainAdapter(val listener: FeedMainAdapterListener) : RecyclerView.Adap
 
     interface FeedMainAdapterListener {
         fun onShareBannerClick(campaign: Campaign)
+        fun onHeroBannerClick(hero: FeedHeroItemSection)
         fun onRestaurantClick(restaurantInitParams: RestaurantInitParams)
         fun onChangeAddressClick()
         fun onDishSwiped()
@@ -38,7 +45,7 @@ class FeedMainAdapter(val listener: FeedMainAdapterListener) : RecyclerView.Adap
         fun onComingSoonBtnClick(comingSoonData: FeedComingSoonSection)
 
         //Search
-        fun onTagClick(tag: String){}
+        fun onTagClick(tag: String) {}
     }
 
     override fun getItemViewType(position: Int): Int = dataList[position].type!!.ordinal
@@ -56,6 +63,10 @@ class FeedMainAdapter(val listener: FeedMainAdapterListener) : RecyclerView.Adap
             FeedAdapterViewType.COUPONS.ordinal -> {
                 val binding = FeedAdapterCampaignSectionBinding.inflate(LayoutInflater.from(parent.context), parent, false)
                 FeedAdapterCampaignViewHolder(binding)
+            }
+            FeedAdapterViewType.HERO.ordinal -> {
+                val binding = FeedAdapterHeroSectionBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+                FeedAdapterHeroViewHolder(binding)
             }
             FeedAdapterViewType.RESTAURANT.ordinal -> {
                 Log.d("wowFeedAdapter", "onCreateViewHolder -> RESTAURANT")
@@ -137,6 +148,10 @@ class FeedMainAdapter(val listener: FeedMainAdapterListener) : RecyclerView.Adap
                 holder as FeedAdapterCampaignViewHolder
                 holder.bindItems(section, this)
             }
+            is FeedAdapterHero -> {
+                holder as FeedAdapterHeroViewHolder
+                holder.bindItems(section, this)
+            }
             is FeedAdapterRestaurant -> {
                 holder as FeedAdapterRestaurantViewHolder
                 holder.bindItems(section, this, position)
@@ -184,22 +199,6 @@ class FeedMainAdapter(val listener: FeedMainAdapterListener) : RecyclerView.Adap
         }
     }
 
-//    private class DiffCallback : DiffUtil.ItemCallback<FeedAdapterItem>() {
-//        override fun areItemsTheSame(
-//            oldItem: FeedAdapterItem,
-//            newItem: FeedAdapterItem
-//        ): Boolean {
-//            return oldItem == newItem
-//        }
-//
-//        override fun areContentsTheSame(
-//            oldItem: FeedAdapterItem,
-//            newItem: FeedAdapterItem
-//        ): Boolean {
-//            return oldItem.type == oldItem.type
-//        }
-//    }
-
     override fun onShareBannerClick(campaign: Campaign?) {
         campaign?.let {
             listener.onShareBannerClick(campaign)
@@ -217,28 +216,37 @@ class FeedMainAdapter(val listener: FeedMainAdapterListener) : RecyclerView.Adap
     override fun onPageClick(itemLocalId: Long?, position: Int) {
         Log.d("wowProcessFeedData", "onPageClick position: $position")
         dataList.forEachIndexed { index, feedAdapterItem ->
-            if(feedAdapterItem.id == itemLocalId){
+            if (feedAdapterItem.id == itemLocalId) {
                 val section = dataList[index]
                 when (section) {
                     is FeedAdapterRestaurant -> {
                         val sectionTitle = section.sectionTitle
                         val sectionOrder = section.sectionOrder
                         val restaurantOrderInSection = section.restaurantOrderInSection
-                        val dishIndexInRestaurant = position +1
-//                        Log.d("wowFeedAdapter", "onPageClick sectionTitle: $sectionTitle, sectionOrder: $sectionOrder, restaurantOrderInSection: $restaurantOrderInSection, dishIndexInRestaurant: $dishIndexInRestaurant")
-                        listener.onRestaurantClick(section.restaurantSection.toRestaurantInitParams(sectionTitle, sectionOrder, restaurantOrderInSection, dishIndexInRestaurant))
+                        val dishIndexInRestaurant = position + 1
+                        listener.onRestaurantClick(
+                            section.restaurantSection.toRestaurantInitParams(
+                                sectionTitle,
+                                sectionOrder,
+                                restaurantOrderInSection,
+                                dishIndexInRestaurant
+                            )
+                        )
                         return@forEachIndexed
                     }
-                    is FeedAdapterLargeRestaurant  -> {
+                    is FeedAdapterLargeRestaurant -> {
                         val sectionTitle = section.sectionTitle
                         val sectionOrder = section.sectionOrder
                         val restaurantOrderInSection = section.restaurantOrderInSection
-                        val dishIndexInRestaurant = position +1
-                        listener.onRestaurantClick(section.restaurantSection.toRestaurantInitParams(
-                            sectionTitle,
-                            sectionOrder,
-                            restaurantOrderInSection,
-                            dishIndexInRestaurant))
+                        val dishIndexInRestaurant = position + 1
+                        listener.onRestaurantClick(
+                            section.restaurantSection.toRestaurantInitParams(
+                                sectionTitle,
+                                sectionOrder,
+                                restaurantOrderInSection,
+                                dishIndexInRestaurant
+                            )
+                        )
                         return@forEachIndexed
                     }
                     else -> {}
@@ -248,13 +256,21 @@ class FeedMainAdapter(val listener: FeedMainAdapterListener) : RecyclerView.Adap
     }
 
     override fun getItemCount(): Int {
-       return dataList.size
+        return dataList.size
     }
 
     override fun onTagClick(tag: String) {
         listener.onTagClick(tag)
     }
 
-
+    override fun onHeroBannerClick(hero: FeedHeroItemSection?) {
+        hero?.url?.contains("woodspoon.app.link/referral_purchase")?.let {
+            if (it) {
+                hero.let { heroItem ->
+                    listener.onHeroBannerClick(heroItem)
+                }
+            }
+        }
+    }
 }
 

@@ -7,7 +7,13 @@ import com.bupp.wood_spoon_eaters.network.result_handler.ResultHandler
 import com.bupp.wood_spoon_eaters.network.result_handler.ResultManager
 
 interface FeedRepositoryInterface{
-    suspend fun getFeed(lat: Double?, lng: Double?, addressId: Long?, timestamp: String? = null): ResultHandler<ServerResponse<FeedResult>>
+    suspend fun getFeed(
+        isLongFeed: Boolean = false,
+        lat: Double?,
+        lng: Double?,
+        addressId: Long?,
+        timestamp: String? = null
+    ): ResultHandler<ServerResponse<FeedResult>>
     suspend fun getHrefCollection(href: String): ResultHandler<ServerResponse<List<FeedSectionCollectionItem>>>
     suspend fun getCookById(cookId: Long, addressId: Long?, lat: Double?, lng: Double?): ResultHandler<ServerResponse<Cook>>
     suspend fun getCookReview(cookId: Long): ResultHandler<ServerResponse<Review>>
@@ -16,9 +22,25 @@ interface FeedRepositoryInterface{
     suspend fun getSearchTags(lat: Double?, lng: Double?, addressId: Long?): ResultHandler<ServerResponse<List<String>>>
 }
 
-class FeedRepositoryImpl(private val service: ApiService, private val resultManager: ResultManager) : FeedRepositoryInterface {
-    override suspend fun getFeed(lat: Double?, lng: Double?, addressId: Long?, timestamp: String?): ResultHandler<ServerResponse<FeedResult>> {
-        return resultManager.safeApiCall { service.getFeed(lat, lng, addressId, timestamp) }
+class FeedRepositoryImpl(
+    private val service: ApiService,
+    private val resultManager: ResultManager
+    ) : FeedRepositoryInterface {
+
+    override suspend fun getFeed(
+        isLongFeed: Boolean,
+        lat: Double?,
+        lng: Double?,
+        addressId: Long?,
+        timestamp: String?
+    ): ResultHandler<ServerResponse<FeedResult>> {
+        return resultManager.safeApiCall {
+            if (isLongFeed) {
+                service.getFeedV5(lat, lng, addressId, timestamp)
+            } else {
+                service.getFeedV4(lat, lng, addressId, timestamp)
+            }
+        }
     }
 
     override suspend fun getHrefCollection(href: String): ResultHandler<ServerResponse<List<FeedSectionCollectionItem>>> {

@@ -18,6 +18,7 @@ import com.bupp.wood_spoon_eaters.custom_views.cuisine_chooser.CuisinesChooserDi
 import com.bupp.wood_spoon_eaters.databinding.MyProfileFragmentBinding
 import com.bupp.wood_spoon_eaters.dialogs.LogoutDialog
 import com.bupp.wood_spoon_eaters.dialogs.web_docs.WebDocsDialog
+import com.bupp.wood_spoon_eaters.features.main.MainNavigationEvent
 import com.bupp.wood_spoon_eaters.features.main.MainViewModel
 import com.bupp.wood_spoon_eaters.managers.PaymentManager
 import com.bupp.wood_spoon_eaters.model.*
@@ -29,10 +30,13 @@ import com.stripe.android.model.PaymentMethod
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-
-class MyProfileFragment : Fragment(R.layout.my_profile_fragment), CustomDetailsView.CustomDetailsViewListener,
-    LogoutDialog.LogoutDialogListener, CuisinesChooserDialog.CuisinesChooserListener,
-    HorizontalDietaryView.HorizontalDietaryViewListener, ShareBanner.WSCustomBannerListener, UserImageVideoView.UserImageVideoViewListener {
+class MyProfileFragment : Fragment(R.layout.my_profile_fragment),
+    CustomDetailsView.CustomDetailsViewListener,
+    LogoutDialog.LogoutDialogListener,
+    CuisinesChooserDialog.CuisinesChooserListener,
+    HorizontalDietaryView.HorizontalDietaryViewListener,
+    ShareBanner.WSCustomBannerListener,
+    UserImageVideoView.UserImageVideoViewListener {
 
     var binding: MyProfileFragmentBinding? = null
     private val viewModel by viewModel<MyProfileViewModel>()
@@ -44,10 +48,8 @@ class MyProfileFragment : Fragment(R.layout.my_profile_fragment), CustomDetailsV
         super.onViewCreated(view, savedInstanceState)
         binding = MyProfileFragmentBinding.bind(view)
 
-
         initClicks()
         initObservers()
-
     }
 
     override fun onResume() {
@@ -60,11 +62,6 @@ class MyProfileFragment : Fragment(R.layout.my_profile_fragment), CustomDetailsV
             profileData.dietary.let {
                 myProfileFragDietary.initHorizontalDietaryView(it, this@MyProfileFragment)
             }
-
-//            profileData.bannerUrl?.let{
-//                Glide.with(requireContext()).load(it).transform(CenterCrop(), RoundedCorners(15)).into(myProfileFragBanner)
-//                myProfileFragBannerLayout.visibility = View.VISIBLE
-//            }
 
             profileData.eater?.let { eater ->
 
@@ -94,7 +91,6 @@ class MyProfileFragment : Fragment(R.layout.my_profile_fragment), CustomDetailsV
                 myProfileFragCuisine.setIsEditable(true, object : WSEditText.WSEditTextListener {
                     override fun onWSEditUnEditableClick() {
                         val cuisineFragment = CuisinesChooserDialog(this@MyProfileFragment)
-//                        cuisineFragment.setSelectedCuisine(eater.getSelectedCuisines())
                         cuisineFragment.show(childFragmentManager, "CookingCuisine")
                     }
                 })
@@ -105,31 +101,26 @@ class MyProfileFragment : Fragment(R.layout.my_profile_fragment), CustomDetailsV
     }
 
     private fun initObservers() {
-        viewModel.profileData.observe(viewLifecycleOwner, { profileData ->
+        viewModel.profileData.observe(viewLifecycleOwner) { profileData ->
             initProfileData(profileData)
-        })
-
-        viewModel.paymentLiveData.observe(viewLifecycleOwner, { cardsEvent ->
+        }
+        viewModel.paymentLiveData.observe(viewLifecycleOwner) { cardsEvent ->
             handleCustomerCards(cardsEvent)
-        })
-//        viewModel.favoritesLiveData.observe(viewLifecycleOwner, {
-//            binding.myProfileFragFavorites.setFavoritesViewData(it, this)
-//        })
-        viewModel.progressData.observe(viewLifecycleOwner, {
+        }
+        viewModel.progressData.observe(viewLifecycleOwner) {
             if (it) {
                 binding!!.myProfileFragPb.show()
             } else {
                 binding!!.myProfileFragPb.hide()
             }
-        })
-        viewModel.campaignLiveData.observe(viewLifecycleOwner, {
+        }
+        viewModel.campaignLiveData.observe(viewLifecycleOwner) {
             handleCampaign(it)
-        })
-        viewModel.versionLiveData.observe(viewLifecycleOwner, {
+        }
+        viewModel.versionLiveData.observe(viewLifecycleOwner) {
             binding!!.myProfileFragVersion.text = it
-        })
-        mainViewModel.stripeInitializationEvent.observe(viewLifecycleOwner, {
-            Log.d(TAG, "stripeInitializationEvent status: $it")
+        }
+        mainViewModel.stripeInitializationEvent.observe(viewLifecycleOwner) {
             with(binding!!) {
                 when (it) {
                     PaymentManager.StripeInitializationStatus.START -> {
@@ -141,16 +132,16 @@ class MyProfileFragment : Fragment(R.layout.my_profile_fragment), CustomDetailsV
                     PaymentManager.StripeInitializationStatus.FAIL -> {
                         myProfileFragPb.hide()
                     }
-                    else -> { }
+                    else -> {}
                 }
             }
-        })
-        mainViewModel.getFinalAddressParams().observe(viewLifecycleOwner, {
+        }
+        mainViewModel.getFinalAddressParams().observe(viewLifecycleOwner) {
             binding!!.myProfileFragAddress.updateDeliveryAddressFullDetails(it.address)
-        })
-        mainViewModel.onFloatingBtnHeightChange.observe(viewLifecycleOwner, {
+        }
+        mainViewModel.onFloatingBtnHeightChange.observe(viewLifecycleOwner) {
             binding!!.myProfileFragHeightCorrection.isVisible = it
-        })
+        }
     }
 
     private fun handleCampaign(campaigns: List<Campaign>?) {
@@ -168,33 +159,39 @@ class MyProfileFragment : Fragment(R.layout.my_profile_fragment), CustomDetailsV
 
     private fun initClicks() {
         with(binding!!) {
-//            myProfileFragEditAccount.setOnClickListener { (activity as MainActivity).loadEditMyProfile() }//todo - fix this feed 2.0
-
             myProfileFragAddress.setOnClickListener {
-                mainViewModel.handleMainNavigation(MainViewModel.MainNavigationEvent.START_LOCATION_AND_ADDRESS_ACTIVITY)
+                mainViewModel.handleMainNavigation(
+                    MainNavigationEvent.START_LOCATION_AND_ADDRESS_ACTIVITY
+                )
             }
-
             myProfileFragSettings.setOnClickListener {
-                SettingsBottomSheet().show(childFragmentManager, Constants.SETTINGS_BOTTOM_SHEET)
+                SettingsBottomSheet()
+                    .show(childFragmentManager, Constants.SETTINGS_BOTTOM_SHEET)
             }
-            myProfileFragPrivacy.setOnClickListener { WebDocsDialog(Constants.WEB_DOCS_PRIVACY).show(childFragmentManager, Constants.WEB_DOCS_DIALOG_TAG) }
+            myProfileFragPrivacy.setOnClickListener {
+                WebDocsDialog(Constants.WEB_DOCS_PRIVACY)
+                    .show(childFragmentManager, Constants.WEB_DOCS_DIALOG_TAG)
+            }
             myProfileFragSupport.setOnClickListener {
-                SupportCenterBottomSheet().show(childFragmentManager, Constants.SUPPORT_CENTER_BOTTOM_SHEET)
+                SupportCenterBottomSheet()
+                    .show(childFragmentManager, Constants.SUPPORT_CENTER_BOTTOM_SHEET)
             }
-
             myProfileFragJoinAsChef.setOnClickListener {
-                JoinAsChefBottomSheet().show(childFragmentManager, Constants.JOIN_AS_CHEF_BOTTOM_SHEET)
+                JoinAsChefBottomSheet()
+                    .show(childFragmentManager, Constants.JOIN_AS_CHEF_BOTTOM_SHEET)
             }
-
             myProfileFragLogout.setOnClickListener {
-                LogoutDialog(this@MyProfileFragment).show(childFragmentManager, Constants.LOGOUT_DIALOG_TAG)
+                LogoutDialog(this@MyProfileFragment)
+                    .show(childFragmentManager, Constants.LOGOUT_DIALOG_TAG)
                 mainViewModel.logEvent(Constants.EVENT_CLICK_SIGN_OUT)
-
             }
             myProfileFragDeleteAccount.setOnClickListener {
-                DeleteAccountBottomSheet().show(childFragmentManager, Constants.DELETE_ACCOUNT_BOTTOM_SHEET)
+                DeleteAccountBottomSheet()
+                    .show(childFragmentManager, Constants.DELETE_ACCOUNT_BOTTOM_SHEET)
             }
-            myProfileFragEditAccount.setOnClickListener { onUserImageClick(null) }
+            myProfileFragEditAccount.setOnClickListener {
+                onUserImageClick(null)
+            }
             myProfileFragAddress.setDeliveryDetailsViewListener(this@MyProfileFragment)
             myProfileFragPayment.setDeliveryDetailsViewListener(this@MyProfileFragment)
             myProfileFragAddress.setChangeable(true)
@@ -204,7 +201,6 @@ class MyProfileFragment : Fragment(R.layout.my_profile_fragment), CustomDetailsV
 
     override fun onDietaryClick(dietary: SelectableIcon) {
         viewModel.updateClientAccount(dietaryIcons = listOf(dietary))
-
     }
 
     override fun onCuisineChoose(selectedCuisines: List<SelectableIcon>) {
@@ -218,7 +214,9 @@ class MyProfileFragment : Fragment(R.layout.my_profile_fragment), CustomDetailsV
     override fun onCustomDetailsClick(type: Int) {
         when (type) {
             Constants.DELIVERY_DETAILS_LOCATION -> {
-                mainViewModel.handleMainNavigation(MainViewModel.MainNavigationEvent.START_LOCATION_AND_ADDRESS_ACTIVITY)
+                mainViewModel.handleMainNavigation(
+                    MainNavigationEvent.START_LOCATION_AND_ADDRESS_ACTIVITY
+                )
             }
             Constants.DELIVERY_DETAILS_PAYMENT -> {
                 mainViewModel.logEvent(Constants.EVENT_CLICK_PAYMENT)
@@ -238,7 +236,6 @@ class MyProfileFragment : Fragment(R.layout.my_profile_fragment), CustomDetailsV
     private fun updateCustomerPaymentMethod(paymentMethod: PaymentMethod) {
         val card = paymentMethod.card
         if (card != null) {
-            Log.d("wowMyProfile", "updateCustomerPaymentMethod: ${paymentMethod.id}")
             with(binding!!){
                 myProfileFragPayment.updateSubTitle("Selected Card: (${card.brand} ${card.last4})")
                 myProfileFragPb.hide()
@@ -251,7 +248,7 @@ class MyProfileFragment : Fragment(R.layout.my_profile_fragment), CustomDetailsV
     }
 
     override fun onShareBannerClick(campaign: Campaign?) {
-        mainViewModel.onShareCampaignClick(campaign)
+        mainViewModel.onShareCampaignClick(campaign?.shareUrl, campaign?.shareText)
     }
 
     override fun onUserImageClick(cook: Cook?) {
@@ -268,6 +265,4 @@ class MyProfileFragment : Fragment(R.layout.my_profile_fragment), CustomDetailsV
         fun newInstance() = MyProfileFragment()
         const val TAG = "wowMyProfileFrag"
     }
-
-
 }

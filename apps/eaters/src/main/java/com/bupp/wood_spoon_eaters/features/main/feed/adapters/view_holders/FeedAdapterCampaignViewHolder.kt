@@ -7,8 +7,14 @@ import com.bupp.wood_spoon_eaters.features.main.feed.adapters.FeedCouponSectionP
 import com.bupp.wood_spoon_eaters.features.main.feed.adapters.decorators.FeedCampaignCouponItemTransformer
 import com.bupp.wood_spoon_eaters.model.FeedAdapterCoupons
 
-class FeedAdapterCampaignViewHolder(val binding: FeedAdapterCampaignSectionBinding) : RecyclerView.ViewHolder(binding.root) {
-    fun bindItems(item: FeedAdapterCoupons, listener: FeedCouponSectionPagerAdapter.FeedCouponSectionListener) {
+class FeedAdapterCampaignViewHolder(
+    val binding: FeedAdapterCampaignSectionBinding
+) : RecyclerView.ViewHolder(binding.root) {
+
+    fun bindItems(
+        item: FeedAdapterCoupons,
+        listener: FeedCouponSectionPagerAdapter.FeedCouponSectionListener
+    ) {
         item.couponSection.items?.let {
             if (it.isNotEmpty()) {
                 binding.feedCampaignSectionLayout.visibility = View.VISIBLE

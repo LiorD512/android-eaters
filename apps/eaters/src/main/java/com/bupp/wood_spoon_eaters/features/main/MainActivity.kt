@@ -320,25 +320,25 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
 
     //fragment and sub features
 
-    private fun handleNavigation(mainNavigationEvent: MainViewModel.MainNavigationEvent) {
+    private fun handleNavigation(mainNavigationEvent: MainNavigationEvent) {
         when (mainNavigationEvent) {
-            MainViewModel.MainNavigationEvent.START_LOCATION_AND_ADDRESS_ACTIVITY -> {
+            MainNavigationEvent.START_LOCATION_AND_ADDRESS_ACTIVITY -> {
                 updateLocationOnResult.launch(Intent(this, LocationAndAddressActivity::class.java))
             }
-            MainViewModel.MainNavigationEvent.START_PAYMENT_METHOD_ACTIVITY -> {
+            MainNavigationEvent.START_PAYMENT_METHOD_ACTIVITY -> {
                 UXCam.occludeSensitiveScreen(true)
                 PaymentMethodsActivityStarter(this).startForResult(PaymentMethodsActivityStarter.Args.Builder().build())
             }
-            MainViewModel.MainNavigationEvent.INITIALIZE_STRIPE -> {
+            MainNavigationEvent.INITIALIZE_STRIPE -> {
                 viewModel.reInitStripe(this)
             }
-            MainViewModel.MainNavigationEvent.LOGOUT -> {
+            MainNavigationEvent.LOGOUT -> {
                 val intent = Intent(this, SplashActivity::class.java)
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                 startActivity(intent)
                 finish()
             }
-            MainViewModel.MainNavigationEvent.OPEN_CAMERA_UTIL_IMAGE -> {
+            MainNavigationEvent.OPEN_CAMERA_UTIL_IMAGE -> {
                 mediaUtil.startPhotoFetcher()
             }
         }

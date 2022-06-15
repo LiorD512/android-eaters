@@ -11,7 +11,7 @@
             app:motionInterpolator="easeInOut">
         <OnSwipe
                 app:dragDirection="dragLeft"
-                app:touchAnchorId="@id/feedCampaignSectionViewPager" />
+                app:touchAnchorId="@id/feedHeroSectionViewPager" />
 
         <KeyFrameSet>
             <KeyAttribute
@@ -45,7 +45,7 @@
 
         <OnSwipe
                 app:dragDirection="dragRight"
-                app:touchAnchorId="@+id/feedCampaignSectionViewPager" />
+                app:touchAnchorId="@+id/feedHeroSectionViewPager" />
 
         <KeyFrameSet>
             <KeyAttribute
