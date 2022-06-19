@@ -24,6 +24,7 @@ class FeedMainAdapter(
     FeedAdapterLargeRestaurantViewHolder.FeedAdapterRestaurantViewHolderListener,
     FeedRestaurantDishPagerAdapter.FeedRestaurantDishPagerAdapterListener,
     FeedHeroSectionPagerAdapter.FeedHeroSectionListener,
+    FeedChefSectionAdapter.FeedChefSectionListener,
     SearchTagsAdapter.SearchTagsAdapterListener {
 
     private val dataList: MutableList<FeedAdapterItem> = mutableListOf()
@@ -68,8 +69,11 @@ class FeedMainAdapter(
                 val binding = FeedAdapterHeroSectionBinding.inflate(LayoutInflater.from(parent.context), parent, false)
                 FeedAdapterHeroViewHolder(binding)
             }
+            FeedAdapterViewType.CHEF.ordinal -> {
+                val binding = FeedAdapterChefSectionBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+                FeedAdapterChefViewHolder(binding)
+            }
             FeedAdapterViewType.RESTAURANT.ordinal -> {
-                Log.d("wowFeedAdapter", "onCreateViewHolder -> RESTAURANT")
                 val snapHelper = GravitySnapHelper(Gravity.START)
                 val adapter = FeedRestaurantDishPagerAdapter(this)
                 val binding = FeedAdapterRestaurantItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -133,7 +137,6 @@ class FeedMainAdapter(
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        Log.d("wowProcessFeedData", "onBindViewHolder - position: $position")
         val section = dataList[position]
         when (section) {
             is FeedAdapterTitle -> {
@@ -150,6 +153,10 @@ class FeedMainAdapter(
             }
             is FeedAdapterHero -> {
                 holder as FeedAdapterHeroViewHolder
+                holder.bindItems(section, this)
+            }
+            is FeedAdapterChefSection -> {
+                holder as FeedAdapterChefViewHolder
                 holder.bindItems(section, this)
             }
             is FeedAdapterRestaurant -> {
@@ -214,7 +221,6 @@ class FeedMainAdapter(
     }
 
     override fun onPageClick(itemLocalId: Long?, position: Int) {
-        Log.d("wowProcessFeedData", "onPageClick position: $position")
         dataList.forEachIndexed { index, feedAdapterItem ->
             if (feedAdapterItem.id == itemLocalId) {
                 val section = dataList[index]
@@ -271,6 +277,19 @@ class FeedMainAdapter(
                 }
             }
         }
+    }
+
+    override fun onChefClick(chef: FeedChefItemSection?) {
+        listener.onRestaurantClick(RestaurantInitParams(
+            restaurantId = chef?.cook?.id,
+            chefName = chef?.cook?.firstName,
+            chefThumbnail = chef?.cook?.thumbnail,
+            rating = chef?.cook?.rating.toString(),
+            restaurantName = chef?.cook?.getFullName(),
+            isFromSearch = false,
+            coverPhoto = null,
+            isFavorite = false
+        ))
     }
 }
 

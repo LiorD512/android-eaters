@@ -44,7 +44,8 @@
     <fragment
             android:id="@+id/dishSearchFragment"
             android:name="com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.dish_search.DishSearchFragment"
-            android:label="DishSearchFragment" >
+            android:label="DishSearchFragment"
+            tools:layout="@layout/fragment_dish_search">
         <action
                 android:id="@+id/action_dishSearchFragment_to_dishPageFragment"
                 app:destination="@id/dishPageFragment"

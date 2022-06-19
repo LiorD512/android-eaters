@@ -106,6 +106,22 @@ data class FeedHeroItemSection(
 
 @Parcelize
 @JsonClass(generateAdapter = true)
+data class FeedChefItemSection(
+    override val full_href: String? = null,
+    override val items: List<FeedRestaurantSectionItem>? = null,
+    @Json(name = "cook") val cook: Cook?,
+    @Json(name = "cooking_slot") val cookingSlot: FeedDishCookingSlot?,
+) : Parcelable, FeedSectionCollectionItem(FeedModelsViewType.CHEF)
+
+@Parcelize
+@JsonClass(generateAdapter = true)
+data class FeedDishItemSection(
+    override val full_href: String? = null,
+    override val items: List<FeedRestaurantSectionItem>? = null,
+) : Parcelable, FeedSectionCollectionItem(FeedModelsViewType.DISH)
+
+@Parcelize
+@JsonClass(generateAdapter = true)
 data class QuickLinkItem(
     override val items: List<FeedRestaurantSectionItem>? = null,
     override val full_href: String? = null,
@@ -145,26 +161,29 @@ data class FeedRestaurantSection(
         return ""
     }
 
-    fun toRestaurantInitParams(sectionTitle: String? = null, sectionOrder: Int? = null, restaurantOrderInSection: Int? = null, dishIndexInRestaurant: Int? = null, isFromSearch: Boolean = false): RestaurantInitParams {
-        return RestaurantInitParams(
-            chefId,
-            chefThumbnail,
-            chefCover,
-            getAvgRating(),
-            restaurantName,
-            chefName,
-            false,
-            null,
-            isFromSearch,
-            cookingSlot,
-            sectionTitle,
-            sectionOrder,
-            restaurantOrderInSection,
-            dishIndexInRestaurant
-        )
-    }
+    fun toRestaurantInitParams(
+        sectionTitle: String? = null,
+        sectionOrder: Int? = null,
+        restaurantOrderInSection: Int? = null,
+        dishIndexInRestaurant: Int? = null,
+        isFromSearch: Boolean = false
+    ) = RestaurantInitParams(
+        chefId,
+        chefThumbnail,
+        chefCover,
+        getAvgRating(),
+        restaurantName,
+        chefName,
+        false,
+        null,
+        isFromSearch,
+        cookingSlot,
+        sectionTitle,
+        sectionOrder,
+        restaurantOrderInSection,
+        dishIndexInRestaurant
+    )
 }
-
 
 sealed class FeedRestaurantSectionItem(
     @Json(name = "type") val type: FeedRestaurantSectionItemViewType? = null
@@ -222,7 +241,11 @@ enum class FeedModelsViewType {
     @Json(name = "hero")
     HERO,
     @Json(name = "quick_link")
-    QUICK_LINK
+    QUICK_LINK,
+    @Json(name = "chef")
+    CHEF,
+    @Json(name = "dish")
+    DISH
 }
 
 enum class FeedRestaurantSectionItemViewType{
@@ -241,6 +264,7 @@ enum class FeedAdapterViewType {
     SEARCH_TITLE,
     COUPONS,
     HERO,
+    CHEF,
     QUICK_LINK,
     RESTAURANT,
     RESTAURANT_LARGE,
@@ -316,6 +340,11 @@ data class FeedAdapterEmptySection(
 data class FeedAdapterComingSoonSection(
     val comingSoonSection: FeedComingSoonSection, override val id: Long?
 ) : Parcelable, FeedAdapterItem(FeedAdapterViewType.COMING_SOON)
+
+@Parcelize
+data class FeedAdapterChefSection(
+    val chefSection: MutableList<FeedChefItemSection>, override val id: Long?
+) : Parcelable, FeedAdapterItem(FeedAdapterViewType.CHEF)
 
 @Parcelize
 data class FeedAdapterNoNetworkSection(
