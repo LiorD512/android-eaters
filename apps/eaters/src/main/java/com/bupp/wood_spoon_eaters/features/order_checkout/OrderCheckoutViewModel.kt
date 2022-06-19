@@ -15,9 +15,11 @@ import com.bupp.wood_spoon_eaters.features.order_checkout.upsale_and_cart.Custom
 import com.bupp.wood_spoon_eaters.managers.CartManager
 import com.bupp.wood_spoon_eaters.managers.EatersAnalyticsTracker
 import com.bupp.wood_spoon_eaters.managers.PaymentManager
+import com.bupp.wood_spoon_eaters.managers.logEvent
 import com.bupp.wood_spoon_eaters.model.DishInitParams
 import com.bupp.wood_spoon_eaters.repositories.OrderRepository
 import com.bupp.wood_spoon_eaters.utils.DateUtils
+import com.eatwoodspoon.analytics.events.EatersGiftEvent
 import com.stripe.android.model.PaymentMethod
 import kotlinx.coroutines.launch
 import java.util.*
@@ -46,7 +48,8 @@ private val eatersAnalyticsTracker: EatersAnalyticsTracker) : ViewModel() {
         INITIALIZE_STRIPE,
         OPEN_PROMO_CODE_FRAGMENT,
         OPEN_DISH_PAGE,
-        OPEN_TIP_FRAGMENT
+        OPEN_TIP_FRAGMENT,
+        OPEN_GIFT_FRAGMENT
     }
 
     fun handleMainNavigation(type: NavigationEventType) {
@@ -116,6 +119,11 @@ private val eatersAnalyticsTracker: EatersAnalyticsTracker) : ViewModel() {
         eatersAnalyticsTracker.logEvent(Constants.EVENT_CHANGE_DELIVERY_TIME, getChangedTimeData(date))
     }
 
+    fun logEventGiftClicked() {
+        val orderId = cartManager.getCurrentOrderData().value?.id?.toString() ?: ""
+        eatersAnalyticsTracker.logEvent(EatersGiftEvent.ClickGiftInCheckoutEvent(order_id = orderId))
+    }
+
     private fun getChangedTimeData(date: Date?): Map<String, String> {
         val data = mutableMapOf<String, String>()
         data["selected_date"] = DateUtils.parseDateToFullTime(date)
@@ -126,7 +134,4 @@ private val eatersAnalyticsTracker: EatersAnalyticsTracker) : ViewModel() {
     companion object{
         const val TAG = "wowOrderCheckoutVM"
     }
-
-
-
 }

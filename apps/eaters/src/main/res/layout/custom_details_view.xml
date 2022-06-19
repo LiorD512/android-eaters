@@ -29,6 +29,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center_vertical|left"
+                android:layout_gravity="center_vertical"
                 android:orientation="vertical">
 
             <TextView
@@ -49,7 +50,7 @@
                     android:layout_height="wrap_content"
                     android:ellipsize="end"
                     android:lines="1"
-                    tools:text="Monday, May 24th, 4PM" />
+                    tools:text="Monday, May 24th, 4PM"/>
 
             <TextView
                     android:visibility="gone"

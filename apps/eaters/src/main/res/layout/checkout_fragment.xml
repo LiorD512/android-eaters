@@ -74,7 +74,15 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:changeable="true"
-                    app:detailsType="DELIVERY_DETAILS_LOCATION"
+                    app:detailsType="DELIVERY_DETAILS_LOCATION" />
+
+            <com.bupp.wood_spoon_eaters.custom_views.CustomDetailsView
+                    android:id="@+id/checkoutFragGift"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:changeable="true"
+                    app:btnTitle="Add details"
+                    app:detailsType="DELIVERY_DETAILS_GIFT"
                     app:showSep="false" />
 
             <LinearLayout

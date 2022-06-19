@@ -40,12 +40,13 @@ data class WSImage(
 ) : Parcelable
 
 @JsonClass(generateAdapter = true)
+@Parcelize
 data class CountriesISO(
     val name: String?,
     val value: String,
     val country_code: String?,
     val flag: String?
-)
+) : Parcelable
 
 @JsonClass(generateAdapter = true)
 data class MetaDataModel(

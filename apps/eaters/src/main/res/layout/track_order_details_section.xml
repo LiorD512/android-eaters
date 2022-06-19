@@ -183,6 +183,32 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/trackOrderDetailsSectionGiftRecipient"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="9dp"
+            android:orientation="horizontal">
+
+            <TextView
+                style="@style/LatoBold11Dark"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="4dp"
+                android:letterSpacing="0.03"
+                android:text="Gift recipient:" />
+
+            <TextView
+                android:id="@+id/trackOrderDetailsSectionGiftRecipientInfo"
+                style="@style/LatoReg11Dark"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="start"
+                android:letterSpacing="0.03"
+                tools:text="Sasha Sidorenko\n617-909-6185\nmylove@gmail.com" />
+
+        </LinearLayout>
+
+        <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="9dp"

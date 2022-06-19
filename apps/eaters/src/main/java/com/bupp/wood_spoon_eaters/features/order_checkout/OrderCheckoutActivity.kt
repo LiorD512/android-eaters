@@ -15,7 +15,6 @@ import com.bupp.wood_spoon_eaters.di.abs.LiveEvent
 import com.bupp.wood_spoon_eaters.features.base.BaseActivity
 import com.bupp.wood_spoon_eaters.features.locations_and_address.LocationAndAddressActivity
 import com.bupp.wood_spoon_eaters.features.main.MainActivity
-import com.bupp.wood_spoon_eaters.features.restaurant.RestaurantMainViewModel
 import com.bupp.wood_spoon_eaters.utils.showErrorToast
 import com.stripe.android.view.PaymentMethodsActivityStarter
 import com.uxcam.UXCam
@@ -24,12 +23,13 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 class OrderCheckoutActivity : BaseActivity() {
 
     //activityLauncher Results
-    private val startAddressChooserForResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
-        Log.d(TAG, "Activity For Result - startAddressChooserForResult")
-        if (result.resultCode == Activity.RESULT_OK) {
-            viewModel.onLocationChanged()
+    private val startAddressChooserForResult =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
+            Log.d(TAG, "Activity For Result - startAddressChooserForResult")
+            if (result.resultCode == Activity.RESULT_OK) {
+                viewModel.onLocationChanged()
+            }
         }
-    }
 
     val viewModel by viewModel<OrderCheckoutViewModel>()
     lateinit var binding: ActivityOrderCheckoutActivityBinding
@@ -60,14 +60,21 @@ class OrderCheckoutActivity : BaseActivity() {
     }
 
     private fun handleNavigation(mainNavigationEvent: LiveEvent<OrderCheckoutViewModel.NavigationEvent>) {
-        mainNavigationEvent.getContentIfNotHandled()?.let{ navigation ->
+        mainNavigationEvent.getContentIfNotHandled()?.let { navigation ->
             when (navigation.navigationType) {
                 OrderCheckoutViewModel.NavigationEventType.START_LOCATION_AND_ADDRESS_ACTIVITY -> {
-                    startAddressChooserForResult.launch(Intent(this, LocationAndAddressActivity::class.java))
+                    startAddressChooserForResult.launch(
+                        Intent(
+                            this,
+                            LocationAndAddressActivity::class.java
+                        )
+                    )
                 }
                 OrderCheckoutViewModel.NavigationEventType.START_PAYMENT_METHOD_ACTIVITY -> {
                     UXCam.occludeSensitiveScreen(true)
-                    PaymentMethodsActivityStarter(this).startForResult(PaymentMethodsActivityStarter.Args.Builder().build())
+                    PaymentMethodsActivityStarter(this).startForResult(
+                        PaymentMethodsActivityStarter.Args.Builder().build()
+                    )
                 }
                 OrderCheckoutViewModel.NavigationEventType.FINISH_CHECKOUT_ACTIVITY -> {
                     finish()
@@ -83,6 +90,9 @@ class OrderCheckoutActivity : BaseActivity() {
                 OrderCheckoutViewModel.NavigationEventType.OPEN_PROMO_CODE_FRAGMENT -> {
                     findNavController(R.id.checkoutActContainer).navigate(R.id.action_checkoutFragment_to_promoCodeFragment)
                 }
+                OrderCheckoutViewModel.NavigationEventType.OPEN_GIFT_FRAGMENT -> {
+                    findNavController(R.id.checkoutActContainer).navigate(R.id.action_checkoutFragment_to_giftActionsDialogFragment)
+                }
                 OrderCheckoutViewModel.NavigationEventType.OPEN_DISH_PAGE -> {
                     navigation.navDirections?.let { it ->
                         findNavController(R.id.checkoutActContainer).navigate(it)
@@ -97,18 +107,18 @@ class OrderCheckoutActivity : BaseActivity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-            when (requestCode) {
-                PaymentMethodsActivityStarter.REQUEST_CODE -> {
-                    MTLogger.c(MainActivity.TAG, "Stripe")
-                    UXCam.occludeSensitiveScreen(false)
-                    val result = PaymentMethodsActivityStarter.Result.fromIntent(data)
-                    result?.let {
-                        MTLogger.c(MainActivity.TAG, "payment method success")
-                        viewModel.updatePaymentMethod(this, result.paymentMethod)
-                    }
+        when (requestCode) {
+            PaymentMethodsActivityStarter.REQUEST_CODE -> {
+                MTLogger.c(MainActivity.TAG, "Stripe")
+                UXCam.occludeSensitiveScreen(false)
+                val result = PaymentMethodsActivityStarter.Result.fromIntent(data)
+                result?.let {
+                    MTLogger.c(MainActivity.TAG, "payment method success")
+                    viewModel.updatePaymentMethod(this, result.paymentMethod)
                 }
-
             }
+
+        }
     }
 
     fun handleProgressBar(isLoading: Boolean) {
@@ -125,7 +135,7 @@ class OrderCheckoutActivity : BaseActivity() {
         finish()
     }
 
-    companion object{
+    companion object {
         const val TAG = "wowOrderCheckoutAct"
     }
 

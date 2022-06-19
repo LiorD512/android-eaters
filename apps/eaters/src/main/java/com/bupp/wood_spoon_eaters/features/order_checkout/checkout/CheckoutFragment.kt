@@ -6,6 +6,7 @@ import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.bottom_sheets.clear_cart_dialogs.clear_cart_restaurant.ClearCartCheckoutBottomSheet
@@ -26,6 +27,7 @@ import com.bupp.wood_spoon_eaters.features.order_checkout.OrderCheckoutViewModel
 import com.bupp.wood_spoon_eaters.features.order_checkout.checkout.models.CheckoutAdapterItem
 import com.bupp.wood_spoon_eaters.features.order_checkout.checkout.order_items_view.CheckoutOrderItemsAdapter
 import com.bupp.wood_spoon_eaters.features.order_checkout.checkout.order_items_view.CheckoutOrderItemsView
+import com.bupp.wood_spoon_eaters.features.order_checkout.gift.GiftConfig
 import com.bupp.wood_spoon_eaters.features.order_checkout.upsale_and_cart.*
 import com.bupp.wood_spoon_eaters.model.*
 import com.bupp.wood_spoon_eaters.views.WSTitleValueView
@@ -54,13 +56,15 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        activity?.onBackPressedDispatcher?.addCallback(this, object : OnBackPressedCallback(isEnabled) {
-            override fun handleOnBackPressed() {
-                mainViewModel.logEvent(Constants.EVENT_CLICK_BACK_FROM_CHECKOUT)
-                isEnabled = false
-                activity?.onBackPressed()
-            }
-        })
+        activity?.onBackPressedDispatcher?.addCallback(
+            this,
+            object : OnBackPressedCallback(isEnabled) {
+                override fun handleOnBackPressed() {
+                    mainViewModel.logEvent(Constants.EVENT_CLICK_BACK_FROM_CHECKOUT)
+                    isEnabled = false
+                    activity?.onBackPressed()
+                }
+            })
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -80,6 +84,7 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
             checkoutFragChangePayment.setDeliveryDetailsViewListener(this@CheckoutFragment)
             checkoutFragDeliveryFee.setWSTitleValueListener(this@CheckoutFragment)
             checkoutFragPromoCode.setDeliveryDetailsViewListener(this@CheckoutFragment)
+            checkoutFragGift.setDeliveryDetailsViewListener(this@CheckoutFragment)
             checkoutFragFees.setWSTitleValueListener(this@CheckoutFragment)
 
             checkoutFragPromoCode.setOnClickListener {
@@ -108,33 +113,40 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
             }
 
             //adapter listener
-            val adapterListener = object : CheckoutOrderItemsAdapter.CheckoutOrderItemsAdapterListener {
-                override fun onDishSwipedAdd(item: CheckoutAdapterItem) {
-                    val dishId = item.customOrderItem.orderItem.dish.id
-                    val note = item.customOrderItem.orderItem.notes
-                    val orderId = item.customOrderItem.orderItem.id
-                    val currentQuantity = item.customOrderItem.orderItem.quantity
-                    viewModel.updateDishInCart(currentQuantity + 1, dishId, note, orderId)
+            val adapterListener =
+                object : CheckoutOrderItemsAdapter.CheckoutOrderItemsAdapterListener {
+                    override fun onDishSwipedAdd(item: CheckoutAdapterItem) {
+                        val dishId = item.customOrderItem.orderItem.dish.id
+                        val note = item.customOrderItem.orderItem.notes
+                        val orderId = item.customOrderItem.orderItem.id
+                        val currentQuantity = item.customOrderItem.orderItem.quantity
+                        viewModel.updateDishInCart(currentQuantity + 1, dishId, note, orderId)
 //                    viewModel.logSwipeDishInCart(Constants.EVENT_SWIPE_ADD_DISH_IN_CART, item.customOrderItem)
-                }
-
-                override fun onDishSwipedRemove(item: CheckoutAdapterItem) {
-                    val orderItemId = item.customOrderItem.orderItem.id
-                    val showDialog = viewModel.removeSingleOrderItemId(orderItemId)
-                    if (showDialog) {
-                        ClearCartCheckoutBottomSheet.newInstance(this@CheckoutFragment)
-                            .show(childFragmentManager, Constants.CLEAR_CART_RESTAURANT_DIALOG_TAG)
                     }
+
+                    override fun onDishSwipedRemove(item: CheckoutAdapterItem) {
+                        val orderItemId = item.customOrderItem.orderItem.id
+                        val showDialog = viewModel.removeSingleOrderItemId(orderItemId)
+                        if (showDialog) {
+                            ClearCartCheckoutBottomSheet.newInstance(this@CheckoutFragment)
+                                .show(
+                                    childFragmentManager,
+                                    Constants.CLEAR_CART_RESTAURANT_DIALOG_TAG
+                                )
+                        }
 //                    viewModel.logSwipeDishInCart(Constants.EVENT_SWIPE_REMOVE_DISH_IN_CART, item.customOrderItem)
-                }
+                    }
 
-                override fun onDishClicked(customOrderItem: CustomOrderItem) {
-                    mainViewModel.openDishPageWithOrderItem(customOrderItem)
-                }
+                    override fun onDishClicked(customOrderItem: CustomOrderItem) {
+                        mainViewModel.openDishPageWithOrderItem(customOrderItem)
+                    }
 
-            }
+                }
             //init view
-            checkoutFragOrderItemsView.initView(adapterListener = adapterListener, viewListener = viewListener)
+            checkoutFragOrderItemsView.initView(
+                adapterListener = adapterListener,
+                viewListener = viewListener
+            )
         }
     }
 
@@ -171,15 +183,21 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
         }
         viewModel.feeAndTaxDialogData.observe(viewLifecycleOwner) {
             it.getContentIfNotHandled()?.let { data ->
-                FeesAndTaxBottomSheetDialog.newInstance(data.fee, data.tax, data.minOrderFee).show(childFragmentManager, Constants.FEES_AND_tAX_BOTTOM_SHEET)
+                FeesAndTaxBottomSheetDialog.newInstance(data.fee, data.tax, data.minOrderFee)
+                    .show(childFragmentManager, Constants.FEES_AND_tAX_BOTTOM_SHEET)
             }
         }
         viewModel.shippingMethodsEvent.observe(viewLifecycleOwner) {
             it?.let {
                 if (it.isNotEmpty()) {
-                    NationwideShippingChooserDialog.newInstance(ArrayList(it)).show(childFragmentManager, Constants.NATIONWIDE_SHIPPING_SELECT_DIALOG)
+                    NationwideShippingChooserDialog.newInstance(ArrayList(it))
+                        .show(childFragmentManager, Constants.NATIONWIDE_SHIPPING_SELECT_DIALOG)
                 } else {
-                    Toast.makeText(requireContext(), "UPS Service is not available at the moment, please try again later", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        requireContext(),
+                        "UPS Service is not available at the moment, please try again later",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
             }
         }
@@ -208,6 +226,9 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
         viewModel.pricingExperimentData.observe(viewLifecycleOwner) {
             handlePricingExperiment(it)
         }
+        viewModel.giftConfigData.observe(viewLifecycleOwner) {
+            handleGiftConfig(it)
+        }
     }
 
     private fun initMap(orderData: Order?) {
@@ -233,6 +254,13 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
         }
     }
 
+    private fun handleGiftConfig(giftConfig: GiftConfig) {
+        with(binding!!) {
+            checkoutFragGift.isVisible = giftConfig.isGiftEnabled
+        }
+    }
+
+
     private fun handleOrderDeliveryDates(deliveryDates: List<DeliveryDates>) {
         if (deliveryDates.isEmpty()) {
             binding!!.checkoutFragDeliveryTime.setChangeable(false)
@@ -247,7 +275,10 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
 
     private fun openOrderTimeBottomSheet(deliveryDatesData: CheckoutViewModel.TimePickerData) {
         val timePickerBottomSheet = SingleColumnTimePickerBottomSheet(this)
-        timePickerBottomSheet.setDeliveryDates(deliveryDatesData.selectedDate, deliveryDatesData.deliveryDates)
+        timePickerBottomSheet.setDeliveryDates(
+            deliveryDatesData.selectedDate,
+            deliveryDatesData.deliveryDates
+        )
         timePickerBottomSheet.show(childFragmentManager, Constants.TIME_PICKER_BOTTOM_SHEET)
     }
 
@@ -296,6 +327,8 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
                     checkoutFragDeliveryAddress.updateDeliveryAddressFullDetails(order.deliveryAddress)
 //                    checkoutFragOrderItemsView.setOrderItems(requireContext(), it.orderItems.toList(), this@CheckoutFragment)
                 }
+
+                checkoutFragGift.updateGiftingFullDetails(order)
 
                 order.cookingSlot?.isNationwide?.let {
                     if (it) {
@@ -381,6 +414,10 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
                 mainViewModel.logEvent(Constants.EVENT_CLICK_ON_PROMO_CODE)
                 mainViewModel.handleMainNavigation(OrderCheckoutViewModel.NavigationEventType.OPEN_PROMO_CODE_FRAGMENT)
             }
+            Constants.DELIVERY_DETAILS_GIFT -> {
+                mainViewModel.logEventGiftClicked()
+                mainViewModel.handleMainNavigation(OrderCheckoutViewModel.NavigationEventType.OPEN_GIFT_FRAGMENT)
+            }
         }
     }
 
@@ -408,7 +445,8 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
                     bodyText = resources.getString(R.string.tool_tip_courier_body)
                 }
             }
-            ToolTipBottomSheet.newInstance(titleText, bodyText).show(childFragmentManager, Constants.FREE_TEXT_BOTTOM_SHEET)
+            ToolTipBottomSheet.newInstance(titleText, bodyText)
+                .show(childFragmentManager, Constants.FREE_TEXT_BOTTOM_SHEET)
         }
     }
 

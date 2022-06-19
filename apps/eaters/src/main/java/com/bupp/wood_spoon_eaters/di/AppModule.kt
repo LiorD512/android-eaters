@@ -35,6 +35,10 @@ import com.bupp.wood_spoon_eaters.features.onboarding.OnboardingViewModel
 import com.bupp.wood_spoon_eaters.features.order_checkout.checkout.CheckoutViewModel
 import com.bupp.wood_spoon_eaters.features.order_checkout.promo_code.PromoCodeViewModel
 import com.bupp.wood_spoon_eaters.features.order_checkout.OrderCheckoutViewModel
+import com.bupp.wood_spoon_eaters.features.order_checkout.gift.GiftActionsViewModel
+import com.bupp.wood_spoon_eaters.features.order_checkout.gift.GiftConfigUseCase
+import com.bupp.wood_spoon_eaters.features.order_checkout.gift.GiftStateMapper
+import com.bupp.wood_spoon_eaters.features.order_checkout.gift.GiftViewModel
 import com.bupp.wood_spoon_eaters.features.order_checkout.upsale_and_cart.UpSaleNCartViewModel
 import com.bupp.wood_spoon_eaters.features.restaurant.RestaurantMainViewModel
 import com.bupp.wood_spoon_eaters.features.restaurant.dish_page.DishPageViewModel
@@ -87,6 +91,7 @@ val appModule = module {
     single { GetOnboardingVideoPathUseCase(get()) }
     single { GetOnboardingSlideListUseCase() }
     single { GetOnboardingAppSettingsSlidesDelayUseCase(get()) }
+    single { GiftConfigUseCase(get()) }
     single { FeatureFlagLongFeedUseCase(get()) }
 
     //managers
@@ -99,6 +104,10 @@ val appModule = module {
     single { FeedDataManager(get(), get(), get()) }
     single { CartManager(get(), get(), get()) }
     single { EaterDataManager(get(), get(), get(), get(), get()) }
+
+    //mappers
+    factory { GiftStateMapper() }
+
     //VIEW MODELS
 
     // analytics
@@ -125,9 +134,11 @@ val appModule = module {
     viewModel { TimePickerViewModel(get()) }
 
     //New Order
-    viewModel { CheckoutViewModel(get(), get(), get(), get(), get()) }
+    viewModel { CheckoutViewModel(get(), get(), get(), get(), get(), get()) }
     viewModel { PromoCodeViewModel(get(), get()) }
     viewModel { FeesAndTaxViewModel(get(), get()) }
+    viewModel { GiftViewModel(get(), get(), get()) }
+    viewModel { GiftActionsViewModel(get(), get()) }
 
     viewModel { UpSaleNCartViewModel(get(), get(), get(), get()) }
 

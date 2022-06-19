@@ -1,0 +1,13 @@
+apply from: "${rootProject.projectDir}/common-module.gradle"
+
+android {
+
+}
+
+dependencies {
+
+    implementation 'androidx.lifecycle:lifecycle-common'
+    implementation 'androidx.lifecycle:lifecycle-livedata-core-ktx'
+    implementation 'androidx.fragment:fragment-ktx'
+    implementation 'androidx.appcompat:appcompat'
+}

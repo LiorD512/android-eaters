@@ -9,14 +9,21 @@ import com.squareup.moshi.JsonClass
 import kotlinx.parcelize.Parcelize
 import java.util.*
 
-enum class OrderState{
-    @Json(name = "finalized") FINALIZED,
-    @Json(name = "accepted") RECEIVED,
-    @Json(name = "preparation") PREPARED,
-    @Json(name = "on_the_way") ON_THE_WAY,
-    @Json(name = "delivered") DELIVERED,
-    @Json(name = "cancelled") CANCELLED,
-    @Json(name = "cart") NONE
+enum class OrderState {
+    @Json(name = "finalized")
+    FINALIZED,
+    @Json(name = "accepted")
+    RECEIVED,
+    @Json(name = "preparation")
+    PREPARED,
+    @Json(name = "on_the_way")
+    ON_THE_WAY,
+    @Json(name = "delivered")
+    DELIVERED,
+    @Json(name = "cancelled")
+    CANCELLED,
+    @Json(name = "cart")
+    NONE
 }
 
 @JsonClass(generateAdapter = true)
@@ -45,6 +52,16 @@ data class OrderItemRequest(
 )
 
 @JsonClass(generateAdapter = true)
+data class OrderGiftRequest (
+    @Json(name = "is_gift") val isGift: Boolean,
+    @Json(name = "recipient_first_name") val recipientFirstName: String?,
+    @Json(name = "recipient_last_name") val recipientLastName: String?,
+    @Json(name = "recipient_phone_number") val recipientPhoneNumber: String?,
+    @Json(name = "notify_recipient") val notifyRecipient: Boolean?,
+    @Json(name = "recipient_email") val recipientEmail : String?,
+)
+
+@JsonClass(generateAdapter = true)
 data class DeliveryDates(
     val from: Date,
     val to: Date
@@ -52,7 +69,7 @@ data class DeliveryDates(
 
 @Parcelize
 @JsonClass(generateAdapter = true)
-data class Order (
+data class Order(
     @Json(name = "id") val id: Long,
     @Json(name = "order_number") val orderNumber: String?,
     @Json(name = "deliver_at") val deliverAt: Date?,
@@ -88,8 +105,13 @@ data class Order (
     @Json(name = "tip") val tip: Price?,
     @Json(name = "discount") val discount: Price?,
     @Json(name = "was_rated") val wasRated: Boolean?,
-    @Json(name = "nationwide_shipping") val isNationwide: Boolean?
-): Parcelable {
+    @Json(name = "nationwide_shipping") val isNationwide: Boolean?,
+    @Json(name = "is_gift") val isGift: Boolean?,
+    @Json(name = "recipient_first_name") val recipientFirstName: String?,
+    @Json(name = "recipient_last_name") val recipientLastName: String?,
+    @Json(name = "recipient_phone_number") val recipientPhoneNumber: String?,
+    @Json(name = "recipient_email") val recipientEmail: String?,
+) : Parcelable {
 //    fun getOrderState(): OrderState {
 //        Log.d("wowOrderState","orderNumber: $orderNumber")
 //        Log.d("wowOrderState","deliveryStatus: $deliveryStatus")
@@ -140,16 +162,12 @@ data class Order (
     }
 }
 
-enum class OrderStatus{
-
-}
-
 @Parcelize
 @JsonClass(generateAdapter = true)
 data class OrderTextStatus(
     val title: String,
     val subtitle: String
-): Parcelable
+) : Parcelable
 
 
 @Parcelize
@@ -163,7 +181,7 @@ data class OrderItem(
     @Json(name = "price") val price: Price,
     @Json(name = "notes") var notes: String?,
     @Json(name = "_destroy") var _destroy: Boolean? = null
-): Parcelable {
+) : Parcelable {
     fun getSingleItemPrice(): Double? {
         price.value?.let {
             return price.value / quantity
@@ -171,7 +189,7 @@ data class OrderItem(
         return null
     }
 
-    fun toOrderItemRequest(): OrderItemRequest{
+    fun toOrderItemRequest(): OrderItemRequest {
         return OrderItemRequest(
             id = id,
             notes = notes,
@@ -180,21 +198,12 @@ data class OrderItem(
             _destroy = _destroy
         )
     }
-//    fun getRemovedIngredients(): String?{
-//        var removedIngredientsStr: String? = null
-////        if(removedIngredients.isNotEmpty()){
-////            removedIngredientsStr = "Without: "
-////            removedIngredients.forEach {
-////                removedIngredientsStr += "${it.name}, "
-////            }
-////        }
-//        return removedIngredientsStr?.substring(0, removedIngredientsStr.length - 2)
-//    }
-    fun getNoteStr(): String?{
-        if(notes.isNullOrEmpty()){
+
+    fun getNoteStr(): String? {
+        if (notes.isNullOrEmpty()) {
             return null
         }
-        return  "Special requests: $notes"
+        return "Special requests: $notes"
     }
 
 }
@@ -206,7 +215,7 @@ data class ShippingMethod(
     val name: String,
     val fee: Price,
     val description: String
-): Parcelable
+) : Parcelable
 
 @Parcelize
 @JsonClass(generateAdapter = true)
@@ -220,4 +229,4 @@ data class Courier(
     val transport_type: String?,
     val lat: Double?,
     val lng: Double?
-): Parcelable
+) : Parcelable

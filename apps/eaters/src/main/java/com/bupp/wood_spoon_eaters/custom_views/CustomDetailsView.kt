@@ -8,17 +8,20 @@ import android.view.LayoutInflater
 import android.view.View
 import android.widget.LinearLayout
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.databinding.CustomDetailsViewBinding
 import com.bupp.wood_spoon_eaters.model.Address
+import com.bupp.wood_spoon_eaters.model.Order
 
 @SuppressLint("CustomViewStyleable")
 class CustomDetailsView @JvmOverloads
 constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) :
     LinearLayout(context, attrs, defStyleAttr) {
 
-    private var binding: CustomDetailsViewBinding = CustomDetailsViewBinding.inflate(LayoutInflater.from(context), this, true)
+    private var binding: CustomDetailsViewBinding =
+        CustomDetailsViewBinding.inflate(LayoutInflater.from(context), this, true)
 
 
     var listener: CustomDetailsViewListener? = null
@@ -40,7 +43,10 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
             if (attrs != null) {
                 val a = context.obtainStyledAttributes(attrs, R.styleable.CustomDetailsAttrs)
                 if (a.hasValue(R.styleable.CustomDetailsAttrs_detailsType)) {
-                    type = a.getInt(R.styleable.CustomDetailsAttrs_detailsType, Constants.DELIVERY_DETAILS_LOCATION)
+                    type = a.getInt(
+                        R.styleable.CustomDetailsAttrs_detailsType,
+                        Constants.DELIVERY_DETAILS_LOCATION
+                    )
                     initUi(type)
                 }
                 if (a.hasValue(R.styleable.CustomDetailsAttrs_changeable)) {
@@ -54,7 +60,12 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
                 if (a.hasValue(R.styleable.CustomDetailsAttrs_isSelectionGray)) {
                     isGrey = a.getBoolean(R.styleable.CustomDetailsAttrs_isSelectionGray, false)
                     if (isGrey) {
-                        customDetailsViewSubtitle.setTextColor(ContextCompat.getColor(context, R.color.dark_50))
+                        customDetailsViewSubtitle.setTextColor(
+                            ContextCompat.getColor(
+                                context,
+                                R.color.dark_50
+                            )
+                        )
                     }
                 }
                 if (a.hasValue(R.styleable.CustomDetailsAttrs_btnTitle)) {
@@ -145,6 +156,10 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
                     customDetailsViewTitle.text = "Promo code"
                     customDetailsViewSubtitle.text = "Enter a WoodSpoon promo code"
                 }
+                Constants.DELIVERY_DETAILS_GIFT -> {
+                    customDetailsViewIcon.setImageResource(R.drawable.icons_gift)
+                    customDetailsViewTitle.text = "This is a gift"
+                }
             }
         }
     }
@@ -176,11 +191,35 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
                     customDetailsViewExtraText.text = address.notes
                     customDetailsViewExtraText.visibility = View.VISIBLE
                 }
-            }else{
+            } else {
                 customDetailsViewSubtitle.text = "Please select your address"
             }
         }
     }
 
+    fun updateGiftingFullDetails(order: Order?) {
+        with(binding) {
+            if (order?.isGift == true) {
+                customDetailsViewSubtitle.isVisible = true
+                customDetailsViewExtraText.isVisible = false
+                setBtnText("Change")
+
+                listOf(
+                    order.recipientFirstName + " " + order.recipientLastName,
+                    order.recipientPhoneNumber,
+                    order.recipientEmail
+                ).filterNot { it.isNullOrBlank() }.apply {
+                    customDetailsViewSubtitle.setLines(this.size)
+                    customDetailsViewSubtitle.text = joinToString("\n")
+                }
+
+            } else {
+                customDetailsViewSubtitle.isVisible = false
+                customDetailsViewExtraText.isVisible = false
+                customDetailsViewSubtitle.setLines(1)
+                setBtnText("Add details")
+            }
+        }
+    }
 
 }

@@ -4,6 +4,7 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -124,6 +125,14 @@ class TrackOrderNewAdapter(val context: Context, val listener: TrackOrderNewAdap
 
             userInfo?.note?.let {
                 binding.trackOrderDetailsSectionNote.text = it
+            }
+            binding.trackOrderDetailsSectionGiftRecipient.isVisible = order.isGift == true
+            binding.trackOrderDetailsSectionGiftRecipientInfo.text = with(order) {
+                listOfNotNull(
+                    "${recipientFirstName ?: ""} ${recipientLastName ?: ""}",
+                    order.recipientPhoneNumber,
+                    order.recipientEmail
+                ).joinToString(separator = "\n")
             }
         }
     }

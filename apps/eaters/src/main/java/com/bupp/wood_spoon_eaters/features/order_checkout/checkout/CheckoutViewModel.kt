@@ -7,10 +7,13 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.bupp.wood_spoon_eaters.di.abs.LiveEventData
 import com.bupp.wood_spoon_eaters.di.abs.ProgressData
+import com.bupp.wood_spoon_eaters.domain.comon.execute
 import com.bupp.wood_spoon_eaters.experiments.PricingExperimentParams
 import com.bupp.wood_spoon_eaters.experiments.PricingExperimentUseCase
 import com.bupp.wood_spoon_eaters.features.base.SingleLiveEvent
 import com.bupp.wood_spoon_eaters.features.order_checkout.checkout.models.CheckoutAdapterItem
+import com.bupp.wood_spoon_eaters.features.order_checkout.gift.GiftConfig
+import com.bupp.wood_spoon_eaters.features.order_checkout.gift.GiftConfigUseCase
 import com.bupp.wood_spoon_eaters.features.order_checkout.upsale_and_cart.CustomOrderItem
 import com.bupp.wood_spoon_eaters.managers.CartManager
 import com.bupp.wood_spoon_eaters.managers.EaterDataManager
@@ -29,7 +32,8 @@ class CheckoutViewModel(
     private val paymentManager: PaymentManager,
     val eaterDataManager: EaterDataManager,
     private val eatersAnalyticsTracker: EatersAnalyticsTracker,
-    private val pricingExperimentUseCase: PricingExperimentUseCase
+    private val pricingExperimentUseCase: PricingExperimentUseCase,
+    private val giftConfigUseCase: GiftConfigUseCase
 ) : ViewModel() {
 
 
@@ -47,6 +51,7 @@ class CheckoutViewModel(
     val validationError = SingleLiveEvent<OrderValidationErrorType>()
 
     val pricingExperimentData: LiveData<PricingExperimentParams> = MutableLiveData(pricingExperimentUseCase.getExperimentParams())
+    val giftConfigData: LiveData<GiftConfig> = MutableLiveData(giftConfigUseCase.execute())
 
     enum class OrderValidationErrorType {
         SHIPPING_METHOD_MISSING,

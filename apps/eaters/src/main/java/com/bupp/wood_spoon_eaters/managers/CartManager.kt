@@ -187,6 +187,25 @@ class CartManager(
     }
 
     /**
+     * this function is used to update order gifting params
+     * @param orderGiftRequest OrderGiftRequest
+     * @param eventType String?
+     * @return OrderRepository.OrderRepoResult<Order>?
+     */
+    suspend fun updateOrderGiftParams(orderGiftRequest: OrderGiftRequest, eventType: String? = null): OrderRepository.OrderRepoResult<Order>? {
+        currentOrderResponse?.id?.let { orderId ->
+            val result = orderRepository.updateOrderGift(orderId, orderGiftRequest)
+            result.data?.let { resultOrder ->
+                updateCartManagerParams(resultOrder.copy())
+                handleEvent(eventType)
+                return result
+            }
+            return result
+        }
+        return null
+    }
+
+    /**
      * this functions is called whenever a user swiped out (right) a dish.
      * it updates the order with a "destroyed" orderItems list.
      * @param dishId = could be dish id or orderItem id

@@ -11,6 +11,7 @@ interface OrderRepositoryInterface{
     suspend fun getFullDishByMenuItem(menuItemId: Long, feedRequest: FeedRequest? = null): ResultHandler<ServerResponse<FullDish>>
     suspend fun postOrder(orderRequest: OrderRequest): ResultHandler<ServerResponse<Order>>
     suspend fun updateOrder(orderId: Long, orderRequest: OrderRequest): ResultHandler<ServerResponse<Order>>
+    suspend fun updateOrderGift(orderId: Long, orderGiftRequest: OrderGiftRequest): ResultHandler<ServerResponse<Order>>
     suspend fun checkoutOrder(orderId: Long, paymentMethodId: String?): ResultHandler<ServerResponse<Any>>
     suspend fun getTraceableOrders(): ResultHandler<ServerResponse<List<Order>>>
     suspend fun getOrderDeliveryTimes(orderId: Long): ResultHandler<ServerResponse<List<DeliveryDates>>>
@@ -48,6 +49,10 @@ class OrderRepositoryImpl(private val service: ApiService, private val resultMan
 
     override suspend fun updateOrder(orderId: Long, orderRequest: OrderRequest): ResultHandler<ServerResponse<Order>> {
         return resultManager.safeApiCall { service.updateOrder(orderId, orderRequest) }
+    }
+
+    override suspend fun updateOrderGift(orderId: Long, orderGiftRequest: OrderGiftRequest): ResultHandler<ServerResponse<Order>> {
+        return resultManager.safeApiCall { service.updateOrderGift(orderId, orderGiftRequest) }
     }
 
     override suspend fun checkoutOrder(orderId: Long, paymentMethodId: String?): ResultHandler<ServerResponse<Any>> {

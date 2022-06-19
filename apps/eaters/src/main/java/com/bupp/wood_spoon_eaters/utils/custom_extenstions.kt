@@ -43,7 +43,29 @@ fun Fragment.showErrorToast(title: String, anchorView: ViewGroup, length: Int = 
     val titleView = customLayout.findViewById<TextView>(R.id.errorTitle)
     titleView.text = title.trim()
     val toast = Toast(requireContext())
-    toast.duration = Toast.LENGTH_SHORT
+    toast.duration = length
+    toast.setGravity(Gravity.TOP or Gravity.FILL_HORIZONTAL, 0, 50)
+    toast.view = customLayout
+    toast.show()
+}
+
+fun Activity.showErrorToast(title: String, length: Int = Toast.LENGTH_SHORT) {
+    val customLayout = layoutInflater.inflate(R.layout.error_toast, null, false)
+    val titleView = customLayout.findViewById<TextView>(R.id.errorTitle)
+    titleView.text = title
+    val toast = Toast(this)
+    toast.duration = length
+    toast.setGravity(Gravity.TOP or Gravity.FILL_HORIZONTAL, 0, 50)
+    toast.view = customLayout
+    toast.show()
+}
+
+fun Fragment.showErrorToast(title: String, length: Int = Toast.LENGTH_SHORT) {
+    val customLayout = layoutInflater.inflate(R.layout.error_toast, null, false)
+    val titleView = customLayout.findViewById<TextView>(R.id.errorTitle)
+    titleView.text = title.trim()
+    val toast = Toast(requireContext())
+    toast.duration = length
     toast.setGravity(Gravity.TOP or Gravity.FILL_HORIZONTAL, 0, 50)
     toast.view = customLayout
     toast.show()

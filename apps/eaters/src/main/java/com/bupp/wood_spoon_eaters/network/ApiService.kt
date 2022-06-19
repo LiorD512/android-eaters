@@ -220,6 +220,12 @@ interface ApiService {
         @Body orderRequest: OrderRequest
     ): ServerResponse<Order>
 
+    @POST("eaters/me/orders/{order_id}")
+    suspend fun updateOrderGift(
+        @Path(value = "order_id", encoded = true) orderId: Long,
+        @Body orderGiftRequest: OrderGiftRequest
+    ): ServerResponse<Order>
+
     @POST("eaters/me/orders/{order_id}/checkout")
     suspend fun checkoutOrder(
         @Path(value = "order_id", encoded = true) orderId: Long,

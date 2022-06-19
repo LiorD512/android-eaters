@@ -1,6 +1,7 @@
 apply from: "${rootProject.projectDir}/common-app.gradle"
 
 apply plugin: "androidx.navigation.safeargs.kotlin"
+apply plugin: 'org.jetbrains.kotlin.android'
 
 android {
     defaultConfig {
@@ -36,8 +37,9 @@ android {
 
 dependencies {
     implementation project(path: ':core:analytics')
+    implementation project(path: ':core:android-utils')
 
-    implementation 'androidx.appcompat:appcompat:1.3.1'
+    implementation 'androidx.appcompat:appcompat'
 
     // Android
     implementation 'com.google.android.material:material:1.4.0'
@@ -45,7 +47,7 @@ dependencies {
     implementation "androidx.constraintlayout:constraintlayout:2.1.2"
     implementation "androidx.navigation:navigation-fragment-ktx:2.3.5"
 
-    implementation 'androidx.fragment:fragment-ktx:1.3.6'
+    implementation 'androidx.fragment:fragment-ktx'
     implementation "org.jetbrains.kotlin:kotlin-reflect:1.6.0"
     implementation 'android.arch.lifecycle:extensions:1.1.1'
 
@@ -62,6 +64,9 @@ dependencies {
     implementation 'com.github.gayanvoice:android-animations-kotlin:1.0.1'
     implementation 'it.sephiroth.android.library.targettooltip:target-tooltip-library:2.0.3'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    implementation 'androidx.lifecycle:lifecycle-livedata-ktx'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx'
+    implementation 'androidx.lifecycle:lifecycle-runtime-ktx'
     kapt 'com.github.bumptech.glide:compiler:4.11.0'
     implementation 'com.facebook.shimmer:shimmer:0.5.0'
     implementation 'com.github.bumptech.glide:glide:4.12.0'
@@ -83,6 +88,8 @@ dependencies {
     implementation 'com.mikhaellopez:ratebottomsheet:1.1.0'
     implementation 'com.google.android.flexbox:flexbox:3.0.0'
     implementation 'com.github.ibrahimsn98:PhoneNumberKit:1.6.2'
+    // TODO replace com.github.ibrahimsn98 with below, referenced by Google
+    // implementation 'io.michaelrocks:libphonenumber-android:8.12.49'
     implementation 'com.github.rubensousa:gravitysnaphelper:2.2.1'
     debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.8.1'
 

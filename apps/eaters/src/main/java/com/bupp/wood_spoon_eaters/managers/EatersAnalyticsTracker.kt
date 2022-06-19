@@ -9,6 +9,7 @@ import com.bupp.wood_spoon_eaters.common.FlowEventsManager
 import com.bupp.wood_spoon_eaters.model.Address
 import com.bupp.wood_spoon_eaters.model.Eater
 import com.bupp.wood_spoon_eaters.utils.DateUtils
+import com.eatwoodspoon.analytics.events.AnalyticsEvent
 import com.facebook.appevents.AppEventsConstants
 import com.facebook.appevents.AppEventsLogger
 import com.google.firebase.analytics.FirebaseAnalytics
@@ -285,4 +286,8 @@ class EatersAnalyticsTracker(
             firebaseAnalytics.logEvent("Error_Prod", bundle)
         }
     }
+}
+
+fun EatersAnalyticsTracker.logEvent(event: AnalyticsEvent) {
+    this.logEvent(event.name, event.params)
 }

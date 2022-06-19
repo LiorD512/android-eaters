@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    tools:context=".features.order_checkout.gift.GiftFragment">
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.google.android.material.appbar.AppBarLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardElevation="6dp">
+
+                <com.bupp.wood_spoon_eaters.custom_views.CheckoutHeaderView
+                    android:id="@+id/giftFragmentHeader"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:iconType="HEADER_ICON_BACK"
+                    app:subtitle=""
+                    app:title="This is a gift" />
+            </androidx.cardview.widget.CardView>
+
+        </com.google.android.material.appbar.AppBarLayout>
+
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+            <LinearLayout
+                android:id="@+id/giftFormLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:animateLayoutChanges="true"
+                android:orientation="vertical"
+                android:paddingHorizontal="16dp">
+
+                <TextView
+                    style="@style/LatoReg13Black"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="30dp"
+                    android:letterSpacing="0.03"
+                    android:lineSpacingExtra="6.7sp"
+                    android:text="@string/gift_description_message" />
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="30dp"
+                    android:orientation="horizontal">
+
+                    <com.bupp.wood_spoon_eaters.views.WSEditText
+                        android:id="@+id/recipientFirstName"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="8dp"
+                        android:layout_weight="1"
+                        app:error="@string/gift_first_name_error"
+                        app:hint="@string/gift_first_name_hint"
+                        app:inputType="INPUT_TYPE_FULL_NAME"/>
+
+                    <com.bupp.wood_spoon_eaters.views.WSEditText
+                        android:id="@+id/recipientLastName"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_weight="1"
+                        app:error="@string/gift_last_name_error"
+                        app:hint="@string/gift_last_name_hint"
+                        app:inputType="INPUT_TYPE_FULL_NAME"/>
+
+                </LinearLayout>
+
+                <com.bupp.wood_spoon_eaters.custom_views.phone_number.PhoneSelectorView
+                    android:id="@+id/recipientPhoneSelector"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="30dp"
+                    tools:layout_height="30dp" />
+
+                <CheckBox
+                    android:id="@+id/notifyRecipientCheckBox"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="30dp"
+                    android:button="@color/transparent"
+                    android:buttonTint="@color/transparent"
+                    android:buttonTintMode="add"
+                    android:drawableStart="@drawable/checkbox_selector"
+                    android:drawablePadding="8dp"
+                    android:text="@string/gift_notify_recipient_to_get_notifications" />
+
+                <com.bupp.wood_spoon_eaters.views.WSEditText
+                    android:id="@+id/recipientEmail"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:visibility="gone"
+                    app:error="@string/gift_email_error"
+                    app:hint="@string/gift_last_email_hint"
+                    app:inputType="MAIL" />
+
+                <com.bupp.wood_spoon_eaters.custom_views.BlueBtnCornered
+                    android:id="@+id/giftSubmitButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:layout_marginTop="30dp"
+                    android:layout_marginBottom="16dp"
+                    app:title="Add details" />
+
+
+            </LinearLayout>
+        </androidx.core.widget.NestedScrollView>
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+    <com.bupp.wood_spoon_eaters.views.WSProgressBar
+        android:id="@+id/giftProgress"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+</FrameLayout>

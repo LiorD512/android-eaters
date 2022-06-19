@@ -165,5 +165,16 @@
     <string name="text_title_onboarding_3">Enjoy home-cooked food made just for you</string>
     <string name="text_description_onboarding_3">Prepared with the love our Home Chefs give their own families.</string>
     <string name="btn_sign_in_onboarding">Sign in</string>
+    <string name="generic_error_message">An Error Occurred Please Try Again Later</string>
+    <string name="gift_description_message">Please add the gift recipient’s details for delivery coordination and updates. (We will contact them only in case of delivery issues).</string>
+    <string name="gift_first_name_error">Please enter first name</string>
+    <string name="gift_first_name_hint">Receiver’s first name</string>
+    <string name="gift_last_name_error">Please enter last name</string>
+    <string name="gift_last_name_hint">Receiver’s last name</string>
+    <string name="gift_notify_recipient_to_get_notifications">I want the recipient to get notifications</string>
+    <string name="gift_email_error">Please enter email</string>
+    <string name="gift_last_email_hint">Receiver’s email</string>
+    <string name="gift_edit_details_action">Edit gift details</string>
+    <string name="gift_delete_details_action">Delete gift details</string>
 
 </resources>

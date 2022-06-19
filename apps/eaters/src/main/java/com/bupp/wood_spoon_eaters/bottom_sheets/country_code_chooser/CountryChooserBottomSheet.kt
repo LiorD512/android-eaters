@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
+import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bupp.wood_spoon_eaters.R
@@ -23,14 +24,17 @@ import me.ibrahimsn.lib.Countries
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import java.util.*
 
-
-class CountryChooserBottomSheet : BottomSheetDialogFragment(), CountryIsoChooserAdapter.AddressChooserAdapterListener {
+abstract class AbstractCountryChooserBottomSheet : BottomSheetDialogFragment(),
+    CountryIsoChooserAdapter.AddressChooserAdapterListener {
 
     var adapter: CountryIsoChooserAdapter? = null
     private var binding: CountryChooserBottomSheetBinding? = null
-    val viewModel by sharedViewModel<LoginViewModel>()
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         val view = inflater.inflate(R.layout.country_chooser_bottom_sheet, container, false)
         binding = CountryChooserBottomSheetBinding.bind(view)
         return view
@@ -63,16 +67,20 @@ class CountryChooserBottomSheet : BottomSheetDialogFragment(), CountryIsoChooser
         parent.setBackgroundResource(R.drawable.bottom_sheet_bkg)
 
         initUi()
-        initObservers()
     }
 
 
     private fun initUi() {
-        with(binding!!){
-            adapter = CountryIsoChooserAdapter(this@CountryChooserBottomSheet)
+        with(binding!!) {
+            adapter = CountryIsoChooserAdapter(this@AbstractCountryChooserBottomSheet)
             countryCodeBottomSheetList.layoutManager = LinearLayoutManager(requireContext())
             countryCodeBottomSheetList.adapter = adapter
-            val dividerItemDecoration = DividerItemDecorator(ContextCompat.getDrawable(requireContext(), R.drawable.divider))
+            val dividerItemDecoration = DividerItemDecorator(
+                ContextCompat.getDrawable(
+                    requireContext(),
+                    R.drawable.divider
+                )
+            )
             countryCodeBottomSheetList.addItemDecoration(dividerItemDecoration)
 
             val countriesISO = mutableListOf<CountriesISO>()
@@ -88,11 +96,14 @@ class CountryChooserBottomSheet : BottomSheetDialogFragment(), CountryIsoChooser
             }
             adapter?.submitList(countriesISO)
 
-            countryCodeBottomSheetInput.addTextChangedListener(object: SimpleTextWatcher(){
+            countryCodeBottomSheetInput.addTextChangedListener(object : SimpleTextWatcher() {
                 override fun afterTextChanged(s: Editable) {
                     super.afterTextChanged(s)
                     val input = s.toString()
-                    val filtered = countriesISO.filter { it.name?.lowercase(Locale.ROOT)?.contains(input.lowercase(Locale.ROOT)) ?: false }
+                    val filtered = countriesISO.filter {
+                        it.name?.lowercase(Locale.ROOT)?.contains(input.lowercase(Locale.ROOT))
+                            ?: false
+                    }
                     adapter?.submitList(filtered)
                 }
             })
@@ -104,15 +115,8 @@ class CountryChooserBottomSheet : BottomSheetDialogFragment(), CountryIsoChooser
 
     }
 
-    private fun initObservers() {
-        viewModel.countryCodeEvent.observe(viewLifecycleOwner, {
-            adapter?.setSelected(it)
-        })
-    }
-
-    override fun onCountryCodeSelected(selected: CountriesISO) {
-        viewModel.onCountryCodeSelected(selected)
-        dismiss()
+    fun setSelected(country: CountriesISO?) {
+        adapter?.setSelected(country)
     }
 
     override fun onDestroyView() {
@@ -122,4 +126,42 @@ class CountryChooserBottomSheet : BottomSheetDialogFragment(), CountryIsoChooser
     }
 
 
+}
+
+class CountryChooserBottomSheet : AbstractCountryChooserBottomSheet() {
+
+    val viewModel by sharedViewModel<LoginViewModel>()
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        initObservers()
+    }
+
+    private fun initObservers() {
+        viewModel.countryCodeEvent.observe(viewLifecycleOwner) {
+            adapter?.setSelected(it)
+        }
+    }
+
+    override fun onCountryCodeSelected(selected: CountriesISO) {
+        viewModel.onCountryCodeSelected(selected)
+        dismiss()
+    }
+}
+
+class CountryChooserBottomSheetFragmentResult : AbstractCountryChooserBottomSheet() {
+
+    companion object {
+        const val requestKey = "country_chooser.country_code_request"
+        const val resultKey = "country_chooser.country_code_result"
+    }
+
+    override fun onCountryCodeSelected(selected: CountriesISO) {
+        parentFragmentManager.setFragmentResult(
+            requestKey, bundleOf(
+                resultKey to selected
+            )
+        )
+        dismiss()
+    }
 }
