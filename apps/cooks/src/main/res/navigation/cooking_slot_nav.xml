@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/cooking_slot_nav"
+    app:startDestination="@id/createCookingSlotNewFragment">
+
+    <action
+        android:id="@+id/to_cookingSlotMenuFragment"
+        app:destination="@id/cookingSlotMenuFragment"
+        app:enterAnim="@anim/slide_right_enter"
+        app:exitAnim="@anim/slide_right_exit"
+        app:popEnterAnim="@anim/slide_left_enter"
+        app:popExitAnim="@anim/slide_left_exit" />
+
+    <action
+        android:id="@+id/to_cookingSlotReviewFragment"
+        app:destination="@id/cookingSlotReviewFragment"
+        app:enterAnim="@anim/slide_right_enter"
+        app:exitAnim="@anim/slide_right_exit"
+        app:popEnterAnim="@anim/slide_left_enter"
+        app:popExitAnim="@anim/slide_left_exit" />
+
+
+    <fragment
+        tools:layout="@layout/fragment_create_cooking_slot_new"
+        android:id="@+id/createCookingSlotNewFragment"
+        android:name="com.bupp.wood_spoon_chef.presentation.features.cooking_slot.fragments.CreateCookingSlotFragmentNew"
+        android:label="CreateCookingSlotNewFragment">
+    </fragment>
+
+    <fragment
+        tools:layout="@layout/fragment_cooking_slot_menu"
+        android:id="@+id/cookingSlotMenuFragment"
+        android:name="com.bupp.wood_spoon_chef.presentation.features.cooking_slot.fragments.CookingSlotMenuFragment"
+        android:label="CookingSlotMenuFragment">
+    </fragment>
+
+    <fragment
+        tools:layout="@layout/fragment_cooking_slot_review"
+        android:id="@+id/cookingSlotReviewFragment"
+        android:name="com.bupp.wood_spoon_chef.presentation.features.cooking_slot.fragments.CookingSlotReviewFragment"
+        android:label="CookingSlotReviewFragment">
+    </fragment>
+
+</navigation>

@@ -10,7 +10,8 @@ interface FeatureFlagsListProvider {
 @Keep
 enum class CooksFeatureFlags {
     test_mobile_show_build_number,
-    mobile_can_chef_cancel_orders
+    mobile_can_chef_cancel_orders,
+    mobile_cooking_slot_new_flow_enabled
 }
 
 class StaticFeatureFlagsListProvider : FeatureFlagsListProvider {

@@ -12,6 +12,8 @@ import com.bupp.wood_spoon_chef.data.remote.network.base.ResponseSuccess
 import com.bupp.wood_spoon_chef.presentation.features.base.BaseViewModel
 import com.bupp.wood_spoon_chef.data.repositories.CookingSlotRepository
 import com.bupp.wood_spoon_chef.data.repositories.UserRepository
+import com.bupp.wood_spoon_chef.domain.GetIsCookingSlotNewFlowEnabledUseCase
+import com.bupp.wood_spoon_chef.domain.comon.execute
 import com.bupp.wood_spoon_chef.utils.extensions.monthOfYearAsShortText
 import com.bupp.wood_spoon_chef.utils.extensions.prepareRangeOneMonth
 import kotlinx.coroutines.*
@@ -20,16 +22,20 @@ import org.joda.time.DateTime
 import timber.log.Timber
 import java.lang.Exception
 import java.util.*
-import kotlin.collections.HashMap
+
 
 class CalendarViewModel(
     private val userRepository: UserRepository,
     private val cookingSlotRepository: CookingSlotRepository,
-    private val chefAnalyticsTracker: ChefAnalyticsTracker
+    private val chefAnalyticsTracker: ChefAnalyticsTracker,
+    private val isCookingSlotNewFlowEnabledUseCase: GetIsCookingSlotNewFlowEnabledUseCase
 ) : BaseViewModel() {
 
     private val _selectedDateFlow = userRepository.getLastSelectedCalendarDateFlow()
     val selectedDateFlow: StateFlow<Long> = _selectedDateFlow
+
+    private val _isCookingSlotNewFlowEnable = MutableStateFlow(false)
+    val isCookingSlotNewFlowEnable = _isCookingSlotNewFlowEnable
 
     val calendarEventsLaveData: MutableLiveData<MutableMap<String, List<CookingSlotSlim>>> =
         MutableLiveData(hashMapOf())
@@ -37,6 +43,14 @@ class CalendarViewModel(
     fun setSelectedDate(date: Date) {
         viewModelScope.launch {
             userRepository.setMemorySelectedCalendarDate(DateTime(date))
+        }
+    }
+
+    fun getIsCookingSlotNewFlowEnable(){
+        viewModelScope.launch {
+            isCookingSlotNewFlowEnabledUseCase.execute().collectLatest { isEnabled ->
+                _isCookingSlotNewFlowEnable.emit(isEnabled)
+            }
         }
     }
 

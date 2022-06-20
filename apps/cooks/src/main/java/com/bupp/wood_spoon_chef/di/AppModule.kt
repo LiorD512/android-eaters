@@ -31,6 +31,7 @@ import com.bupp.wood_spoon_chef.data.remote.network.ErrorManger
 import com.bupp.wood_spoon_chef.data.remote.network.ResponseHandler
 import com.bupp.wood_spoon_chef.data.repositories.*
 import com.bupp.wood_spoon_chef.data.repositories.AppSettingsRepositoryImpl
+import com.bupp.wood_spoon_chef.domain.GetIsCookingSlotNewFlowEnabledUseCase
 import com.bupp.wood_spoon_chef.domain.GetSupportNumberUseCase
 import com.bupp.wood_spoon_chef.domain.IsCallSupportByCancelingOrderUseCase
 import com.bupp.wood_spoon_chef.utils.UserSettings
@@ -90,7 +91,7 @@ val appModule = module {
     viewModel { NewDishViewModel(get(), get(), get()) }
 
     //calendar
-    viewModel { CalendarViewModel(get(), get(), get()) }
+    viewModel { CalendarViewModel(get(), get(), get(), get()) }
 
     //calendar CookingSlotDetailsBottomSheet
     viewModel { CreateCookingSlotViewModel(get(), get()) }
@@ -114,5 +115,6 @@ val appModule = module {
 
     //SingleDishFragment
     viewModel { SingleDishViewModel(get(), get()) }
+
 }
 
