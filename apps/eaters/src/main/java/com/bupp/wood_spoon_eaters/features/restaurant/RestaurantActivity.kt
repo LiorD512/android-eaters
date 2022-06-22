@@ -3,7 +3,6 @@ package com.bupp.wood_spoon_eaters.features.restaurant
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.widget.Toast
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -32,7 +31,6 @@ class RestaurantActivity : BaseActivity() {
 
     //activityLauncher Results
     private val startCheckoutForResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
-        Log.d(TAG, "Activity For Result - startCheckoutForResult")
         if (result.resultCode == Activity.RESULT_OK) {
             val data = result.data
             val isAfterPurchase = data?.getBooleanExtra("isAfterPurchase", false)
@@ -53,7 +51,6 @@ class RestaurantActivity : BaseActivity() {
         binding = ActivityRestaurantBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-//        viewModel.initExtras(intent.extras?.getParcelable(Constants.ARG_RESTAURANT), intent.extras?.getParcelable(Constants.ARG_DISH))
         checkStartDestination(intent.extras?.getParcelable(Constants.ARG_RESTAURANT), intent.extras?.getParcelable(Constants.ARG_DISH))
         initUi()
         initObservers()
@@ -86,14 +83,14 @@ class RestaurantActivity : BaseActivity() {
     }
 
     private fun initObservers() {
-        viewModel.navigationEvent.observe(this, { navigationEvent ->
+        viewModel.navigationEvent.observe(this) { navigationEvent ->
             handleNavigationEvent(navigationEvent)
-        })
-        viewModel.deliveryAtChangeEvent.observe(this, {
+        }
+        viewModel.deliveryAtChangeEvent.observe(this) {
             it.getContentIfNotHandled()?.let { message ->
                 showErrorToast(message, binding.root, Toast.LENGTH_LONG)
             }
-        })
+        }
     }
 
     private fun handleNavigationEvent(navigationEvent: LiveEvent<RestaurantMainViewModel.NavigationEvent>) {

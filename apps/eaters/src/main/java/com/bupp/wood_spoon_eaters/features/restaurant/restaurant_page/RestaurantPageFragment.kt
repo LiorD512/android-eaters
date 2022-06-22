@@ -3,7 +3,6 @@ package com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page
 import android.annotation.SuppressLint
 import android.graphics.drawable.Drawable
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.core.content.ContextCompat
@@ -67,7 +66,6 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
         val navArgs: RestaurantPageFragmentArgs by navArgs()
         binding = FragmentRestaurantPageBinding.bind(view)
         viewModel.handleInitialParamData(navArgs.extras)
-        Log.d("orderFlow - rest", "onViewCreated")
 
         mainViewModel.logPageEvent(FlowEventsManager.FlowEvents.PAGE_VISIT_HOME_CHEF)
 
@@ -147,56 +145,59 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
     }
 
     private fun initObservers() {
-        viewModel.initialParamData.observe(viewLifecycleOwner, {
+        viewModel.initialParamData.observe(viewLifecycleOwner) {
             handleInitialParamData(it)
-        })
-        viewModel.restaurantFullData.observe(viewLifecycleOwner, {
+        }
+        viewModel.restaurantFullData.observe(viewLifecycleOwner) {
             handleRestaurantFullData(it)
-        })
-        viewModel.deliveryDatesData.observe(viewLifecycleOwner, {
+        }
+        viewModel.deliveryDatesData.observe(viewLifecycleOwner) {
             initDeliveryDatesTabLayout(it)
-        })
-        viewModel.onCookingSlotUiChange.observe(viewLifecycleOwner, {
+        }
+        viewModel.onCookingSlotUiChange.observe(viewLifecycleOwner) {
             handleCookingSlotUiChange(it)
-        })
-        viewModel.dishListLiveData.observe(viewLifecycleOwner, {
+        }
+        viewModel.dishListLiveData.observe(viewLifecycleOwner) {
             handleDishesList(it)
-        })
-        viewModel.orderLiveData.observe(viewLifecycleOwner, {
+        }
+        viewModel.orderLiveData.observe(viewLifecycleOwner) {
             viewModel.handleCartData()
-        })
-        viewModel.clearCartEvent.observe(viewLifecycleOwner, {
+        }
+        viewModel.clearCartEvent.observe(viewLifecycleOwner) {
             handleClearCartEvent(it)
-        })
-        viewModel.wsErrorEvent.observe(viewLifecycleOwner, {
+        }
+        viewModel.wsErrorEvent.observe(viewLifecycleOwner) {
             handleWSError(it.getContentIfNotHandled())
-        })
-        viewModel.timePickerEvent.observe(viewLifecycleOwner, {
+        }
+        viewModel.timePickerEvent.observe(viewLifecycleOwner) {
             it.getContentIfNotHandled()?.let { it1 -> handleTimePickerClick(it1) }
-        })
-        viewModel.onCookingSlotForceChange.observe(viewLifecycleOwner, {
+        }
+        viewModel.onCookingSlotForceChange.observe(viewLifecycleOwner) {
             it.getContentIfNotHandled()?.let { viewModel.forceCookingSlotUiChange(it) }
-        })
-        viewModel.floatingBtnEvent.observe(viewLifecycleOwner, {
+        }
+        viewModel.floatingBtnEvent.observe(viewLifecycleOwner) {
             handleFloatingBtnEvent(it)
-        })
-        viewModel.favoriteEvent.observe(viewLifecycleOwner, {
+        }
+        viewModel.favoriteEvent.observe(viewLifecycleOwner) {
             handleFavoriteEvent(it)
-        })
-        viewModel.unavailableEventData.observe(viewLifecycleOwner, {
+        }
+        viewModel.unavailableEventData.observe(viewLifecycleOwner) {
             handleUnAvailableEvent(it)
-        })
-        mainViewModel.reOpenCartEvent.observe(viewLifecycleOwner, {
+        }
+        mainViewModel.reOpenCartEvent.observe(viewLifecycleOwner) {
             reOpenCart()
-        })
-        viewModel.networkErrorEvent.observe(viewLifecycleOwner, {
+        }
+        viewModel.networkErrorEvent.observe(viewLifecycleOwner) {
             handleNetworkErrorEvent(it)
-        })
+        }
+        viewModel.selectedDishNavigationLifeData.observe(viewLifecycleOwner) { menuItem ->
+            val curCookingSlot = viewModel.currentCookingSlot
+            mainViewModel.openDishPage(menuItem, curCookingSlot)
+        }
     }
 
     private fun handleUnAvailableEvent(event: RestaurantPageViewModel.UnavailableUiData?) {
         event?.let {
-            Log.d("wow", "handleUnAvailableEvent")
             if (event.type != AVAILABLE) {
                 showErrorToast(event.text!!, binding!!.root, Toast.LENGTH_LONG)
                 with(binding!!) {
@@ -222,9 +223,7 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
             restHeaderRestName.text = params.restaurantName
             restHeaderChefName.text = "By ${params.chefName}"
             params.chefThumbnail?.url?.let { restHeaderChefThumbnail.setImage(it) }
-//            params.chefFlag?.let { restHeaderChefThumbnail.setFlag(it) }
             rating.text = "${params.rating}"
-//            ratingLayout.isVisible = params.rating ?: 0f > 0
 
             topHeaderRestaurantName.text = params.restaurantName
             topHeaderChefName.text = "By ${params.chefName}"
@@ -391,7 +390,6 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
     private fun getDishesAdapterListener(): DishesMainAdapter.DishesMainAdapterListener =
         object : DishesMainAdapter.DishesMainAdapterListener {
             override fun onDishClick(menuItem: MenuItem) {
-//                val curCookingSlot = viewModel.currentCookingSlot
                 val curCookingSlot = viewModel.currentCookingSlot
                 mainViewModel.openDishPage(menuItem, curCookingSlot)
             }

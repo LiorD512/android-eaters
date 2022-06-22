@@ -185,40 +185,39 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
 
 
     private fun initObservers() {
-        viewModel.globalErrorLiveData.observe(this, {
+        viewModel.globalErrorLiveData.observe(this) {
             handleError(it)
-        })
-        viewModel.mainNavigationEvent.observe(this, {
+        }
+        viewModel.mainNavigationEvent.observe(this) {
             handleNavigation(it)
-        })
-        viewModel.floatingCartBtnEvent.observe(this, {
+        }
+        viewModel.floatingCartBtnEvent.observe(this) {
             handleFloatingBtnEvent(it)
-        })
-        viewModel.startRestaurantActivity.observe(this, {
+        }
+        viewModel.startRestaurantActivity.observe(this) {
             startRestaurantActivity(it)
-        })
-        viewModel.getTraceableOrder.observe(this, { traceableOrders ->
+        }
+        viewModel.getTraceableOrder.observe(this) { traceableOrders ->
             handleTraceableOrderData(traceableOrders)
-        })
-        viewModel.getTriggers.observe(this, { triggerEvent ->
+        }
+        viewModel.getTriggers.observe(this) { triggerEvent ->
             triggerEvent?.getContentIfNotHandled()?.let { trigger ->
                 trigger.shouldRateOrder?.let { order ->
                     openReviewActivity(order)
                 }
             }
-        })
-        viewModel.campaignLiveData.observe(this, {
+        }
+        viewModel.campaignLiveData.observe(this) {
             it?.let {
                 handleCampaignData(it)
             }
-        })
-        viewModel.shareEvent.observe(this, {
+        }
+        viewModel.shareEvent.observe(this) {
             sendShareCampaign(it)
-        })
+        }
     }
 
     fun openReviewActivity(order:Order){
-        Log.d(TAG, "found should rate id !: $order")
         val intent = Intent(this, ReviewActivity::class.java)
         intent.putExtra(Constants.ARG_REVIEW, order)
         startActivity(intent)

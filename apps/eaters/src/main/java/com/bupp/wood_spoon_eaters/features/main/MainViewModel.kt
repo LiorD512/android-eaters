@@ -1,7 +1,6 @@
 package com.bupp.wood_spoon_eaters.features.main
 
 import android.content.Context
-import android.util.Log
 import androidx.lifecycle.*
 import com.bupp.wood_spoon_eaters.common.*
 import com.bupp.wood_spoon_eaters.model.RestaurantInitParams

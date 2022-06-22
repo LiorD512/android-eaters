@@ -80,16 +80,22 @@ class DishPageViewModel(
     val unavailableUiEvent = MutableLiveData<MenuItem?>()
 
     fun initData(extras: DishInitParams) {
-        Log.d("orderFlow - dishPage","initData")
         this.extras = extras
+
+        extras.selectedDishId?.let { selectedDishId ->
+            getFullDish(dishId = selectedDishId.toLong())
+            return
+        }
+
         if (extras.menuItem != null) {
             currentFragmentState = DishFragmentState.ADD_DISH
 
             if (extras.cookingSlot?.id != extras.menuItem.cookingSlotId) {
-                Log.d(TAG, "this is a different Cooking slot")
                 dishMatchCookingSlot = false
             }
+
             isDummy = extras.cookingSlot?.isDummy()
+
             if(isDummy == true){
                 unavailableUiEvent.postValue(extras.menuItem)
                 getFullDish(dishId = extras.menuItem.dishId)
@@ -111,7 +117,6 @@ class DishPageViewModel(
     }
 
     private fun handleMenuItemData(menuItem: MenuItem) {
-        Log.d("orderFlow - dishPage","handleMenuItemData")
         val quantityInCart = cartManager.getQuantityInCart(menuItem.dishId)
         menuItemData.postValue(menuItem)
         dishMaxQuantity = menuItem.getQuantityCount() - quantityInCart
@@ -130,7 +135,6 @@ class DishPageViewModel(
     }
 
     private fun handleOrderItemData(orderItem: OrderItem) {
-        Log.d("orderFlow - dishPage","handleOrderItemData")
         orderItemData.postValue(orderItem)
         val quantityInCart = cartManager.getQuantityInCart(orderItem.dish.id)
         dishMaxQuantity = (orderItem.menuItem?.getQuantityCount() ?: 0) - quantityInCart + orderItem.quantity
@@ -138,7 +142,6 @@ class DishPageViewModel(
     }
 
     private fun getFullDish(menuItemId: Long? = null, dishId: Long? = null) {
-        Log.d("orderFlow - dishPage","getFullDish")
         menuItemId.let {
             skeletonProgressData.startProgress()
             viewModelScope.launch {
@@ -173,7 +176,6 @@ class DishPageViewModel(
     }
 
     fun updateDishQuantity(quantity: Int) {
-        Log.d("orderFlow - dishPage","updateDishQuantity")
         dishQuantity = quantity
 
         var overallPrice = ""
@@ -199,7 +201,6 @@ class DishPageViewModel(
     }
 
     fun onPerformClearCart() {
-        Log.d("orderFlow - dishPage","onPerformClearCart")
         eatersAnalyticsTracker.logEvent(Constants.EVENT_CLEAR_CART)
         cartManager.onCartCleared()
         viewModelScope.launch {
@@ -211,7 +212,6 @@ class DishPageViewModel(
     }
 
     fun onDishPageCartClick(note: String? = null) {
-        Log.d("orderFlow - dishPage","onDishPageCartClick")
         if(isEditMode){
             updateOrderItem(note)
         }else{
@@ -220,7 +220,6 @@ class DishPageViewModel(
     }
 
     private fun updateOrderItem(note: String? = null){
-        Log.d("orderFlow - dishPage","updateOrderItem")
         viewModelScope.launch {
             val quantity = dishQuantity
             val dishId = dishFullData.value?.id ?: -1
@@ -235,7 +234,6 @@ class DishPageViewModel(
     }
 
     private fun addDishToCart(note: String? = null) {
-        Log.d("orderFlow - dishPage","addDishToCart")
         val quantity = dishQuantity
         if (quantity > 0) {
             val dishId = dishFullData.value?.id
@@ -291,7 +289,6 @@ class DishPageViewModel(
     }
 
     fun onDishRemove(dishId: Long){
-        Log.d("orderFlow - dishPage","onDishRemove")
         viewModelScope.launch {
             val result = cartManager.removeOrderItems(dishId)
             if (result == OrderRepository.OrderRepoStatus.UPDATE_ORDER_SUCCESS) {
@@ -338,9 +335,4 @@ class DishPageViewModel(
     fun reloadPage() {
         initData(extras)
     }
-
-    companion object{
-        const val TAG = "dishPageVM"
-    }
-
 }

@@ -118,6 +118,13 @@ data class FeedChefItemSection(
 data class FeedDishItemSection(
     override val full_href: String? = null,
     override val items: List<FeedRestaurantSectionItem>? = null,
+    @Json(name = "id") val dishId: String?,
+    @Json(name = "name") val name: String?,
+    @Json(name = "price") val price: String?,
+    @Json(name = "cook") val cook: Cook?,
+    @Json(name = "cooking_slot") val cookingSlot: FeedDishCookingSlot?,
+    @Json(name = "thumbnail") val thumbnail: WSImage?,
+    @Json(name = "tags") val tags: List<String>?
 ) : Parcelable, FeedSectionCollectionItem(FeedModelsViewType.DISH)
 
 @Parcelize
@@ -181,7 +188,8 @@ data class FeedRestaurantSection(
         sectionTitle,
         sectionOrder,
         restaurantOrderInSection,
-        dishIndexInRestaurant
+        dishIndexInRestaurant,
+        selectedDishId = null
     )
 }
 
@@ -265,6 +273,7 @@ enum class FeedAdapterViewType {
     COUPONS,
     HERO,
     CHEF,
+    DISH,
     QUICK_LINK,
     RESTAURANT,
     RESTAURANT_LARGE,
@@ -345,6 +354,11 @@ data class FeedAdapterComingSoonSection(
 data class FeedAdapterChefSection(
     val chefSection: MutableList<FeedChefItemSection>, override val id: Long?
 ) : Parcelable, FeedAdapterItem(FeedAdapterViewType.CHEF)
+
+@Parcelize
+data class FeedAdapterDishSection(
+    val dishSection: MutableList<FeedDishItemSection>, override val id: Long?
+) : Parcelable, FeedAdapterItem(FeedAdapterViewType.DISH)
 
 @Parcelize
 data class FeedAdapterNoNetworkSection(

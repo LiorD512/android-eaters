@@ -19,7 +19,6 @@ import com.bupp.wood_spoon_eaters.features.restaurant.dish_page.adapters.Dietari
 import com.bupp.wood_spoon_eaters.features.restaurant.dish_page.adapters.DishAvailabilityAdapter
 import com.bupp.wood_spoon_eaters.features.restaurant.dish_page.adapters.DishPhotosAdapter
 import com.bupp.wood_spoon_eaters.features.restaurant.dish_page.adapters.ModificationsListAdapter
-import com.bupp.wood_spoon_eaters.managers.CartManager
 import com.bupp.wood_spoon_eaters.managers.ClearCartDialogType
 import com.bupp.wood_spoon_eaters.managers.ClearCartEvent
 import com.bupp.wood_spoon_eaters.model.*
@@ -40,14 +39,13 @@ class DishPageFragment : Fragment(R.layout.fragment_dish_page),
     private var binding: FragmentDishPageBinding? = null
     private val viewModel by viewModel<DishPageViewModel>()
     private var dishPhotosAdapter: DishPhotosAdapter? = null
-
-    var availableTimesAdapter: DishAvailabilityAdapter? = null
+    private val navArgs: DishPageFragmentArgs by navArgs()
+    private var availableTimesAdapter: DishAvailabilityAdapter? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentDishPageBinding.bind(view)
 
-        val navArgs: DishPageFragmentArgs by navArgs()
         viewModel.initData(navArgs.extras)
 
         viewModel.logPageEvent(FlowEventsManager.FlowEvents.PAGE_VISIT_DISH)
@@ -94,48 +92,48 @@ class DishPageFragment : Fragment(R.layout.fragment_dish_page),
     }
 
     private fun initObservers() {
-        viewModel.menuItemData.observe(viewLifecycleOwner, {
+        viewModel.menuItemData.observe(viewLifecycleOwner) {
             handleDishData(it)
-        })
-        viewModel.orderItemData.observe(viewLifecycleOwner, {
+        }
+        viewModel.orderItemData.observe(viewLifecycleOwner) {
             handleOrderItemData(it)
-        })
-        viewModel.dishFullData.observe(viewLifecycleOwner, {
+        }
+        viewModel.dishFullData.observe(viewLifecycleOwner) {
             handleDishFullData(it)
-        })
-        viewModel.counterBtnsState.observe(viewLifecycleOwner, {
+        }
+        viewModel.counterBtnsState.observe(viewLifecycleOwner) {
             handleCounterBtnsUi(it)
-        })
-        viewModel.userRequestData.observe(viewLifecycleOwner, {
+        }
+        viewModel.userRequestData.observe(viewLifecycleOwner) {
             handleUserRequestData(it)
-        })
-        viewModel.progressData.observe(viewLifecycleOwner, {
+        }
+        viewModel.progressData.observe(viewLifecycleOwner) {
 
-        })
-        viewModel.skeletonProgressData.observe(viewLifecycleOwner, {
+        }
+        viewModel.skeletonProgressData.observe(viewLifecycleOwner) {
             handleSkeleton(it)
-        })
-        viewModel.clearCartEvent.observe(viewLifecycleOwner, {
+        }
+        viewModel.clearCartEvent.observe(viewLifecycleOwner) {
             handleClearCartEvent(it)
-        })
-        viewModel.onFinishDishPage.observe(viewLifecycleOwner, {
+        }
+        viewModel.onFinishDishPage.observe(viewLifecycleOwner) {
             handleFinishPage(it)
-        })
-        viewModel.shakeAddToCartBtn.observe(viewLifecycleOwner, {
+        }
+        viewModel.shakeAddToCartBtn.observe(viewLifecycleOwner) {
             AnimationUtil().shakeView(binding!!.dishFragAddToCartBtn)
-        })
-        viewModel.dishQuantityChange.observe(viewLifecycleOwner, {
+        }
+        viewModel.dishQuantityChange.observe(viewLifecycleOwner) {
             handleAddToCartBtn(it)
-        })
-        viewModel.wsErrorEvent.observe(viewLifecycleOwner, {
+        }
+        viewModel.wsErrorEvent.observe(viewLifecycleOwner) {
             handleWSError(it.getContentIfNotHandled())
-        })
-        viewModel.networkError.observe(viewLifecycleOwner, {
+        }
+        viewModel.networkError.observe(viewLifecycleOwner) {
             showNoNetworkLayout()
-        })
-        viewModel.unavailableUiEvent.observe(viewLifecycleOwner, {
+        }
+        viewModel.unavailableUiEvent.observe(viewLifecycleOwner) {
             handleUnavailableUiEvent(it)
-        })
+        }
     }
 
     private fun handleUnavailableUiEvent(menuItem: MenuItem?) {

@@ -1,7 +1,6 @@
 package com.bupp.wood_spoon_eaters.features.main.feed.adapters
 
 import android.annotation.SuppressLint
-import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -25,6 +24,7 @@ class FeedMainAdapter(
     FeedRestaurantDishPagerAdapter.FeedRestaurantDishPagerAdapterListener,
     FeedHeroSectionPagerAdapter.FeedHeroSectionListener,
     FeedChefSectionAdapter.FeedChefSectionListener,
+    FeedDishSectionAdapter.FeedDishSectionListener,
     SearchTagsAdapter.SearchTagsAdapterListener {
 
     private val dataList: MutableList<FeedAdapterItem> = mutableListOf()
@@ -40,6 +40,7 @@ class FeedMainAdapter(
         fun onShareBannerClick(campaign: Campaign)
         fun onHeroBannerClick(hero: FeedHeroItemSection)
         fun onRestaurantClick(restaurantInitParams: RestaurantInitParams)
+        fun onDishClicked(restaurantInitParams: RestaurantInitParams)
         fun onChangeAddressClick()
         fun onDishSwiped()
         fun onRefreshFeedClick()
@@ -129,6 +130,10 @@ class FeedMainAdapter(
                 val binding = SearchItemSkeletonBinding.inflate(LayoutInflater.from(parent.context), parent, false)
                 FeedAdapterSkeletonSearchViewHolder(binding)
             }
+            FeedAdapterViewType.DISH.ordinal -> {
+                val binding = FeedAdapterDishSectionBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+                FeedAdapterDishViewHolder(binding)
+            }
             else -> {
                 val binding = FeedAdapterRestaurantItemSkeletonBinding.inflate(LayoutInflater.from(parent.context), parent, false)
                 FeedAdapterSkeletonViewHolder(binding)
@@ -157,6 +162,10 @@ class FeedMainAdapter(
             }
             is FeedAdapterChefSection -> {
                 holder as FeedAdapterChefViewHolder
+                holder.bindItems(section, this)
+            }
+            is FeedAdapterDishSection -> {
+                holder as FeedAdapterDishViewHolder
                 holder.bindItems(section, this)
             }
             is FeedAdapterRestaurant -> {
@@ -282,13 +291,27 @@ class FeedMainAdapter(
     override fun onChefClick(chef: FeedChefItemSection?) {
         listener.onRestaurantClick(RestaurantInitParams(
             restaurantId = chef?.cook?.id,
-            chefName = chef?.cook?.firstName,
             chefThumbnail = chef?.cook?.thumbnail,
+            coverPhoto = null,
             rating = chef?.cook?.rating.toString(),
             restaurantName = chef?.cook?.getFullName(),
-            isFromSearch = false,
+            chefName = chef?.cook?.firstName,
+            isFavorite = false,
+            isFromSearch = false
+        ))
+    }
+
+    override fun onDishClick(dish: FeedDishItemSection?) {
+        listener.onDishClicked(RestaurantInitParams(
+            restaurantId = dish?.cook?.id,
+            chefThumbnail = dish?.cook?.thumbnail,
             coverPhoto = null,
-            isFavorite = false
+            rating = dish?.cook?.rating.toString(),
+            restaurantName = dish?.cook?.getFullName(),
+            chefName = dish?.cook?.firstName,
+            isFavorite = false,
+            isFromSearch = false,
+            selectedDishId = dish?.dishId
         ))
     }
 }

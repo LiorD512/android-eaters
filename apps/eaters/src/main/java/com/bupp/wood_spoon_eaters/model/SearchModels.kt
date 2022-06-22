@@ -67,9 +67,11 @@ data class Cook(
     @Json(name = "first_name") val firstName: String,
     @Json(name = "last_name") val lastName: String,
     @Json(name = "thumbnail") val thumbnail: WSImage,
+    @Json(name = "cover") val cover: WSImage?,
     @Json(name = "video") val video: String?,
     @Json(name = "profession") val profession: String?,
     @Json(name = "about") val about: String?,
+    @Json(name = "restaurant_name") val restaurantName: String?,
     @Json(name = "birthdate") val birthdate: Date?,
     @Json(name = "pickup_address") var pickupAddress: Address? = null,
     @Json(name = "place_of_birth") val country: Country? = null,
@@ -88,7 +90,7 @@ data class Cook(
 @Parcelize
 @JsonClass(generateAdapter = true)
 data class Dish(
-    @Json(name = "id") val id: Long,
+    @Json(name = "id") var id: Long,
     @Json(name = "cook") val cook: Cook?,
     @Json(name = "name") val name: String,
     @Json(name = "price") val price: Price?,

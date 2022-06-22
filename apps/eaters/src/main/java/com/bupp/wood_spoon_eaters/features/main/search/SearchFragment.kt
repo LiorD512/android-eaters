@@ -125,6 +125,10 @@ class SearchFragment : Fragment(R.layout.fragment_search),
         viewModel.logRestaurantClick(restaurantInitParams)
     }
 
+    override fun onDishClicked(restaurantInitParams: RestaurantInitParams) {
+        //do nothing
+    }
+
     override fun onTagClick(tag: String) {
         binding!!.searchFragInput.setText(tag)
         binding!!.searchFragInput.setSelection(tag.length)

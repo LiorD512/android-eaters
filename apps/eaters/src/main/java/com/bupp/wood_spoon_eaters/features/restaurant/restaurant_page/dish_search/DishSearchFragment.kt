@@ -184,6 +184,10 @@ class DishSearchFragment : Fragment(R.layout.fragment_dish_search), FeedMainAdap
 //        viewModel.logRestaurantClick(restaurantInitParams)
     }
 
+    override fun onDishClicked(restaurantInitParams: RestaurantInitParams) {
+        //do nothing
+    }
+
     override fun onTagClick(tag: String) {
 //        binding!!.searchFragInput.setText(tag)
 //        binding!!.searchFragInput.setSelection(tag.length)
