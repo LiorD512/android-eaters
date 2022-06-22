@@ -63,7 +63,9 @@ class CreateCookingSlotViewModel(
         try {
             when (val result = cookingSlotRepository.getCookingSlotById(cookingSlotId)) {
                 is ResponseSuccess -> {
-                    editingCookingSlotLiveData.postValue(result.data)
+                    result.data?.let {
+                        editingCookingSlotLiveData.postValue(it)
+                    }
                 }
                 is ResponseError -> {
                     errorEvent.postRawValue(result.error)
@@ -125,7 +127,9 @@ class CreateCookingSlotViewModel(
             try {
                 when (val result = cookingSlotRepository.postCookingSlot(cookingSlotRequest)) {
                     is ResponseSuccess -> {
-                        savedCookingSlotLiveData.postValue(result.data)
+                        result.data?.let {
+                            savedCookingSlotLiveData.postValue(it)
+                        }
                     }
                     is ResponseError -> {
                         errorEvent.postRawValue(result.error)
@@ -146,7 +150,9 @@ class CreateCookingSlotViewModel(
                     when (val result =
                         cookingSlotRepository.updateCookingSlot(it, cookingSlotRequest)) {
                         is ResponseSuccess -> {
-                            savedCookingSlotLiveData.postValue(result.data)
+                            result.data?.let {
+                                savedCookingSlotLiveData.postValue(it)
+                            }
                         }
                         is ResponseError -> {
                             errorEvent.postRawValue(result.error)

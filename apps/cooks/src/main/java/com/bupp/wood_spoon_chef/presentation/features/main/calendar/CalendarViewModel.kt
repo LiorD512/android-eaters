@@ -23,7 +23,6 @@ import timber.log.Timber
 import java.lang.Exception
 import java.util.*
 
-
 class CalendarViewModel(
     private val userRepository: UserRepository,
     private val cookingSlotRepository: CookingSlotRepository,
@@ -128,7 +127,9 @@ class CalendarViewModel(
             )
         }?.toMutableMap()
 
-        calendarEventsLaveData.value = value
+        value?.let {
+            calendarEventsLaveData.value = it
+        }
     }
 
     private fun doOnError(responseResult: ResponseError<List<CookingSlotSlim>>) {
@@ -146,7 +147,9 @@ class CalendarViewModel(
             )
         }?.toMutableMap()
 
-        calendarEventsLaveData.postValue(value)
+        value?.let {
+            calendarEventsLaveData.postValue(it)
+        }
     }
 
     private suspend fun fetchCookingSlotsIfNotCashed(
