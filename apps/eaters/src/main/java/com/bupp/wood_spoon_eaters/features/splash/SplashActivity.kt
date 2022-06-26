@@ -16,8 +16,9 @@ import com.google.firebase.analytics.FirebaseAnalytics
 import io.branch.referral.Branch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-
-class SplashActivity : AppCompatActivity(), UpdateRequiredDialog.UpdateRequiredDialogListener, WSErrorDialog.WSErrorListener {
+class SplashActivity : AppCompatActivity(),
+    UpdateRequiredDialog.UpdateRequiredDialogListener,
+    WSErrorDialog.WSErrorListener {
 
     private lateinit var binding: ActivitySplashBinding
     private var cookId: String? = null
@@ -42,10 +43,10 @@ class SplashActivity : AppCompatActivity(), UpdateRequiredDialog.UpdateRequiredD
     }
 
     private fun initObservers() {
-        viewModel.splashEvent.observe(this, { splashEvent ->
+        viewModel.splashEvent.observe(this) { splashEvent ->
             val event = splashEvent.getContentIfNotHandled()
-            event?.let{
-                when(it){
+            event?.let {
+                when (it) {
                     SplashViewModel.SplashEventType.SHOULD_UPDATE_VERSION -> {
                         openVersionUpdateDialog()
                     }
@@ -64,17 +65,25 @@ class SplashActivity : AppCompatActivity(), UpdateRequiredDialog.UpdateRequiredD
                 }
             }
 
-        })
+        }
 
-        viewModel.errorEvent.observe(this, {
-            if(it){
-                WSErrorDialog("Server error, please try again later", this).show(supportFragmentManager, Constants.WS_ERROR_DIALOG)
+        viewModel.errorEvent.observe(this) {
+            if (it) {
+                WSErrorDialog("Server error, please try again later", this).show(
+                    supportFragmentManager,
+                    Constants.WS_ERROR_DIALOG
+                )
             }
-        })
+        }
     }
 
     private fun redirectToLogin(loginScreenState: Int) {
-        startActivity(Intent(this, LoginActivity::class.java).putExtra(Constants.LOGIN_STATE, loginScreenState))
+        startActivity(
+            Intent(this, LoginActivity::class.java).putExtra(
+                Constants.LOGIN_STATE,
+                loginScreenState
+            )
+        )
         finish()
     }
 
@@ -100,7 +109,6 @@ class SplashActivity : AppCompatActivity(), UpdateRequiredDialog.UpdateRequiredD
     }
 
     private fun redirectToMain() {
-        Log.d(TAG, "redirectToMain")
         viewModel.initFCMAndRefreshToken()
         val intent = Intent(this, MainActivity::class.java)
         cookId?.let {
@@ -116,7 +124,8 @@ class SplashActivity : AppCompatActivity(), UpdateRequiredDialog.UpdateRequiredD
 
     public override fun onStart() {
         super.onStart()
-        Branch.sessionBuilder(this).withCallback(callback).withData(if (intent != null) intent.data else null).init()
+        Branch.sessionBuilder(this).withCallback(callback)
+            .withData(if (intent != null) intent.data else null).init()
     }
 
     override fun onNewIntent(intent: Intent) {
@@ -127,23 +136,16 @@ class SplashActivity : AppCompatActivity(), UpdateRequiredDialog.UpdateRequiredD
 
     private val callback = Branch.BranchReferralInitListener { linkProperties, _ ->
         linkProperties?.let {
-            Log.d(TAG, "Branch.io intent $linkProperties")
             if (it.has("chef_id")) {
                 cookId = (it.get("chef_id") as Int).toString()
             }
             if (it.has("menu_item_id")) {
                 menuItemId = it.get("menu_item_id") as String
             }
-            if(it.has("referral_token")){
+            if (it.has("referral_token")) {
                 val token = it.get("referral_token") as String
-                Log.d(TAG, "referral_token: $token")
                 viewModel.setUserReferralToken(token)
             }
         }
     }
-
-    companion object{
-        const val TAG = "wowSplash"
-    }
-
 }
