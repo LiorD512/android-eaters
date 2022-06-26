@@ -47,7 +47,7 @@
             android:layout_width="wrap_content"
             android:layout_height="0dp"
             android:paddingStart="7.7dp"
-            android:text="When"
+            android:text="Anytime"
             android:gravity="center"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/feedHeaderDateArrow"
