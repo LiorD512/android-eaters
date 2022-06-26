@@ -61,7 +61,10 @@ class FeedDishSectionAdapter(
                 tvItemUnavailable.isVisible = (dish.cookingSlot?.canOrder)?.not() ?: false
                 tagView.apply {
                     isVisible = dish.cookingSlot?.canOrder ?: false
-                    setTags(dish.tags)
+
+                    dish.tags?.firstOrNull()?.let {
+                        setTags(listOf(it))
+                    }
                 }
 
                 root.setOnClickListener {
