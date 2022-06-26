@@ -1,62 +1,62 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
     <androidx.cardview.widget.CardView
-            android:id="@+id/customBannerLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:cardCornerRadius="7.7dp"
-            app:cardElevation="8dp"
-            app:cardPreventCornerOverlap="false"
-            app:cardUseCompatPadding="true">
+        android:id="@+id/customBannerLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="7.7dp"
+        app:cardElevation="8dp"
+        app:cardPreventCornerOverlap="false"
+        app:cardUseCompatPadding="true">
 
         <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
             <ImageView
-                    android:id="@+id/customBanner"
-                    android:layout_width="match_parent"
-                    android:layout_height="115dp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    tools:background="#ccc" />
+                android:id="@+id/customBanner"
+                android:layout_width="match_parent"
+                android:layout_height="115dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:background="#ccc" />
 
             <TextView
-                    android:id="@+id/customBannerTitle"
-                    style="@style/LatoBold19Dark"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="15.4dp"
-                    android:layout_marginTop="16dp"
-                    android:letterSpacing="0.03"
-                    android:lineSpacingExtra="3.8sp"
-                    app:layout_constraintBottom_toTopOf="@+id/customBannerSubTitle"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/customBanner"
-                    tools:text="Get 30% off your next order" />
+                android:id="@+id/customBannerTitle"
+                style="@style/LatoBlack19DarkGrey"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="15.4dp"
+                android:layout_marginTop="16dp"
+                android:letterSpacing="0.03"
+                android:lineSpacingExtra="3.8sp"
+                app:layout_constraintBottom_toTopOf="@+id/customBannerSubTitle"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/customBanner"
+                tools:text="Get 30% off your next order" />
 
             <TextView
-                    android:id="@+id/customBannerSubTitle"
-                    style="@style/LatoBold13Dark"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:layout_marginBottom="14dp"
-                    android:letterSpacing="0.03"
-                    android:paddingHorizontal="15.4dp"
-                    android:maxLines="3"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/customBannerTitle"
-                    tools:text="@tools:sample/lorem/random" />
+                android:id="@+id/customBannerSubTitle"
+                style="@style/LatoReg13Dark"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="14dp"
+                android:letterSpacing="0.03"
+                android:maxLines="3"
+                android:paddingHorizontal="15.4dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/customBannerTitle"
+                tools:text="@tools:sample/lorem/random" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
