@@ -1,24 +1,123 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/wild_sand"
     tools:context=".presentation.features.cooking_slot.fragments.CreateCookingSlotFragmentNew">
 
-    <!-- TODO: Update blank fragment layout -->
+    <com.bupp.wood_spoon_chef.presentation.custom_views.CreateCookingSlotTopBar
+        android:id="@+id/createCookingSlotNewFragmentTopBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cooking_slot_bar_icon="@drawable/ic_close_gray"
+        app:layout_constraintTop_toTopOf="parent"
+        app:title="Create cooking slot" />
+
     <TextView
+        android:id="@+id/createCookingSlotNewFragmentTitle"
+        style="@style/LatoBlack19DarkDarkGrey"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:textSize="20sp"
-        android:gravity="center"
-        android:text="Create Cooking Slot" />
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_15.4"
+        android:layout_marginTop="22.6dp"
+        android:textColor="@color/dark"
+        app:layout_constraintTop_toBottomOf="@id/createCookingSlotNewFragmentTopBar"
+        tools:text="Friday, Nov 30, 2021" />
 
-    <Button
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/createCookingSlotNewFragmentNestedScroll"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="23dp"
+        app:layout_constraintTop_toBottomOf="@id/createCookingSlotNewFragmentTitle">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <com.bupp.wood_spoon_chef.presentation.custom_views.SectionView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <com.bupp.wood_spoon_chef.presentation.custom_views.CreateCookingSlotActionView
+                    android:id="@+id/createCookingSlotNewFragmentOperatingHoursView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:mainIcon="@drawable/icons_time"
+                    app:showSecondaryIcon="true"
+                    app:showSubTitle="true"
+                    app:subtitle="12:15 PM - 4:00 PM"
+                    app:setSubtitleAllCaps="true"
+                    app:title="Operating hours" />
+
+            </com.bupp.wood_spoon_chef.presentation.custom_views.SectionView>
+
+            <com.bupp.wood_spoon_chef.presentation.custom_views.SectionView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp">
+
+                <com.bupp.wood_spoon_chef.presentation.custom_views.CreateCookingSlotActionView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:mainIcon="@drawable/icons_location"
+                    app:showSecondaryIcon="false"
+                    app:showSubTitle="true"
+                    app:subtitle="1 Canal St, New York, B26"
+                    app:title="Pickup address" />
+
+            </com.bupp.wood_spoon_chef.presentation.custom_views.SectionView>
+
+            <TextView
+                style="@style/LatoBlack13Dark"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_15.4"
+                android:layout_marginTop="23dp"
+                android:text="@string/more_options" />
+
+            <com.bupp.wood_spoon_chef.presentation.custom_views.SectionView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp">
+
+                <com.bupp.wood_spoon_chef.presentation.custom_views.CreateCookingSlotOptionView
+                    android:id="@+id/createCookingSlotNewFragmentLastCallForOrderView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    app:mainIcon="@drawable/icon_bell"
+                    app:subtitle="Wednsday, Nov 29, 4:00 PM"
+                    app:title="Last call for orders"/>
+
+                <com.bupp.wood_spoon_chef.presentation.custom_views.CreateCookingSlotOptionView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:mainIcon="@drawable/icon_reccuring"
+                    app:subtitle="Cooking slot will occur every week on\nSunday and Tuesday, 20 times"
+                    app:title="Make slot recurring"/>
+
+                <com.bupp.wood_spoon_chef.presentation.custom_views.CreateCookingSlotToggleView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:title="Ship nationwide"
+                    app:mainIcon="@drawable/icon_ship"
+                    app:subtitle="Allow all dishes in this cooking slot to\nship nationwide by you, via UPS."/>
+
+            </com.bupp.wood_spoon_chef.presentation.custom_views.SectionView>
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+    <com.bupp.wood_spoon_chef.presentation.custom_views.OrangeBtnCornered
         android:id="@+id/createCookingSlotNewFragmentNextBtn"
-        android:layout_gravity="bottom"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:background="@color/white"
-        android:text="NEXT" />
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/margin_15.4"
+        android:layout_marginBottom="14.4dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:title="@string/code_fragment_next_btn" />
 
-</FrameLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

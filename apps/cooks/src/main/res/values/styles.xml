@@ -243,6 +243,13 @@
         <item name="android:lineSpacingExtra">5.5sp</item>
     </style>
 
+    <style name="LatoBlack13Dark">
+        <item name="android:fontFamily">@font/lato_black</item>
+        <item name="android:textSize">13.4sp</item>
+        <item name="android:textColor">@color/dark</item>
+        <item name="android:lineSpacingExtra">6.5sp</item>
+    </style>
+
     <style name="LatoBlack15Dark">
         <item name="android:fontFamily">@font/lato_black</item>
         <item name="android:textSize">15.4sp</item>

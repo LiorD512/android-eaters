@@ -57,4 +57,17 @@
         <item>Dec</item>
     </string-array>
 
+    //CookingSlotNewFlow
+    <string name="go_to_review">Go to review</string>
+    <string name="my_cooking_slot_menu">My cooking slot menu</string>
+    <string name="save_cooking_slot">Save cooking slot</string>
+    <string name="review_your_cooking_slot">Review your cooking slot</string>
+    <string name="select_dishes_amp_add_quantities"><![CDATA[Select dishes & add quantities]]></string>
+    <string name="more_options">More options</string>
+    <string name="opening_time">Opening time</string>
+    <string name="closing_time">Closing time</string>
+    <string name="set_time">Set time</string>
+    <string name="change">Change</string>
+    <string name="last_call_for_order_explanation">Adding a last call for orders may impact your sales, as 50% of our order are placed on-demand.\n\nAfter this time, your cooking slot will no longer be visible to customers.</string>
+
 </resources>

@@ -33,7 +33,7 @@ class CalendarViewModel(
     private val _selectedDateFlow = userRepository.getLastSelectedCalendarDateFlow()
     val selectedDateFlow: StateFlow<Long> = _selectedDateFlow
 
-    private val _isCookingSlotNewFlowEnable = MutableStateFlow(false)
+    private val _isCookingSlotNewFlowEnable = MutableSharedFlow<Boolean>()
     val isCookingSlotNewFlowEnable = _isCookingSlotNewFlowEnable
 
     val calendarEventsLaveData: MutableLiveData<MutableMap<String, List<CookingSlotSlim>>> =

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/top_cornered_bkg">
+
+    <TextView
+        android:id="@+id/operatingHourBsTitle"
+        style="@style/LatoBlack19DarkDarkGrey"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="23dp"
+        android:gravity="center"
+        android:text="Operating hours"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/operatingHourSubject"
+        style="@style/LatoReg13Black"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="15.8dp"
+        android:layout_marginTop="23.1dp"
+        android:layout_marginEnd="14.9dp"
+        android:gravity="center"
+        android:text="Please indicate the time you will actively be in your kitchen and available for a driver to pick up your food. We will try our best to make sure the pickup time of your fist order is at least 30 minutes after your cooking start time."
+        app:layout_constraintTop_toBottomOf="@id/operatingHourBsTitle" />
+
+    <com.bupp.wood_spoon_chef.presentation.custom_views.OrangeBtnCornered
+        android:id="@+id/operatingHourBsOkBtn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="7.7dp"
+        android:layout_marginTop="23dp"
+        android:layout_marginBottom="8.6dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/operatingHourSubject"
+        app:title="Ok" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

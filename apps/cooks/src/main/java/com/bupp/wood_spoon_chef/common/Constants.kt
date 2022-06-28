@@ -151,6 +151,9 @@ class Constants {
         const val PRESIGNED_URL_COVER = "cover_photo"
         const val PRESIGNED_URL_VIDEO = "video"
 
+        //args
+        const val ARG_SELECTED_DATE = "args_selected_date"
+
         //        const val MEDIA_THUMBNAIL_TYPE = 50
 
 //        const val CAMERA_PERMISSION_REQUEST_CODE = 444

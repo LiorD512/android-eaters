@@ -1,25 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/quantum_purple"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/wild_sand"
     tools:context=".presentation.features.cooking_slot.fragments.CookingSlotReviewFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <com.bupp.wood_spoon_chef.presentation.custom_views.CreateCookingSlotTopBar
+        android:id="@+id/createCookingSlotReviewFragmentTopBar"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:textSize="20sp"
-        android:gravity="center"
-        android:text="Cooking Slot Review Fragment" />
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:title="@string/review_your_cooking_slot"
+        app:cooking_slot_bar_icon="@drawable/ic_back_grey"/>
 
-    <Button
-        android:id="@+id/createCookingSlotReviewFragmentNextBtn"
+    <com.bupp.wood_spoon_chef.presentation.custom_views.OrangeBtnCornered
+        android:id="@+id/createCookingSlotReviewFragmentSaveCookingSlotBtn"
         android:layout_gravity="bottom"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
         android:background="@color/white"
-        android:text="NEXT" />
+        android:layout_marginHorizontal="@dimen/margin_15.4"
+        android:layout_marginBottom="14.4dp"
+        app:title="@string/save_cooking_slot" />
 
-</FrameLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

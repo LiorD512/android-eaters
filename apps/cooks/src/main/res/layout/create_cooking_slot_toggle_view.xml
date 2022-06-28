@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingBottom="10dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="18dp"
+        android:layout_marginEnd="7dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/createCookingSlotToggleViewMainIcon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="@null"
+            app:tint="@color/black"
+            tools:src="@drawable/icons_time" />
+
+        <TextView
+            android:id="@+id/createCookingSlotToggleViewTitle"
+            style="@style/LatoBold13Black"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="6dp"
+            android:layout_marginEnd="9dp"
+            tools:text="Ship nationwide" />
+
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
+
+        <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/createCookingSlotToggleViewSwitch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center|start"
+            android:textColor="@color/white"
+            android:thumb="@drawable/icon_toggel_btn"
+            app:track="@drawable/cooking_slot_switch_selector" />
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/createCookingSlotToggleViewSubTitle"
+        style="@style/LatoReg13PurpelyGrey"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="43dp"
+        android:lineSpacingExtra="1dp"
+        tools:text="Allow all dishes in this cooking slot to ship\nnationwide by you, via UPS." />
+
+</LinearLayout>

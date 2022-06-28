@@ -4,13 +4,15 @@ import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.View
 import androidx.activity.OnBackPressedCallback
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.whenStarted
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import com.bupp.wood_spoon_chef.R
 import com.bupp.wood_spoon_chef.databinding.FragmentCookingSlotParentBinding
-import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.navigation.CookingSlotFlowNavigator
+import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.coordinator.CookingSlotFlowCoordinator
+import com.eatwoodspoon.android_utils.binding.viewBinding
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
@@ -18,16 +20,17 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 
 interface CookingSlotParent {
-    val cookingSlotNavigator: CookingSlotFlowNavigator
+    val cookingSlotCoordinator: CookingSlotFlowCoordinator
 }
 
-class CookingSlotParentFragment : Fragment(R.layout.fragment_cooking_slot_parent), CookingSlotParent {
+class CookingSlotParentFragment : Fragment(R.layout.fragment_cooking_slot_parent),
+    CookingSlotParent {
 
     private lateinit var navController: NavController
-    private var binding: FragmentCookingSlotParentBinding? = null
-    override val cookingSlotNavigator: CookingSlotFlowNavigator by inject()
+    private val binding by viewBinding (FragmentCookingSlotParentBinding::bind)
+    override val cookingSlotCoordinator: CookingSlotFlowCoordinator by inject()
     private val viewModel: CookingSlotParentViewModel by viewModel {
-        parametersOf(cookingSlotNavigator)
+        parametersOf(cookingSlotCoordinator)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -43,8 +46,6 @@ class CookingSlotParentFragment : Fragment(R.layout.fragment_cooking_slot_parent
     }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding = FragmentCookingSlotParentBinding.bind(view)
-
 
         setNavController()
         initObservers()
@@ -52,13 +53,13 @@ class CookingSlotParentFragment : Fragment(R.layout.fragment_cooking_slot_parent
 
     private fun initObservers() {
         viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.whenStarted {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.RESUMED) {
                 viewModel.stepStateFlow.collect {
                     when (it) {
-                        CookingSlotFlowNavigator.Step.OPEN_MENU_FRAGMENT -> {
+                        CookingSlotFlowCoordinator.Step.OPEN_MENU_FRAGMENT -> {
                             navController.navigate(R.id.to_cookingSlotMenuFragment)
                         }
-                        CookingSlotFlowNavigator.Step.OPEN_REVIEW_FRAGMENT -> {
+                        CookingSlotFlowCoordinator.Step.OPEN_REVIEW_FRAGMENT -> {
                             navController.navigate(R.id.to_cookingSlotReviewFragment)
                         }
                         else -> {}
@@ -72,10 +73,5 @@ class CookingSlotParentFragment : Fragment(R.layout.fragment_cooking_slot_parent
         val navHostFragment =
             childFragmentManager.findFragmentById(R.id.cookingSlotParentContainer) as NavHostFragment
         navController = navHostFragment.navController
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        binding = null
     }
 }

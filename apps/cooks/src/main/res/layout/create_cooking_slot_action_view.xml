@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingVertical="10dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="18dp"
+        android:layout_marginEnd="7dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/createCookingSlotActionViewMainIcon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="@null"
+            app:tint="@color/black"
+            tools:src="@drawable/icons_time" />
+
+        <TextView
+            android:id="@+id/createCookingSlotActionViewTitle"
+            style="@style/LatoBold13Black"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="6dp"
+            android:layout_marginEnd="9dp"
+            tools:text="Operating hours" />
+
+        <ImageView
+            android:id="@+id/createCookingSlotActionViewSecondaryIcon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="@null"
+            android:src="@drawable/ic_tool_tip" />
+
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
+
+        <com.bupp.wood_spoon_chef.presentation.custom_views.PeachRoundedBtn
+            android:id="@+id/createCookingSlotActionViewAddBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:title="Add" />
+
+    </LinearLayout>
+
+
+    <TextView
+        android:id="@+id/createCookingSlotActionViewSubTitle"
+        style="@style/LatoReg13PurpelyGrey"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="11dp"
+        tools:text="12:15 PM - 4:00 PM" />
+
+
+</LinearLayout>

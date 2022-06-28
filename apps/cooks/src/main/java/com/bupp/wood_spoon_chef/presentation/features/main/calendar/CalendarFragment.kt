@@ -141,7 +141,7 @@ class CalendarFragment : BaseFragment(R.layout.fragment_calendar),
     private fun handleCookingSlotNewFlowEnable(isEnabled: Boolean){
         selectedDate?.let {
             if (isEnabled) {
-                openCookingSlotActivity()
+                openCookingSlotActivity(it.time)
             } else {
                 findNavController().apply {
                     val action =
@@ -155,9 +155,9 @@ class CalendarFragment : BaseFragment(R.layout.fragment_calendar),
             }
         }
     }
-    private fun openCookingSlotActivity() {
+    private fun openCookingSlotActivity(selectedDate: Long) {
         startActivity(
-            Intent(requireContext(), CookingSlotActivity::class.java)
+            Intent(requireContext(), CookingSlotActivity::class.java).putExtra(Constants.ARG_SELECTED_DATE,selectedDate)
         )
     }
 
@@ -179,5 +179,4 @@ class CalendarFragment : BaseFragment(R.layout.fragment_calendar),
         selectedDate = null
         cookingSlotSlimAdapter = null
     }
-
 }

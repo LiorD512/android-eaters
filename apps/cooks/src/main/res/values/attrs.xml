@@ -10,6 +10,8 @@
     <attr name="minChar" format="integer" />
     <attr name="maxChar" format="integer" />
     <attr name="maxLines" format="integer" />
+    <attr name="mainIcon" format="reference" />
+    <attr name="showSubTitle" format="boolean" />
     <attr name="toolTipType" format="enum">
         <enum name="SSN" value="1" />
         <enum name="PROFILE_FLAG" value="2" />
@@ -80,9 +82,9 @@
     </declare-styleable>
 
     <declare-styleable name="star_state">
-        <attr name="star_state_empty" format="boolean"/>
-        <attr name="star_state_half" format="boolean"/>
-        <attr name="star_state_full" format="boolean"/>
+        <attr name="star_state_empty" format="boolean" />
+        <attr name="star_state_half" format="boolean" />
+        <attr name="star_state_full" format="boolean" />
     </declare-styleable>
 
     <declare-styleable name="BottomSheetHeaderView">
@@ -226,5 +228,41 @@
             <enum name="NEW_DISH_VIDEO" value="4" />
             <enum name="NEW_DISH_NAME" value="5" />
         </attr>
+    </declare-styleable>
+
+    <declare-styleable name="CreateCookingSlotTopBar">
+        <attr name="title" />
+        <attr name="cooking_slot_bar_icon" format="reference" />
+    </declare-styleable>
+
+    <declare-styleable name="PeachRoundedBtn">
+        <attr name="title" />
+    </declare-styleable>
+
+    <declare-styleable name="CreateCookingSlotActionView">
+        <attr name="mainIcon" />
+        <attr name="title" />
+        <attr name="subtitle" />
+        <attr name="showSubTitle" />
+        <attr name="showSecondaryIcon" format="boolean" />
+        <attr name="setSubtitleAllCaps" format="boolean" />
+    </declare-styleable>
+
+    <declare-styleable name="CreateCookingSlotOptionView">
+        <attr name="mainIcon" />
+        <attr name="title" />
+        <attr name="subtitle" />
+        <attr name="showSubTitle" />
+    </declare-styleable>
+
+    <declare-styleable name="CreateCookingSlotToggleView">
+        <attr name="mainIcon" />
+        <attr name="title" />
+        <attr name="subtitle" />
+        <attr name="showSubTitle" />
+    </declare-styleable>
+
+    <declare-styleable name="WowCalendarView">
+        <attr name="mainBkgColor" format="color" />
     </declare-styleable>
 </resources>
