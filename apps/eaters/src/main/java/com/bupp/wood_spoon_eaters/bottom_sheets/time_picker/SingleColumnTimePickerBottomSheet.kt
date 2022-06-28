@@ -19,7 +19,9 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.util.*
 
-class SingleColumnTimePickerBottomSheet(val listener: TimePickerListener? = null) : BottomSheetDialogFragment() {
+class SingleColumnTimePickerBottomSheet(
+    val listener: TimePickerListener? = null
+) : BottomSheetDialogFragment() {
 
     data class DeliveryTimeParam(
         val deliveryTimeType: DeliveryType,

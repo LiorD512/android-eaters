@@ -303,6 +303,7 @@ class FeedMainAdapter(
 
     override fun onDishClick(dish: FeedDishItemSection?) {
         listener.onDishClicked(RestaurantInitParams(
+            cookingSlot = dish?.cookingSlot,
             restaurantId = dish?.cook?.id,
             chefThumbnail = dish?.cook?.thumbnail,
             coverPhoto = null,

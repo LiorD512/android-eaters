@@ -36,7 +36,6 @@ import com.bupp.wood_spoon_eaters.utils.showErrorToast
 import com.bupp.wood_spoon_eaters.views.DeliveryDateTabLayout
 import com.bupp.wood_spoon_eaters.views.FavoriteBtn
 import com.bupp.wood_spoon_eaters.views.floating_buttons.WSFloatingButton
-import io.split.android.client.SplitClient
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 

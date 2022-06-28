@@ -73,7 +73,10 @@ class RestaurantPageViewModel(
             }
             initRestaurantFullData(params.restaurantId, query = params.query)
         }
-        selectedDishId = params.selectedDishId
+        params.selectedDishId?.let {
+            selectedDishId = it
+            searchedCookingSlotId = params.cookingSlot?.id
+        }
     }
 
     fun reloadPage(showSkeleton: Boolean = true) {
@@ -114,28 +117,26 @@ class RestaurantPageViewModel(
         }
     }
 
-    private fun navigateToSelectedDishIfExist(result: RestaurantRepository.RestaurantResult) {
-        selectedDishId?.let { selectedId ->
-            result.restaurant?.let {
-                val menuItem = prepareSelectedMenuItem(it.dishes, selectedId.toLong())
-                menuItem?.let { item ->
-                    selectedDishNavigationLifeData.postValue(item)
-                }
+    private fun navigateToSelectedDishIfExist(
+        result: RestaurantRepository.RestaurantResult
+    ) {
+        selectedDishId?.let { dishId ->
+            result.restaurant?.let { restaurant ->
+                restaurant.cookingSlots
+                    .filter { it.id == searchedCookingSlotId }
+                    .map { it.sections }
+                    .map { sectionList ->
+                        sectionList.forEach { section ->
+                            section.menuItems.forEach { menuItem ->
+                                if (menuItem.dish?.id == dishId.toLong()) {
+                                    selectedDishNavigationLifeData.postValue(menuItem)
+                                }
+                            }
+                        }
+                    }
             }
-            selectedDishId = null
         }
     }
-
-    private fun prepareSelectedMenuItem(
-        dishesList: List<Dish>,
-        selectedId: Long
-    ): MenuItem? = dishesList
-        .firstOrNull {
-            it.id == selectedId
-        }
-        ?.let {
-            findClosestMenuItem(it)
-        }
 
     private fun checkIfUnavailableCookingSlot(restaurant: Restaurant): Boolean {
         val canDeliver = restaurant.canBeDelivered ?: false
