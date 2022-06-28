@@ -163,15 +163,18 @@ class EatersAnalyticsTracker(
             params.putString(AppEventsConstants.EVENT_PARAM_CONTENT_TYPE, "dISH")
             params.putString(AppEventsConstants.EVENT_PARAM_CONTENT_ID, eventData.get("dish_id") as String?)
             params.putString(AppEventsConstants.EVENT_PARAM_CURRENCY, "USD")
-            logger.logEvent(AppEventsConstants.EVENT_NAME_VIEWED_CONTENT, formattedPrice.toDouble(), params)
+
+            formattedPrice.toDoubleOrNull()?.let {
+                logger.logEvent(AppEventsConstants.EVENT_NAME_VIEWED_CONTENT, it, params)
+            }
         }
     }
 
     fun logEvent(eventName: String, params: Map<String, Any>? = null) {
-        if (params != null) {
-            UXCam.logEvent(eventName, params)
-        } else {
+        if (params.isNullOrEmpty()) {
             UXCam.logEvent(eventName)
+        } else {
+            UXCam.logEvent(eventName, params)
         }
 
         val eventData = Properties()
