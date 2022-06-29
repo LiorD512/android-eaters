@@ -13,9 +13,11 @@ import com.bupp.wood_spoon_eaters.domain.FeatureFlagLongFeedUseCase
 import com.bupp.wood_spoon_eaters.managers.CampaignManager
 import com.bupp.wood_spoon_eaters.managers.EatersAnalyticsTracker
 import com.bupp.wood_spoon_eaters.managers.FeedDataManager
+import com.bupp.wood_spoon_eaters.managers.logEvent
 import com.bupp.wood_spoon_eaters.model.*
 import com.bupp.wood_spoon_eaters.repositories.FeedRepository
 import com.bupp.wood_spoon_eaters.utils.DateUtils
+import com.eatwoodspoon.analytics.events.EatersFeedEvent
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -174,6 +176,26 @@ class FeedViewModel(
         feedDataManager.onTimePickerChanged(deliveryTimeParam)
         logEvent(Constants.EVENT_CHANGE_DELIVERY_DATE, getDateChangedData(deliveryTimeParam))
         onPullToRefresh()
+    }
+
+    fun logFeedHeroItemClickedEvent(heroId: Int?) = eatersAnalyticsTracker.logEvent(
+        EatersFeedEvent.FeedHeroItemClickedEvent(hero_id = heroId)
+    )
+
+    fun logFeedHeroCampaignClickedEvent(campaignId: Int?) = eatersAnalyticsTracker.logEvent(
+        EatersFeedEvent.FeedHeroCampaignClickedEvent(campaign_id = campaignId)
+    )
+
+    fun logFeedDishItemClickedEvent(dishId: Int?) = dishId?.let {
+        eatersAnalyticsTracker.logEvent(
+            EatersFeedEvent.FeedDishItemClickedEvent(dish_id = it)
+        )
+    }
+
+    fun logFeedChefItemClickedEvent(chefId: Int?) = chefId?.let {
+        eatersAnalyticsTracker.logEvent(
+            EatersFeedEvent.FeedChefItemClickedEvent(chef_id = it)
+        )
     }
 
     fun logEvent(eventName: String, params: Map<String, String>? = null) {

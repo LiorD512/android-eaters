@@ -98,6 +98,7 @@ data class FeedHeroItemSection(
     override val full_href: String? = null,
     override val items: List<FeedRestaurantSectionItem>? = null,
 
+    var id: String?,
     var title: String?,
     var text: String?,
     var url: String?,

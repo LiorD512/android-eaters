@@ -125,8 +125,12 @@ class SearchFragment : Fragment(R.layout.fragment_search),
         viewModel.logRestaurantClick(restaurantInitParams)
     }
 
-    override fun onDishClicked(restaurantInitParams: RestaurantInitParams) {
+    override fun onChefClick(restaurantInitParams: RestaurantInitParams) {
         //do nothing
+    }
+
+    override fun onDishClicked(restaurantInitParams: RestaurantInitParams) {
+
     }
 
     override fun onTagClick(tag: String) {
@@ -139,7 +143,11 @@ class SearchFragment : Fragment(R.layout.fragment_search),
         //do nothing
     }
 
-    override fun onHeroBannerClick(hero: FeedHeroItemSection) {
+    override fun onHeroBannerCampaignClick(hero: FeedHeroItemSection?) {
+        //do nothing
+    }
+
+    override fun onHeroBannerClick(hero: FeedHeroItemSection?) {
         //do nothing
     }
 

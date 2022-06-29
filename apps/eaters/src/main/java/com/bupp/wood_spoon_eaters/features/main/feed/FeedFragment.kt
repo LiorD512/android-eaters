@@ -166,7 +166,6 @@ class FeedFragment : Fragment(R.layout.fragment_feed),
 
     private fun handleBannerEvent(bannerType: Int) {
         bannerType.let {
-            Log.d(TAG, "handleBannerEvent: $bannerType")
             when (bannerType) {
                 Constants.NO_BANNER -> { }
                 Constants.BANNER_KNOWN_ADDRESS -> {
@@ -216,8 +215,14 @@ class FeedFragment : Fragment(R.layout.fragment_feed),
         mainViewModel.onShareCampaignClick(campaign.shareUrl,campaign.shareText)
     }
 
-    override fun onHeroBannerClick(hero: FeedHeroItemSection) {
-        mainViewModel.onShareCampaignClick(hero.url, hero.text)
+    override fun onHeroBannerCampaignClick(hero: FeedHeroItemSection?) {
+        mainViewModel.onShareCampaignClick(hero?.url, hero?.text)
+
+        viewModel.logFeedHeroCampaignClickedEvent(hero?.id?.toIntOrNull())
+    }
+
+    override fun onHeroBannerClick(hero: FeedHeroItemSection?) {
+        viewModel.logFeedHeroItemClickedEvent(hero?.id?.toIntOrNull())
     }
 
     override fun onRestaurantClick(restaurantInitParams: RestaurantInitParams) {
@@ -231,7 +236,16 @@ class FeedFragment : Fragment(R.layout.fragment_feed),
 
     override fun onDishClicked(restaurantInitParams: RestaurantInitParams) {
         mainViewModel.startRestaurantActivity(restaurantInitParams)
-        mainViewModel.logRestaurantClick(restaurantInitParams)
+        viewModel.logFeedDishItemClickedEvent(
+            dishId = restaurantInitParams.selectedDishId?.toIntOrNull(),
+        )
+    }
+
+    override fun onChefClick(restaurantInitParams: RestaurantInitParams) {
+        mainViewModel.startRestaurantActivity(restaurantInitParams)
+        restaurantInitParams.restaurantId?.let {
+            viewModel.logFeedChefItemClickedEvent(chefId = it.toInt())
+        }
     }
 
     override fun onRefreshFeedClick() {

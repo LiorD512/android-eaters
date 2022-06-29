@@ -38,8 +38,10 @@ class FeedMainAdapter(
 
     interface FeedMainAdapterListener {
         fun onShareBannerClick(campaign: Campaign)
-        fun onHeroBannerClick(hero: FeedHeroItemSection)
+        fun onHeroBannerClick(hero: FeedHeroItemSection?)
+        fun onHeroBannerCampaignClick(hero: FeedHeroItemSection?)
         fun onRestaurantClick(restaurantInitParams: RestaurantInitParams)
+        fun onChefClick(restaurantInitParams: RestaurantInitParams)
         fun onDishClicked(restaurantInitParams: RestaurantInitParams)
         fun onChangeAddressClick()
         fun onDishSwiped()
@@ -281,9 +283,9 @@ class FeedMainAdapter(
     override fun onHeroBannerClick(hero: FeedHeroItemSection?) {
         hero?.url?.contains("woodspoon.app.link/referral_purchase")?.let {
             if (it) {
-                hero.let { heroItem ->
-                    listener.onHeroBannerClick(heroItem)
-                }
+                listener.onHeroBannerCampaignClick(hero)
+            } else {
+                listener.onHeroBannerClick(hero)
             }
         }
     }

@@ -184,6 +184,10 @@ class DishSearchFragment : Fragment(R.layout.fragment_dish_search), FeedMainAdap
 //        viewModel.logRestaurantClick(restaurantInitParams)
     }
 
+    override fun onChefClick(restaurantInitParams: RestaurantInitParams) {
+        //do nothing
+    }
+
     override fun onDishClicked(restaurantInitParams: RestaurantInitParams) {
         //do nothing
     }
@@ -198,7 +202,11 @@ class DishSearchFragment : Fragment(R.layout.fragment_dish_search), FeedMainAdap
         //do nothing
     }
 
-    override fun onHeroBannerClick(hero: FeedHeroItemSection) {
+    override fun onHeroBannerCampaignClick(hero: FeedHeroItemSection?) {
+        //do nothing
+    }
+
+    override fun onHeroBannerClick(hero: FeedHeroItemSection?) {
         //do nothing
     }
 
