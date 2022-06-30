@@ -281,7 +281,7 @@ class FeedMainAdapter(
     }
 
     override fun onHeroBannerClick(hero: FeedHeroItemSection?) {
-        hero?.url?.contains("woodspoon.app.link/referral_purchase")?.let {
+        hero?.url?.contains("referral")?.let {
             if (it) {
                 listener.onHeroBannerCampaignClick(hero)
             } else {
@@ -291,7 +291,7 @@ class FeedMainAdapter(
     }
 
     override fun onChefClick(chef: FeedChefItemSection?) {
-        listener.onRestaurantClick(RestaurantInitParams(
+        listener.onChefClick(RestaurantInitParams(
             restaurantId = chef?.cook?.id,
             chefThumbnail = chef?.cook?.thumbnail,
             coverPhoto = null,

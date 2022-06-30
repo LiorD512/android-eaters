@@ -218,7 +218,12 @@ class FeedFragment : Fragment(R.layout.fragment_feed),
     override fun onHeroBannerCampaignClick(hero: FeedHeroItemSection?) {
         mainViewModel.onShareCampaignClick(hero?.url, hero?.text)
 
-        viewModel.logFeedHeroCampaignClickedEvent(hero?.id?.toIntOrNull())
+        hero?.url
+            ?.substringAfter("campaign_id=")
+            ?.substringBeforeLast(",")
+            ?.let {
+                viewModel.logFeedHeroCampaignClickedEvent(it.toIntOrNull())
+            }
     }
 
     override fun onHeroBannerClick(hero: FeedHeroItemSection?) {
@@ -243,6 +248,7 @@ class FeedFragment : Fragment(R.layout.fragment_feed),
 
     override fun onChefClick(restaurantInitParams: RestaurantInitParams) {
         mainViewModel.startRestaurantActivity(restaurantInitParams)
+
         restaurantInitParams.restaurantId?.let {
             viewModel.logFeedChefItemClickedEvent(chefId = it.toInt())
         }
