@@ -11,7 +11,7 @@ import com.bupp.wood_spoon_chef.utils.extensions.show
 
 class CreateCookingSlotOptionView @JvmOverloads
 constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) :
-    LinearLayout(context, attrs, defStyleAttr){
+    LinearLayout(context, attrs, defStyleAttr) {
 
     private val binding: CreateCookingSlotOptionViewBinding =
         CreateCookingSlotOptionViewBinding.inflate(
@@ -45,11 +45,7 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
                 setIcon(icon)
             }
 
-            if (attrSet.hasValue(R.styleable.CreateCookingSlotOptionView_showSubTitle)) {
-                val show =
-                    attrSet.getBoolean(R.styleable.CreateCookingSlotOptionView_showSubTitle, false)
-                showSubtitle(show)
-            }
+            showSubtitle()
 
             attrSet.recycle()
         }
@@ -61,6 +57,7 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 
     fun setSubtitle(subtitle: String?) {
         binding.createCookingSlotOptionViewSubTitle.text = subtitle
+        showSubtitle()
     }
 
     private fun setIcon(icon: Int) {
@@ -72,8 +69,8 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
         )
     }
 
-    private fun showSubtitle(show: Boolean) {
-        binding.createCookingSlotOptionViewSubTitle.show(show)
+    private fun showSubtitle() {
+        binding.createCookingSlotOptionViewSubTitle.show(binding.createCookingSlotOptionViewSubTitle.text.isNotEmpty())
     }
 
     fun setForwardBtnClickListener(clickListener: () -> Unit) {

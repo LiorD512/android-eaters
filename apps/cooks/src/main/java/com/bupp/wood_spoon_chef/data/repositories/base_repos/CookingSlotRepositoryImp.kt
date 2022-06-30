@@ -4,9 +4,9 @@ import com.bupp.wood_spoon_chef.data.remote.model.CookingSlot
 import com.bupp.wood_spoon_chef.data.remote.model.CookingSlotRequest
 import com.bupp.wood_spoon_chef.data.remote.model.CookingSlotSlim
 import com.bupp.wood_spoon_chef.data.remote.model.Order
-import com.bupp.wood_spoon_chef.data.remote.network.ApiService
 import com.bupp.wood_spoon_chef.data.remote.network.ResponseHandler
 import com.bupp.wood_spoon_chef.data.remote.network.base.ResponseResult
+import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.network.CookingSlotApiService
 
 interface BaseCookingSlotRepository {
 
@@ -34,7 +34,7 @@ interface BaseCookingSlotRepository {
 }
 
 open class CookingSlotRepositoryImp(
-    private val service: ApiService,
+    private val service: CookingSlotApiService,
     private val responseHandler: ResponseHandler
 ) : BaseCookingSlotRepository {
 

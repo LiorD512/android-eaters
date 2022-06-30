@@ -339,7 +339,9 @@ data class CookingSlotRequest(
     @Json(name = "free_delivery") var freeDelivery: Boolean = false,
     @Json(name = "nationwide_shipping") var worldwide: Boolean = false,
     @Json(name = "recurring_slot") var recurringSlot: Boolean = false,
-    @Json(name = "menu_items") var menuItems: List<MenuItemRequest> = mutableListOf()
+    @Json(name = "menu_items") var menuItems: List<MenuItemRequest> = mutableListOf(),
+    @Json(name = "rrule") val recurringRule: String? = null,
+    @Json(name = "submit") val submit: Boolean? = false
 ) : Parcelable
 
 @Parcelize
@@ -356,7 +358,7 @@ data class CookingSlotSlim(
 @Parcelize
 @JsonClass(generateAdapter = true)
 data class CookingSlot(
-    val id: Long,
+    val id: Long?,
     @Json(name = "event") val event: Event?,
     @Json(name = "starts_at") val startsAt: Date,
     @Json(name = "ends_at") val endsAt: Date,

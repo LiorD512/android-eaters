@@ -157,7 +157,9 @@ class OrdersFragment : BaseFragment(R.layout.fragment_orders),
 
     override fun onCancelCookingSlot(cookingSlot: CookingSlot) {
         this.lastClickedCookingSlot = cookingSlot
-        viewModel.cancelCookingSlot(cookingSlot.id)
+        cookingSlot.id?.let { id ->
+            viewModel.cancelCookingSlot(id)
+        }
         viewModel.trackAnalyticsEvent(OrdersClickOnItemMenuCancelSlotEvent())
     }
 

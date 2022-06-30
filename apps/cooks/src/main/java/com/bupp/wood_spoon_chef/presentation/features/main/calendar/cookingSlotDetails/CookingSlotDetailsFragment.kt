@@ -122,7 +122,9 @@ class CookingSlotDetailsFragment : BaseFragment(R.layout.fragment_cooking_slot_d
         val cookingSlotChooser = CookingSlotChooserDialog(cookingSlot,
             object : CookingSlotChooserDialog.CookingSlotChooserListener {
                 override fun onCancelCookingSlot(cookingSlot: CookingSlot) {
-                    viewModel.cancelCookingSlot(cookingSlot.id)
+                    cookingSlot.id?.let { id ->
+                        viewModel.cancelCookingSlot(id)
+                    }
                 }
 
                 override fun onEditCookingSlot(cookingSlot: CookingSlot) {

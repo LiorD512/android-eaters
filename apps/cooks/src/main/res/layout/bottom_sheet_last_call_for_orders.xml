@@ -19,7 +19,7 @@
         style="@style/LatoReg13Black"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="@dimen/margin_15.4"
+        android:layout_marginHorizontal="@dimen/medium"
         android:layout_marginTop="15.8dp"
         android:paddingBottom="15.2dp"
         android:text="@string/last_call_for_order_explanation"
@@ -30,7 +30,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/wild_sand"
-        android:paddingTop="@dimen/margin_15.4"
+        android:paddingTop="@dimen/medium"
         app:layout_constraintTop_toBottomOf="@id/lastCallForOrderBsExplanationTxt">
 
 
@@ -47,7 +47,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="14.4dp"
-        android:layout_marginHorizontal="@dimen/margin_15.4"
+        android:layout_marginHorizontal="@dimen/medium"
         app:title="Save"
         app:layout_constraintBottom_toBottomOf="parent" />
 

@@ -4,18 +4,23 @@ import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.View
 import android.widget.Toast
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.bupp.wood_spoon_chef.R
 import com.bupp.wood_spoon_chef.common.Constants
 import com.bupp.wood_spoon_chef.databinding.FragmentCreateCookingSlotNewBinding
 import com.bupp.wood_spoon_chef.presentation.custom_views.CreateCookingSlotTopBar
-import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.dialogs.LastCallForOrdersBottomSheet
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.dialogs.OperatingHoursInfoBottomSheet
-import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.dialogs.TimePickerBottomSheet
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.fragments.base.CookingSlotParentFragment
-import com.bupp.wood_spoon_chef.utils.extensions.findParent
-import com.bupp.wood_spoon_chef.utils.extensions.prepareFormattedDate
+import com.bupp.wood_spoon_chef.utils.extensions.*
 import com.eatwoodspoon.android_utils.binding.viewBinding
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.launch
 import org.joda.time.DateTime
+import org.joda.time.format.DateTimeFormat
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 
@@ -31,24 +36,91 @@ class CreateCookingSlotFragmentNew : Fragment(R.layout.fragment_create_cooking_s
         super.onViewCreated(view, savedInstanceState)
         getArgs()
         initUi()
+        observeViewModelState()
+        observeViewModelEvents()
     }
 
     private fun initUi() {
         binding.apply {
             createCookingSlotNewFragmentTopBar.setCookingSlotTopBarListener(this@CreateCookingSlotFragmentNew)
-            createCookingSlotNewFragmentNextBtn.setOnClickListener { viewModel.openMenuFragment() }
+            createCookingSlotNewFragmentNextBtn.setOnClickListener { viewModel.onNextClick() }
             createCookingSlotNewFragmentOperatingHoursView.setOnSecondaryIconClickListener { openOperatingHoursInfoBottomSheet() }
-            createCookingSlotNewFragmentOperatingHoursView.setAddClickListener { openTimePickerBottomSheet() }
-            createCookingSlotNewFragmentLastCallForOrderView.setForwardBtnClickListener { openLastCallForOrderBs() }
+            createCookingSlotNewFragmentOperatingHoursView.setAddClickListener { viewModel.onOperatingHoursClick() }
+            createCookingSlotNewFragmentLastCallForOrderView.setForwardBtnClickListener { viewModel.onLastCallForOrderClick() }
+            createCookingSlotNewFragmentMakeRecurringView.setForwardBtnClickListener { viewModel.onRecurringSlotClick() }
+
+        }
+    }
+
+    private fun observeViewModelState() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                launch {
+                    viewModel.state.collect { state ->
+                        updateInputsWithState(state)
+                    }
+                }
+
+                launch {
+                    viewModel.state.map { it.errors }.distinctUntilChanged().collect {
+                        updateErrors(it)
+                    }
+                }
+            }
+        }
+    }
+
+    private fun observeViewModelEvents() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                launch {
+                    viewModel.events.collect { event ->
+                        when (event) {
+                            is CreateCookingSlotEvents.Error -> showErrorToast(
+                                event.message ?: getString(R.string.generic_error),
+                                binding.createCookingSlotNewFragmentMainLayout,
+                                Toast.LENGTH_SHORT
+                            )
+                            is CreateCookingSlotEvents.ShowOperatingHours -> openTimePickerBottomSheet(
+                                event.operatingHours
+                            )
+                            is CreateCookingSlotEvents.ShowLastCallForOrder -> openLastCallForOrder(
+                                event.lastCallForOrder
+                            )
+                            is CreateCookingSlotEvents.ShowRecurringRule -> openRecurringRule(
+                                event.recurringRule
+                            )
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private fun updateInputsWithState(state: CreateCookingSlotNewState) {
+        binding.apply {
+            showTitle(state.selectedDate)
+
+            createCookingSlotNewFragmentOperatingHoursView.setSubtitle(
+                formatOperatingHours(
+                    state.operatingHours.startTime, state.operatingHours.endTime
+                )
+            )
+            createCookingSlotNewFragmentLastCallForOrderView.setSubtitle(
+                formatLastCallForOrderDate(state.lastCallForOrder)
+            )
+            createCookingSlotNewFragmentMakeRecurringView.setSubtitle(
+                formatRcs(state.recurringRule)
+            )
         }
     }
 
     private fun getArgs() {
         val selectedDate = requireActivity().intent.getLongExtra(Constants.ARG_SELECTED_DATE, 0)
-        showTitle(selectedDate)
+        viewModel.setSelectedDate(selectedDate)
     }
 
-    private fun showTitle(selectedDate: Long) {
+    private fun showTitle(selectedDate: Long?) {
         binding.createCookingSlotNewFragmentTitle.text =
             DateTime(selectedDate).prepareFormattedDate()
     }
@@ -60,17 +132,59 @@ class CreateCookingSlotFragmentNew : Fragment(R.layout.fragment_create_cooking_s
         )
     }
 
-    private fun openTimePickerBottomSheet() {
-        TimePickerBottomSheet.show(this) { time ->
-            viewModel.setStartTime(time)
+    private fun openTimePickerBottomSheet(operatingHours: OperatingHours?) {
+        operatingHours?.let {
+            viewModel.setOperationHours(it)
+            binding.createCookingSlotNewFragmentOperatingHoursError.show(false)
         }
+    }
+
+    private fun openLastCallForOrder(lastCallForOrder: Long?) {
+        viewModel.setLastCallForOrders(lastCallForOrder)
+    }
+
+    private fun openRecurringRule(recurringRule: RecurringRule?) {
+        viewModel.setRecurringRule(recurringRule)
     }
 
     override fun onBackClick() {
         requireActivity().finish()
     }
 
-    private fun openLastCallForOrderBs() {
-        LastCallForOrdersBottomSheet().show(childFragmentManager, LastCallForOrdersBottomSheet::class.simpleName)
+    private fun updateErrors(errors: List<Errors>) {
+        errors.forEach { error ->
+            when (error) {
+                Errors.OperatingHours -> binding.createCookingSlotNewFragmentOperatingHoursError.show(
+                    true
+                )
+            }
+        }
     }
 }
+
+private fun formatOperatingHours(startTime: Long?, endTime: Long?): String {
+    if (startTime != null) {
+        return "${DateTime(startTime).prepareFormattedDateForHours()} - ${DateTime(endTime).prepareFormattedDateForHours()}"
+    }
+    return ""
+}
+
+private fun formatLastCallForOrderDate(lastCallForOrder: Long?): String {
+    if (lastCallForOrder != null) {
+        return DateTime(lastCallForOrder).prepareFormattedDateForDateAndHour()
+    }
+    return ""
+}
+
+private fun formatRcs(recurringRule: RecurringRule?): String {
+    if (recurringRule != null) {
+        return "Cooking slot will occur ${recurringRule.frequency}, ${recurringRule.count} times"
+    }
+    return ""
+}
+
+private fun DateTime.prepareFormattedDateForHours(): String =
+    DateTimeFormat.forPattern("hh:mm aa").print(this)
+
+private fun DateTime.prepareFormattedDateForDateAndHour(): String =
+    DateTimeFormat.forPattern("EEEE, MMM dd, yyyy, hh:mm aa").print(this)

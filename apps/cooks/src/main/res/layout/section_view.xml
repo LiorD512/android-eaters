@@ -9,8 +9,9 @@
         android:id="@+id/createCookingSlotItemViewLayoutContent"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="@dimen/margin_15.4"
+        android:layout_marginHorizontal="@dimen/medium"
         android:background="@drawable/white_rect_7_radius"
+        android:showDividers="middle"
+        android:divider="@drawable/divider"
         android:orientation="vertical" />
-
 </merge>

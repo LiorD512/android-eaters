@@ -1,35 +1,146 @@
 package com.bupp.wood_spoon_chef.presentation.features.cooking_slot.fragments
 
+import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.viewModelScope
+import com.bupp.wood_spoon_chef.data.remote.network.base.ResponseError
+import com.bupp.wood_spoon_chef.data.remote.network.base.ResponseSuccess
+import com.bupp.wood_spoon_chef.data.repositories.CookingSlotRepository
 import com.bupp.wood_spoon_chef.presentation.features.base.BaseViewModel
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.coordinator.CookingSlotFlowCoordinator
-import com.bupp.wood_spoon_chef.utils.extensions.prepareFormattedDateForHours
+import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.mapper.CookingSlotStateMapper
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import org.joda.time.DateTime
+import java.lang.Exception
+
+data class OperatingHours(
+    val startTime: Long?,
+    val endTime: Long?
+)
+
+data class RecurringRule(
+    val frequency: String?,
+    val count: String?
+)
+
+data class CreateCookingSlotNewState(
+    val selectedDate: Long? = null,
+    val operatingHours: OperatingHours = OperatingHours(null, null),
+    val lastCallForOrder: Long? = null,
+    val recurringRule: RecurringRule? = null,
+    val errors: List<Errors> = emptyList()
+)
+
+enum class Errors {
+    OperatingHours
+}
+
+sealed class CreateCookingSlotEvents {
+    data class Error(val message: String? = null) : CreateCookingSlotEvents()
+    data class ShowOperatingHours(val operatingHours: OperatingHours? = null) :
+        CreateCookingSlotEvents()
+    data class ShowLastCallForOrder(val lastCallForOrder: Long? = null) : CreateCookingSlotEvents()
+    data class ShowRecurringRule(val recurringRule: RecurringRule? = null) :
+        CreateCookingSlotEvents()
+}
 
 class CreateCookingSlotNewViewModel(
-    private val cookingSlotFlowCoordinator: CookingSlotFlowCoordinator
+    private val cookingSlotFlowCoordinator: CookingSlotFlowCoordinator,
+    private val stateMapper: CookingSlotStateMapper,
+    private val cookingSlotRepository: CookingSlotRepository
 ) : BaseViewModel() {
 
-    private var startTime: Long? = null
-    private var endTime: Long? = null
+    private val _state = MutableStateFlow(CreateCookingSlotNewState())
+    val state: StateFlow<CreateCookingSlotNewState> = _state
 
-    fun openMenuFragment() {
-        viewModelScope.launch {
-            cookingSlotFlowCoordinator.next(CookingSlotFlowCoordinator.Step.OPEN_MENU_FRAGMENT)
+    private val _events = MutableSharedFlow<CreateCookingSlotEvents>()
+    val events: SharedFlow<CreateCookingSlotEvents> = _events
+
+    fun setOperationHours(operatingHours: OperatingHours) {
+        _state.update {
+            it.copy(operatingHours = operatingHours)
         }
     }
 
-    fun setStartTime(startTime: Long) {
-        this.startTime = startTime
+    fun setLastCallForOrders(lastCallForOrder: Long?) {
+        _state.update {
+            it.copy(lastCallForOrder = lastCallForOrder)
+        }
     }
 
-    fun setEndTime(endTime: Long) {
-        this.endTime = endTime
+    fun setRecurringRule(recurringRule: RecurringRule?) {
+        _state.update {
+            it.copy(recurringRule = recurringRule)
+        }
     }
 
-    fun getOperatingHours(): String {
-        return "${DateTime(startTime).prepareFormattedDateForHours()} - ${DateTime(endTime).prepareFormattedDateForHours()}"
+    fun onNextClick() {
+        if (validateInputs()) {
+            viewModelScope.launch(Dispatchers.IO) {
+                try {
+                    when (val result = cookingSlotRepository.postCookingSlot(
+                        stateMapper.mapStateToCreateCookingSlotRequest(_state.value)
+                    )) {
+                        is ResponseSuccess -> {
+                            result.data?.let {
+                                cookingSlotFlowCoordinator.next(CookingSlotFlowCoordinator.Step.OPEN_MENU_FRAGMENT)
+                            }
+                        }
+                        is ResponseError -> {
+                            _events.emit(CreateCookingSlotEvents.Error(result.error.message))
+                        }
+                    }
+                } catch (ex: Exception) {
+                    _events.emit(CreateCookingSlotEvents.Error(ex.message))
+                }
+            }
+        }
     }
 
+    fun onOperatingHoursClick() {
+        viewModelScope.launch {
+            val startTime = DateTime(_state.value.selectedDate).plusHours(7).millis
+            val endTime = DateTime(_state.value.selectedDate).plusHours(10).millis
+            _events.emit(
+                CreateCookingSlotEvents.ShowOperatingHours(
+                    OperatingHours(
+                        startTime,
+                        endTime
+                    )
+                )
+            )
+        }
+    }
+
+    fun onLastCallForOrderClick() {
+        viewModelScope.launch {
+            val lastCallForOrder = DateTime(_state.value.selectedDate).plusHours(9).millis
+            _events.emit(CreateCookingSlotEvents.ShowLastCallForOrder(lastCallForOrder))
+        }
+    }
+
+    fun onRecurringSlotClick(){
+        viewModelScope.launch {
+            _events.emit(CreateCookingSlotEvents.ShowRecurringRule(RecurringRule("daily", 3.toString())))
+        }
+    }
+
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    private fun validateInputs(): Boolean {
+        val errors = mutableListOf<Errors>()
+        with(_state.value) {
+            if (operatingHours.startTime == null) {
+                errors.add(Errors.OperatingHours)
+            }
+        }
+        _state.update { it.copy(errors = errors.toList()) }
+        return errors.isEmpty()
+    }
+
+    fun setSelectedDate(selectedDate: Long?) {
+        _state.update {
+            it.copy(selectedDate = selectedDate)
+        }
+    }
 }

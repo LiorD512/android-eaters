@@ -46,15 +46,12 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
                 setIcon(icon)
             }
 
-            if (attrSet.hasValue(R.styleable.CreateCookingSlotActionView_showSubTitle)) {
-                val show =
-                    attrSet.getBoolean(R.styleable.CreateCookingSlotActionView_showSubTitle, false)
-                showSubtitle(show)
-            }
-
             if (attrSet.hasValue(R.styleable.CreateCookingSlotActionView_setSubtitleAllCaps)) {
                 val allCaps =
-                    attrSet.getBoolean(R.styleable.CreateCookingSlotActionView_setSubtitleAllCaps, false)
+                    attrSet.getBoolean(
+                        R.styleable.CreateCookingSlotActionView_setSubtitleAllCaps,
+                        false
+                    )
                 setSubtitleAllCaps(allCaps)
             }
 
@@ -67,6 +64,9 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
                 showSecondaryIcon(show)
             }
 
+            showSubtitle()
+            setActionButtonTitle()
+
             attrSet.recycle()
         }
     }
@@ -77,6 +77,8 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 
     fun setSubtitle(subtitle: String?) {
         binding.createCookingSlotActionViewSubTitle.text = subtitle
+        showSubtitle()
+        setActionButtonTitle()
     }
 
     private fun setIcon(icon: Int) {
@@ -88,15 +90,15 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
         )
     }
 
-    private fun showSubtitle(show: Boolean) {
-        binding.createCookingSlotActionViewSubTitle.show(show)
+    private fun showSubtitle() {
+        binding.createCookingSlotActionViewSubTitle.show(binding.createCookingSlotActionViewSubTitle.text.isNotEmpty())
     }
 
     private fun showSecondaryIcon(show: Boolean) {
         binding.createCookingSlotActionViewSecondaryIcon.show(show)
     }
 
-    fun setAddClickListener(clickListener: () -> Unit){
+    fun setAddClickListener(clickListener: () -> Unit) {
         binding.createCookingSlotActionViewAddBtn.setOnClickListener { clickListener() }
     }
 
@@ -104,11 +106,15 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
         binding.createCookingSlotActionViewSecondaryIcon.setOnClickListener { clickListener() }
     }
 
-    private fun setSubtitleAllCaps(allCaps: Boolean){
+    private fun setSubtitleAllCaps(allCaps: Boolean) {
         binding.createCookingSlotActionViewSubTitle.isAllCaps = allCaps
     }
 
-    fun setActionButtonTitle(title: String?){
-        binding.createCookingSlotActionViewAddBtn.setTitle(title)
+    private fun setActionButtonTitle() {
+        if (binding.createCookingSlotActionViewSubTitle.text.isNullOrEmpty()) {
+            binding.createCookingSlotActionViewAddBtn.setTitle("Add")
+        } else {
+            binding.createCookingSlotActionViewAddBtn.setTitle("Change")
+        }
     }
 }

@@ -4,16 +4,16 @@ import com.bupp.wood_spoon_chef.common.Constants
 import com.bupp.wood_spoon_chef.analytics.ChefAnalyticsTracker
 import com.bupp.wood_spoon_chef.data.remote.model.CookingSlot
 import com.bupp.wood_spoon_chef.data.remote.model.CookingSlotRequest
-import com.bupp.wood_spoon_chef.data.remote.network.ApiService
 import com.bupp.wood_spoon_chef.data.remote.network.ResponseHandler
 import com.bupp.wood_spoon_chef.data.remote.network.base.ResponseResult
 import com.bupp.wood_spoon_chef.data.remote.network.base.ResponseSuccess
 import com.bupp.wood_spoon_chef.data.repositories.base_repos.CookingSlotRepositoryImp
+import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.network.CookingSlotApiService
 
 class CookingSlotRepository(
     private val chefAnalyticsTracker: ChefAnalyticsTracker,
     private val userRepository: UserRepository,
-    service: ApiService,
+    service: CookingSlotApiService,
     responseHandler: ResponseHandler
 ) : CookingSlotRepositoryImp(service, responseHandler) {
 
@@ -53,11 +53,4 @@ class CookingSlotRepository(
         data["chef_id"] = userRepository.getCurrentChef()?.id ?: "N/A"
         return data
     }
-
-
-    companion object {
-        const val TAG = "wowCookingSlotRepo"
-    }
-
-
 }

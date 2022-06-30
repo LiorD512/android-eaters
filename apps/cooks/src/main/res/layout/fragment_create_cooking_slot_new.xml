@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/wild_sand"
+    android:id="@+id/createCookingSlotNewFragmentMainLayout"
     tools:context=".presentation.features.cooking_slot.fragments.CreateCookingSlotFragmentNew">
 
     <com.bupp.wood_spoon_chef.presentation.custom_views.CreateCookingSlotTopBar
@@ -20,7 +21,7 @@
         style="@style/LatoBlack19DarkDarkGrey"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/margin_15.4"
+        android:layout_marginStart="@dimen/medium"
         android:layout_marginTop="22.6dp"
         android:textColor="@color/dark"
         app:layout_constraintTop_toBottomOf="@id/createCookingSlotNewFragmentTopBar"
@@ -48,25 +49,38 @@
                     android:layout_height="wrap_content"
                     app:mainIcon="@drawable/icons_time"
                     app:showSecondaryIcon="true"
-                    app:showSubTitle="true"
-                    app:subtitle="12:15 PM - 4:00 PM"
                     app:setSubtitleAllCaps="true"
                     app:title="Operating hours" />
 
             </com.bupp.wood_spoon_chef.presentation.custom_views.SectionView>
 
+            <TextView
+                android:id="@+id/createCookingSlotNewFragmentOperatingHoursError"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/coral"
+                android:text="@string/please_enter_operating_hours"
+                style="@style/LatoReg11Black"
+                android:gravity="center_vertical"
+                android:layout_marginStart="@dimen/medium"
+                android:layout_marginTop="6dp"
+                android:drawablePadding="7dp"
+                android:visibility="gone"
+                tools:visibility="visible"
+                app:drawableStartCompat="@drawable/ic_error" />
+
             <com.bupp.wood_spoon_chef.presentation.custom_views.SectionView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:visibility="gone"
                 android:layout_marginTop="15dp">
 
                 <com.bupp.wood_spoon_chef.presentation.custom_views.CreateCookingSlotActionView
+                    android:id="@+id/createCookingSlotNewFragmentPickUpAddressView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:mainIcon="@drawable/icons_location"
                     app:showSecondaryIcon="false"
-                    app:showSubTitle="true"
-                    app:subtitle="1 Canal St, New York, B26"
                     app:title="Pickup address" />
 
             </com.bupp.wood_spoon_chef.presentation.custom_views.SectionView>
@@ -75,7 +89,7 @@
                 style="@style/LatoBlack13Dark"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/margin_15.4"
+                android:layout_marginStart="@dimen/medium"
                 android:layout_marginTop="23dp"
                 android:text="@string/more_options" />
 
@@ -90,14 +104,13 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
                     app:mainIcon="@drawable/icon_bell"
-                    app:subtitle="Wednsday, Nov 29, 4:00 PM"
                     app:title="Last call for orders"/>
 
                 <com.bupp.wood_spoon_chef.presentation.custom_views.CreateCookingSlotOptionView
+                    android:id="@+id/createCookingSlotNewFragmentMakeRecurringView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:mainIcon="@drawable/icon_reccuring"
-                    app:subtitle="Cooking slot will occur every week on\nSunday and Tuesday, 20 times"
                     app:title="Make slot recurring"/>
 
                 <com.bupp.wood_spoon_chef.presentation.custom_views.CreateCookingSlotToggleView
@@ -105,6 +118,7 @@
                     android:layout_height="wrap_content"
                     app:title="Ship nationwide"
                     app:mainIcon="@drawable/icon_ship"
+                    android:visibility="gone"
                     app:subtitle="Allow all dishes in this cooking slot to\nship nationwide by you, via UPS."/>
 
             </com.bupp.wood_spoon_chef.presentation.custom_views.SectionView>
@@ -115,7 +129,7 @@
         android:id="@+id/createCookingSlotNewFragmentNextBtn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="@dimen/margin_15.4"
+        android:layout_marginHorizontal="@dimen/medium"
         android:layout_marginBottom="14.4dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:title="@string/code_fragment_next_btn" />

@@ -9,9 +9,6 @@ fun DateTime.monthOfYearAsShortText(): String =
 fun DateTime.prepareFormattedDate(): String =
     DateTimeFormat.forPattern("EEEE, MMM dd, yyyy").print(this)
 
-fun DateTime.prepareFormattedDateForHours(): String =
-    DateTimeFormat.forPattern("hh:mm aa").print(this)
-
 fun DateTime.prepareRangeOneMonth(): Pair<Long, Long> {
     val startDate: DateTime = this.withDayOfMonth(1)
     val endDate: DateTime = startDate.plusMonths(1).minusDays(1)
