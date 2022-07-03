@@ -143,6 +143,22 @@ class FeedMainAdapter(
         }
     }
 
+    override fun onViewAttachedToWindow(holder: RecyclerView.ViewHolder) {
+        when(holder){
+            is FeedAdapterHeroViewHolder -> {
+                holder.onViewAttachedToWindow()
+            }
+        }
+    }
+
+    override fun onViewDetachedFromWindow(holder: RecyclerView.ViewHolder) {
+        when(holder){
+            is FeedAdapterHeroViewHolder -> {
+                holder.onViewDetachedFromWindow()
+            }
+        }
+    }
+
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val section = dataList[position]
         when (section) {
