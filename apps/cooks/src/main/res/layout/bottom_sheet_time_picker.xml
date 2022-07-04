@@ -28,8 +28,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@id/timePickerDivider"
-        android:layout_marginTop="21dp"
-        android:timePickerMode="spinner"/>
+        android:theme="@style/TimePickerStyle"
+        style="@style/TimePickerStyle"
+        android:layout_marginTop="21dp" />
+
 
     <com.bupp.wood_spoon_chef.presentation.custom_views.OrangeBtnCornered
         android:id="@+id/timePickerActionBtn"

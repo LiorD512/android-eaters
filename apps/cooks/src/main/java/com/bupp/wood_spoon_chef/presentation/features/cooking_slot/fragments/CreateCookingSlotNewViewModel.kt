@@ -14,6 +14,7 @@ import kotlinx.coroutines.launch
 import org.joda.time.DateTime
 import java.lang.Exception
 
+
 data class OperatingHours(
     val startTime: Long?,
     val endTime: Long?
@@ -26,6 +27,8 @@ data class RecurringRule(
 
 data class CreateCookingSlotNewState(
     val selectedDate: Long? = null,
+    val startTime: Long? = null,
+    val endTime: Long? = null,
     val operatingHours: OperatingHours = OperatingHours(null, null),
     val lastCallForOrder: Long? = null,
     val recurringRule: RecurringRule? = null,
@@ -38,11 +41,11 @@ enum class Errors {
 
 sealed class CreateCookingSlotEvents {
     data class Error(val message: String? = null) : CreateCookingSlotEvents()
-    data class ShowOperatingHours(val operatingHours: OperatingHours? = null) :
-        CreateCookingSlotEvents()
+    object ShowOperatingHours : CreateCookingSlotEvents()
     data class ShowLastCallForOrder(val lastCallForOrder: Long? = null) : CreateCookingSlotEvents()
     data class ShowRecurringRule(val recurringRule: RecurringRule? = null) :
         CreateCookingSlotEvents()
+    data class ShowEndTimePicker(val startTime: Long?): CreateCookingSlotEvents()
 }
 
 class CreateCookingSlotNewViewModel(
@@ -57,9 +60,15 @@ class CreateCookingSlotNewViewModel(
     private val _events = MutableSharedFlow<CreateCookingSlotEvents>()
     val events: SharedFlow<CreateCookingSlotEvents> = _events
 
-    fun setOperationHours(operatingHours: OperatingHours) {
+    fun setOperatingHours(operatingHours: OperatingHours) {
         _state.update {
             it.copy(operatingHours = operatingHours)
+        }
+    }
+
+    fun setStartTime(startTime: Long?){
+        _state.update {
+            it.copy(startTime = startTime)
         }
     }
 
@@ -100,15 +109,16 @@ class CreateCookingSlotNewViewModel(
 
     fun onOperatingHoursClick() {
         viewModelScope.launch {
-            val startTime = DateTime(_state.value.selectedDate).plusHours(7).millis
-            val endTime = DateTime(_state.value.selectedDate).plusHours(10).millis
             _events.emit(
-                CreateCookingSlotEvents.ShowOperatingHours(
-                    OperatingHours(
-                        startTime,
-                        endTime
-                    )
-                )
+                CreateCookingSlotEvents.ShowOperatingHours
+            )
+        }
+    }
+
+    fun openOperatingHoursEndTime(){
+        viewModelScope.launch {
+            _events.emit(
+                CreateCookingSlotEvents.ShowEndTimePicker(_state.value.startTime)
             )
         }
     }

@@ -10,10 +10,12 @@ import androidx.fragment.app.setFragmentResult
 import com.bupp.wood_spoon_chef.R
 import com.bupp.wood_spoon_chef.common.TopCorneredBottomSheet
 import com.bupp.wood_spoon_chef.databinding.BottomSheetTimePickerBinding
+import org.joda.time.DateTime
 import java.util.*
 
 class TimePickerBottomSheet(
-    private val timePickerState: TimePickerState
+    private val timePickerState: TimePickerState,
+    private val startTime: Long?
 ) : TopCorneredBottomSheet() {
 
     private var binding: BottomSheetTimePickerBinding? = null
@@ -55,7 +57,7 @@ class TimePickerBottomSheet(
             timePickerTitle.text = getString(R.string.opening_time)
             timePickerActionBtn.setText(getString(R.string.code_fragment_next_btn))
             timePickerActionBtn.setOnClickListener {
-                setFragmentResult(START_TIME_KEY, bundleOf(START_TIME_VALUE to getTimeInMillis()))
+                setFragmentResult(TIME_RESULT_KEY, bundleOf(TIME_VALUE to getTimeInMillis()))
                 dismiss()
             }
         }
@@ -65,8 +67,10 @@ class TimePickerBottomSheet(
         binding?.apply {
             timePickerTitle.text = getString(R.string.closing_time)
             timePickerActionBtn.setText(getString(R.string.set_time))
+            timePickerTimePick.hour = DateTime(startTime).plusHours(2).hourOfDay
+            timePickerTimePick.minute = DateTime(startTime).minuteOfHour
             timePickerActionBtn.setOnClickListener {
-                setFragmentResult(END_TIME_KEY, bundleOf(END_TIME_VALUE to getTimeInMillis()))
+                setFragmentResult(TIME_RESULT_KEY, bundleOf(TIME_VALUE to getTimeInMillis()))
                 dismiss()
             }
         }
@@ -89,27 +93,25 @@ class TimePickerBottomSheet(
     }
 
     companion object {
-        const val START_TIME_KEY = "startTimeKey"
-        const val END_TIME_KEY = "endTimeKey"
-        const val START_TIME_VALUE = "startTimeValue"
-        const val END_TIME_VALUE = "endTimeValue"
+        const val TIME_RESULT_KEY = "timeResultKey"
+        const val TIME_VALUE = "timeValue"
 
-        fun show(fragment: Fragment, listener: ((Long) -> Unit)) {
-            TimePickerBottomSheet(TimePickerState.START_TIME).show(
+        fun show(fragment: Fragment, timePickerState: TimePickerState, startTime: Long?, listener: ((Long) -> Unit)) {
+            TimePickerBottomSheet(timePickerState, startTime).show(
                 fragment.childFragmentManager,
                 TimePickerBottomSheet::class.simpleName
             )
-            fragment.setStartTimeResultListener(listener)
+            fragment.setTimeResultListener(listener)
         }
     }
 }
 
-private fun Fragment.setStartTimeResultListener(listener: ((Long) -> Unit)) {
+private fun Fragment.setTimeResultListener(listener: ((Long) -> Unit)) {
     childFragmentManager.setFragmentResultListener(
-        TimePickerBottomSheet.START_TIME_KEY,
+        TimePickerBottomSheet.TIME_RESULT_KEY,
         this
     ) { _, bundle ->
-        val result = bundle.getLong(TimePickerBottomSheet.START_TIME_VALUE)
+        val result = bundle.getLong(TimePickerBottomSheet.TIME_VALUE)
         listener.invoke(result)
     }
 }
