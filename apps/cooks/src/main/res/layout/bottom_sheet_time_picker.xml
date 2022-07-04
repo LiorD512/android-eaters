@@ -1,45 +1,84 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ViewSwitcher xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:id="@+id/timePickerSwitcher"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:inAnimation="@anim/slide_left_enter"
+    android:outAnimation="@anim/slide_left_exit"
     android:background="@drawable/top_cornered_bkg">
 
-    <TextView
-        android:id="@+id/timePickerTitle"
+    <LinearLayout
+        android:id="@+id/startTimeLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        style="@style/LatoBlack19DarkDarkGrey"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginTop="18.2dp"
-        android:gravity="center"
-        android:text="@string/opening_time" />
+        android:orientation="vertical">
 
-    <View
-        android:id="@+id/timePickerDivider"
-        android:layout_width="match_parent"
-        app:layout_constraintTop_toBottomOf="@id/timePickerTitle"
-        android:background="@color/silver"
-        android:layout_marginTop="21dp"
-        android:layout_height="1dp" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/LatoBlack19DarkDarkGrey"
+            android:layout_marginTop="18.2dp"
+            android:gravity="center"
+            android:text="@string/opening_time" />
 
-    <TimePicker
-        android:id="@+id/timePickerTimePick"
+        <View
+            android:layout_width="match_parent"
+            android:background="@color/silver"
+            android:layout_marginTop="21dp"
+            android:layout_height="1dp" />
+
+        <TimePicker
+            android:id="@+id/timePickerStartTimePick"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:layout_marginTop="21dp"
+            android:timePickerMode="spinner"/>
+
+        <com.bupp.wood_spoon_chef.presentation.custom_views.OrangeBtnCornered
+            android:id="@+id/timePickerActionNextBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="7.7dp"
+            app:title="@string/code_fragment_next_btn" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/endTimeLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/timePickerDivider"
-        android:theme="@style/TimePickerStyle"
-        style="@style/TimePickerStyle"
-        android:layout_marginTop="21dp" />
+        android:orientation="vertical">
 
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/LatoBlack19DarkDarkGrey"
+            android:layout_marginTop="18.2dp"
+            android:gravity="center"
+            android:text="@string/closing_time" />
 
-    <com.bupp.wood_spoon_chef.presentation.custom_views.OrangeBtnCornered
-        android:id="@+id/timePickerActionBtn"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/timePickerTimePick"
-        android:layout_margin="7.7dp"
-        app:title="@string/code_fragment_next_btn"
-        app:layout_constraintBottom_toBottomOf="parent"/>
+        <View
+            android:layout_width="match_parent"
+            android:background="@color/silver"
+            android:layout_marginTop="21dp"
+            android:layout_height="1dp" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <TimePicker
+            android:id="@+id/timePickerEndTimePick"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:layout_marginTop="21dp"
+            android:timePickerMode="spinner"/>
+
+        <com.bupp.wood_spoon_chef.presentation.custom_views.OrangeBtnCornered
+            android:id="@+id/timePickerActionSaveBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="7.7dp"
+            app:title="@string/set_time" />
+
+    </LinearLayout>
+</ViewSwitcher>

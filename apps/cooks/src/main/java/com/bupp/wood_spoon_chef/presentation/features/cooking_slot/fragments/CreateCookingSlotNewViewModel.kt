@@ -1,5 +1,6 @@
 package com.bupp.wood_spoon_chef.presentation.features.cooking_slot.fragments
 
+import android.os.Parcelable
 import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.viewModelScope
 import com.bupp.wood_spoon_chef.data.remote.network.base.ResponseError
@@ -11,14 +12,15 @@ import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.mapper.Cookin
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
+import kotlinx.parcelize.Parcelize
 import org.joda.time.DateTime
 import java.lang.Exception
 
-
+@Parcelize
 data class OperatingHours(
     val startTime: Long?,
     val endTime: Long?
-)
+) : Parcelable
 
 data class RecurringRule(
     val frequency: String?,
@@ -27,8 +29,6 @@ data class RecurringRule(
 
 data class CreateCookingSlotNewState(
     val selectedDate: Long? = null,
-    val startTime: Long? = null,
-    val endTime: Long? = null,
     val operatingHours: OperatingHours = OperatingHours(null, null),
     val lastCallForOrder: Long? = null,
     val recurringRule: RecurringRule? = null,
@@ -41,11 +41,12 @@ enum class Errors {
 
 sealed class CreateCookingSlotEvents {
     data class Error(val message: String? = null) : CreateCookingSlotEvents()
-    object ShowOperatingHours : CreateCookingSlotEvents()
+    data class ShowOperatingHours(
+        val operatingHours: OperatingHours? = null, val selectedDate: Long? = null) :
+        CreateCookingSlotEvents()
     data class ShowLastCallForOrder(val lastCallForOrder: Long? = null) : CreateCookingSlotEvents()
     data class ShowRecurringRule(val recurringRule: RecurringRule? = null) :
         CreateCookingSlotEvents()
-    data class ShowEndTimePicker(val startTime: Long?): CreateCookingSlotEvents()
 }
 
 class CreateCookingSlotNewViewModel(
@@ -63,12 +64,6 @@ class CreateCookingSlotNewViewModel(
     fun setOperatingHours(operatingHours: OperatingHours) {
         _state.update {
             it.copy(operatingHours = operatingHours)
-        }
-    }
-
-    fun setStartTime(startTime: Long?){
-        _state.update {
-            it.copy(startTime = startTime)
         }
     }
 
@@ -110,29 +105,22 @@ class CreateCookingSlotNewViewModel(
     fun onOperatingHoursClick() {
         viewModelScope.launch {
             _events.emit(
-                CreateCookingSlotEvents.ShowOperatingHours
+                CreateCookingSlotEvents.ShowOperatingHours(
+                    OperatingHours(
+                        _state.value.operatingHours.startTime,
+                        _state.value.operatingHours.endTime
+                    ),
+                    _state.value.selectedDate
+                )
             )
         }
     }
 
-    fun openOperatingHoursEndTime(){
-        viewModelScope.launch {
-            _events.emit(
-                CreateCookingSlotEvents.ShowEndTimePicker(_state.value.startTime)
-            )
-        }
-    }
 
     fun onLastCallForOrderClick() {
         viewModelScope.launch {
             val lastCallForOrder = DateTime(_state.value.selectedDate).plusHours(9).millis
             _events.emit(CreateCookingSlotEvents.ShowLastCallForOrder(lastCallForOrder))
-        }
-    }
-
-    fun onRecurringSlotClick(){
-        viewModelScope.launch {
-            _events.emit(CreateCookingSlotEvents.ShowRecurringRule(RecurringRule("daily", 3.toString())))
         }
     }
 

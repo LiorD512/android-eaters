@@ -48,7 +48,6 @@ class CreateCookingSlotFragmentNew : Fragment(R.layout.fragment_create_cooking_s
             createCookingSlotNewFragmentOperatingHoursView.setOnSecondaryIconClickListener { openOperatingHoursInfoBottomSheet() }
             createCookingSlotNewFragmentOperatingHoursView.setAddClickListener { viewModel.onOperatingHoursClick() }
             createCookingSlotNewFragmentLastCallForOrderView.setForwardBtnClickListener { viewModel.onLastCallForOrderClick() }
-            createCookingSlotNewFragmentMakeRecurringView.setForwardBtnClickListener { viewModel.onRecurringSlotClick() }
 
         }
     }
@@ -82,15 +81,14 @@ class CreateCookingSlotFragmentNew : Fragment(R.layout.fragment_create_cooking_s
                                 binding.createCookingSlotNewFragmentMainLayout,
                                 Toast.LENGTH_SHORT
                             )
-                            is CreateCookingSlotEvents.ShowOperatingHours -> openTimePickerBottomSheetStart()
+                            is CreateCookingSlotEvents.ShowOperatingHours -> openTimePickerBottomSheet(
+                                event.selectedDate
+                            )
                             is CreateCookingSlotEvents.ShowLastCallForOrder -> openLastCallForOrder(
                                 event.lastCallForOrder
                             )
                             is CreateCookingSlotEvents.ShowRecurringRule -> openRecurringRule(
                                 event.recurringRule
-                            )
-                            is CreateCookingSlotEvents.ShowEndTimePicker -> openTimePickerBottomSheetEnd(
-                                event.startTime
                             )
                         }
                     }
@@ -134,19 +132,15 @@ class CreateCookingSlotFragmentNew : Fragment(R.layout.fragment_create_cooking_s
         )
     }
 
-    private fun openTimePickerBottomSheetStart() {
-        binding.createCookingSlotNewFragmentOperatingHoursError.show(false)
-        TimePickerBottomSheet.show(this, TimePickerBottomSheet.TimePickerState.START_TIME, null){
-            viewModel.setStartTime(it)
-            viewModel.openOperatingHoursEndTime()
+    private fun openTimePickerBottomSheet(selectedDate: Long?) {
+        selectedDate?.let { date ->
+            binding.createCookingSlotNewFragmentOperatingHoursError.show(false)
+            TimePickerBottomSheet.show(this,date){
+                viewModel.setOperatingHours(it)
+            }
         }
     }
 
-    private fun openTimePickerBottomSheetEnd(startTime: Long?) {
-        TimePickerBottomSheet.show(this, TimePickerBottomSheet.TimePickerState.END_TIME, startTime){
-            viewModel.setOperatingHours(OperatingHours(startTime, it))
-        }
-    }
     private fun openLastCallForOrder(lastCallForOrder: Long?) {
         viewModel.setLastCallForOrders(lastCallForOrder)
     }

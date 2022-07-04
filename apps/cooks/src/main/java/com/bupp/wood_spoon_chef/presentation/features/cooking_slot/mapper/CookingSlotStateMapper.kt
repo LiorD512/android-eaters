@@ -21,7 +21,10 @@ class CookingSlotStateMapper {
         )
     }
 
-    private fun formatRecurringRule(recurringRule: RecurringRule?): String{
+    private fun formatRecurringRule(recurringRule: RecurringRule?): String?{
+        if (recurringRule == null){
+            return null
+        }
         return "FREQ=${recurringRule?.frequency};COUNT=${recurringRule?.count}".uppercase()
     }
 }
