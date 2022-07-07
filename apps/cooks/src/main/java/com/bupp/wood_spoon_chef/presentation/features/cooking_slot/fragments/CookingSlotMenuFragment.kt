@@ -7,6 +7,7 @@ import androidx.navigation.fragment.findNavController
 import com.bupp.wood_spoon_chef.R
 import com.bupp.wood_spoon_chef.databinding.FragmentCookingSlotMenuBinding
 import com.bupp.wood_spoon_chef.presentation.custom_views.CreateCookingSlotTopBar
+import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.dialogs.MyDishesBottomSheet
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.fragments.base.CookingSlotParentFragment
 import com.bupp.wood_spoon_chef.utils.extensions.findParent
 import com.eatwoodspoon.android_utils.binding.viewBinding
@@ -31,8 +32,18 @@ class CookingSlotMenuFragment :
 
     private fun initUi() {
         binding.apply {
-            createCookingSlotMenuFragmentTopBar.setCookingSlotTopBarListener(this@CookingSlotMenuFragment)
-            createCookingSlotMenuFragmentGoToReviewBtn.setOnClickListener { viewModel.openReviewFragment() }
+            createCookingSlotMenuFragmentTopBar.setCookingSlotTopBarListener(
+                this@CookingSlotMenuFragment
+            )
+            createCookingSlotMenuFragmentGoToReviewBtn.setOnClickListener {
+                viewModel.openReviewFragment()
+            }
+            createCookingSlotMenuFragmentAddDishes.setOnClickListener {
+                MyDishesBottomSheet().show(
+                    childFragmentManager,
+                    MyDishesBottomSheet::class.simpleName
+                )
+            }
         }
     }
 

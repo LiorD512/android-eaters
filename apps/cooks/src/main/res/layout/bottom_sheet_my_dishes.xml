@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/top_cornered_bkg">
+
+    <com.bupp.wood_spoon_chef.presentation.custom_views.HeaderView
+        android:id="@+id/myDishesBsHeaderView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:title="My dishes"
+        app:type="HEADER_VIEW_TYPE_TITLE_BACK" />
+
+    <LinearLayout
+        android:id="@+id/myDishesBsSearchView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/medium"
+        android:layout_marginTop="23dp"
+        android:background="@drawable/white_two_rect_7_radius"
+        android:orientation="horizontal"
+        android:paddingVertical="12dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/myDishesBsHeaderView"
+        app:layout_constraintWidth_percent="0.78">
+
+        <EditText
+            android:id="@+id/myDishesBsSearchInput"
+            style="@style/LatoReg13PurpelyGrey"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@null"
+            android:hint="Search for dishes"
+            android:paddingStart="12dp"
+            android:paddingEnd="15.4dp" />
+
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginEnd="10dp"
+            android:src="@drawable/ic_search"
+            app:tint="@color/purpley_grey" />
+
+    </LinearLayout>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/myDishesBsFilterView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/medium"
+        app:cardBackgroundColor="@color/white"
+        app:cardCornerRadius="@dimen/small"
+        app:cardElevation="4dp"
+        app:layout_constraintBottom_toBottomOf="@id/myDishesBsSearchView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/myDishesBsSearchView">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="12dp"
+            android:paddingVertical="12dp"
+            android:src="@drawable/ic_filter_normal" />
+    </androidx.cardview.widget.CardView>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/myDishesBsDishesRv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/medium"
+        android:layout_marginTop="@dimen/big"
+        app:layout_constraintTop_toBottomOf="@id/myDishesBsSearchView" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
