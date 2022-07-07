@@ -33,7 +33,7 @@
     <string name="phone_verification_fragment_phone_error">Please enter a valid phone</string>
     <string name="default_notification_channel_id">woodspoonchefs</string>
     <string name="tooltip_birthdate">Your birthdate will not be shown on your profile; this is to verify your bank account info</string>
-    <string name="tooltip_ssn">Your SSN is required for verification purposes</string>
+    <string name="tooltip_ssn">We want to pay you! This is required for processing your payments.</string>
     <string name="tooltip_chef_service_fee"><![CDATA[The service fee goes toward helping us pay couriers, provide quality customer support & logistics, process payments, and other costs associated with running our service.]]></string>
     <string name="title_item_add_new_cooking_slot_text">Create cooking slot</string>
     <string name="email_app_not_found_error">E-mail app was not found</string>
