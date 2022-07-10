@@ -71,6 +71,8 @@
     <string name="last_call_for_order_explanation">Adding a last call for orders may impact your sales, as 50% of our order are placed on-demand.\n\nAfter this time, your cooking slot will no longer be visible to customers.</string>
     <string name="please_enter_operating_hours">Please enter operating hours</string>
     <string name="generic_error">An Error Occurred Please Try Again Later</string>
+    <string name="by_category">By category</string>
+    <string name="no_search_resuls">Nothing came up. Please try searching\nfor something else.</string>
 
 
 </resources>
