@@ -60,7 +60,7 @@ class TimePickerBottomSheet(
     }
 
     override fun clearClassVariables() {
-        //Do nothing
+        binding = null
     }
 
     private fun getTimeInMillis(timePicker: TimePicker): Long {

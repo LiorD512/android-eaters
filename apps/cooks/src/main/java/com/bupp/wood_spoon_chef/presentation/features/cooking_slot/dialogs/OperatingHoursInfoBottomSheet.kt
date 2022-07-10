@@ -34,6 +34,6 @@ class OperatingHoursInfoBottomSheet : TopCorneredBottomSheet() {
     }
 
     override fun clearClassVariables() {
-        //Do nothing
+        binding = null
     }
 }

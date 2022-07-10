@@ -21,6 +21,8 @@
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginEnd="@dimen/medium"
+        android:visibility="gone"
+        tools:visibility="visible"
         app:layout_constraintTop_toTopOf="@id/filterMenuBsHeaderView"
         app:layout_constraintBottom_toBottomOf="@id/filterMenuBsHeaderView"
         app:title="Clear all" />
