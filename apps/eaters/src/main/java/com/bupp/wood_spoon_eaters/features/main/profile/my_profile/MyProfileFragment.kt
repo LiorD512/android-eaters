@@ -1,7 +1,6 @@
 package com.bupp.wood_spoon_eaters.features.main.profile.my_profile
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -12,7 +11,6 @@ import com.bupp.wood_spoon_eaters.bottom_sheets.join_as_chef.JoinAsChefBottomShe
 import com.bupp.wood_spoon_eaters.bottom_sheets.settings.SettingsBottomSheet
 import com.bupp.wood_spoon_eaters.bottom_sheets.support_center.SupportCenterBottomSheet
 import com.bupp.wood_spoon_eaters.common.Constants
-import com.bupp.wood_spoon_eaters.common.FlowEventsManager
 import com.bupp.wood_spoon_eaters.custom_views.CustomDetailsView
 import com.bupp.wood_spoon_eaters.custom_views.cuisine_chooser.CuisinesChooserDialog
 import com.bupp.wood_spoon_eaters.databinding.MyProfileFragmentBinding
@@ -20,7 +18,7 @@ import com.bupp.wood_spoon_eaters.dialogs.LogoutDialog
 import com.bupp.wood_spoon_eaters.dialogs.web_docs.WebDocsDialog
 import com.bupp.wood_spoon_eaters.features.main.MainNavigationEvent
 import com.bupp.wood_spoon_eaters.features.main.MainViewModel
-import com.bupp.wood_spoon_eaters.managers.PaymentManager
+import com.bupp.wood_spoon_eaters.managers.StripeInitializationStatus
 import com.bupp.wood_spoon_eaters.model.*
 import com.bupp.wood_spoon_eaters.views.ShareBanner
 import com.bupp.wood_spoon_eaters.views.UserImageVideoView
@@ -123,13 +121,13 @@ class MyProfileFragment : Fragment(R.layout.my_profile_fragment),
         mainViewModel.stripeInitializationEvent.observe(viewLifecycleOwner) {
             with(binding!!) {
                 when (it) {
-                    PaymentManager.StripeInitializationStatus.START -> {
+                    StripeInitializationStatus.START -> {
                         myProfileFragPb.show()
                     }
-                    PaymentManager.StripeInitializationStatus.SUCCESS -> {
+                    StripeInitializationStatus.SUCCESS -> {
                         myProfileFragPb.hide()
                     }
-                    PaymentManager.StripeInitializationStatus.FAIL -> {
+                    StripeInitializationStatus.FAIL -> {
                         myProfileFragPb.hide()
                     }
                     else -> {}

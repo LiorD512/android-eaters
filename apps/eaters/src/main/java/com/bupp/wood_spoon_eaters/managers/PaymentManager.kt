@@ -8,7 +8,6 @@ import androidx.lifecycle.MutableLiveData
 import com.bupp.wood_spoon_eaters.common.MTLogger
 import com.bupp.wood_spoon_eaters.repositories.AppSettingsRepoState
 import com.bupp.wood_spoon_eaters.repositories.AppSettingsRepository
-import com.bupp.wood_spoon_eaters.repositories.MetaDataRepository
 import com.bupp.wood_spoon_eaters.repositories.getStripePublishableKey
 import com.stripe.android.CustomerSession
 import com.stripe.android.PaymentConfiguration
@@ -17,23 +16,28 @@ import com.stripe.android.model.PaymentMethod
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
-class PaymentManager(val appSettingsRepository: AppSettingsRepository, private val sharedPreferences: SharedPreferences) :
-    EphemeralKeyProvider.EphemeralKeyProviderListener {
+
+enum class StripeInitializationStatus {
+    START,
+    SUCCESS,
+    FAIL
+}
+
+class PaymentManager(
+    val appSettingsRepository: AppSettingsRepository,
+    private val sharedPreferences: SharedPreferences
+) : EphemeralKeyProvider.EphemeralKeyProviderListener {
+
+    private val stripeInitializationEvent = MutableLiveData<StripeInitializationStatus>()
 
     var lastSelectedCardIdRes: String?
         get() = sharedPreferences.getString(LAST_SELECTED_CARD_ID, null)
-        set(selectedCardId) = sharedPreferences.edit().putString(LAST_SELECTED_CARD_ID, selectedCardId).apply()
+        set(selectedCardId) = sharedPreferences.edit()
+            .putString(LAST_SELECTED_CARD_ID, selectedCardId).apply()
 
     var hasStripeInitialized: Boolean = false
 
     fun getStripeInitializationEvent() = stripeInitializationEvent
-    private val stripeInitializationEvent = MutableLiveData<StripeInitializationStatus>()
-
-    enum class StripeInitializationStatus {
-        START,
-        SUCCESS,
-        FAIL
-    }
 
     suspend fun initPaymentManagerWithListener(context: Context) {
         //this method is called when user tries to open any stripe activity while stripe isn't initialized
@@ -92,9 +96,9 @@ class PaymentManager(val appSettingsRepository: AppSettingsRepository, private v
                 object : CustomerSession.PaymentMethodsRetrievalListener {
                     override fun onPaymentMethodsRetrieved(@NonNull paymentMethods: List<PaymentMethod>) {
                         MTLogger.c(TAG, "getStripeCustomerCards")
-//                            MTLogger.c(TAG, "getStripeCustomerCards $paymentMethods")
                         if (lastSelectedCardIdRes != null) {
-                            val lastSelectedCard = paymentMethods.find { it.card?.last4 == lastSelectedCardIdRes }
+                            val lastSelectedCard =
+                                paymentMethods.find { it.card?.last4 == lastSelectedCardIdRes }
                             if (lastSelectedCard != null) {
                                 payments.value = lastSelectedCard
                             } else {
@@ -105,7 +109,11 @@ class PaymentManager(val appSettingsRepository: AppSettingsRepository, private v
                         }
                     }
 
-                    override fun onError(errorCode: Int, @NonNull errorMessage: String, @Nullable stripeError: StripeError?) {
+                    override fun onError(
+                        errorCode: Int,
+                        @NonNull errorMessage: String,
+                        @Nullable stripeError: StripeError?
+                    ) {
                         MTLogger.c(TAG, "getStripeCustomerCards ERROR $errorMessage")
                     }
                 })

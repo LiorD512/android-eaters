@@ -183,7 +183,6 @@ class OrderRepository(val apiService: OrderRepositoryImpl, val eaterDataManager:
                     OrderRepoResult(OrderRepoStatus.UPDATE_ORDER_SUCCESS, result.value.data)
                 }
                 is ResultHandler.WSCustomError -> {
-//                    MTLogger.c(TAG,"updateOrder - wsError ${result.errors?.get(0)?.msg}")
                     OrderRepoResult(OrderRepoStatus.WS_ERROR, wsError = result.errors)
                 }
             }

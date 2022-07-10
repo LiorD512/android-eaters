@@ -193,20 +193,19 @@ class CheckoutViewModel(
 
     private fun finalizeOrder() {
         viewModelScope.launch {
-            val paymentMethodId = paymentManager.getStripeCurrentPaymentMethod()?.id
             progressData.startProgress()
+
+            val paymentMethodId = paymentManager.getStripeCurrentPaymentMethod()
             val result = cartManager.finalizeOrder(paymentMethodId)
+
             when (result?.type) {
                 OrderRepository.OrderRepoStatus.FINALIZE_ORDER_SUCCESS -> {
-                    Log.d(TAG, "finalizeOrder - success")
                     cartManager.onCartCleared()
                     onCheckoutDone.postRawValue(true)
                 }
                 OrderRepository.OrderRepoStatus.FINALIZE_ORDER_FAILED -> {
-                    Log.d(TAG, "finalizeOrder - failed")
                 }
                 OrderRepository.OrderRepoStatus.WS_ERROR -> {
-                    Log.d(TAG, "finalizeOrder - ws error")
                     var error = result.wsError?.getErrorsMsg()
                     if (error.isNullOrEmpty()) {
                         error = "Failed to create your order please try again later"
@@ -216,6 +215,7 @@ class CheckoutViewModel(
                 else -> {
                 }
             }
+
             progressData.endProgress()
         }
     }

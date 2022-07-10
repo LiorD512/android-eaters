@@ -6,6 +6,7 @@ import com.bupp.wood_spoon_eaters.di.abs.LiveEventData
 import com.bupp.wood_spoon_eaters.model.*
 import com.bupp.wood_spoon_eaters.repositories.OrderRepository
 import com.bupp.wood_spoon_eaters.utils.DateUtils
+import com.stripe.android.model.PaymentMethod
 import java.util.*
 
 data class ClearCartEvent(
@@ -363,12 +364,12 @@ class CartManager(
         eaterDataManager.rollBackToPreviousAddress()
     }
 
-    suspend fun finalizeOrder(paymentMethodId: String?): OrderRepository.OrderRepoResult<Any>? {
+    suspend fun finalizeOrder(paymentMethod: PaymentMethod?): OrderRepository.OrderRepoResult<Any>? {
         this.currentOrderResponse?.id?.let { it ->
-            val result = orderRepository.finalizeOrder(it, paymentMethodId)
+            val result = orderRepository.finalizeOrder(it, paymentMethod?.id)
             val isSuccess = result.type == OrderRepository.OrderRepoStatus.FINALIZE_ORDER_SUCCESS
             eatersAnalyticsTracker.sendPurchaseEvent(it, calcTotalDishesPrice())
-            eatersAnalyticsTracker.logEvent(Constants.EVENT_ORDER_PLACED, getOrderValue(isSuccess, result.wsError))
+            eatersAnalyticsTracker.logEvent(Constants.EVENT_ORDER_PLACED, getOrderValue(paymentMethod, isSuccess, result.wsError))
             return result
         }
         return null
@@ -534,18 +535,32 @@ class CartManager(
         return data
     }
 
-    private fun getOrderValue(isSuccess: Boolean, wsError: List<WSError>? = null): Map<String, Any> {
+    private fun getOrderValue(
+        paymentMethod: PaymentMethod?,
+        isSuccess: Boolean,
+        wsError: List<WSError>? = null
+    ): Map<String, Any> {
         val chefsName = getCurrentOrderChefName()
         val chefsId = getCurrentOrderChefId()
         val totalCostStr = calcTotalDishesPrice()
         val dishesName = getCurrentOrderDishNames()
         val cuisine = getCurrentOrderChefCuisine()
-        val data =
-            mutableMapOf<String, Any>("currency" to "USD", "home_chef_name" to chefsName, "success" to isSuccess.toString())
-        data["home_chef_id"] = chefsId
-        dishesName.let {
-            data["dishes"] = it
+
+        val data = mutableMapOf<String, Any>(
+            "currency" to "USD",
+            "home_chef_name" to chefsName,
+            "success" to isSuccess.toString()
+        )
+
+        paymentMethod?.let {
+            if (it.type?.name == "Card") {
+                data["payment_method"] = "CC"
+            }
         }
+
+        data["home_chef_id"] = chefsId
+        data["dishes"] = dishesName
+
         if (cuisine.isNotEmpty()) {
             data["cuisine"] = cuisine
         }
