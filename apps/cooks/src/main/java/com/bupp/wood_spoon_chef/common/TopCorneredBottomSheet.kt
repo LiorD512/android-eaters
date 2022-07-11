@@ -43,4 +43,7 @@ abstract class TopCorneredBottomSheet : BaseBottomSheetDialogFragment() {
         layoutParams.height = WindowManager.LayoutParams.MATCH_PARENT
     }
 
+    fun setDialogAdjustPan(){
+        dialog?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN)
+    }
 }

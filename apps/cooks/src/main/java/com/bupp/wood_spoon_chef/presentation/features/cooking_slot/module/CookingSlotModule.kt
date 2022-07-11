@@ -7,6 +7,8 @@ import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.fragments.Coo
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.fragments.CreateCookingSlotNewViewModel
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.fragments.base.CookingSlotParentViewModel
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.coordinator.CookingSlotFlowCoordinator
+import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.dialogs.FilterMenuViewModel
+import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.dialogs.MyDishesViewModel
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.mapper.CookingSlotStateMapper
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.network.CookingSlotApiService
 import org.koin.androidx.viewmodel.dsl.viewModel
@@ -25,6 +27,8 @@ val cookingSlotModule = module {
     viewModel { params -> CookingSlotParentViewModel(params.get()) }
     viewModel { params -> CreateCookingSlotNewViewModel(params.get(), get(), get()) }
     viewModel { params -> CookingSlotMenuViewModel(params.get()) }
+    viewModel { MyDishesViewModel(get(), get()) }
+    viewModel { FilterMenuViewModel(get()) }
 
 }
 

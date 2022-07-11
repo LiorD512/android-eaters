@@ -28,6 +28,6 @@ class LastCallForOrdersBottomSheet: TopCorneredBottomSheet() {
     }
 
     override fun clearClassVariables() {
-        //Do Nothing
+       binding = null
     }
 }
