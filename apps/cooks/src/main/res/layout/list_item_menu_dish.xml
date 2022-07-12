@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:cardBackgroundColor="@color/white"
+    android:layout_marginBottom="@dimen/medium"
+    app:cardCornerRadius="@dimen/small">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingVertical="@dimen/medium">
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/listItemDishMenuLayout"
+            android:layout_width="60dp"
+            android:layout_height="70dp"
+            android:layout_marginStart="@dimen/medium"
+            app:cardCornerRadius="@dimen/small"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:id="@+id/listItemDishMenuImage"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop" />
+
+        </androidx.cardview.widget.CardView>
+
+        <TextView
+            android:id="@+id/listItemDishMenuDishName"
+            style="@style/LatoBlack15Dark"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/medium"
+            app:layout_constraintStart_toEndOf="@id/listItemDishMenuLayout"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Side of Pita" />
+
+        <TextView
+            android:id="@+id/listItemDishMenuDishPrice"
+            style="@style/LatoBlack15Dark"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/medium"
+            android:layout_marginTop="4dp"
+            app:layout_constraintStart_toEndOf="@id/listItemDishMenuLayout"
+            app:layout_constraintTop_toBottomOf="@id/listItemDishMenuDishName"
+            tools:text="$1.5" />
+
+        <ImageView
+            android:id="@+id/listItemDishMenuDeleteDish"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/medium"
+            android:paddingStart="@dimen/small"
+            android:paddingEnd="@dimen/small"
+            android:paddingBottom="@dimen/small"
+            android:src="@drawable/ic_delete"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/listItemMenuDishQuantityTitle"
+            style="@style/LatoBold13Black"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/medium"
+            android:text="@string/quantity"
+            android:textColor="@color/greyish_brown"
+            app:layout_constraintBottom_toBottomOf="@id/listItemDishMenuLayout"
+            app:layout_constraintStart_toEndOf="@id/listItemDishMenuLayout" />
+
+        <ImageView
+            android:id="@+id/listItemMenuDishQuantityMinus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/big"
+            android:src="@drawable/ic_minus_peach"
+            app:layout_constraintBottom_toBottomOf="@id/listItemMenuDishQuantityTitle"
+            app:layout_constraintTop_toTopOf="@id/listItemMenuDishQuantityTitle"
+            app:layout_constraintStart_toEndOf="@id/listItemMenuDishQuantityTitle" />
+
+        <ImageView
+            android:id="@+id/listItemMenuDishQuantityPlus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginEnd="@dimen/medium"
+            android:src="@drawable/ic_plus_peach"/>
+
+        <TextView
+            android:id="@+id/listItemMenuDishQuantityNumber"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="5"
+            style="@style/LatoBold13Black"
+            android:paddingVertical="@dimen/small"
+            android:paddingHorizontal="20dp"
+
+            android:background="@drawable/white_rect_wild_sand_stroke"
+            app:layout_constraintStart_toEndOf="@id/listItemMenuDishQuantityMinus"
+            app:layout_constraintEnd_toStartOf="@id/listItemMenuDishQuantityPlus"
+            app:layout_constraintBottom_toBottomOf="@id/listItemMenuDishQuantityPlus"
+            app:layout_constraintTop_toTopOf="@id/listItemMenuDishQuantityPlus"
+            android:textColor="@color/greyish_brown" />
+
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.cardview.widget.CardView>
