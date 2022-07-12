@@ -7,6 +7,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.content.ContextCompat
+import androidx.core.os.bundleOf
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.setFragmentResult
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
@@ -25,11 +28,14 @@ import kotlinx.coroutines.launch
 import me.ibrahimsn.lib.util.clear
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class MyDishesBottomSheet() : TopCorneredBottomSheet(), HeaderView.HeaderViewListener {
+class MyDishesBottomSheet(private val selectedDishes: List<Dish>?) : TopCorneredBottomSheet(),
+    HeaderView.HeaderViewListener, MyDishesAdapter.MyDishesAdapterListener {
 
     private var binding: BottomSheetMyDishesBinding? = null
     private val viewModel by viewModel<MyDishesViewModel>()
     private lateinit var myDishesAdapter: MyDishesAdapter
+
+    private val dishList = mutableListOf<Dish>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -45,6 +51,7 @@ class MyDishesBottomSheet() : TopCorneredBottomSheet(), HeaderView.HeaderViewLis
         super.onViewCreated(view, savedInstanceState)
         setDialogAdjustPan()
         setFullScreenDialog()
+        setSelectedDishes()
         initUi()
         setupList()
         observeViewModelState()
@@ -68,6 +75,11 @@ class MyDishesBottomSheet() : TopCorneredBottomSheet(), HeaderView.HeaderViewLis
             myDishesBsFilterView.setOnClickListener {
                 viewModel.onFilterClick()
             }
+            mydDishesBsAddBtn.setOnClickListener {
+                setFragmentResult(SELECTED_DISHES_KEY, bundleOf(SELECTED_DISHES_VALUE to dishList))
+                dismiss()
+            }
+
         }
     }
 
@@ -108,13 +120,19 @@ class MyDishesBottomSheet() : TopCorneredBottomSheet(), HeaderView.HeaderViewLis
         binding?.apply {
             myDishesBsDishesRv.apply {
                 layoutManager = LinearLayoutManager(requireContext())
-                myDishesAdapter = MyDishesAdapter()
+                myDishesAdapter = MyDishesAdapter(this@MyDishesBottomSheet, selectedDishes)
                 adapter = myDishesAdapter
                 val dividerItemDecoration = DividerItemDecorator(
                     ContextCompat.getDrawable(requireContext(), R.drawable.divider_white_three)
                 )
                 addItemDecoration(dividerItemDecoration)
             }
+        }
+    }
+
+    private fun setSelectedDishes(){
+        if (!selectedDishes.isNullOrEmpty()) {
+            dishList.addAll(selectedDishes)
         }
     }
 
@@ -163,7 +181,43 @@ class MyDishesBottomSheet() : TopCorneredBottomSheet(), HeaderView.HeaderViewLis
         }
     }
 
+    override fun onDishSelected(isChecked: Boolean, dish: Dish) {
+        if (isChecked) {
+            dishList.add(dish)
+        } else {
+            dishList.remove(dish)
+        }
+    }
+
     override fun onHeaderBackClick() {
         dismiss()
+    }
+
+    companion object {
+        const val SELECTED_DISHES_KEY = "selectedDishesKey"
+        const val SELECTED_DISHES_VALUE = "selectedDishesValue"
+
+        fun show(
+            fragment: Fragment,
+            selectedDishes: List<Dish>?,
+            listener: ((List<Dish>?) -> Unit)
+        ) {
+            MyDishesBottomSheet(selectedDishes).show(
+                fragment.childFragmentManager,
+                MyDishesBottomSheet::class.simpleName
+            )
+            fragment.setSelectedDishesResultListener(listener)
+        }
+    }
+
+}
+
+private fun Fragment.setSelectedDishesResultListener(listener: ((List<Dish>?) -> Unit)) {
+    childFragmentManager.setFragmentResultListener(
+        MyDishesBottomSheet.SELECTED_DISHES_KEY,
+        this
+    ) { _, bundle ->
+        val result = bundle.get(MyDishesBottomSheet.SELECTED_DISHES_VALUE) as List<Dish>?
+        listener.invoke(result)
     }
 }

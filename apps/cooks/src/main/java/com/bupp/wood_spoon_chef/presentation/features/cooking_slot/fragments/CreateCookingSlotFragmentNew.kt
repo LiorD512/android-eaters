@@ -14,6 +14,7 @@ import com.bupp.wood_spoon_chef.presentation.custom_views.CreateCookingSlotTopBa
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.dialogs.OperatingHoursInfoBottomSheet
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.dialogs.TimePickerBottomSheet
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.fragments.base.CookingSlotParentFragment
+import com.bupp.wood_spoon_chef.utils.DateUtils.prepareFormattedDateForHours
 import com.bupp.wood_spoon_chef.utils.extensions.*
 import com.eatwoodspoon.android_utils.binding.viewBinding
 import kotlinx.coroutines.flow.collect
@@ -184,9 +185,6 @@ private fun formatRcs(recurringRule: RecurringRule?): String {
     }
     return ""
 }
-
-private fun DateTime.prepareFormattedDateForHours(): String =
-    DateTimeFormat.forPattern("hh:mm aa").print(this)
 
 private fun DateTime.prepareFormattedDateForDateAndHour(): String =
     DateTimeFormat.forPattern("EEEE, MMM dd, yyyy, hh:mm aa").print(this)

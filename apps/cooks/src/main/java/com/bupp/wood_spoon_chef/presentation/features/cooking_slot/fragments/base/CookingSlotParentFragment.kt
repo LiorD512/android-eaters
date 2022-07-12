@@ -12,6 +12,8 @@ import androidx.navigation.fragment.NavHostFragment
 import com.bupp.wood_spoon_chef.R
 import com.bupp.wood_spoon_chef.databinding.FragmentCookingSlotParentBinding
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.coordinator.CookingSlotFlowCoordinator
+import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.fragments.CookingSlotMenuFragmentDirections
+import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.fragments.CookingSlotReviewFragmentDirections
 import com.eatwoodspoon.android_utils.binding.viewBinding
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
@@ -27,7 +29,7 @@ class CookingSlotParentFragment : Fragment(R.layout.fragment_cooking_slot_parent
     CookingSlotParent {
 
     private lateinit var navController: NavController
-    private val binding by viewBinding (FragmentCookingSlotParentBinding::bind)
+    private val binding by viewBinding(FragmentCookingSlotParentBinding::bind)
     override val cookingSlotCoordinator: CookingSlotFlowCoordinator by inject()
     private val viewModel: CookingSlotParentViewModel by viewModel {
         parametersOf(cookingSlotCoordinator)
@@ -35,15 +37,18 @@ class CookingSlotParentFragment : Fragment(R.layout.fragment_cooking_slot_parent
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        requireActivity().onBackPressedDispatcher.addCallback(this, object: OnBackPressedCallback(true) {
-            override fun handleOnBackPressed() {
-                if(!navController.popBackStack()) {
-                    // In case this flow will be used in SingleActivity app we will have undesired behaviour
-                    activity?.finish()
+        requireActivity().onBackPressedDispatcher.addCallback(
+            this,
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    if (!navController.popBackStack()) {
+                        // In case this flow will be used in SingleActivity app we will have undesired behaviour
+                        activity?.finish()
+                    }
                 }
-            }
-        })
+            })
     }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -55,21 +60,22 @@ class CookingSlotParentFragment : Fragment(R.layout.fragment_cooking_slot_parent
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.RESUMED) {
                 viewModel.stepStateFlow.collect {
-                    when (it) {
+                    when (it.step) {
                         CookingSlotFlowCoordinator.Step.OPEN_MENU_FRAGMENT -> {
-                            navController.navigate(R.id.to_cookingSlotMenuFragment)
+                            val action = CookingSlotMenuFragmentDirections.toCookingSlotMenuFragment(it.cookingSlot)
+                            navController.navigate(action)
                         }
                         CookingSlotFlowCoordinator.Step.OPEN_REVIEW_FRAGMENT -> {
-                            navController.navigate(R.id.to_cookingSlotReviewFragment)
+                            val action = CookingSlotReviewFragmentDirections.toCookingSlotReviewFragment(it.cookingSlot)
+                            navController.navigate(action)
                         }
-                        else -> {}
                     }
                 }
             }
         }
     }
 
-    private fun setNavController(){
+    private fun setNavController() {
         val navHostFragment =
             childFragmentManager.findFragmentById(R.id.cookingSlotParentContainer) as NavHostFragment
         navController = navHostFragment.navController

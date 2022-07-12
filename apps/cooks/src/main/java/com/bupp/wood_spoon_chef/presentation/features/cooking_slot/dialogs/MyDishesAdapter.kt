@@ -9,9 +9,17 @@ import com.bumptech.glide.Glide
 import com.bupp.wood_spoon_chef.data.remote.model.Dish
 import com.bupp.wood_spoon_chef.databinding.ListItemDishSelectionBinding
 
-class MyDishesAdapter() : ListAdapter<Dish, RecyclerView.ViewHolder>(
-    DiffCallback())
-{
+class MyDishesAdapter(
+    private val listener: MyDishesAdapterListener,
+    private val selectedDishes: List<Dish>?
+) :
+    ListAdapter<Dish, RecyclerView.ViewHolder>(
+        DiffCallback()
+    ) {
+
+    interface MyDishesAdapterListener {
+        fun onDishSelected(isChecked: Boolean, dish: Dish)
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val binding =
@@ -22,17 +30,21 @@ class MyDishesAdapter() : ListAdapter<Dish, RecyclerView.ViewHolder>(
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val item = getItem(position)
         holder as DishItemSelectionViewHolder
-        holder.bind(item)
+        holder.bind(item, selectedDishes, listener)
     }
 
     class DishItemSelectionViewHolder(val binding: ListItemDishSelectionBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(dish: Dish) {
+        fun bind(dish: Dish, selectedDishes: List<Dish>?, listener: MyDishesAdapterListener) {
             binding.apply {
                 listItemDishSelectionDishName.text = dish.name
                 listItemDishSelectionDishPrice.text = dish.price?.formattedValue
                 Glide.with(binding.root.context).load(dish.imageGallery?.first())
                     .into(listItemDishSelectionImage)
+                listItemDishSelectionCb.isChecked = selectedDishes?.contains(dish) == true
+                listItemDishSelectionCb.setOnCheckedChangeListener { _, isChecked ->
+                    listener.onDishSelected(isChecked, dish)
+                }
             }
         }
     }

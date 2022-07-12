@@ -2,6 +2,8 @@ package com.bupp.wood_spoon_chef.utils
 
 import com.bupp.wood_spoon_chef.data.remote.model.CookingSlot
 import com.bupp.wood_spoon_chef.data.remote.model.CookingSlotSlim
+import org.joda.time.DateTime
+import org.joda.time.format.DateTimeFormat
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.TimeUnit
@@ -13,6 +15,9 @@ object DateUtils {
         val sdf = SimpleDateFormat("MMMM dd, yyyy", Locale.ENGLISH)
         return sdf.format(date?.time)
     }
+
+    fun DateTime.prepareFormattedDateForHours(): String =
+        DateTimeFormat.forPattern("hh:mm aa").print(this)
 
     fun parseDateToMonthYear(date: Date): String {
         val sdf = SimpleDateFormat("MMM yyyy", Locale.ENGLISH)
@@ -132,12 +137,13 @@ object DateUtils {
         return ""
     }
 
-    fun parseMilliToLength(milli: Long): String{
+    fun parseMilliToLength(milli: Long): String {
         //01:22
-        return String.format("%02d:%02d",
-                TimeUnit.MILLISECONDS.toMinutes(milli),
-                TimeUnit.MILLISECONDS.toSeconds(milli) -
-                        TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(milli))
+        return String.format(
+            "%02d:%02d",
+            TimeUnit.MILLISECONDS.toMinutes(milli),
+            TimeUnit.MILLISECONDS.toSeconds(milli) -
+                    TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(milli))
         )
     }
 
@@ -145,7 +151,7 @@ object DateUtils {
     fun parseDateToDate(date: Date?): String {
         //05.04.19
         val sdf = SimpleDateFormat("dd.MM.yy", Locale.ENGLISH)
-        date?.let{
+        date?.let {
             return sdf.format(date.time)
         }
         return ""
@@ -184,8 +190,8 @@ object DateUtils {
     }
 
     fun isSameDay(date1: Date?, date2: Date?): Boolean {
-        date1?.let{
-            date2?.let{
+        date1?.let {
+            date2?.let {
                 val fmt = SimpleDateFormat("yyyyMMdd", Locale.ENGLISH)
                 return fmt.format(date1) == fmt.format(date2)
             }
@@ -205,7 +211,7 @@ fun Date.minutes(): Int {
     return sdf.format(this.time).toIntOrNull() ?: 0
 }
 
-fun String.parseStringToTime(): Date?{
+fun String.parseStringToTime(): Date? {
     val formatter = SimpleDateFormat("h:mma", Locale.ENGLISH)
-    return formatter.parse(this.replace(" ",""))
+    return formatter.parse(this.replace(" ", ""))
 }

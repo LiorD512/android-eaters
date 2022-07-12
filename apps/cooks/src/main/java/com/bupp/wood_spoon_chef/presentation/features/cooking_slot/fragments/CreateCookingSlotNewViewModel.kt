@@ -88,7 +88,7 @@ class CreateCookingSlotNewViewModel(
                     )) {
                         is ResponseSuccess -> {
                             result.data?.let {
-                                cookingSlotFlowCoordinator.next(CookingSlotFlowCoordinator.Step.OPEN_MENU_FRAGMENT)
+                                cookingSlotFlowCoordinator.next(CookingSlotFlowCoordinator.Step.OPEN_MENU_FRAGMENT, cookingSlot = it)
                             }
                         }
                         is ResponseError -> {
