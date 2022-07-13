@@ -8,9 +8,11 @@ import android.view.ViewGroup
 import android.widget.FrameLayout
 import com.bupp.wood_spoon_chef.databinding.SectionViewBinding
 
-class SectionView @JvmOverloads
-constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) :
-    FrameLayout(context, attrs, defStyleAttr) {
+class SectionView @JvmOverloads constructor(
+    context: Context,
+    attrs: AttributeSet? = null,
+    defStyleAttr: Int = 0
+) : FrameLayout(context, attrs, defStyleAttr) {
 
     private var binding: SectionViewBinding? = null
 

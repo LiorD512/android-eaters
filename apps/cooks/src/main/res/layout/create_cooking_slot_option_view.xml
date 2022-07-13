@@ -1,62 +1,62 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:paddingBottom="10dp">
+    android:paddingBottom="16dp">
 
-    <LinearLayout
-        android:layout_width="match_parent"
+    <ImageView
+        android:id="@+id/createCookingSlotOptionViewMainIcon"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="18dp"
-        android:layout_marginEnd="13dp"
+        android:layout_marginStart="16dp"
+        android:contentDescription="@null"
         android:gravity="center_vertical"
-        android:orientation="horizontal">
+        app:layout_constraintBottom_toBottomOf="@+id/createCookingSlotOptionViewTitle"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/createCookingSlotOptionViewTitle"
+        app:tint="@color/black"
+        tools:src="@drawable/icon_reccuring" />
 
-        <ImageView
-            android:id="@+id/createCookingSlotOptionViewMainIcon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:contentDescription="@null"
-            app:tint="@color/black"
-            tools:src="@drawable/icon_reccuring" />
+    <TextView
+        android:id="@+id/createCookingSlotOptionViewTitle"
+        style="@style/LatoBold13Black"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="8dp"
+        app:layout_constraintEnd_toStartOf="@+id/createCookingSlotOptionViewForwardBtn"
+        app:layout_constraintStart_toEndOf="@+id/createCookingSlotOptionViewMainIcon"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Make slot recurring" />
 
-        <TextView
-            android:id="@+id/createCookingSlotOptionViewTitle"
-            style="@style/LatoBold13Black"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="6dp"
-            android:layout_marginEnd="9dp"
-            tools:text="Make slot recurring" />
-
-        <Space
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1" />
-
-        <ImageView
-            android:id="@+id/createCookingSlotOptionViewForwardBtn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:contentDescription="@null"
-            android:padding="10dp"
-            android:src="@drawable/ic_arrow_right"/>
-
-    </LinearLayout>
-
+    <ImageView
+        android:id="@+id/createCookingSlotOptionViewForwardBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:contentDescription="@null"
+        android:padding="10dp"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="@+id/createCookingSlotOptionViewTitle"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/createCookingSlotOptionViewTitle"
+        tools:src="@drawable/ic_arrow_right" />
 
     <TextView
         android:id="@+id/createCookingSlotOptionViewSubTitle"
         style="@style/LatoReg13PurpelyGrey"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
         android:layout_marginTop="4dp"
-        android:layout_marginEnd="43dp"
         android:lineSpacingExtra="1dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/createCookingSlotOptionViewTitle"
+        app:layout_constraintStart_toStartOf="@+id/createCookingSlotOptionViewTitle"
+        app:layout_constraintTop_toBottomOf="@+id/createCookingSlotOptionViewTitle"
         tools:text="Cooking slot will occur every week on\nSunday and Tuesday, 20 times" />
 
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

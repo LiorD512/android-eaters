@@ -11,6 +11,8 @@
     <attr name="maxChar" format="integer" />
     <attr name="maxLines" format="integer" />
     <attr name="mainIcon" format="reference" />
+    <attr name="rightArrowIcon" format="reference" />
+    <attr name="count" format="reference" />
     <attr name="showSubTitle" format="boolean" />
     <attr name="toolTipType" format="enum">
         <enum name="SSN" value="1" />
@@ -250,6 +252,7 @@
 
     <declare-styleable name="CreateCookingSlotOptionView">
         <attr name="mainIcon" />
+        <attr name="rightArrowIcon" />
         <attr name="title" />
         <attr name="subtitle" />
         <attr name="showSubTitle" />
@@ -260,6 +263,10 @@
         <attr name="title" />
         <attr name="subtitle" />
         <attr name="showSubTitle" />
+    </declare-styleable>
+
+    <declare-styleable name="DishCounterView">
+        <attr name="count" />
     </declare-styleable>
 
     <declare-styleable name="WowCalendarView">

@@ -4,14 +4,18 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.widget.LinearLayout
+import androidx.annotation.DrawableRes
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import com.bupp.wood_spoon_chef.R
 import com.bupp.wood_spoon_chef.databinding.CreateCookingSlotOptionViewBinding
 import com.bupp.wood_spoon_chef.utils.extensions.show
 
-class CreateCookingSlotOptionView @JvmOverloads
-constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) :
-    LinearLayout(context, attrs, defStyleAttr) {
+class CreateCookingSlotOptionView @JvmOverloads constructor(
+    context: Context,
+    attrs: AttributeSet? = null,
+    defStyleAttr: Int = 0
+) : LinearLayout(context, attrs, defStyleAttr) {
 
     private val binding: CreateCookingSlotOptionViewBinding =
         CreateCookingSlotOptionViewBinding.inflate(
@@ -45,6 +49,14 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
                 setIcon(icon)
             }
 
+            if (attrSet.hasValue(R.styleable.CreateCookingSlotOptionView_rightArrowIcon)) {
+                val icon = attrSet.getResourceId(
+                    R.styleable.CreateCookingSlotOptionView_rightArrowIcon,
+                    0
+                )
+                setRightArrowIcon(icon)
+            }
+
             showSubtitle()
 
             attrSet.recycle()
@@ -67,6 +79,21 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
                 icon
             )
         )
+    }
+
+    private fun setRightArrowIcon(@DrawableRes rightArrowIcon: Int) {
+        binding.createCookingSlotOptionViewForwardBtn.apply {
+            if (rightArrowIcon == 0) {
+                isVisible = false
+            } else {
+                setImageDrawable(
+                    ContextCompat.getDrawable(
+                        context,
+                        rightArrowIcon
+                    )
+                )
+            }
+        }
     }
 
     private fun showSubtitle() {

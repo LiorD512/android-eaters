@@ -1,29 +1,135 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/wild_sand"
+    android:orientation="vertical"
     tools:context=".presentation.features.cooking_slot.fragments.CookingSlotReviewFragment">
 
     <com.bupp.wood_spoon_chef.presentation.custom_views.CreateCookingSlotTopBar
-        android:id="@+id/createCookingSlotReviewFragmentTopBar"
+        android:id="@+id/reviewFragmentTopBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        app:cooking_slot_bar_icon="@drawable/ic_back_grey"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:title="@string/review_your_cooking_slot"
-        app:cooking_slot_bar_icon="@drawable/ic_back_grey"/>
+        app:title="@string/review_your_cooking_slot" />
 
-    <com.bupp.wood_spoon_chef.presentation.custom_views.OrangeBtnCornered
-        android:id="@+id/createCookingSlotReviewFragmentSaveCookingSlotBtn"
-        android:layout_gravity="bottom"
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:fillViewport="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/reviewFragmentTopBar">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/reviewSlotTitle"
+                style="@style/LatoBlack19DarkDarkGrey"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="24dp"
+                android:layout_marginEnd="16dp"
+                android:textColor="@color/dark"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="Friday, Nov 30, 2021" />
+
+            <TextView
+                android:id="@+id/reviewSlotSubtitle"
+                style="@style/LatoReg13Black"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="16dp"
+                android:textColor="@color/dark"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/reviewSlotTitle"
+                tools:text="12:15 PM - 4:00 PM" />
+
+            <com.bupp.wood_spoon_chef.presentation.custom_views.SectionView
+                android:id="@+id/sectionView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/reviewSlotSubtitle">
+
+                <com.bupp.wood_spoon_chef.presentation.custom_views.CreateCookingSlotOptionView
+                    android:id="@+id/createCookingSlotNewFragmentLastCallForOrderView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:mainIcon="@drawable/icon_bell"
+                    app:title="Last call for orders" />
+
+                <com.bupp.wood_spoon_chef.presentation.custom_views.CreateCookingSlotOptionView
+                    android:id="@+id/createCookingSlotNewFragmentMakeRecurringView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:mainIcon="@drawable/icon_reccuring"
+                    app:title="Make slot recurring" />
+
+            </com.bupp.wood_spoon_chef.presentation.custom_views.SectionView>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/rv_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                app:cardCornerRadius="8dp"
+                app:cardElevation="0dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/sectionView">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rv_menu"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    tools:itemCount="4"
+                    tools:listitem="@layout/item_slot_review_menu" />
+
+            </androidx.cardview.widget.CardView>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+
+    <FrameLayout
+        android:id="@+id/btn_gradient"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:background="@drawable/transparent_to_white_80_gradient"
+        android:paddingTop="20dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:background="@color/white"
-        android:layout_marginHorizontal="@dimen/medium"
-        android:layout_marginBottom="14.4dp"
-        app:title="@string/save_cooking_slot" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <com.bupp.wood_spoon_chef.presentation.custom_views.OrangeBtnCornered
+            android:id="@+id/btn_save_slot"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="15.4dp"
+            android:layout_marginBottom="15.6dp"
+            app:title="@string/save_cooking_slot" />
+
+    </FrameLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
