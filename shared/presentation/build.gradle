@@ -1,0 +1,14 @@
+apply from: "${rootProject.projectDir}/common-module.gradle"
+apply plugin: 'kotlin-parcelize'
+
+android { }
+dependencies {
+    implementation project(path: ':core:android-utils')
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android'
+    implementation 'com.google.android.material:material'
+    implementation 'androidx.lifecycle:lifecycle-common'
+    implementation 'androidx.lifecycle:lifecycle-livedata-core-ktx'
+    implementation 'androidx.fragment:fragment-ktx'
+    implementation 'androidx.appcompat:appcompat'
+}

@@ -1,4 +1,4 @@
-package com.bupp.wood_spoon_eaters.bottom_sheets.action_list_bottom_sheet
+package com.shared.presentation.dialog.bottomsheet
 
 import android.content.DialogInterface
 import android.os.Bundle
@@ -14,13 +14,13 @@ import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.bupp.wood_spoon_eaters.R
-import com.bupp.wood_spoon_eaters.custom_views.adapters.DividerItemDecorator
-import com.bupp.wood_spoon_eaters.databinding.FragmentActionListBottomSheetListDialogBinding
-import com.bupp.wood_spoon_eaters.databinding.FragmentActionListBottomSheetListDialogItemBinding
-import com.eatwoodspoon.android_utils.binding.viewBinding
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.shared.presentation.R
+import com.shared.presentation.databinding.FragmentActionListBottomSheetListDialogBinding
 import kotlinx.parcelize.Parcelize
+import com.eatwoodspoon.android_utils.binding.viewBinding
+import com.shared.presentation.databinding.FragmentActionListBottomSheetListDialogItemBinding
+import com.shared.presentation.dialog.adapter.DividerItemDecorator
 
 /**
  *
@@ -80,20 +80,11 @@ open class ActionListBottomSheetFragment : BottomSheetDialogFragment() {
                 )
             )
         }
-        initCancellation()
     }
 
     override fun onCancel(dialog: DialogInterface) {
         super.onCancel(dialog)
         onActionSelected(defaultCancelAction)
-    }
-
-    private fun initCancellation() {
-        binding.actionCloseButton.text =
-            defaultCancelAction.text ?: defaultCancelAction.textId?.let { getString(it) }
-        binding.actionCloseButton.setOnClickListener {
-            onActionSelected(defaultCancelAction)
-        }
     }
 
     open fun onActionSelected(action: Action) {

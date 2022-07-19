@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.View
 import androidx.activity.OnBackPressedCallback
+import androidx.core.os.bundleOf
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
@@ -35,8 +36,23 @@ class CookingSlotParentFragment : Fragment(R.layout.fragment_cooking_slot_parent
         parametersOf(cookingSlotCoordinator)
     }
 
+    companion object {
+        private const val KEY_SCREEN = "key_starting_point"
+
+        fun newInstance(screen: CookingSlotFlowCoordinator.Step? = null) =
+            CookingSlotParentFragment().apply {
+                screen?.let {
+                    arguments = bundleOf(
+                        KEY_SCREEN to screen.name
+                    )
+                }
+            }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        arguments?.getString(KEY_SCREEN)
+
         requireActivity().onBackPressedDispatcher.addCallback(
             this,
             object : OnBackPressedCallback(true) {
@@ -62,13 +78,14 @@ class CookingSlotParentFragment : Fragment(R.layout.fragment_cooking_slot_parent
                 viewModel.stepStateFlow.collect {
                     when (it.step) {
                         CookingSlotFlowCoordinator.Step.OPEN_MENU_FRAGMENT -> {
-                            val action = CookingSlotMenuFragmentDirections.toCookingSlotMenuFragment(it.cookingSlot)
-                            navController.navigate(action)
+                            CookingSlotMenuFragmentDirections.toCookingSlotMenuFragment(it.cookingSlot)
                         }
                         CookingSlotFlowCoordinator.Step.OPEN_REVIEW_FRAGMENT -> {
-                            val action = CookingSlotReviewFragmentDirections.toCookingSlotReviewFragment(it.cookingSlot)
-                            navController.navigate(action)
+                            CookingSlotReviewFragmentDirections.toCookingSlotReviewFragment(it.cookingSlot)
                         }
+                        else -> { null }
+                    }?.let { action ->
+                        navController.navigate(action)
                     }
                 }
             }

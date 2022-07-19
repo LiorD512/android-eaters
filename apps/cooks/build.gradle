@@ -47,6 +47,7 @@ dependencies {
 
     implementation project(path: ':core:analytics')
     implementation project(path: ':core:android-utils')
+    implementation project(path: ':shared:presentation')
 
     // Android
     implementation 'com.google.android.material:material:1.4.0-beta01'

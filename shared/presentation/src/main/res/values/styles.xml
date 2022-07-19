@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="LatoBold13White">
+        <item name="android:fontFamily">@font/lato_bold</item>
+        <item name="android:textSize">13.4sp</item>
+        <item name="android:textColor">#fff</item>
+    </style>
+
+    <style name="LatoBlack15Red">
+        <item name="android:fontFamily">@font/lato_black</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:textColor">@color/red</item>
+    </style>
+    <style name="LatoReg15Black">
+        <item name="android:fontFamily">@font/lato_reg</item>
+        <item name="android:textSize">15.4sp</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:lineSpacingExtra">7.5sp</item>
+    </style>
+    <style name="BottomSheetTransparentStyle" parent="Theme.Design.Light.BottomSheetDialog">
+        <item name="bottomSheetStyle">@style/CustomBottomSheetStyle</item>
+    </style>
+    <style name="CustomBottomSheetStyle" parent="Widget.Design.BottomSheet.Modal">
+        <item name="android:background">@android:color/transparent</item>
+    </style>
+
+</resources>

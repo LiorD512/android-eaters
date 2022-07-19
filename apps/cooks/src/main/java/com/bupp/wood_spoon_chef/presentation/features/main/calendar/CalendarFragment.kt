@@ -1,6 +1,5 @@
 package com.bupp.wood_spoon_chef.presentation.features.main.calendar
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.lifecycle.lifecycleScope
@@ -19,9 +18,11 @@ import com.bupp.wood_spoon_chef.presentation.features.main.calendar.cookingSlotD
 import com.bupp.wood_spoon_chef.presentation.features.main.calendar.create_cooking_slot.ArgumentModelCreateCookingSlot
 import com.bupp.wood_spoon_chef.data.remote.model.CookingSlotSlim
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.CookingSlotActivity
+import com.bupp.wood_spoon_chef.presentation.features.main.calendar.cookingSlotDetails.ArgumentModelCookingSlotDetailsNew
 import com.bupp.wood_spoon_chef.utils.extensions.monthOfYearAsShortText
 import com.bupp.wood_spoon_chef.utils.extensions.prepareFormattedDate
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import org.joda.time.DateTime
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -76,24 +77,29 @@ class CalendarFragment : BaseFragment(R.layout.fragment_calendar),
                 binding?.calendarFragCalView?.setSelectedDate(Date(it))
             }
         }
-
-        lifecycleScope.launch{
-            viewModel.isCookingSlotNewFlowEnable.collect{ isEnabled ->
-                handleCookingSlotNewFlowEnable(isEnabled)
-            }
-        }
     }
 
     private fun initUi() {
         binding?.apply {
             calendarFragCalView.setCalendarViewListener(this@CalendarFragment)
-            calendarFragList.layoutManager = LinearLayoutManager(context)
-            cookingSlotSlimAdapter = CookingSlotSlimAdapter(
-                requireContext(), mutableListOf(), this@CalendarFragment
-            )
+
+            initAdapter()
+
             calendarSupportCenterButton.setOnClickListener {
                 viewModel.trackAnalyticsEvent(CalendarClickOnNeedHelpEvent())
                 SupportBottomSheet().show(childFragmentManager, Constants.SUPPORT_BOTTOM_SHEET)
+            }
+        }
+    }
+
+    private fun initAdapter() {
+        binding?.calendarFragList?.layoutManager = LinearLayoutManager(context)
+
+        lifecycleScope.launch {
+            viewModel.isCookingSlotNewFlowEnable.collectLatest { isFFEnabled ->
+                cookingSlotSlimAdapter = CookingSlotSlimAdapter(
+                    requireContext(), mutableListOf(), this@CalendarFragment, isFFEnabled
+                )
             }
         }
     }
@@ -135,10 +141,15 @@ class CalendarFragment : BaseFragment(R.layout.fragment_calendar),
 
     override fun onCreateCookingSlotClick() {
         viewModel.trackAnalyticsEvent(CalendarCreateCookingSlotEvent())
-        viewModel.getIsCookingSlotNewFlowEnable()
+
+        lifecycleScope.launch {
+            viewModel.isCookingSlotNewFlowEnable.collectLatest {
+                handleCookingSlotNewFlowEnable(it)
+            }
+        }
     }
 
-    private fun handleCookingSlotNewFlowEnable(isEnabled: Boolean){
+    private fun handleCookingSlotNewFlowEnable(isEnabled: Boolean) {
         selectedDate?.let {
             if (isEnabled) {
                 openCookingSlotActivity(it.time)
@@ -155,19 +166,35 @@ class CalendarFragment : BaseFragment(R.layout.fragment_calendar),
             }
         }
     }
+
     private fun openCookingSlotActivity(selectedDate: Long) {
         startActivity(
-            Intent(requireContext(), CookingSlotActivity::class.java).putExtra(Constants.ARG_SELECTED_DATE,selectedDate)
+            CookingSlotActivity().newInstance(
+                context = requireContext(),
+                selectedDate = selectedDate
+            )
         )
     }
 
     override fun onCookingSlotClick(cookingSlotIds: List<Long>, selectedCookingSlotDate: Long) {
         findNavController().apply {
-            val action =
-                CalendarFragmentDirections.actionCalendarFragmentToCookingSlotDetailsFragment(
+            val action = CalendarFragmentDirections
+                .actionCalendarFragmentToCookingSlotDetailsFragment(
                     ArgumentModelCookingSlotDetails(
                         cookingSlitsIds = cookingSlotIds,
                         cookingSlitsDateMillis = selectedCookingSlotDate
+                    )
+                )
+            navigate(action)
+        }
+    }
+
+    override fun onCookingSlotClickNew(selectedCookingSlotId: Long) {
+        findNavController().apply {
+            val action = CalendarFragmentDirections
+                .actionCalendarFragmentToCookingSlotDetailsFragmentNew(
+                    ArgumentModelCookingSlotDetailsNew(
+                        cookingSlitsId = selectedCookingSlotId
                     )
                 )
             navigate(action)

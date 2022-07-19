@@ -1,11 +1,11 @@
-package com.bupp.wood_spoon_eaters.custom_views.adapters
+package com.shared.presentation.dialog.adapter
 
 import android.graphics.Canvas
 import android.graphics.drawable.Drawable
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ItemDecoration
 import java.util.*
-@Deprecated("Use shared:presentation/adapter/DividerItemDecorator")
+
 class DividerItemDecorator(val divider: Drawable?): ItemDecoration() {
 
     override fun onDrawOver(canvas: Canvas, parent: RecyclerView, state: RecyclerView.State) {

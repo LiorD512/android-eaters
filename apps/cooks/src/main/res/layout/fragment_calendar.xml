@@ -81,9 +81,9 @@
                 android:layout_height="wrap_content"
                 android:paddingLeft="@dimen/medium"
                 android:paddingTop="@dimen/small"
-                tools:text="@tools:sample/lorem"
                 android:textColor="@color/black"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                tools:text="@tools:sample/lorem" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/calendarFragList"

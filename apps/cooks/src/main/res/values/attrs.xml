@@ -12,7 +12,7 @@
     <attr name="maxLines" format="integer" />
     <attr name="mainIcon" format="reference" />
     <attr name="rightArrowIcon" format="reference" />
-    <attr name="count" format="reference" />
+    <attr name="count" format="integer" />
     <attr name="showSubTitle" format="boolean" />
     <attr name="toolTipType" format="enum">
         <enum name="SSN" value="1" />
@@ -234,7 +234,9 @@
 
     <declare-styleable name="CreateCookingSlotTopBar">
         <attr name="title" />
+        <attr name="subTitle" />
         <attr name="cooking_slot_bar_icon" format="reference" />
+        <attr name="cooking_slot_bar_menu_icon" format="reference" />
     </declare-styleable>
 
     <declare-styleable name="PeachRoundedBtn">

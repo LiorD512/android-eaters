@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/wild_sand">
+
+    <com.bupp.wood_spoon_chef.presentation.custom_views.CreateCookingSlotTopBar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cooking_slot_bar_icon="@drawable/ic_close_gray"
+        app:cooking_slot_bar_menu_icon="@drawable/ic_menu"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:subTitle="12:15 PM - 4:00PM"
+        tools:title="Friday, Nov 30, 2021 " />
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:fillViewport="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+
+            <com.bupp.wood_spoon_chef.presentation.custom_views.SectionView
+                android:id="@+id/sectionView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp">
+
+                <com.bupp.wood_spoon_chef.presentation.custom_views.CreateCookingSlotOptionView
+                    android:id="@+id/createCookingSlotNewFragmentLastCallForOrderView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:mainIcon="@drawable/icon_bell"
+                    app:title="Last call for orders"
+                    tools:subtitle="@tools:sample/lorem"/>
+
+                <com.bupp.wood_spoon_chef.presentation.custom_views.CreateCookingSlotOptionView
+                    android:id="@+id/createCookingSlotNewFragmentMakeRecurringView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:mainIcon="@drawable/icon_reccuring"
+                    app:title="Make slot recurring"
+                    tools:subtitle="@tools:sample/lorem/random"/>
+
+                <com.bupp.wood_spoon_chef.presentation.custom_views.CreateCookingSlotOptionView
+                    android:id="@+id/createCookingSlotNewFragmentShipNationwide"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:mainIcon="@drawable/icon_ship"
+                    app:title="Ship nationwide" />
+
+            </com.bupp.wood_spoon_chef.presentation.custom_views.SectionView>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/rv_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                app:cardCornerRadius="8dp"
+                app:cardElevation="0dp"
+                android:layout_marginBottom="16dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/sectionView">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rv_menu"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    tools:itemCount="8"
+                    tools:listitem="@layout/item_slot_review_menu" />
+
+            </androidx.cardview.widget.CardView>
+
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

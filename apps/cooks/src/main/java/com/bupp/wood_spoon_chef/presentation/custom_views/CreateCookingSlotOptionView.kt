@@ -72,7 +72,7 @@ class CreateCookingSlotOptionView @JvmOverloads constructor(
         showSubtitle()
     }
 
-    private fun setIcon(icon: Int) {
+    private fun setIcon(@DrawableRes icon: Int) {
         binding.createCookingSlotOptionViewMainIcon.setImageDrawable(
             ContextCompat.getDrawable(
                 context,

@@ -57,6 +57,7 @@
         app:layout_constraintEnd_toEndOf="@+id/createCookingSlotOptionViewTitle"
         app:layout_constraintStart_toStartOf="@+id/createCookingSlotOptionViewTitle"
         app:layout_constraintTop_toBottomOf="@+id/createCookingSlotOptionViewTitle"
-        tools:text="Cooking slot will occur every week on\nSunday and Tuesday, 20 times" />
+        android:maxLines="2"
+        android:ellipsize="end" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

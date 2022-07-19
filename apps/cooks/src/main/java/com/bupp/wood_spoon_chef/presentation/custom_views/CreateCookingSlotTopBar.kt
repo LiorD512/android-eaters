@@ -3,18 +3,23 @@ package com.bupp.wood_spoon_chef.presentation.custom_views
 import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
+import android.view.View
 import android.widget.FrameLayout
 import android.widget.LinearLayout
 import androidx.core.content.ContextCompat
 import com.bupp.wood_spoon_chef.R
+import com.bupp.wood_spoon_chef.data.remote.model.CookingSlot
 import com.bupp.wood_spoon_chef.databinding.CreateCookingSlotTopBarBinding
 
-class CreateCookingSlotTopBar @JvmOverloads
-constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) :
-    LinearLayout(context, attrs, defStyleAttr) {
+class CreateCookingSlotTopBar @JvmOverloads constructor(
+    context: Context,
+    attrs: AttributeSet? = null,
+    defStyleAttr: Int = 0
+) : LinearLayout(context, attrs, defStyleAttr) {
 
     interface CreateCookingSlotTopBarListener {
-        fun onBackClick()
+        fun onBackClick() { }
+        fun onMenuClick() { }
     }
 
     private var binding: CreateCookingSlotTopBarBinding = CreateCookingSlotTopBarBinding.inflate(
@@ -31,6 +36,7 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
     private fun initUi() {
         binding.apply {
             createCookingSlotTopBarImg.setOnClickListener { listener?.onBackClick() }
+            ivIconMenu.setOnClickListener { listener?.onMenuClick() }
         }
     }
 
@@ -43,6 +49,11 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
                 setTitle(title)
             }
 
+            if (attrSet.hasValue(R.styleable.CreateCookingSlotTopBar_subTitle)) {
+                val setSubTitle = attrSet.getString(R.styleable.CreateCookingSlotTopBar_subTitle)
+                setSubTitle(setSubTitle)
+            }
+
             if (attrSet.hasValue(R.styleable.CreateCookingSlotTopBar_cooking_slot_bar_icon)) {
                 val icon = attrSet.getResourceId(
                     R.styleable.CreateCookingSlotTopBar_cooking_slot_bar_icon,
@@ -51,7 +62,34 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
                 setIcon(icon)
 
             }
+
+            if (attrSet.hasValue(R.styleable.CreateCookingSlotTopBar_cooking_slot_bar_menu_icon)) {
+                val icon = attrSet.getResourceId(
+                    R.styleable.CreateCookingSlotTopBar_cooking_slot_bar_menu_icon,
+                    0
+                )
+                setMenuIcon(icon)
+
+            }
+
             attrSet.recycle()
+        }
+    }
+
+    private fun setMenuIcon(icon: Int) {
+        binding.ivIconMenu.setImageDrawable(
+            ContextCompat.getDrawable(
+                context,
+                icon
+            )
+        )
+    }
+
+    fun setSubTitle(subTitle: String?) {
+        if (subTitle == null) {
+            binding.tvSubtitle.visibility = View.INVISIBLE
+        } else {
+            binding.tvSubtitle.text = subTitle
         }
     }
 
@@ -59,11 +97,11 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
         listener = listenerInstance
     }
 
-    private fun setTitle(title: String?) {
+    fun setTitle(title: String?) {
         binding.createCookingSlotTopBarTitle.text = title
     }
 
-    private fun setIcon(icon: Int) {
+    fun setIcon(icon: Int) {
         binding.createCookingSlotTopBarImg.setImageDrawable(
             ContextCompat.getDrawable(
                 context,

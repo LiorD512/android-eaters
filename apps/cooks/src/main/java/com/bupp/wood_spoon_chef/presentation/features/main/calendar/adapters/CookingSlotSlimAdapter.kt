@@ -24,12 +24,15 @@ private object ViewType {
 class CookingSlotSlimAdapter(
     val context: Context,
     private val cookingSlotList: MutableList<CookingSlotSlim>,
-    val listener: CalendarCookingSlotAdapterListener?
+    val listener: CalendarCookingSlotAdapterListener?,
+    private val isShowNewCookingSlotDetailsEnabled: Boolean
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     interface CalendarCookingSlotAdapterListener {
         fun onCreateCookingSlotClick()
+        @Deprecated("use onCookingSlotClickNew() to navigate to new design. Remove all old functionality.")
         fun onCookingSlotClick(cookingSlotIds: List<Long>, selectedCookingSlotDate: Long)
+        fun onCookingSlotClickNew(selectedCookingSlotId: Long)
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
@@ -42,12 +45,9 @@ class CookingSlotSlimAdapter(
             else -> {
                 val curCookingSlot: CookingSlotSlim = cookingSlotList[position]
 
-                curCookingSlot.let {
+                curCookingSlot.let { slot ->
                     (holder as ItemViewHolder).root.setOnClickListener {
-                        listener?.onCookingSlotClick(
-                            cookingSlotList.map { it.id },
-                            cookingSlotList.first().startsAt.time
-                        )
+                        doOnCookingSlotClick(slot)
                     }
 
                     val fromDateTime: DateTimeFormatter = DateTimeFormat.forPattern("h:mm a")
@@ -62,6 +62,19 @@ class CookingSlotSlimAdapter(
                     )
                 }
             }
+        }
+    }
+
+    private fun doOnCookingSlotClick(slot: CookingSlotSlim) {
+        if (isShowNewCookingSlotDetailsEnabled) {
+            listener?.onCookingSlotClickNew(
+                selectedCookingSlotId = slot.id
+            )
+        } else {
+            listener?.onCookingSlotClick(
+                cookingSlotList.map { it.id },
+                cookingSlotList.first().startsAt.time
+            )
         }
     }
 

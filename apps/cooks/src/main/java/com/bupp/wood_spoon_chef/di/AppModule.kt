@@ -31,9 +31,8 @@ import com.bupp.wood_spoon_chef.data.remote.network.ErrorManger
 import com.bupp.wood_spoon_chef.data.remote.network.ResponseHandler
 import com.bupp.wood_spoon_chef.data.repositories.*
 import com.bupp.wood_spoon_chef.data.repositories.AppSettingsRepositoryImpl
-import com.bupp.wood_spoon_chef.domain.GetIsCookingSlotNewFlowEnabledUseCase
-import com.bupp.wood_spoon_chef.domain.GetSupportNumberUseCase
-import com.bupp.wood_spoon_chef.domain.IsCallSupportByCancelingOrderUseCase
+import com.bupp.wood_spoon_chef.domain.*
+import com.bupp.wood_spoon_chef.presentation.features.main.calendar.cookingSlotDetails.CookingSlotDetailsViewModelNew
 import com.bupp.wood_spoon_chef.utils.UserSettings
 import com.google.firebase.analytics.ktx.analytics
 import com.google.firebase.ktx.Firebase
@@ -48,6 +47,8 @@ val appModule = module {
     //UseCase
     single { GetSupportNumberUseCase(get()) }
     single { IsCallSupportByCancelingOrderUseCase(get()) }
+    single { FetchCookingSlotByIdUseCase(get()) }
+    single { CancelCookingSlotUseCase(get()) }
 
     //Repo
     single { UserRepository(get(), get(), get(), get(), get()) }
@@ -98,6 +99,9 @@ val appModule = module {
 
     //calendar CookingSlotDetailsViewModel
     viewModel { CookingSlotDetailsViewModel(get(), get()) }
+
+    //calendar CookingSlotDetailsViewModel
+    viewModel { CookingSlotDetailsViewModelNew(get(), get()) }
 
     //orders
     viewModel { CancelOrderViewModel(get(), get()) }

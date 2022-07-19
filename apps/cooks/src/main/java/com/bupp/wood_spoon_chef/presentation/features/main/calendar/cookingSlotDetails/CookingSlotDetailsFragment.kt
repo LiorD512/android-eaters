@@ -31,6 +31,7 @@ data class ArgumentModelCookingSlotDetails(
     var cookingSlitsDateMillis: Long,
 ) : Parcelable
 
+@Deprecated("new design CookingSlotDetailsFragment screen. Delete this screen after implementing new one.")
 class CookingSlotDetailsFragment : BaseFragment(R.layout.fragment_cooking_slot_details) {
 
     private var binding: FragmentCookingSlotDetailsBinding? = null

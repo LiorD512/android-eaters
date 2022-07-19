@@ -12,10 +12,10 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.bupp.wood_spoon_eaters.R
-import com.bupp.wood_spoon_eaters.bottom_sheets.action_list_bottom_sheet.ActionListBottomSheetFragment
 import com.bupp.wood_spoon_eaters.databinding.FragmentGiftActionBinding
 import com.bupp.wood_spoon_eaters.utils.showErrorToast
 import com.eatwoodspoon.android_utils.binding.viewBinding
+import com.shared.presentation.dialog.bottomsheet.ActionListBottomSheetFragment
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
