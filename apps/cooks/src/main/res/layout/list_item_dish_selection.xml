@@ -5,56 +5,68 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/white"
-    android:gravity="center_vertical"
-    android:orientation="horizontal"
-    android:padding="@dimen/medium">
+    android:orientation="vertical">
 
-    <androidx.cardview.widget.CardView
-        android:layout_width="60dp"
-        android:layout_height="70dp"
-        app:cardCornerRadius="@dimen/small">
-
-        <ImageView
-            android:id="@+id/listItemDishSelectionImage"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:scaleType="centerCrop" />
-
-    </androidx.cardview.widget.CardView>
-
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/medium"
-        android:orientation="vertical">
+        android:gravity="center_vertical"
+        android:padding="@dimen/medium"
+        android:orientation="horizontal">
 
-        <TextView
-            android:id="@+id/listItemDishSelectionDishName"
-            style="@style/LatoBlack15Dark"
-            android:layout_width="wrap_content"
+        <androidx.cardview.widget.CardView
+            android:layout_width="60dp"
+            android:layout_height="70dp"
+            app:cardCornerRadius="@dimen/small">
+
+            <ImageView
+                android:id="@+id/listItemDishSelectionImage"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop" />
+
+        </androidx.cardview.widget.CardView>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:text="Side of Pita" />
+            android:layout_marginStart="@dimen/medium"
+            android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/listItemDishSelectionDishPrice"
-            style="@style/LatoBlack15Dark"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/listItemDishSelectionDishName"
-            tools:text="$1.5" />
+            <TextView
+                android:id="@+id/listItemDishSelectionDishName"
+                style="@style/LatoBlack15Dark"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="Side of Pita" />
 
-        <com.google.android.material.checkbox.MaterialCheckBox
-            android:id="@+id/listItemDishSelectionCb"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:button="@drawable/dish_cb_selector"
-            android:gravity="top"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            <TextView
+                android:id="@+id/listItemDishSelectionDishPrice"
+                style="@style/LatoBlack15Dark"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/listItemDishSelectionDishName"
+                tools:text="$1.5" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            <com.google.android.material.checkbox.MaterialCheckBox
+                android:id="@+id/listItemDishSelectionCb"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:button="@drawable/dish_cb_selector"
+                android:gravity="top"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/white_three" />
 </LinearLayout>

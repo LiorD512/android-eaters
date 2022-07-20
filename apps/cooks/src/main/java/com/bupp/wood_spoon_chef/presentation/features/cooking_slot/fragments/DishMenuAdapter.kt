@@ -1,68 +1,105 @@
 package com.bupp.wood_spoon_chef.presentation.features.cooking_slot.fragments
 
-import android.view.LayoutInflater
-import android.view.ViewGroup
-import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.ListAdapter
+import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.bupp.wood_spoon_chef.data.remote.model.Dish
+import com.bupp.wood_spoon_chef.R
+import com.bupp.wood_spoon_chef.databinding.ListItemCategoryBinding
 import com.bupp.wood_spoon_chef.databinding.ListItemMenuDishBinding
+import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.data.models.MyDishesPickerAdapterDish
+import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.data.models.MyDishesPickerAdapterModel
+import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.dialogs.*
+import java.util.*
 
 class DishMenuAdapter(private val listener: DishesMenuAdapterListener) :
-    ListAdapter<Dish, RecyclerView.ViewHolder>(
-        DiffCallback()
-    ) {
+    SectionedListAdapter<MyDishesPickerAdapterModel>() {
 
     interface DishesMenuAdapterListener {
-        fun onDeleteClick(dish: Dish, position: Int)
+        fun onDeleteClick(dish: MyDishesPickerAdapterDish, position: Int)
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        val binding =
-            ListItemMenuDishBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+    override fun submitSections(sections: List<MyDishesPickerAdapterModel>) {
+        submitList(sectionsToSectionedListItem(sections))
+    }
+
+    override fun sectionsToSectionedListItem(sections: List<MyDishesPickerAdapterModel>): List<SectionedListItem> {
+        val items = mutableListOf<SectionedListItem>()
+        for (section in sections) {
+            section.section?.title?.let { title ->
+                items.add(SectionedListItem.SectionHeader(title, title))
+                section.dishes?.map { SectionedListItem.SectionItem(it, it.dish?.id.toString()) }?.let { items.addAll(it) }
+            }
+        }
+        return items
+    }
+
+    override fun createHeaderViewHolder(view: View): BaseViewHolder {
+        val binding = ListItemCategoryBinding.bind(view)
+        return CategoryViewHolder(binding)
+    }
+
+    override fun createItemViewHolder(view: View): BaseViewHolder {
+        val binding = ListItemMenuDishBinding.bind(view)
         return DishMenuItemViewHolder(binding)
     }
 
-
-    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        val item = getItem(position)
-        holder as DishMenuItemViewHolder
-        holder.bind(item, listener)
+    override fun getHeaderItemLayout(): Int {
+        return R.layout.list_item_category
     }
 
-    class DishMenuItemViewHolder(val binding: ListItemMenuDishBinding) :
-        RecyclerView.ViewHolder(binding.root) {
-        fun bind(dish: Dish, listener: DishesMenuAdapterListener) {
-            binding.apply {
-                var quantity = 0
-                listItemDishMenuDishName.text = dish.name
-                listItemDishMenuDishPrice.text = dish.price?.formattedValue
-                listItemMenuDishQuantityNumber.text = quantity.toString()
-                Glide.with(binding.root.context).load(dish.imageGallery?.first())
-                    .into(listItemDishMenuImage)
-                listItemDishMenuDeleteDish.setOnClickListener {
-                    listener.onDeleteClick(dish, absoluteAdapterPosition)
-                }
-                listItemMenuDishQuantityMinus.setOnClickListener {
-                    if (quantity != 0){
-                        quantity -= 1
-                        listItemMenuDishQuantityNumber.text = quantity.toString()
-                    }
-                }
-                listItemMenuDishQuantityPlus.setOnClickListener {
-                    quantity += 1
-                    listItemMenuDishQuantityNumber.text = quantity.toString()
-                }
+    override fun getItemLayout(): Int {
+        return R.layout.list_item_menu_dish
+    }
+
+    override fun onBindItemViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        val item = getItem(position)
+        if (item is SectionedListItem.SectionItem){
+            val myDishesPickerAdapterDish = item.item as MyDishesPickerAdapterDish
+            holder as DishMenuItemViewHolder
+            holder.deleteBtn.setOnClickListener {
+                listener.onDeleteClick(myDishesPickerAdapterDish, position)
             }
+            holder.bind(item)
         }
     }
 
-    private class DiffCallback : DiffUtil.ItemCallback<Dish>() {
-        override fun areItemsTheSame(oldItem: Dish, newItem: Dish) =
-            oldItem.id == newItem.id
+    override fun onBindHeaderViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        if (getItem(position) is SectionedListItem.SectionHeader){
+            holder as CategoryViewHolder
+            holder.bind(getItem(position))
+        }
+    }
 
-        override fun areContentsTheSame(oldItem: Dish, newItem: Dish) =
-            oldItem == newItem
+    class CategoryViewHolder(val binding: ListItemCategoryBinding) :
+        BaseViewHolder(binding.root) {
+        override fun bind(item: SectionedListItem) {
+            if (item is SectionedListItem.SectionHeader) {
+                val title = item.section as String
+                binding.apply {
+                    listItemCategoryTitle.text = title.replaceFirstChar {
+                        it.titlecase(
+                            Locale.ROOT
+                        )
+                    }
+                }
+            }
+        }
+
+    }
+
+    class DishMenuItemViewHolder(val binding: ListItemMenuDishBinding) :
+        BaseViewHolder(binding.root) {
+        val deleteBtn = binding.listItemDishMenuDeleteDish
+        override fun bind(item: SectionedListItem) {
+            if (item is SectionedListItem.SectionItem){
+                val myDishesAdapterModel = item.item as MyDishesPickerAdapterDish
+                binding.apply {
+                    listItemDishMenuDishName.text = myDishesAdapterModel.dish?.name
+                    listItemDishMenuDishPrice.text = myDishesAdapterModel.dish?.price?.formattedValue
+                    Glide.with(binding.root.context).load(myDishesAdapterModel.dish?.imageGallery?.first())
+                        .into(listItemDishMenuImage)
+                }
+            }
+        }
     }
 }

@@ -11,9 +11,10 @@ import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bupp.wood_spoon_chef.R
 import com.bupp.wood_spoon_chef.data.remote.model.CookingSlot
-import com.bupp.wood_spoon_chef.data.remote.model.Dish
 import com.bupp.wood_spoon_chef.databinding.FragmentCookingSlotMenuBinding
 import com.bupp.wood_spoon_chef.presentation.custom_views.CreateCookingSlotTopBar
+import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.data.models.MyDishesPickerAdapterDish
+import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.data.models.MyDishesPickerAdapterModel
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.dialogs.MyDishesBottomSheet
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.fragments.base.CookingSlotParentFragment
 import com.bupp.wood_spoon_chef.utils.DateUtils.prepareFormattedDateForHours
@@ -71,7 +72,7 @@ class CookingSlotMenuFragment :
                 launch {
                     viewModel.state.collect { state ->
                         updateInputsWithState(state)
-                        setAddDishesView(state.dishList)
+                        setAddDishesView(state.myDishesPickerAdapterModelList)
                     }
                 }
             }
@@ -85,7 +86,10 @@ class CookingSlotMenuFragment :
                     viewModel.events.collect { event ->
                         when (event) {
                             is CookingSlotMenuEvents.ShowMyDishesBottomSheet -> {
-                                openMyDishesBottomSheet(event.dishList)
+                                openMyDishesBottomSheet()
+                            }
+                            is CookingSlotMenuEvents.DeleteDish -> {
+                                deleteDish(event.selectedDishes, event.dishToRemoveId)
                             }
                         }
                     }
@@ -94,15 +98,24 @@ class CookingSlotMenuFragment :
         }
     }
 
+    private fun deleteDish(selectedDishes: List<Long>?, dishToRemove: Long?){
+        val dishIds = mutableListOf<Long>()
+        selectedDishes?.let { dishes ->
+            dishIds.addAll(dishes)
+        }
+        dishIds.remove(dishToRemove)
+        viewModel.setDishList(dishIds)
+    }
+
     private fun updateInputsWithState(state: CookingSlotMenuState) {
         binding.apply {
-            updateDishList(state.dishList)
+            updateDishList(state.myDishesPickerAdapterModelList)
             setTitle(state.cookingSlot)
         }
     }
 
-    private fun openMyDishesBottomSheet(selectedDishes: List<Dish>?) {
-        MyDishesBottomSheet.show(this, selectedDishes) {
+    private fun openMyDishesBottomSheet() {
+        MyDishesBottomSheet.show(this) {
             viewModel.setDishList(it)
         }
     }
@@ -117,8 +130,10 @@ class CookingSlotMenuFragment :
         }
     }
 
-    private fun updateDishList(data: List<Dish>?) {
-        dishMenuAdapter.submitList(data)
+    private fun updateDishList(data: List<MyDishesPickerAdapterModel>?) {
+        data?.let {
+            dishMenuAdapter.submitSections(it)
+        }
     }
 
     private fun parseArguments() {
@@ -137,7 +152,7 @@ class CookingSlotMenuFragment :
         }
     }
 
-    private fun setAddDishesView(dishList: List<Dish>?){
+    private fun setAddDishesView(dishList: List<MyDishesPickerAdapterModel>?){
         binding.apply {
             createCookingSlotMenuFragmentAddDishesEmpty.show(dishList.isNullOrEmpty())
             createCookingSlotMenuFragmentAddDishesFull.show(!dishList.isNullOrEmpty())
@@ -148,8 +163,7 @@ class CookingSlotMenuFragment :
         findNavController().navigateUp()
     }
 
-    override fun onDeleteClick(dish: Dish, position: Int) {
-        viewModel.removeDishFromList(dish)
-        dishMenuAdapter.notifyItemRemoved(position)
+    override fun onDeleteClick(dish: MyDishesPickerAdapterDish, position: Int) {
+        viewModel.onDeleteDishClick(dish.dish?.id)
     }
 }

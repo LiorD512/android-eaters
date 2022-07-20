@@ -141,6 +141,20 @@ data class MediaList(
 
 @Parcelize
 @JsonClass(generateAdapter = true)
+data class SectionWithDishes(
+    @Json(name = "dishes") val dishes: List<Dish>?,
+    @Json(name = "sections") val sections: List<Section>?
+): Parcelable
+
+@Parcelize
+@JsonClass(generateAdapter = true)
+data class Section(
+    @Json(name = "title") val title: String?,
+    @Json(name = "dish_ids") val dishIds: List<Long>?
+): Parcelable
+
+@Parcelize
+@JsonClass(generateAdapter = true)
 data class DishIngredient(
     @Json(name = "id") val id: Long? = null,
     @Json(name = "ingredient") val ingredient: Ingredient?,

@@ -2,6 +2,7 @@ package com.bupp.wood_spoon_chef.data.repositories.base_repos
 
 import com.bupp.wood_spoon_chef.data.remote.model.Dish
 import com.bupp.wood_spoon_chef.data.remote.model.DishRequest
+import com.bupp.wood_spoon_chef.data.remote.model.SectionWithDishes
 import com.bupp.wood_spoon_chef.data.remote.network.ApiService
 import com.bupp.wood_spoon_chef.data.remote.network.ResponseHandler
 import com.bupp.wood_spoon_chef.data.remote.network.base.ResponseResult

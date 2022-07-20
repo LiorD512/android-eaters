@@ -8,7 +8,7 @@ import com.bupp.wood_spoon_chef.data.remote.network.ResponseHandler
 import com.bupp.wood_spoon_chef.data.remote.network.base.ResponseResult
 import com.bupp.wood_spoon_chef.data.remote.network.base.ResponseSuccess
 import com.bupp.wood_spoon_chef.data.repositories.base_repos.CookingSlotRepositoryImp
-import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.network.CookingSlotApiService
+import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.data.network.CookingSlotApiService
 
 class CookingSlotRepository(
     private val chefAnalyticsTracker: ChefAnalyticsTracker,

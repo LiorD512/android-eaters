@@ -6,7 +6,7 @@ import com.bupp.wood_spoon_chef.data.remote.model.CookingSlotSlim
 import com.bupp.wood_spoon_chef.data.remote.model.Order
 import com.bupp.wood_spoon_chef.data.remote.network.ResponseHandler
 import com.bupp.wood_spoon_chef.data.remote.network.base.ResponseResult
-import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.network.CookingSlotApiService
+import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.data.network.CookingSlotApiService
 
 interface BaseCookingSlotRepository {
 

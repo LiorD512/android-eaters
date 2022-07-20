@@ -1,4 +1,4 @@
-package com.bupp.wood_spoon_chef.presentation.features.cooking_slot.network
+package com.bupp.wood_spoon_chef.presentation.features.cooking_slot.data.network
 import com.bupp.wood_spoon_chef.data.remote.model.CookingSlot
 import com.bupp.wood_spoon_chef.data.remote.model.CookingSlotRequest
 import com.bupp.wood_spoon_chef.data.remote.model.CookingSlotSlim

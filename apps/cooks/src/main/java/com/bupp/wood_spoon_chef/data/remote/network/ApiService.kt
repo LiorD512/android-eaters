@@ -131,6 +131,10 @@ interface ApiService {
     @GET("cooks/me/dishes")
     suspend fun getMyDishes(): ServerResponse<List<Dish>>
 
+    @V3
+    @GET("cooks/me/dishes")
+    suspend fun getSectionsAndDishes(): ServerResponse<SectionWithDishes>
+
     @GET("cooks/me/dishes/{dish_id}")
     suspend fun getDishById(
         @Path(value = "dish_id", encoded = true) dishId: Long

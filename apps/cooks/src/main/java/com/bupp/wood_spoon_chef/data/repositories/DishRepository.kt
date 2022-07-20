@@ -70,14 +70,14 @@ open class DishRepository(
         return result
     }
 
-     override suspend fun publishDish(dishId: Long): ResponseResult<Dish> {
+    override suspend fun publishDish(dishId: Long): ResponseResult<Dish> {
         val dishResponse = super.publishDish(dishId)
         if (dishResponse is ResponseSuccess) {
-                chefAnalyticsTracker.trackEvent(
-                    Constants.EVENTS_NEW_DISH,
-                    getNewDishEventsParam(dishId = dishId, type = "published")
-                )
-            }
+            chefAnalyticsTracker.trackEvent(
+                Constants.EVENTS_NEW_DISH,
+                getNewDishEventsParam(dishId = dishId, type = "published")
+            )
+        }
         return dishResponse
     }
 
@@ -114,5 +114,4 @@ open class DishRepository(
         data["type"] = type
         return data
     }
-
 }

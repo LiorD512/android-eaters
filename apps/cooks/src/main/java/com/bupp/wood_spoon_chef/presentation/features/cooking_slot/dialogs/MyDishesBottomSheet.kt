@@ -6,21 +6,22 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResult
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.bupp.wood_spoon_chef.R
 import com.bupp.wood_spoon_chef.common.TopCorneredBottomSheet
-import com.bupp.wood_spoon_chef.data.remote.model.Dish
 import com.bupp.wood_spoon_chef.databinding.BottomSheetMyDishesBinding
 import com.bupp.wood_spoon_chef.presentation.custom_views.HeaderView
 import com.bupp.wood_spoon_chef.presentation.custom_views.SimpleTextWatcher
-import com.bupp.wood_spoon_chef.presentation.custom_views.adapters.DividerItemDecorator
+import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.data.models.MyDishesPickerAdapterDish
+import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.data.models.MyDishesPickerAdapterModel
 import com.bupp.wood_spoon_chef.utils.extensions.show
 import com.bupp.wood_spoon_chef.utils.extensions.showErrorToast
 import kotlinx.coroutines.flow.collect
@@ -28,14 +29,12 @@ import kotlinx.coroutines.launch
 import me.ibrahimsn.lib.util.clear
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class MyDishesBottomSheet(private val selectedDishes: List<Dish>?) : TopCorneredBottomSheet(),
-    HeaderView.HeaderViewListener, MyDishesAdapter.MyDishesAdapterListener {
+class MyDishesBottomSheet() : TopCorneredBottomSheet(),
+    HeaderView.HeaderViewListener, MyDishesSectionAdapter.MyDishesSectionAdapterListener {
 
     private var binding: BottomSheetMyDishesBinding? = null
     private val viewModel by viewModel<MyDishesViewModel>()
-    private lateinit var myDishesAdapter: MyDishesAdapter
-
-    private val dishList = mutableListOf<Dish>()
+    private lateinit var myDishesSectionAdapter: MyDishesSectionAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -51,7 +50,6 @@ class MyDishesBottomSheet(private val selectedDishes: List<Dish>?) : TopCornered
         super.onViewCreated(view, savedInstanceState)
         setDialogAdjustPan()
         setFullScreenDialog()
-        setSelectedDishes()
         initUi()
         setupList()
         observeViewModelState()
@@ -76,8 +74,7 @@ class MyDishesBottomSheet(private val selectedDishes: List<Dish>?) : TopCornered
                 viewModel.onFilterClick()
             }
             mydDishesBsAddBtn.setOnClickListener {
-                setFragmentResult(SELECTED_DISHES_KEY, bundleOf(SELECTED_DISHES_VALUE to dishList))
-                dismiss()
+                viewModel.onAddClick()
             }
 
         }
@@ -110,6 +107,10 @@ class MyDishesBottomSheet(private val selectedDishes: List<Dish>?) : TopCornered
                                 )
                             }
                         }
+                        is MyDishesEvent.AddDishes -> {
+                            setFragmentResult(SELECTED_DISHES_KEY, bundleOf(SELECTED_DISHES_VALUE to event.selectedDishes))
+                            dismiss()
+                        }
                     }
                 }
             }
@@ -120,24 +121,14 @@ class MyDishesBottomSheet(private val selectedDishes: List<Dish>?) : TopCornered
         binding?.apply {
             myDishesBsDishesRv.apply {
                 layoutManager = LinearLayoutManager(requireContext())
-                myDishesAdapter = MyDishesAdapter(this@MyDishesBottomSheet, selectedDishes)
-                adapter = myDishesAdapter
-                val dividerItemDecoration = DividerItemDecorator(
-                    ContextCompat.getDrawable(requireContext(), R.drawable.divider_white_three)
-                )
-                addItemDecoration(dividerItemDecoration)
+                myDishesSectionAdapter = MyDishesSectionAdapter(this@MyDishesBottomSheet)
+                adapter = myDishesSectionAdapter
             }
         }
     }
 
-    private fun setSelectedDishes(){
-        if (!selectedDishes.isNullOrEmpty()) {
-            dishList.addAll(selectedDishes)
-        }
-    }
-
-    private fun updateList(data: List<Dish>?) {
-        myDishesAdapter.submitList(data)
+    private fun updateList(data: List<MyDishesPickerAdapterModel>) {
+        myDishesSectionAdapter.submitSections(data)
     }
 
     private fun showEmptyResultState(show: Boolean) {
@@ -148,7 +139,9 @@ class MyDishesBottomSheet(private val selectedDishes: List<Dish>?) : TopCornered
 
     private fun updateInputsWithState(state: MyDishesState) {
         binding.apply {
-            updateList(state.dishes)
+            state.sectionedList?.let {
+                updateList(it)
+            }
             setFilterImageResource(state.isListFiltered)
         }
     }
@@ -156,6 +149,7 @@ class MyDishesBottomSheet(private val selectedDishes: List<Dish>?) : TopCornered
     private fun openFilterMenuBottomSheet() {
         FilterMenuBottomSheet.show(this) {
             viewModel.setIsListFiltered(it != null)
+            viewModel.filterBySectionName(it?.name)
         }
     }
 
@@ -181,12 +175,9 @@ class MyDishesBottomSheet(private val selectedDishes: List<Dish>?) : TopCornered
         }
     }
 
-    override fun onDishSelected(isChecked: Boolean, dish: Dish) {
-        if (isChecked) {
-            dishList.add(dish)
-        } else {
-            dishList.remove(dish)
-        }
+
+    override fun onDishSelected(isChecked: Boolean, dishId: Long) {
+        viewModel.onDishSelected(isChecked, dishId)
     }
 
     override fun onHeaderBackClick() {
@@ -199,10 +190,9 @@ class MyDishesBottomSheet(private val selectedDishes: List<Dish>?) : TopCornered
 
         fun show(
             fragment: Fragment,
-            selectedDishes: List<Dish>?,
-            listener: ((List<Dish>?) -> Unit)
+            listener: ((List<Long>) -> Unit)
         ) {
-            MyDishesBottomSheet(selectedDishes).show(
+            MyDishesBottomSheet().show(
                 fragment.childFragmentManager,
                 MyDishesBottomSheet::class.simpleName
             )
@@ -212,12 +202,12 @@ class MyDishesBottomSheet(private val selectedDishes: List<Dish>?) : TopCornered
 
 }
 
-private fun Fragment.setSelectedDishesResultListener(listener: ((List<Dish>?) -> Unit)) {
+private fun Fragment.setSelectedDishesResultListener(listener: ((List<Long>) -> Unit)) {
     childFragmentManager.setFragmentResultListener(
         MyDishesBottomSheet.SELECTED_DISHES_KEY,
         this
     ) { _, bundle ->
-        val result = bundle.get(MyDishesBottomSheet.SELECTED_DISHES_VALUE) as List<Dish>?
+        val result = bundle.get(MyDishesBottomSheet.SELECTED_DISHES_VALUE) as List<Long>
         listener.invoke(result)
     }
 }
