@@ -2,23 +2,62 @@ package com.bupp.wood_spoon_chef.data.repositories
 
 import com.bupp.wood_spoon_chef.common.Constants
 import com.bupp.wood_spoon_chef.analytics.ChefAnalyticsTracker
+import com.bupp.wood_spoon_chef.data.local.MemoryCategoriesWithDishDataSource
 import com.bupp.wood_spoon_chef.data.remote.model.Dish
 import com.bupp.wood_spoon_chef.data.remote.model.DishRequest
+import com.bupp.wood_spoon_chef.data.remote.model.SectionWithDishes
 import com.bupp.wood_spoon_chef.data.remote.network.ApiService
 import com.bupp.wood_spoon_chef.data.remote.network.ResponseHandler
-import com.bupp.wood_spoon_chef.data.remote.network.base.ResponseResult
-import com.bupp.wood_spoon_chef.data.remote.network.base.ResponseSuccess
+import com.bupp.wood_spoon_chef.data.remote.network.base.*
 import com.bupp.wood_spoon_chef.data.repositories.base_repos.DishRepositoryImp
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.flow
 import java.util.*
 
 open class DishRepository(
-    service: ApiService,
-    responseHandler: ResponseHandler,
+    val service: ApiService,
+    val responseHandler: ResponseHandler,
     private val chefAnalyticsTracker: ChefAnalyticsTracker,
-    private val userRepository: UserRepository
+    private val userRepository: UserRepository,
+    private val memoryCategoriesWithDishDataSource: MemoryCategoriesWithDishDataSource
 ) : DishRepositoryImp(service, responseHandler) {
 
     private var myCurrentDishes: List<Dish>? = listOf()
+
+    fun getSectionsWithDishes(
+        forceFetch: Boolean = false
+    ): Flow<ResponseResult<SectionWithDishes>> = flow {
+        val localSource = fetchSectionsLocally().value
+
+        if (forceFetch) {
+            emit(fetchSectionsRemote())
+        } else {
+            if (localSource != null) {
+                emit(ResponseSuccess(localSource))
+            } else {
+                emit(fetchSectionsRemote())
+            }
+        }
+    }
+
+    private suspend fun fetchSectionsRemote(): ResponseResult<SectionWithDishes> =
+        when (val remoteSource = super.fetchSectionsWithDishes()) {
+            is ResponseError -> {
+                ResponseError(remoteSource.error)
+            }
+            is ResponseSuccess -> {
+                if (remoteSource.data == null) {
+                    ResponseError(CustomError("empty list of categories with dishes"))
+                } else {
+                    memoryCategoriesWithDishDataSource.sectionWithDishes.value = remoteSource.data
+                    ResponseSuccess(remoteSource.data)
+                }
+            }
+        }
+
+    private fun fetchSectionsLocally(): MutableStateFlow<SectionWithDishes?> =
+        memoryCategoriesWithDishDataSource.sectionWithDishes
 
     override suspend fun getMyDishes(): ResponseResult<List<Dish>> {
         val result = super.getMyDishes()

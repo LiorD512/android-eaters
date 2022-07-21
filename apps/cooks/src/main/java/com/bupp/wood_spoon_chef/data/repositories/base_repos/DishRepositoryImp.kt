@@ -20,6 +20,7 @@ interface BaseDishRepository {
     // My Dishes
     suspend fun getMyDishes(): ResponseResult<List<Dish>>
     suspend fun getDishById(editDishId: Long): ResponseResult<Dish>
+    suspend fun fetchSectionsWithDishes(): ResponseResult<SectionWithDishes>
 }
 
 open class DishRepositoryImp(private val service: ApiService, private val responseHandler: ResponseHandler) :
@@ -56,4 +57,9 @@ open class DishRepositoryImp(private val service: ApiService, private val respon
     override suspend fun getDishById(dishId: Long): ResponseResult<Dish> {
         return responseHandler.safeApiCall { service.getDishById(dishId) }
     }
+
+    override suspend fun fetchSectionsWithDishes(): ResponseResult<SectionWithDishes> {
+        return responseHandler.safeApiCall { service.fetchSectionsWithDishes() }
+    }
+
 }

@@ -2,7 +2,7 @@ package com.bupp.wood_spoon_chef.data.repositories
 
 import androidx.lifecycle.MutableLiveData
 import com.bupp.wood_spoon_chef.common.Constants
-import com.bupp.wood_spoon_chef.data.local.MemoryDataSource
+import com.bupp.wood_spoon_chef.data.local.MemoryCalendarDataSource
 import com.bupp.wood_spoon_chef.analytics.ChefAnalyticsTracker
 import com.bupp.wood_spoon_chef.data.remote.model.Cook
 import com.bupp.wood_spoon_chef.data.remote.model.CookRequest
@@ -19,7 +19,7 @@ class UserRepository(
     responseHandler: ResponseHandler,
     private val userSettings: UserSettings,
     private val chefAnalyticsTracker: ChefAnalyticsTracker,
-    private val memoryDataSource: MemoryDataSource
+    private val memoryCalendarDataSource: MemoryCalendarDataSource
 ) : UserRepositoryImp(service, responseHandler) {
 
     private var currentUser: Cook? = null
@@ -48,10 +48,10 @@ class UserRepository(
         return getUserData().value
     }
 
-    fun getLastSelectedCalendarDateFlow() = memoryDataSource.selectedDateFlow
+    fun getLastSelectedCalendarDateFlow() = memoryCalendarDataSource.selectedDateFlow
 
     suspend fun setMemorySelectedCalendarDate(date: DateTime) {
-        memoryDataSource.selectedDateFlow.emit(date.millis)
+        memoryCalendarDataSource.selectedDateFlow.emit(date.millis)
     }
 
     suspend fun initUserRepo() {
