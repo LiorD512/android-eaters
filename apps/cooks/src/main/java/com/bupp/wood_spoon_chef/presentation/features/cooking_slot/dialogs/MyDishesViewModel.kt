@@ -10,11 +10,11 @@ import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.data.reposito
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
-import okhttp3.internal.filterList
 import java.lang.Exception
 
 data class MyDishesState(
     val sectionedList: List<MyDishesPickerAdapterModel>? = null,
+    val selectedDishesIds: List<Long> = emptyList(),
     val isListFiltered: Boolean? = false
 )
 
@@ -51,18 +51,31 @@ class MyDishesViewModel(
     }
 
     fun filterList(input: String) {
-        // Not yet implemented 
+        //todo - Not yet implemented
     }
 
     private fun updateSectionedList(data: List<MyDishesPickerAdapterModel>?) {
         _state.update {
             it.copy(sectionedList = data)
         }
+        updateSelectedDishes()
     }
 
     fun setIsListFiltered(isListFiltered: Boolean?) {
         _state.update {
             it.copy(isListFiltered = isListFiltered)
+        }
+    }
+
+    fun setSelectedDishesIds(selectedDishesIds: List<Long>){
+        _state.update {
+            it.copy(selectedDishesIds = selectedDishesIds)
+        }
+    }
+
+    private fun updateSelectedDishes(){
+        _state.update {
+            it.copy(sectionedList = updateSelectedDishes(it.sectionedList, it.selectedDishesIds))
         }
     }
 
@@ -99,6 +112,17 @@ class MyDishesViewModel(
         return sectionedList?.map {
             it.copy(dishes = it.dishes?.updateItem(where = { dish -> dish.dish?.id == dishId }) { myPickerDish ->
                 myPickerDish.copy(isSelected = isChecked)
+            })
+        }
+    }
+
+    private fun updateSelectedDishes(
+        sectionedList: List<MyDishesPickerAdapterModel>?,
+        selectedDishesIds: List<Long>
+    ): List<MyDishesPickerAdapterModel>?{
+        return sectionedList?.map {
+            it.copy(dishes = it.dishes?.updateItem(where = { dish -> selectedDishesIds.contains(dish.dish?.id) }) { myPickerDish ->
+                myPickerDish.copy(isSelected = true)
             })
         }
     }

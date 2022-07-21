@@ -15,11 +15,11 @@ data class MyDishesPickerAdapterDish(
 
 data class DishesMenuAdapterModel(
     val section: Section?,
-    val dishes: List<DishesMenuDish>
+    val dishes: List<MenuDishItem>
 )
 
-data class DishesMenuDish(
+data class MenuDishItem(
     val dish: Dish?,
-    val quantity: Int = 0
+    val quantity: Int = 1
 )
 
