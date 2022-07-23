@@ -133,7 +133,7 @@ interface ApiService {
 
     @V3
     @GET("cooks/me/dishes")
-    suspend fun getSectionsAndDishes(): ServerResponse<SectionWithDishes>
+    suspend fun fetchSectionsWithDishes(): ServerResponse<SectionWithDishes>
 
     @GET("cooks/me/dishes/{dish_id}")
     suspend fun getDishById(

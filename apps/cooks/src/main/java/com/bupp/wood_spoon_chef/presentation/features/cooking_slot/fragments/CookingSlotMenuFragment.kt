@@ -13,8 +13,7 @@ import com.bupp.wood_spoon_chef.R
 import com.bupp.wood_spoon_chef.data.remote.model.CookingSlot
 import com.bupp.wood_spoon_chef.databinding.FragmentCookingSlotMenuBinding
 import com.bupp.wood_spoon_chef.presentation.custom_views.CreateCookingSlotTopBar
-import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.data.models.MyDishesPickerAdapterDish
-import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.data.models.MyDishesPickerAdapterModel
+import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.data.models.DishesMenuAdapterModel
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.dialogs.MyDishesBottomSheet
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.fragments.base.CookingSlotParentFragment
 import com.bupp.wood_spoon_chef.utils.DateUtils.prepareFormattedDateForHours
@@ -71,7 +70,7 @@ class CookingSlotMenuFragment :
                 launch {
                     viewModel.state.collect { state ->
                         updateInputsWithState(state)
-                        setAddDishesView(state.myDishesPickerAdapterModelList)
+                        setAddDishesView(state.dishesMenuAdapterModelList)
                     }
                 }
             }
@@ -85,10 +84,7 @@ class CookingSlotMenuFragment :
                     viewModel.events.collect { event ->
                         when (event) {
                             is CookingSlotMenuEvents.ShowMyDishesBottomSheet -> {
-                                openMyDishesBottomSheet()
-                            }
-                            is CookingSlotMenuEvents.DeleteDish -> {
-                                deleteDish(event.selectedDishes, event.dishToRemoveId)
+                                openMyDishesBottomSheet(event.selectedDishes)
                             }
                         }
                     }
@@ -97,24 +93,15 @@ class CookingSlotMenuFragment :
         }
     }
 
-    private fun deleteDish(selectedDishes: List<Long>?, dishToRemove: Long?){
-        val dishIds = mutableListOf<Long>()
-        selectedDishes?.let { dishes ->
-            dishIds.addAll(dishes)
-        }
-        dishIds.remove(dishToRemove)
-        viewModel.setDishList(dishIds)
-    }
-
     private fun updateInputsWithState(state: CookingSlotMenuState) {
         binding.apply {
-            updateDishList(state.myDishesPickerAdapterModelList)
+            updateDishList(state.dishesMenuAdapterModelList)
             setTitle(state.operatingHours)
         }
     }
 
-    private fun openMyDishesBottomSheet() {
-        MyDishesBottomSheet.show(this) {
+    private fun openMyDishesBottomSheet(selectedDishes: List<Long>) {
+        MyDishesBottomSheet.show(this, selectedDishes) {
             viewModel.setDishList(it)
         }
     }
@@ -129,7 +116,7 @@ class CookingSlotMenuFragment :
         }
     }
 
-    private fun updateDishList(data: List<MyDishesPickerAdapterModel>?) {
+    private fun updateDishList(data: List<DishesMenuAdapterModel>?) {
         data?.let {
             dishMenuAdapter.submitSections(it)
         }
@@ -146,7 +133,7 @@ class CookingSlotMenuFragment :
         }
     }
 
-    private fun setAddDishesView(dishList: List<MyDishesPickerAdapterModel>?){
+    private fun setAddDishesView(dishList: List<DishesMenuAdapterModel>?){
         binding.apply {
             createCookingSlotMenuFragmentAddDishesEmpty.show(dishList.isNullOrEmpty())
             createCookingSlotMenuFragmentAddDishesFull.show(!dishList.isNullOrEmpty())
@@ -157,7 +144,15 @@ class CookingSlotMenuFragment :
         findNavController().navigateUp()
     }
 
-    override fun onDeleteClick(dish: MyDishesPickerAdapterDish, position: Int) {
-        viewModel.onDeleteDishClick(dish.dish?.id)
+    override fun onDeleteClick(dishId: Long?) {
+        viewModel.onDeleteDishClick(dishId)
+    }
+
+    override fun onQuantityChange(dishId: Long?, quantity: Int) {
+        dishId?.let {
+            if (quantity >=1){
+                viewModel.updateQuantity(dishId, quantity)
+            }
+        }
     }
 }

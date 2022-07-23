@@ -42,7 +42,6 @@ class CookingSlotDetailsFragmentNew : BaseFragment(R.layout.fragment_details_coo
 
     private val viewModel: CookingSlotDetailsViewModelNew by viewModel()
     private var menuAdapter: CookingSlotMenuAdapter? = null
-    private var selectedCookingSlot: CookingSlot? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -65,9 +64,8 @@ class CookingSlotDetailsFragmentNew : BaseFragment(R.layout.fragment_details_coo
     }
 
     private fun observeViewModelState() {
-        viewLifecycleOwner.lifecycleScope.launch {
+        viewLifecycleOwner.lifecycleScope.launch() {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                launch {
                     viewModel.state.collect { state ->
                         when (state) {
                             CookingSlotDetailsState.Idle -> {
@@ -81,38 +79,34 @@ class CookingSlotDetailsFragmentNew : BaseFragment(R.layout.fragment_details_coo
                                 handleProgressBar(true)
                             }
                             is CookingSlotDetailsState.Success -> {
-                                this@CookingSlotDetailsFragmentNew.selectedCookingSlot =
-                                    state.cookingSlot
+                                viewModel.selectedCookingSlot = state.cookingSlot
 
                                 handleProgressBar(false)
-                                setupToolBar(state)
+                                setupToolBar(state.cookingSlot)
 
                                 binding.createCookingSlotNewFragmentLastCallForOrderView.setSubtitle(
                                     DateTime(state.cookingSlot.lastCallAt).prepareFormattedDate()
                                 )
-
-                                menuAdapter?.submitList(state.cookingSlot.menuItems)
-
+                                menuAdapter?.submitList(state.categoriesWithMenu)
                             }
                             CookingSlotDetailsState.SlotCanceled -> {
                                 onBackClick()
                             }
-                        }
                     }
                 }
             }
         }
     }
 
-    private fun setupToolBar(state: CookingSlotDetailsState.Success) {
+    private fun setupToolBar(slot: CookingSlot) {
         binding.toolbar.apply {
-            setTitle(DateTime(state.cookingSlot.startsAt).prepareFormattedDate())
+            setTitle(DateTime(slot.startsAt).prepareFormattedDate())
 
             val dateTimeFormat: DateTimeFormatter = DateTimeFormat.forPattern("h:mm a")
             val fromDateTimeFormatted: String =
-                dateTimeFormat.print(DateTime(state.cookingSlot.startsAt)).uppercase()
+                dateTimeFormat.print(DateTime(slot.startsAt)).uppercase()
             val toDateTimeFormatted: String =
-                dateTimeFormat.print(DateTime(state.cookingSlot.endsAt)).uppercase()
+                dateTimeFormat.print(DateTime(slot.endsAt)).uppercase()
 
             setSubTitle("$fromDateTimeFormatted - $toDateTimeFormatted")
         }
@@ -120,7 +114,7 @@ class CookingSlotDetailsFragmentNew : BaseFragment(R.layout.fragment_details_coo
 
     private fun parsNavArguments() {
         args.cookingSlot.let { args ->
-            viewModel.fetchCookingSlotById(args.cookingSlitsId)
+            viewModel.fetchSlotById(args.cookingSlitsId)
         }
     }
 
@@ -166,13 +160,13 @@ class CookingSlotDetailsFragmentNew : BaseFragment(R.layout.fragment_details_coo
     }
 
     private fun doOnDeleteAction() {
-        selectedCookingSlot?.id?.let { id ->
+        viewModel.selectedCookingSlot?.id?.let { id ->
             viewModel.cancelCookingSlot(id)
         }
     }
 
     private fun doOnEditAction() {
-        this@CookingSlotDetailsFragmentNew.selectedCookingSlot?.let { slot ->
+        viewModel.selectedCookingSlot?.let { slot ->
             findNavController().apply {
                 val action = CookingSlotDetailsFragmentDirections
                     .actionCookingSlotDetailsFragmentToCreateCookingSlotFragment(

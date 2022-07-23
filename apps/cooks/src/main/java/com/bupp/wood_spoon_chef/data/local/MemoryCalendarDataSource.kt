@@ -3,7 +3,7 @@ package com.bupp.wood_spoon_chef.data.local
 import kotlinx.coroutines.flow.MutableStateFlow
 import org.joda.time.DateTime
 
-class MemoryDataSource {
+class MemoryCalendarDataSource {
 
      /**
       * selectedDateFlow - selected date on calendarView

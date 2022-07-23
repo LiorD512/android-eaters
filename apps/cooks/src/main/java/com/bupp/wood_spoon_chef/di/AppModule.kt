@@ -1,6 +1,6 @@
 package com.bupp.wood_spoon_chef.di
 
-import com.bupp.wood_spoon_chef.data.local.MemoryDataSource
+import com.bupp.wood_spoon_chef.data.local.MemoryCalendarDataSource
 import com.bupp.wood_spoon_chef.presentation.dialogs.super_user.SuperUserViewModel
 import com.bupp.wood_spoon_chef.presentation.dialogs.update_required.UpdateRequiredViewModel
 import com.bupp.wood_spoon_chef.presentation.dialogs.web_docs.WebDocsViewModel
@@ -26,6 +26,7 @@ import com.bupp.wood_spoon_chef.presentation.features.onboarding.create_account.
 import com.bupp.wood_spoon_chef.presentation.features.onboarding.login.LoginViewModel
 import com.bupp.wood_spoon_chef.presentation.features.splash.SplashViewModel
 import com.bupp.wood_spoon_chef.analytics.ChefAnalyticsTracker
+import com.bupp.wood_spoon_chef.data.local.MemoryCategoriesWithDishDataSource
 import com.bupp.wood_spoon_chef.managers.MediaUploadManager
 import com.bupp.wood_spoon_chef.data.remote.network.ErrorManger
 import com.bupp.wood_spoon_chef.data.remote.network.ResponseHandler
@@ -42,19 +43,24 @@ import org.koin.dsl.module
 val appModule = module {
 
     // DataSource
-    single { MemoryDataSource() }
+    single { MemoryCalendarDataSource() }
+    single { MemoryCategoriesWithDishDataSource() }
 
     //UseCase
     single { GetSupportNumberUseCase(get()) }
     single { IsCallSupportByCancelingOrderUseCase(get()) }
     single { FetchCookingSlotByIdUseCase(get()) }
     single { CancelCookingSlotUseCase(get()) }
+    single { GetSectionsWithDishesUseCase(get()) }
+
+    //Interactor
+    single { CookingSlotWithCategoriesInteractor(get(), get()) }
 
     //Repo
     single { UserRepository(get(), get(), get(), get(), get()) }
     single { MetaDataRepository(get(), get(), StaticFeatureFlagsListProvider(), get()) }
     single<AppSettingsRepository> { AppSettingsRepositoryImpl(get(), get()) }
-    single { DishRepository(get(), get(), get(), get()) }
+    single { DishRepository(get(), get(), get(), get(), get()) }
     single { CookingSlotRepository(get(), get(), get(), get()) }
     single { OrderRepository(get(), get()) }
     single { EventRepository(get(), get()) }

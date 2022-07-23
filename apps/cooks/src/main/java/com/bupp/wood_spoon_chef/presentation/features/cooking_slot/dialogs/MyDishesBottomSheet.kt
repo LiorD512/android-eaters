@@ -12,15 +12,12 @@ import androidx.fragment.app.setFragmentResult
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.bupp.wood_spoon_chef.R
 import com.bupp.wood_spoon_chef.common.TopCorneredBottomSheet
 import com.bupp.wood_spoon_chef.databinding.BottomSheetMyDishesBinding
 import com.bupp.wood_spoon_chef.presentation.custom_views.HeaderView
 import com.bupp.wood_spoon_chef.presentation.custom_views.SimpleTextWatcher
-import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.data.models.MyDishesPickerAdapterDish
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.data.models.MyDishesPickerAdapterModel
 import com.bupp.wood_spoon_chef.utils.extensions.show
 import com.bupp.wood_spoon_chef.utils.extensions.showErrorToast
@@ -29,7 +26,7 @@ import kotlinx.coroutines.launch
 import me.ibrahimsn.lib.util.clear
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class MyDishesBottomSheet() : TopCorneredBottomSheet(),
+class MyDishesBottomSheet(private val selectedDishesIds: List<Long>) : TopCorneredBottomSheet(),
     HeaderView.HeaderViewListener, MyDishesSectionAdapter.MyDishesSectionAdapterListener {
 
     private var binding: BottomSheetMyDishesBinding? = null
@@ -50,6 +47,7 @@ class MyDishesBottomSheet() : TopCorneredBottomSheet(),
         super.onViewCreated(view, savedInstanceState)
         setDialogAdjustPan()
         setFullScreenDialog()
+        setSelectedDishes()
         initUi()
         setupList()
         observeViewModelState()
@@ -115,6 +113,10 @@ class MyDishesBottomSheet() : TopCorneredBottomSheet(),
                 }
             }
         }
+    }
+
+    private fun setSelectedDishes(){
+     viewModel.setSelectedDishesIds(selectedDishesIds)
     }
 
     private fun setupList() {
@@ -205,16 +207,16 @@ class MyDishesBottomSheet() : TopCorneredBottomSheet(),
 
         fun show(
             fragment: Fragment,
+            selectedDishesIds: List<Long>,
             listener: ((List<Long>) -> Unit)
         ) {
-            MyDishesBottomSheet().show(
+            MyDishesBottomSheet(selectedDishesIds).show(
                 fragment.childFragmentManager,
                 MyDishesBottomSheet::class.simpleName
             )
             fragment.setSelectedDishesResultListener(listener)
         }
     }
-
 }
 
 private fun Fragment.setSelectedDishesResultListener(listener: ((List<Long>) -> Unit)) {

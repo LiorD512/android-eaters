@@ -341,7 +341,7 @@ data class CookingSlotRequest(
     @Json(name = "recurring_slot") var recurringSlot: Boolean = false,
     @Json(name = "menu_items") var menuItems: List<MenuItemRequest> = mutableListOf(),
     @Json(name = "rrule") val recurringRule: String? = null,
-    @Json(name = "submit") val submit: Boolean? = false
+    @Json(name = "submit") var submit: Boolean? = null
 ) : Parcelable
 
 @Parcelize

@@ -34,14 +34,20 @@ class DishesWithCategoryRepository(
         }
     }
 
-    fun filterListByCategoryName(name: String?): SectionWithDishes?{
-        return if (!name.isNullOrEmpty()){
-            val filteredSections =  memoryDataSource.getSectionsAndDishes()?.sections?.filter {it.title.equals(name, true) }
-            SectionWithDishes(memoryDataSource.getSectionsAndDishes()?.dishes,filteredSections)
-        }else{
+    fun filterListByCategoryName(name: String?): SectionWithDishes? {
+        return if (!name.isNullOrEmpty()) {
+            val filteredSections = memoryDataSource.getSectionsAndDishes()?.sections?.filter {
+                it.title.equals(
+                    name,
+                    true
+                )
+            }
+            SectionWithDishes(memoryDataSource.getSectionsAndDishes()?.dishes, filteredSections)
+        } else {
             memoryDataSource.getSectionsAndDishes()
         }
     }
+
 }
 
 class DishWithCategoryRepositoryException(message: String?, cause: Throwable? = null) :
