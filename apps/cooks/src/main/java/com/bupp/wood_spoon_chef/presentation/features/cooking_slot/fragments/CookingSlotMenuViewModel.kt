@@ -1,18 +1,19 @@
 package com.bupp.wood_spoon_chef.presentation.features.cooking_slot.fragments
 
 import androidx.lifecycle.viewModelScope
-import com.bupp.wood_spoon_chef.data.remote.model.CookingSlot
 import com.bupp.wood_spoon_chef.data.remote.model.SectionWithDishes
 import com.bupp.wood_spoon_chef.presentation.features.base.BaseViewModel
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.coordinator.CookingSlotFlowCoordinator
+import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.coordinator.CookingSlotFlowStep
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.data.repository.DishesWithCategoryRepository
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.data.models.MyDishesPickerAdapterDish
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.data.models.MyDishesPickerAdapterModel
+import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.data.repository.CookingSlotsDraftRepository
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
 data class CookingSlotMenuState(
-    val cookingSlot: CookingSlot? = null,
+    val operatingHours: OperatingHours = OperatingHours(null, null),
     val selectedDishes: List<Long> = emptyList(),
     val myDishesPickerAdapterModelList: List<MyDishesPickerAdapterModel> = emptyList()
 )
@@ -27,7 +28,8 @@ sealed class CookingSlotMenuEvents {
 
 class CookingSlotMenuViewModel(
     private val cookingSlotFlowNavigator: CookingSlotFlowCoordinator,
-    private val dishesWithCategoryRepository: DishesWithCategoryRepository
+    private val dishesWithCategoryRepository: DishesWithCategoryRepository,
+    private val cookingSlotsDraftRepository: CookingSlotsDraftRepository
 ) : BaseViewModel() {
 
     private val _state = MutableStateFlow(CookingSlotMenuState())
@@ -36,12 +38,20 @@ class CookingSlotMenuViewModel(
     private val _events = MutableSharedFlow<CookingSlotMenuEvents>()
     val events: SharedFlow<CookingSlotMenuEvents> = _events
 
-    fun openReviewFragment() {
+    init {
         viewModelScope.launch {
-            cookingSlotFlowNavigator.next(
-                CookingSlotFlowCoordinator.Step.OPEN_REVIEW_FRAGMENT,
-                _state.value.cookingSlot
-            )
+            cookingSlotsDraftRepository.getDraft().collect { draft ->
+                draft?.let {
+                    setDishList(draft.selectedDishes)
+                    setOperatingHours(draft.operatingHours)
+                }
+            }
+        }
+    }
+
+    fun onOpenReviewFragmentClicked() {
+        viewModelScope.launch {
+            cookingSlotFlowNavigator.navigateNext(fromStep = CookingSlotFlowStep.EDIT_MENU)
         }
     }
 
@@ -70,9 +80,9 @@ class CookingSlotMenuViewModel(
         }
     }
 
-    fun setCookingSlot(cookingSlot: CookingSlot?) {
+    private fun setOperatingHours(operatingHours: OperatingHours) {
         _state.update {
-            it.copy(cookingSlot = cookingSlot)
+            it.copy(operatingHours = operatingHours)
         }
     }
 

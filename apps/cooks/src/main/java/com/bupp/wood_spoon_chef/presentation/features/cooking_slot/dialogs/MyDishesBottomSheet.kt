@@ -123,6 +123,21 @@ class MyDishesBottomSheet() : TopCorneredBottomSheet(),
                 layoutManager = LinearLayoutManager(requireContext())
                 myDishesSectionAdapter = MyDishesSectionAdapter(this@MyDishesBottomSheet)
                 adapter = myDishesSectionAdapter
+                itemAnimator = object: DefaultItemAnimator() {
+                    override fun animateChange(
+                        oldHolder: RecyclerView.ViewHolder,
+                        newHolder: RecyclerView.ViewHolder,
+                        preInfo: ItemHolderInfo,
+                        postInfo: ItemHolderInfo
+                    ): Boolean {
+                        if(preInfo.top == postInfo.top) {
+                            dispatchChangeFinished(oldHolder, true)
+                            dispatchChangeFinished(newHolder, true)
+                            return true
+                        }
+                        return super.animateChange(oldHolder, newHolder, preInfo, postInfo)
+                    }
+                }
             }
         }
     }

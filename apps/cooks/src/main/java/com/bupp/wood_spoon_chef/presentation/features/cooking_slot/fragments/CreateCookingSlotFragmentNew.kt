@@ -8,7 +8,6 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.bupp.wood_spoon_chef.R
-import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.KEY_SELECTED_DATE
 import com.bupp.wood_spoon_chef.databinding.FragmentCreateCookingSlotNewBinding
 import com.bupp.wood_spoon_chef.presentation.custom_views.CreateCookingSlotTopBar
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.dialogs.OperatingHoursInfoBottomSheet
@@ -36,7 +35,6 @@ class CreateCookingSlotFragmentNew : Fragment(R.layout.fragment_create_cooking_s
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        getArgs()
         initUi()
         observeViewModelState()
         observeViewModelEvents()
@@ -114,11 +112,6 @@ class CreateCookingSlotFragmentNew : Fragment(R.layout.fragment_create_cooking_s
                 formatRcs(state.recurringRule)
             )
         }
-    }
-
-    private fun getArgs() {
-        val selectedDate = requireActivity().intent.getLongExtra(KEY_SELECTED_DATE, 0)
-        viewModel.setSelectedDate(selectedDate)
     }
 
     private fun showTitle(selectedDate: Long?) {

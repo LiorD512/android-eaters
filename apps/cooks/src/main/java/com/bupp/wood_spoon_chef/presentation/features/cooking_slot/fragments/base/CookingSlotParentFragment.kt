@@ -1,6 +1,7 @@
 package com.bupp.wood_spoon_chef.presentation.features.cooking_slot.fragments.base
 
 import android.os.Bundle
+import android.os.Parcelable
 import androidx.fragment.app.Fragment
 import android.view.View
 import androidx.activity.OnBackPressedCallback
@@ -11,13 +12,16 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import com.bupp.wood_spoon_chef.R
+import com.bupp.wood_spoon_chef.common.MTLogger
 import com.bupp.wood_spoon_chef.databinding.FragmentCookingSlotParentBinding
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.coordinator.CookingSlotFlowCoordinator
+import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.coordinator.CookingSlotFlowNavigationEvent
+import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.coordinator.CookingSlotFlowStep
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.fragments.CookingSlotMenuFragmentDirections
-import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.fragments.CookingSlotReviewFragmentDirections
 import com.eatwoodspoon.android_utils.binding.viewBinding
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import kotlinx.parcelize.Parcelize
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
@@ -25,6 +29,12 @@ import org.koin.core.parameter.parametersOf
 interface CookingSlotParent {
     val cookingSlotCoordinator: CookingSlotFlowCoordinator
 }
+
+@Parcelize
+data class CookingSlotParentFragmentArgs(
+    val cookingSlotId: Long?,
+    val selectedDate: Long?
+) : Parcelable
 
 class CookingSlotParentFragment : Fragment(R.layout.fragment_cooking_slot_parent),
     CookingSlotParent {
@@ -37,21 +47,21 @@ class CookingSlotParentFragment : Fragment(R.layout.fragment_cooking_slot_parent
     }
 
     companion object {
-        private const val KEY_SCREEN = "key_starting_point"
+        private const val ARGUMENTS = "arguments"
 
-        fun newInstance(screen: CookingSlotFlowCoordinator.Step? = null) =
+        fun newInstance(cookingSlotId: Long?, selectedDate: Long?) =
             CookingSlotParentFragment().apply {
-                screen?.let {
-                    arguments = bundleOf(
-                        KEY_SCREEN to screen.name
+                arguments = bundleOf(
+                    ARGUMENTS to CookingSlotParentFragmentArgs(
+                        cookingSlotId = cookingSlotId,
+                        selectedDate = selectedDate
                     )
-                }
+                )
             }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.getString(KEY_SCREEN)
 
         requireActivity().onBackPressedDispatcher.addCallback(
             this,
@@ -70,25 +80,35 @@ class CookingSlotParentFragment : Fragment(R.layout.fragment_cooking_slot_parent
 
         setNavController()
         initObservers()
+        val startArguments =
+            arguments?.getParcelable<CookingSlotParentFragmentArgs>(ARGUMENTS) ?: run {
+                MTLogger.e("No Arguments Provided To `CookingSlotParentFragment`")
+                return
+            }
+        viewModel.initWith(startArguments.cookingSlotId, startArguments.selectedDate)
     }
 
     private fun initObservers() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.RESUMED) {
-                viewModel.stepStateFlow.collect {
-                    when (it.step) {
-                        CookingSlotFlowCoordinator.Step.OPEN_MENU_FRAGMENT -> {
-                            CookingSlotMenuFragmentDirections.toCookingSlotMenuFragment(it.cookingSlot)
-                        }
-                        CookingSlotFlowCoordinator.Step.OPEN_REVIEW_FRAGMENT -> {
-                            CookingSlotReviewFragmentDirections.toCookingSlotReviewFragment(it.cookingSlot)
-                        }
-                        else -> { null }
-                    }?.let { action ->
-                        navController.navigate(action)
+                viewModel.navigationEvent.collect { event ->
+                    when (event) {
+                        CookingSlotFlowNavigationEvent.NavigateDone -> activity?.finish()
+                        is CookingSlotFlowNavigationEvent.NavigateToStep -> navigateToStep(event.step)
                     }
                 }
             }
+        }
+    }
+
+    private fun navigateToStep(step: CookingSlotFlowStep) {
+        when (step) {
+
+            CookingSlotFlowStep.EDIT_DETAILS -> CookingSlotMenuFragmentDirections.toCookingSlotEditDetails()
+            CookingSlotFlowStep.EDIT_MENU -> CookingSlotMenuFragmentDirections.toCookingSlotMenuFragment()
+            CookingSlotFlowStep.PREVIEW_DETAILS -> CookingSlotMenuFragmentDirections.toCookingSlotReviewFragment()
+        }?.let { action ->
+            navController.navigate(action)
         }
     }
 

@@ -21,6 +21,14 @@
         app:popEnterAnim="@anim/slide_left_enter"
         app:popExitAnim="@anim/slide_left_exit" />
 
+    <action
+        android:id="@+id/to_cookingSlotEditDetails"
+        app:destination="@id/createCookingSlotNewFragment"
+        app:enterAnim="@anim/slide_right_enter"
+        app:exitAnim="@anim/slide_right_exit"
+        app:popEnterAnim="@anim/slide_left_enter"
+        app:popExitAnim="@anim/slide_left_exit" />
+
 
     <fragment
         tools:layout="@layout/fragment_create_cooking_slot_new"
@@ -34,10 +42,6 @@
         android:id="@+id/cookingSlotMenuFragment"
         android:name="com.bupp.wood_spoon_chef.presentation.features.cooking_slot.fragments.CookingSlotMenuFragment"
         android:label="CookingSlotMenuFragment">
-        <argument
-            app:nullable="true"
-            android:name="cookingSlot"
-            app:argType="com.bupp.wood_spoon_chef.data.remote.model.CookingSlot" />
     </fragment>
 
     <fragment
@@ -45,10 +49,6 @@
         android:id="@+id/cookingSlotReviewFragment"
         android:name="com.bupp.wood_spoon_chef.presentation.features.cooking_slot.fragments.CookingSlotReviewFragment"
         android:label="CookingSlotReviewFragment">
-        <argument
-            app:nullable="true"
-            android:name="cookingSlot"
-            app:argType="com.bupp.wood_spoon_chef.data.remote.model.CookingSlot" />
     </fragment>
 
 </navigation>

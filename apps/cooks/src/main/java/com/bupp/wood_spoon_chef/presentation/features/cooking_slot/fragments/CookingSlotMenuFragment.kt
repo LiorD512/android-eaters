@@ -42,7 +42,6 @@ class CookingSlotMenuFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        parseArguments()
         initUi()
         setupList()
         observeViewModelState()
@@ -55,7 +54,7 @@ class CookingSlotMenuFragment :
                 this@CookingSlotMenuFragment
             )
             createCookingSlotMenuFragmentGoToReviewBtn.setOnClickListener {
-                viewModel.openReviewFragment()
+                viewModel.onOpenReviewFragmentClicked()
             }
             createCookingSlotMenuFragmentAddDishesEmpty.setOnClickListener {
                 viewModel.onAddDishesClick()
@@ -110,7 +109,7 @@ class CookingSlotMenuFragment :
     private fun updateInputsWithState(state: CookingSlotMenuState) {
         binding.apply {
             updateDishList(state.myDishesPickerAdapterModelList)
-            setTitle(state.cookingSlot)
+            setTitle(state.operatingHours)
         }
     }
 
@@ -136,19 +135,14 @@ class CookingSlotMenuFragment :
         }
     }
 
-    private fun parseArguments() {
-        val args : CookingSlotMenuFragmentArgs by navArgs()
-        viewModel.setCookingSlot(cookingSlot = args.cookingSlot)
-    }
-
-    private fun setTitle(cookingSlot: CookingSlot?) {
+    private fun setTitle(operatingHours: OperatingHours) {
         binding.apply {
             createCookingSlotMenuFragmentTitle.text =
-                DateTime(cookingSlot?.startsAt).prepareFormattedDate()
+                DateTime(operatingHours.startTime).prepareFormattedDate()
             createCookingSlotMenuFragmentOpeningHours.text =
                 getString(R.string.selected_date_format,
-                    DateTime(cookingSlot?.startsAt).prepareFormattedDateForHours(),
-                    DateTime(cookingSlot?.endsAt).prepareFormattedDateForHours())
+                    DateTime(operatingHours.startTime).prepareFormattedDateForHours(),
+                    DateTime(operatingHours.endTime).prepareFormattedDateForHours())
         }
     }
 
