@@ -2,13 +2,12 @@ package com.bupp.wood_spoon_chef.presentation.features.cooking_slot.fragments.ba
 
 import androidx.lifecycle.viewModelScope
 import com.bupp.wood_spoon_chef.data.remote.model.CookingSlot
-import com.bupp.wood_spoon_chef.data.remote.model.MenuItem
 import com.bupp.wood_spoon_chef.data.remote.network.base.ResponseError
 import com.bupp.wood_spoon_chef.data.remote.network.base.ResponseSuccess
 import com.bupp.wood_spoon_chef.domain.FetchCookingSlotByIdUseCase
 import com.bupp.wood_spoon_chef.presentation.features.base.BaseViewModel
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.coordinator.CookingSlotFlowCoordinator
-import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.coordinator.CookingSlotFlowStep
+import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.data.models.MenuDishItem
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.data.repository.CookingSlotsDraftRepository
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.fragments.OperatingHours
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.fragments.RecurringRule
@@ -21,8 +20,7 @@ data class CookingSlotDraft(
     val operatingHours: OperatingHours = OperatingHours(null, null),
     val lastCallForOrder: Long? = null,
     val recurringRule: RecurringRule? = null,
-    val menuItems: List<MenuItem> = mutableListOf(),
-    val selectedDishes: List<Long> = emptyList(),
+    val menuItems: List<MenuDishItem> = mutableListOf(),
     val originalCookingSlot: CookingSlot?
 ) {
     val id = originalCookingSlot?.id

@@ -10,6 +10,7 @@ import com.bupp.wood_spoon_chef.presentation.features.base.BaseViewModel
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.coordinator.CookingSlotFlowCoordinator
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.coordinator.CookingSlotFlowStep
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.data.repository.CookingSlotsDraftRepository
+import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.data.repository.getDraftValue
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.mapper.CookingSlotStateMapper
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
@@ -68,7 +69,7 @@ class CreateCookingSlotNewViewModel(
 
     init {
         viewModelScope.launch {
-            cookingSlotsDraftRepository.getDraft().first()?.let { draft ->
+            cookingSlotsDraftRepository.getDraftValue()?.let { draft ->
                 setSelectedDate(draft.selectedDate)
                 setOperatingHours(draft.operatingHours)
                 setLastCallForOrders(draft.lastCallForOrder)
@@ -103,9 +104,7 @@ class CreateCookingSlotNewViewModel(
                         stateMapper.mapStateToCreateCookingSlotRequest(_state.value)
                     )) {
                         is ResponseSuccess -> {
-                            result.data?.let {
-                                cookingSlotFlowCoordinator.navigateNext(CookingSlotFlowStep.EDIT_DETAILS)
-                            }
+                            onValidationSuccess()
                         }
                         is ResponseError -> {
                             _events.emit(CreateCookingSlotEvents.Error(result.error.message))
@@ -116,6 +115,18 @@ class CreateCookingSlotNewViewModel(
                 }
             }
         }
+    }
+
+    private suspend fun onValidationSuccess() {
+        val currentDraft = cookingSlotsDraftRepository.getDraftValue() ?: return
+        val updatedDraft = currentDraft.copy(
+            selectedDate = state.value.selectedDate,
+            operatingHours = state.value.operatingHours,
+            lastCallForOrder = state.value.lastCallForOrder,
+            recurringRule = state.value.recurringRule
+        )
+        cookingSlotsDraftRepository.saveDraft(updatedDraft)
+        cookingSlotFlowCoordinator.navigateNext(CookingSlotFlowStep.EDIT_DETAILS)
     }
 
     fun onOperatingHoursClick() {

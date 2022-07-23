@@ -3,6 +3,7 @@ package com.bupp.wood_spoon_chef.presentation.features.cooking_slot.data.reposit
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.fragments.base.CookingSlotDraft
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.first
 
 class CookingSlotsDraftRepository(private val memoryDataSource: CookingSlotsDraftMemoryDataSource) {
 
@@ -18,3 +19,5 @@ class CookingSlotsDraftMemoryDataSource {
 
     val draftCookingSlot = MutableStateFlow<CookingSlotDraft?>(null)
 }
+
+suspend fun CookingSlotsDraftRepository.getDraftValue() = getDraft().first()

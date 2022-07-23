@@ -7,10 +7,8 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bupp.wood_spoon_chef.R
-import com.bupp.wood_spoon_chef.data.remote.model.CookingSlot
 import com.bupp.wood_spoon_chef.databinding.FragmentCookingSlotMenuBinding
 import com.bupp.wood_spoon_chef.presentation.custom_views.CreateCookingSlotTopBar
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.data.models.DishesMenuAdapterModel
@@ -70,7 +68,7 @@ class CookingSlotMenuFragment :
                 launch {
                     viewModel.state.collect { state ->
                         updateInputsWithState(state)
-                        setAddDishesView(state.dishesMenuAdapterModelList)
+                        setAddDishesView(state.menuItemsByCategory)
                     }
                 }
             }
@@ -95,14 +93,14 @@ class CookingSlotMenuFragment :
 
     private fun updateInputsWithState(state: CookingSlotMenuState) {
         binding.apply {
-            updateDishList(state.dishesMenuAdapterModelList)
+            updateDishList(state.menuItemsByCategory)
             setTitle(state.operatingHours)
         }
     }
 
     private fun openMyDishesBottomSheet(selectedDishes: List<Long>) {
         MyDishesBottomSheet.show(this, selectedDishes) {
-            viewModel.setDishList(it)
+            viewModel.addDishesByIds(it)
         }
     }
 
