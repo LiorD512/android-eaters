@@ -11,6 +11,7 @@ import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.data.models.M
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.data.repository.CookingSlotsDraftRepository
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.fragments.OperatingHours
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.fragments.RecurringRule
+import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.mapper.OriginalCookingSlotToDraftCookingSlotMapper
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
@@ -29,7 +30,8 @@ data class CookingSlotDraft(
 class CookingSlotParentViewModel(
     private val cookingSlotFlowNavigator: CookingSlotFlowCoordinator,
     private val fetchCookingSlotByIdUseCase: FetchCookingSlotByIdUseCase,
-    private val cookingSlotsDraftRepository: CookingSlotsDraftRepository
+    private val cookingSlotsDraftRepository: CookingSlotsDraftRepository,
+    private val originalCookingSlotToDraftCookingSlotMapper: OriginalCookingSlotToDraftCookingSlotMapper
 ) : BaseViewModel() {
 
     val navigationEvent = cookingSlotFlowNavigator.navigationEvent
@@ -47,10 +49,13 @@ class CookingSlotParentViewModel(
                 when (cookingSlotResponse) {
                     is ResponseError -> TODO()
                     is ResponseSuccess -> {
-                        cookingSlotsDraftRepository.saveDraft(
-                            // TODO MAP!
-                            CookingSlotDraft(originalCookingSlot = cookingSlotResponse.data)
-                        )
+                        cookingSlotResponse.data?.let {
+                            cookingSlotsDraftRepository.saveDraft(
+                                originalCookingSlotToDraftCookingSlotMapper.mapOriginalCookingSlotToDraft(
+                                    originalCookingSlot = it
+                                )
+                            )
+                        }
                         cookingSlotFlowNavigator.startFlow()
                     }
                 }

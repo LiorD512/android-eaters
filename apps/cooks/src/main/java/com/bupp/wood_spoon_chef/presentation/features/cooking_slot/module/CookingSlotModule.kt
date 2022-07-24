@@ -15,15 +15,16 @@ import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.data.network.
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.data.repository.CookingSlotsDraftMemoryDataSource
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.data.repository.CookingSlotsDraftRepository
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.data.repository.DishesWithCategoryRepository
+import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.mapper.OriginalCookingSlotToDraftCookingSlotMapper
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 import retrofit2.Retrofit
-import retrofit2.create
 
 val cookingSlotModule = module {
 
     factory { CookingSlotFlowCoordinator() }
     factory { CookingSlotStateMapper() }
+    factory { OriginalCookingSlotToDraftCookingSlotMapper() }
 
     single { GetIsCookingSlotNewFlowEnabledUseCase(get()) }
     single { CookingSlotRepository(get(), get(), get(), get()) }
@@ -35,7 +36,7 @@ val cookingSlotModule = module {
     single { CookingSlotsDraftMemoryDataSource() }
     single { CookingSlotsDraftRepository(get()) }
 
-    viewModel { params -> CookingSlotParentViewModel(params.get(), get(), get()) }
+    viewModel { params -> CookingSlotParentViewModel(params.get(), get(), get(), get()) }
     viewModel { params -> CreateCookingSlotNewViewModel(params.get(), get(), get(), get()) }
     viewModel { params -> CookingSlotMenuViewModel(params.get(), get(), get()) }
     viewModel { MyDishesViewModel(get(), get()) }

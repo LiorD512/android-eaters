@@ -35,6 +35,7 @@ data class CreateCookingSlotNewState(
     val operatingHours: OperatingHours = OperatingHours(null, null),
     val lastCallForOrder: Long? = null,
     val recurringRule: RecurringRule? = null,
+    val isInEditMode: Boolean = false,
     val errors: List<Errors> = emptyList()
 )
 
@@ -74,7 +75,14 @@ class CreateCookingSlotNewViewModel(
                 setOperatingHours(draft.operatingHours)
                 setLastCallForOrders(draft.lastCallForOrder)
                 setRecurringRule(draft.recurringRule)
+                setIsInEditMode(draft.originalCookingSlot != null)
             }
+        }
+    }
+
+    private fun setIsInEditMode(isInEditMode: Boolean){
+        _state.update {
+            it.copy(isInEditMode = isInEditMode)
         }
     }
 
