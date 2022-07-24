@@ -1,23 +1,49 @@
 package com.bupp.wood_spoon_chef.presentation.features.cooking_slot.coordinator
 
-import com.bupp.wood_spoon_chef.data.remote.model.CookingSlot
 import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.SharedFlow
 
-sealed class CookingSlotFlowCoordinatorState{
-    data class NextStep(val step: CookingSlotFlowCoordinator.Step? = null, val cookingSlot: CookingSlot? = null)
+enum class CookingSlotFlowStep {
+    EDIT_DETAILS,
+    EDIT_MENU,
+    REVIEW_COOKING_SLOT
+}
+
+sealed class CookingSlotFlowNavigationEvent() {
+    data class NavigateToStep(/* val mode: CookingSlotFlowMode, */ val step: CookingSlotFlowStep,
+                                                                   val fromStep: CookingSlotFlowStep?
+    ) : CookingSlotFlowNavigationEvent()
+
+    object NavigateDone : CookingSlotFlowNavigationEvent()
 }
 
 class CookingSlotFlowCoordinator {
 
-    enum class Step {
-        OPEN_MENU_FRAGMENT,
-        OPEN_REVIEW_FRAGMENT
+    private var _navigationEvent = MutableSharedFlow<CookingSlotFlowNavigationEvent>()
+    val navigationEvent: SharedFlow<CookingSlotFlowNavigationEvent> = _navigationEvent
+
+    suspend fun startFlow() {
+//        _navigationEvent.emit(
+//            CookingSlotFlowNavigationEvent.NavigateToStep(
+//                CookingSlotFlowStep.EDIT_DETAILS,
+//                null
+//            )
+//        )
     }
 
-    private var _stepStateFlow = MutableSharedFlow<CookingSlotFlowCoordinatorState.NextStep>()
-    val stepStateFlow = _stepStateFlow
-
-    suspend fun next(step: Step, cookingSlot: CookingSlot?){
-        _stepStateFlow.emit(CookingSlotFlowCoordinatorState.NextStep(step, cookingSlot))
+    suspend fun navigateNext(fromStep: CookingSlotFlowStep) {
+        _navigationEvent.emit(
+            when (fromStep) {
+                CookingSlotFlowStep.EDIT_DETAILS -> CookingSlotFlowNavigationEvent.NavigateToStep(
+                    CookingSlotFlowStep.EDIT_MENU,
+                    fromStep
+                )
+                CookingSlotFlowStep.EDIT_MENU -> CookingSlotFlowNavigationEvent.NavigateToStep(
+                    CookingSlotFlowStep.REVIEW_COOKING_SLOT,
+                    fromStep
+                )
+                CookingSlotFlowStep.REVIEW_COOKING_SLOT -> CookingSlotFlowNavigationEvent.NavigateDone
+            }
+        )
     }
 }

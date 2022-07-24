@@ -8,6 +8,9 @@ import com.bupp.wood_spoon_chef.data.remote.network.base.ResponseSuccess
 import com.bupp.wood_spoon_chef.data.repositories.CookingSlotRepository
 import com.bupp.wood_spoon_chef.presentation.features.base.BaseViewModel
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.coordinator.CookingSlotFlowCoordinator
+import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.coordinator.CookingSlotFlowStep
+import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.data.repository.CookingSlotsDraftRepository
+import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.data.repository.getDraftValue
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.mapper.CookingSlotStateMapper
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
@@ -42,8 +45,10 @@ enum class Errors {
 sealed class CreateCookingSlotEvents {
     data class Error(val message: String? = null) : CreateCookingSlotEvents()
     data class ShowOperatingHours(
-        val operatingHours: OperatingHours? = null, val selectedDate: Long? = null) :
+        val operatingHours: OperatingHours? = null, val selectedDate: Long? = null
+    ) :
         CreateCookingSlotEvents()
+
     data class ShowLastCallForOrder(val lastCallForOrder: Long? = null) : CreateCookingSlotEvents()
     data class ShowRecurringRule(val recurringRule: RecurringRule? = null) :
         CreateCookingSlotEvents()
@@ -52,7 +57,8 @@ sealed class CreateCookingSlotEvents {
 class CreateCookingSlotNewViewModel(
     private val cookingSlotFlowCoordinator: CookingSlotFlowCoordinator,
     private val stateMapper: CookingSlotStateMapper,
-    private val cookingSlotRepository: CookingSlotRepository
+    private val cookingSlotRepository: CookingSlotRepository,
+    private val cookingSlotsDraftRepository: CookingSlotsDraftRepository
 ) : BaseViewModel() {
 
     private val _state = MutableStateFlow(CreateCookingSlotNewState())
@@ -60,6 +66,17 @@ class CreateCookingSlotNewViewModel(
 
     private val _events = MutableSharedFlow<CreateCookingSlotEvents>()
     val events: SharedFlow<CreateCookingSlotEvents> = _events
+
+    init {
+        viewModelScope.launch {
+            cookingSlotsDraftRepository.getDraftValue()?.let { draft ->
+                setSelectedDate(draft.selectedDate)
+                setOperatingHours(draft.operatingHours)
+                setLastCallForOrders(draft.lastCallForOrder)
+                setRecurringRule(draft.recurringRule)
+            }
+        }
+    }
 
     fun setOperatingHours(operatingHours: OperatingHours) {
         _state.update {
@@ -87,9 +104,7 @@ class CreateCookingSlotNewViewModel(
                         stateMapper.mapStateToCreateCookingSlotRequest(_state.value)
                     )) {
                         is ResponseSuccess -> {
-                            result.data?.let {
-                                cookingSlotFlowCoordinator.next(CookingSlotFlowCoordinator.Step.OPEN_MENU_FRAGMENT, cookingSlot = it)
-                            }
+                            onValidationSuccess()
                         }
                         is ResponseError -> {
                             _events.emit(CreateCookingSlotEvents.Error(result.error.message))
@@ -100,6 +115,18 @@ class CreateCookingSlotNewViewModel(
                 }
             }
         }
+    }
+
+    private suspend fun onValidationSuccess() {
+        val currentDraft = cookingSlotsDraftRepository.getDraftValue() ?: return
+        val updatedDraft = currentDraft.copy(
+            selectedDate = state.value.selectedDate,
+            operatingHours = state.value.operatingHours,
+            lastCallForOrder = state.value.lastCallForOrder,
+            recurringRule = state.value.recurringRule
+        )
+        cookingSlotsDraftRepository.saveDraft(updatedDraft)
+        cookingSlotFlowCoordinator.navigateNext(CookingSlotFlowStep.EDIT_DETAILS)
     }
 
     fun onOperatingHoursClick() {
@@ -136,7 +163,7 @@ class CreateCookingSlotNewViewModel(
         return errors.isEmpty()
     }
 
-    fun setSelectedDate(selectedDate: Long?) {
+    private fun setSelectedDate(selectedDate: Long?) {
         _state.update {
             it.copy(selectedDate = selectedDate)
         }

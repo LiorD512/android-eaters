@@ -1,21 +1,22 @@
 package com.bupp.wood_spoon_chef.presentation.features.cooking_slot.fragments
 
 import androidx.lifecycle.viewModelScope
-import com.bupp.wood_spoon_chef.data.remote.model.CookingSlot
-import com.bupp.wood_spoon_chef.data.remote.model.SectionWithDishes
 import com.bupp.wood_spoon_chef.presentation.features.base.BaseViewModel
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.coordinator.CookingSlotFlowCoordinator
+import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.coordinator.CookingSlotFlowStep
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.data.models.DishesMenuAdapterModel
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.data.models.MenuDishItem
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.data.repository.DishesWithCategoryRepository
+import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.data.repository.CookingSlotsDraftRepository
+import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.data.repository.getDraftValue
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.dialogs.updateItem
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
 data class CookingSlotMenuState(
-    val cookingSlot: CookingSlot? = null,
-    val selectedDishes: List<Long> = emptyList(),
-    val dishesMenuAdapterModelList: List<DishesMenuAdapterModel> = emptyList()
+    val operatingHours: OperatingHours = OperatingHours(null, null),
+    val menuItems: List<MenuDishItem> = emptyList(),
+    val menuItemsByCategory: List<DishesMenuAdapterModel> = emptyList()
 )
 
 sealed class CookingSlotMenuEvents {
@@ -25,7 +26,8 @@ sealed class CookingSlotMenuEvents {
 
 class CookingSlotMenuViewModel(
     private val cookingSlotFlowNavigator: CookingSlotFlowCoordinator,
-    private val dishesWithCategoryRepository: DishesWithCategoryRepository
+    private val dishesWithCategoryRepository: DishesWithCategoryRepository,
+    private val cookingSlotsDraftRepository: CookingSlotsDraftRepository
 ) : BaseViewModel() {
 
     private val _state = MutableStateFlow(CookingSlotMenuState())
@@ -34,67 +36,86 @@ class CookingSlotMenuViewModel(
     private val _events = MutableSharedFlow<CookingSlotMenuEvents>()
     val events: SharedFlow<CookingSlotMenuEvents> = _events
 
-    fun openReviewFragment() {
+    init {
         viewModelScope.launch {
-            cookingSlotFlowNavigator.next(
-                CookingSlotFlowCoordinator.Step.OPEN_REVIEW_FRAGMENT,
-                _state.value.cookingSlot
-            )
-        }
-    }
-
-    fun onAddDishesClick() {
-        viewModelScope.launch {
-            _events.emit(CookingSlotMenuEvents.ShowMyDishesBottomSheet(_state.value.selectedDishes))
-        }
-    }
-
-    fun setDishList(selectedDishes: List<Long>) {
-        viewModelScope.launch {
-            updateSelectedDishes(selectedDishes)
-            val currentSectionWithDishes =
-                parseDataForAdapter(
-                    dishesWithCategoryRepository.getSectionsAndDishes().getOrNull(),
-                    selectedDishes
-                )
-            currentSectionWithDishes.let { myDishList ->
-                _state.update {
-                    it.copy(dishesMenuAdapterModelList = myDishList)
+            cookingSlotsDraftRepository.getDraft().collect { draft ->
+                draft?.let {
+                    setMenuItems(draft.menuItems)
+                    setOperatingHours(draft.operatingHours)
                 }
             }
         }
     }
 
-    private fun updateSelectedDishes(selectedDishes: List<Long>) {
-        _state.update {
-            it.copy(selectedDishes = selectedDishes)
+    fun onOpenReviewFragmentClicked() {
+        viewModelScope.launch {
+            onValidationSuccess()
         }
     }
 
-    fun setCookingSlot(cookingSlot: CookingSlot?) {
+    private suspend fun onValidationSuccess() {
+        val currentDraft = cookingSlotsDraftRepository.getDraftValue() ?: return
+        val updatedDraft = currentDraft.copy(
+            menuItems = _state.value.menuItems
+        )
+        cookingSlotsDraftRepository.saveDraft(updatedDraft)
+        cookingSlotFlowNavigator.navigateNext(fromStep = CookingSlotFlowStep.EDIT_MENU)
+    }
+
+    fun onAddDishesClick() {
+        viewModelScope.launch {
+            _events.emit(CookingSlotMenuEvents.ShowMyDishesBottomSheet(_state.value.menuItems.mapNotNull { it.dish?.id }))
+        }
+    }
+
+    fun addDishesByIds(newIds: List<Long>) {
+        viewModelScope.launch {
+            val currentlyAddedIds = _state.value.menuItems.mapNotNull { it.dish?.id }
+            val newIdsActually = newIds.toMutableList().apply {
+                removeAll(currentlyAddedIds)
+            }.toList()
+            val allUserDishes = dishesWithCategoryRepository.getSectionsAndDishes().getOrNull()?.dishes ?: emptyList()
+            val newMenuItems = newIdsActually.map { dishId ->
+                val dish = allUserDishes.find { it.id == dishId }
+                dish?.let { dish ->
+                    MenuDishItem(dish = dish)
+                }
+            }.filterNotNull()
+
+            setMenuItems(_state.value.menuItems + newMenuItems)
+        }
+    }
+
+    private suspend fun setMenuItems(menuItems: List<MenuDishItem>) {
+        val currentSectionWithDishes = combineMenuItemsBySections(
+            menuItems
+        )
         _state.update {
-            it.copy(cookingSlot = cookingSlot)
+            it.copy(
+                menuItems = menuItems,
+                menuItemsByCategory = currentSectionWithDishes
+            )
+        }
+    }
+
+    private fun setOperatingHours(operatingHours: OperatingHours) {
+        _state.update {
+            it.copy(operatingHours = operatingHours)
         }
     }
 
     fun onDeleteDishClick(dishToRemoveId: Long?) {
-        val dishes = mutableListOf<MenuDishItem>()
-        dishes.addAll(_state.value.dishesMenuAdapterModelList.flatMap { it.dishes })
-        dishes.removeIf { it.dish?.id?.equals(dishToRemoveId) == true }
-       val dishList = _state.value.dishesMenuAdapterModelList.map {
-            it.copy(dishes = dishes)
-        }
-        val selectedDishes = dishes.map { it.dish?.id }
-        _state.update {
-            it.copy(dishesMenuAdapterModelList = dishList, selectedDishes = selectedDishes as List<Long>)
+        viewModelScope.launch {
+            val updatedMenuItems = _state.value.menuItems.filter { it.dish?.id != dishToRemoveId }
+            setMenuItems(updatedMenuItems)
         }
     }
 
     fun updateQuantity(dishId: Long, quantity: Int) {
         _state.update {
             it.copy(
-                dishesMenuAdapterModelList = updateListWithQuantity
-                    (_state.value.dishesMenuAdapterModelList, dishId, quantity) ?: emptyList()
+                menuItemsByCategory = updateListWithQuantity
+                    (_state.value.menuItemsByCategory, dishId, quantity) ?: emptyList()
             )
         }
     }
@@ -112,25 +133,18 @@ class CookingSlotMenuViewModel(
     }
 
 
-    private fun parseDataForAdapter(
-        response: SectionWithDishes?,
-        selectedDishes: List<Long>?
+    private suspend fun combineMenuItemsBySections(
+        menuItems: List<MenuDishItem>
     ): List<DishesMenuAdapterModel> {
-        return response?.sections?.map { section ->
-            val menuItemDishList = mutableListOf<MenuDishItem>()
-            val dishes =
-                response.dishes?.filter { dish -> section.dishIds?.contains(dish.id) == true }
-                    ?.filter { selectedDishes?.contains(it.id) == true }
-            dishes?.forEach { dish ->
-                menuItemDishList.add(
-                    MenuDishItem(
-                        dish
-                    )
-                )
-            }
+
+        val dishesWithCategories =
+            dishesWithCategoryRepository.getSectionsAndDishes().getOrNull() ?: return emptyList()
+
+        return dishesWithCategories.sections?.map { section ->
+
             DishesMenuAdapterModel(
-                section.takeIf { section -> dishes?.isNotEmpty() == true },
-                menuItemDishList
+                section = section,
+                dishes = menuItems.filter { section.dishIds?.contains(it.dish?.id) == true }
             )
         }?.filter { it.dishes.isNotEmpty() }?.toList() ?: emptyList()
     }

@@ -12,7 +12,9 @@ import androidx.fragment.app.setFragmentResult
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.bupp.wood_spoon_chef.R
 import com.bupp.wood_spoon_chef.common.TopCorneredBottomSheet
 import com.bupp.wood_spoon_chef.databinding.BottomSheetMyDishesBinding
@@ -125,6 +127,21 @@ class MyDishesBottomSheet(private val selectedDishesIds: List<Long>) : TopCorner
                 layoutManager = LinearLayoutManager(requireContext())
                 myDishesSectionAdapter = MyDishesSectionAdapter(this@MyDishesBottomSheet)
                 adapter = myDishesSectionAdapter
+                itemAnimator = object: DefaultItemAnimator() {
+                    override fun animateChange(
+                        oldHolder: RecyclerView.ViewHolder,
+                        newHolder: RecyclerView.ViewHolder,
+                        preInfo: ItemHolderInfo,
+                        postInfo: ItemHolderInfo
+                    ): Boolean {
+                        if(preInfo.top == postInfo.top) {
+                            dispatchChangeFinished(oldHolder, true)
+                            dispatchChangeFinished(newHolder, true)
+                            return true
+                        }
+                        return super.animateChange(oldHolder, newHolder, preInfo, postInfo)
+                    }
+                }
             }
         }
     }

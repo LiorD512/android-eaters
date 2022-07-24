@@ -12,6 +12,8 @@ import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.dialogs.MyDis
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.mapper.CookingSlotStateMapper
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.data.network.CookingSlotApiService
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.data.network.DishesWithCategoryApiService
+import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.data.repository.CookingSlotsDraftMemoryDataSource
+import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.data.repository.CookingSlotsDraftRepository
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.data.repository.DishesWithCategoryRepository
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
@@ -30,9 +32,12 @@ val cookingSlotModule = module {
     single { DishesWithCategoryMemoryDataSource() }
     single { DishesWithCategoryRepository(get(), get()) }
 
-    viewModel { params -> CookingSlotParentViewModel(params.get()) }
-    viewModel { params -> CreateCookingSlotNewViewModel(params.get(), get(), get()) }
-    viewModel { params -> CookingSlotMenuViewModel(params.get(), get()) }
+    single { CookingSlotsDraftMemoryDataSource() }
+    single { CookingSlotsDraftRepository(get()) }
+
+    viewModel { params -> CookingSlotParentViewModel(params.get(), get(), get()) }
+    viewModel { params -> CreateCookingSlotNewViewModel(params.get(), get(), get(), get()) }
+    viewModel { params -> CookingSlotMenuViewModel(params.get(), get(), get()) }
     viewModel { MyDishesViewModel(get(), get()) }
     viewModel { FilterMenuViewModel(get()) }
 
