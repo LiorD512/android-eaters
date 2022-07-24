@@ -44,9 +44,16 @@ class MyDishesViewModel(
     private fun getSectionsWithDishes() = viewModelScope.launch(Dispatchers.IO) {
         try {
             val result = dishesWithCategoryRepository.getSectionsAndDishes()
-            updateSectionedList(parseDataForAdapter(result.getOrThrow()))
+            val currentDishes = result.getOrThrow().dishes
+            val sections = result.getOrThrow().sections
+            val dishesWithoutSelected = currentDishes?.filter {
+                    dish -> !_state.value.selectedDishesIds.contains(dish.id)
+            }
+            val filteredSectionsAndDishes = SectionWithDishes(dishesWithoutSelected, sections)
+            updateSectionedList(parseDataForAdapter(filteredSectionsAndDishes))
         } catch (e: Exception) {
             print(e.message)
+
         }
     }
 
