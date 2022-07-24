@@ -71,7 +71,7 @@ class CreateCookingSlotNewViewModel(
 
     init {
         viewModelScope.launch {
-            cookingSlotsDraftRepository.getDraftValue()?.let { draft ->
+            cookingSlotsDraftRepository.getDraft().filterNotNull().collect { draft ->
                 setSelectedDate(draft.selectedDate)
                 setOperatingHours(draft.operatingHours)
                 setLastCallForOrders(draft.lastCallForOrder)
