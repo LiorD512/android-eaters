@@ -36,7 +36,8 @@ data class CreateCookingSlotNewState(
     val lastCallForOrder: Long? = null,
     val recurringRule: RecurringRule? = null,
     val isInEditMode: Boolean = false,
-    val errors: List<Errors> = emptyList()
+    val errors: List<Errors> = emptyList(),
+    val inProgress: Boolean = false
 )
 
 enum class Errors {
@@ -80,7 +81,13 @@ class CreateCookingSlotNewViewModel(
         }
     }
 
-    private fun setIsInEditMode(isInEditMode: Boolean){
+    private fun setInProgress(inProgress: Boolean) {
+        _state.update {
+            it.copy(inProgress = inProgress)
+        }
+    }
+
+    private fun setIsInEditMode(isInEditMode: Boolean) {
         _state.update {
             it.copy(isInEditMode = isInEditMode)
         }
@@ -105,6 +112,7 @@ class CreateCookingSlotNewViewModel(
     }
 
     fun onNextClick() {
+        setInProgress(true)
         if (validateInputs()) {
             viewModelScope.launch(Dispatchers.IO) {
                 try {
@@ -112,13 +120,16 @@ class CreateCookingSlotNewViewModel(
                         stateMapper.mapStateToCreateCookingSlotRequest(_state.value)
                     )) {
                         is ResponseSuccess -> {
+                            setInProgress(false)
                             onValidationSuccess()
                         }
                         is ResponseError -> {
+                            setInProgress(false)
                             _events.emit(CreateCookingSlotEvents.Error(result.error.message))
                         }
                     }
                 } catch (ex: Exception) {
+                    setInProgress(false)
                     _events.emit(CreateCookingSlotEvents.Error(ex.message))
                 }
             }

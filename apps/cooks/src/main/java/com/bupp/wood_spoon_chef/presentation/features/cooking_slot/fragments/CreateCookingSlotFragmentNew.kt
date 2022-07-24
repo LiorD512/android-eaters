@@ -102,6 +102,7 @@ class CreateCookingSlotFragmentNew : BaseFragment(R.layout.fragment_create_cooki
         binding.apply {
             setHeaderTitle(state.isInEditMode)
             showTitle(state.selectedDate)
+            handleProgressBar(state.inProgress)
 
             createCookingSlotNewFragmentOperatingHoursView.setSubtitle(
                 formatOperatingHours(
