@@ -13,10 +13,12 @@ import com.bupp.wood_spoon_chef.common.TopCorneredBottomSheet
 import com.bupp.wood_spoon_chef.databinding.BottomSheetTimePickerBinding
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.fragments.OperatingHours
 import org.joda.time.DateTime
+import java.text.SimpleDateFormat
 import java.util.*
 
 class TimePickerBottomSheet(
-    private val selectedDate: Long
+    private val selectedDate: Long,
+    private val operatingHours: OperatingHours?
 ) : TopCorneredBottomSheet() {
 
     private var binding: BottomSheetTimePickerBinding? = null
@@ -39,6 +41,7 @@ class TimePickerBottomSheet(
 
     private fun handleTimePickerStartTime() {
         binding?.apply {
+            setStartTimeValue()
             timePickerActionNextBtn.setOnClickListener {
                 timePickerSwitcher.showNext()
                 val startTime = getTimeInMillis(timePickerStartTimePick)
@@ -56,6 +59,19 @@ class TimePickerBottomSheet(
                     startTime, getTimeInMillis(timePickerEndTimePick))))
                 dismiss()
             }
+        }
+    }
+
+    private fun setStartTimeValue(){
+        val calendar = Calendar.getInstance()
+        val dateFormat =  SimpleDateFormat("hh:mm aa", Locale.ENGLISH)
+        if (operatingHours?.startTime == null){
+            calendar.time = dateFormat.parse("12:00 PM") as Date
+            binding?.timePickerStartTimePick?.hour = DateTime(calendar.timeInMillis).hourOfDay
+            binding?.timePickerStartTimePick?.minute = DateTime(calendar.timeInMillis).minuteOfHour
+        }else {
+            binding?.timePickerStartTimePick?.hour = DateTime(operatingHours.startTime).hourOfDay
+            binding?.timePickerStartTimePick?.minute = DateTime(operatingHours.startTime).minuteOfHour
         }
     }
 
@@ -80,8 +96,8 @@ class TimePickerBottomSheet(
         const val TIME_KEY = "timeKey"
         const val TIME_VALUE = "timeValue"
 
-        fun show(fragment: Fragment, selectedDate: Long, listener: ((OperatingHours) -> Unit)) {
-            TimePickerBottomSheet(selectedDate).show(
+        fun show(fragment: Fragment, selectedDate: Long, operatingHours: OperatingHours?, listener: ((OperatingHours) -> Unit)) {
+            TimePickerBottomSheet(selectedDate, operatingHours).show(
                 fragment.childFragmentManager,
                 TimePickerBottomSheet::class.simpleName
             )

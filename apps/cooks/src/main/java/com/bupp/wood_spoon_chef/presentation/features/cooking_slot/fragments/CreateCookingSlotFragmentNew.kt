@@ -83,7 +83,8 @@ class CreateCookingSlotFragmentNew : BaseFragment(R.layout.fragment_create_cooki
                                 Toast.LENGTH_SHORT
                             )
                             is CreateCookingSlotEvents.ShowOperatingHours -> openTimePickerBottomSheet(
-                                event.selectedDate
+                                event.selectedDate,
+                                event.operatingHours
                             )
                             is CreateCookingSlotEvents.ShowLastCallForOrder -> openLastCallForOrder(
                                 event.lastCallForOrder
@@ -140,10 +141,10 @@ class CreateCookingSlotFragmentNew : BaseFragment(R.layout.fragment_create_cooki
         )
     }
 
-    private fun openTimePickerBottomSheet(selectedDate: Long?) {
+    private fun openTimePickerBottomSheet(selectedDate: Long?, operatingHours: OperatingHours?) {
         selectedDate?.let { date ->
             binding.createCookingSlotNewFragmentOperatingHoursError.show(false)
-            TimePickerBottomSheet.show(this,date){
+            TimePickerBottomSheet.show(this,date, operatingHours){
                 viewModel.setOperatingHours(it)
             }
         }
