@@ -10,6 +10,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import com.bupp.wood_spoon_chef.R
 import com.bupp.wood_spoon_chef.databinding.FragmentCreateCookingSlotNewBinding
 import com.bupp.wood_spoon_chef.presentation.custom_views.CreateCookingSlotTopBar
+import com.bupp.wood_spoon_chef.presentation.features.base.BaseFragment
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.dialogs.OperatingHoursInfoBottomSheet
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.dialogs.TimePickerBottomSheet
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.fragments.base.CookingSlotParentFragment
@@ -25,13 +26,14 @@ import org.joda.time.format.DateTimeFormat
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 
-class CreateCookingSlotFragmentNew : Fragment(R.layout.fragment_create_cooking_slot_new),
+class CreateCookingSlotFragmentNew : BaseFragment(R.layout.fragment_create_cooking_slot_new),
     CreateCookingSlotTopBar.CreateCookingSlotTopBarListener {
 
     private val binding by viewBinding(FragmentCreateCookingSlotNewBinding::bind)
     private val viewModel: CreateCookingSlotNewViewModel by viewModel {
         parametersOf(findParent(CookingSlotParentFragment::class.java)?.cookingSlotCoordinator)
     }
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -123,9 +125,9 @@ class CreateCookingSlotFragmentNew : Fragment(R.layout.fragment_create_cooking_s
     private fun setHeaderTitle(isEditMode: Boolean){
         binding.apply {
             if (isEditMode){
-                createCookingSlotNewFragmentTopBar.setTitle("Edit cooking slot")
+                createCookingSlotNewFragmentTopBar.setTitle(getString(R.string.edit_cooking_slot))
             }else{
-                createCookingSlotNewFragmentTopBar.setTitle("Create cooking slot")
+                createCookingSlotNewFragmentTopBar.setTitle(getString(R.string.create_cooking_slot))
             }
         }
     }
@@ -167,6 +169,9 @@ class CreateCookingSlotFragmentNew : Fragment(R.layout.fragment_create_cooking_s
             }
         }
     }
+
+
+    override fun clearClassVariables() {}
 }
 
 private fun formatOperatingHours(startTime: Long?, endTime: Long?): String {

@@ -95,8 +95,19 @@ class CookingSlotMenuFragment :
 
     private fun updateInputsWithState(state: CookingSlotMenuState) {
         binding.apply {
+            setHeaderTitle(state.isInEditMode)
             updateDishList(state.menuItemsByCategory)
             setTitle(state.operatingHours)
+        }
+    }
+
+    private fun setHeaderTitle(isEditMode: Boolean){
+        binding.apply {
+            if (isEditMode){
+                createCookingSlotMenuFragmentTopBar.setTitle(getString(R.string.edit_cooking_slot_menu))
+            }else{
+                createCookingSlotMenuFragmentTopBar.setTitle(getString(R.string.my_cooking_slot_menu))
+            }
         }
     }
 

@@ -16,7 +16,8 @@ import kotlinx.coroutines.launch
 data class CookingSlotMenuState(
     val operatingHours: OperatingHours = OperatingHours(null, null),
     val menuItems: List<MenuDishItem> = emptyList(),
-    val menuItemsByCategory: List<DishesMenuAdapterModel> = emptyList()
+    val menuItemsByCategory: List<DishesMenuAdapterModel> = emptyList(),
+    val isInEditMode: Boolean = false
 )
 
 sealed class CookingSlotMenuEvents {
@@ -42,8 +43,15 @@ class CookingSlotMenuViewModel(
                 draft?.let {
                     setMenuItems(draft.menuItems)
                     setOperatingHours(draft.operatingHours)
+                    setIsInEditMode(draft.originalCookingSlot != null)
                 }
             }
+        }
+    }
+
+    private fun setIsInEditMode(isInEditMode: Boolean){
+        _state.update {
+            it.copy(isInEditMode = isInEditMode)
         }
     }
 
