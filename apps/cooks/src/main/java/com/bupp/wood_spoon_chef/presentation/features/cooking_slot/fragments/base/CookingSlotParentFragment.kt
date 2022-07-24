@@ -103,10 +103,9 @@ class CookingSlotParentFragment : Fragment(R.layout.fragment_cooking_slot_parent
 
     private fun navigateToStep(step: CookingSlotFlowStep) {
         when (step) {
-
             CookingSlotFlowStep.EDIT_DETAILS -> CookingSlotMenuFragmentDirections.toCookingSlotEditDetails()
             CookingSlotFlowStep.EDIT_MENU -> CookingSlotMenuFragmentDirections.toCookingSlotMenuFragment()
-            CookingSlotFlowStep.PREVIEW_DETAILS -> CookingSlotMenuFragmentDirections.toCookingSlotReviewFragment()
+            CookingSlotFlowStep.REVIEW_COOKING_SLOT -> CookingSlotMenuFragmentDirections.toCookingSlotReviewFragment()
         }?.let { action ->
             navController.navigate(action)
         }

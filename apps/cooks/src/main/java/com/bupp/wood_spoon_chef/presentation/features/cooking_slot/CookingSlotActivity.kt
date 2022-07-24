@@ -7,9 +7,6 @@ import android.os.Bundle
 import com.bupp.wood_spoon_chef.R
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.fragments.base.CookingSlotParentFragment
 
-const val NAVIGATE_TO_VIEW_COOKING_SLOT = "navigate_to_view_cooking_slot"
-const val NAVIGATE_TO_CREATE_COOKING_SLOT = "navigate_to_create_cooking_slot"
-
 const val KEY_NAVIGATION_DESTINATION = "key_navigation_destination"
 const val KEY_SELECTED_DATE = "args_selected_date"
 const val KEY_COOKING_SLOT_ID = "args_cooking_slot_id"

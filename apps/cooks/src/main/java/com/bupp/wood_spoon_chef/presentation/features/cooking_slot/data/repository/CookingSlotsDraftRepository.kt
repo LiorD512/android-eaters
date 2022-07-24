@@ -5,7 +5,9 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.first
 
-class CookingSlotsDraftRepository(private val memoryDataSource: CookingSlotsDraftMemoryDataSource) {
+class CookingSlotsDraftRepository(
+    private val memoryDataSource: CookingSlotsDraftMemoryDataSource
+) {
 
     fun getDraft(): Flow<CookingSlotDraft?> = memoryDataSource.draftCookingSlot
 

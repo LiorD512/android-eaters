@@ -7,7 +7,9 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.bupp.wood_spoon_chef.R
 import com.bupp.wood_spoon_chef.databinding.FragmentCookingSlotMenuBinding
 import com.bupp.wood_spoon_chef.presentation.custom_views.CreateCookingSlotTopBar
@@ -28,7 +30,7 @@ import org.koin.core.parameter.parametersOf
 class CookingSlotMenuFragment :
     Fragment(R.layout.fragment_cooking_slot_menu),
     CreateCookingSlotTopBar.CreateCookingSlotTopBarListener,
-    DishMenuAdapter.DishesMenuAdapterListener{
+    DishMenuAdapter.DishesMenuAdapterListener {
 
     private val binding by viewBinding(FragmentCookingSlotMenuBinding::bind)
     private lateinit var dishMenuAdapter: DishMenuAdapter
@@ -110,6 +112,15 @@ class CookingSlotMenuFragment :
                 layoutManager = LinearLayoutManager(requireContext())
                 dishMenuAdapter = DishMenuAdapter(this@CookingSlotMenuFragment)
                 adapter = dishMenuAdapter
+                itemAnimator = object : DefaultItemAnimator() {
+                    override fun canReuseUpdatedViewHolder(viewHolder: RecyclerView.ViewHolder) =
+                        true
+
+                    override fun canReuseUpdatedViewHolder(
+                        viewHolder: RecyclerView.ViewHolder,
+                        payloads: MutableList<Any>
+                    ) = true
+                }
             }
         }
     }
@@ -125,13 +136,15 @@ class CookingSlotMenuFragment :
             createCookingSlotMenuFragmentTitle.text =
                 DateTime(operatingHours.startTime).prepareFormattedDate()
             createCookingSlotMenuFragmentOpeningHours.text =
-                getString(R.string.selected_date_format,
+                getString(
+                    R.string.selected_date_format,
                     DateTime(operatingHours.startTime).prepareFormattedDateForHours(),
-                    DateTime(operatingHours.endTime).prepareFormattedDateForHours())
+                    DateTime(operatingHours.endTime).prepareFormattedDateForHours()
+                )
         }
     }
 
-    private fun setAddDishesView(dishList: List<DishesMenuAdapterModel>?){
+    private fun setAddDishesView(dishList: List<DishesMenuAdapterModel>?) {
         binding.apply {
             createCookingSlotMenuFragmentAddDishesEmpty.show(dishList.isNullOrEmpty())
             createCookingSlotMenuFragmentAddDishesFull.show(!dishList.isNullOrEmpty())
@@ -148,8 +161,10 @@ class CookingSlotMenuFragment :
 
     override fun onQuantityChange(dishId: Long?, quantity: Int) {
         dishId?.let {
-            if (quantity >=1){
+            if (quantity >= 1) {
                 viewModel.updateQuantity(dishId, quantity)
+            } else {
+                viewModel.updateQuantity(dishId, 1)
             }
         }
     }

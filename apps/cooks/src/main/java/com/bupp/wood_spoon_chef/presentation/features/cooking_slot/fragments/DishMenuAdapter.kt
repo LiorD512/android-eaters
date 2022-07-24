@@ -1,6 +1,10 @@
 package com.bupp.wood_spoon_chef.presentation.features.cooking_slot.fragments
 
+import android.text.Editable
+import android.text.TextUtils
+import android.text.TextWatcher
 import android.view.View
+import android.widget.EditText
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bupp.wood_spoon_chef.R
@@ -15,7 +19,7 @@ class DishMenuAdapter(private val listener: DishesMenuAdapterListener) :
     SectionedListAdapter<DishesMenuAdapterModel>() {
 
     interface DishesMenuAdapterListener {
-        fun onDeleteClick(dishId:Long?)
+        fun onDeleteClick(dishId: Long?)
         fun onQuantityChange(dishId: Long?, quantity: Int)
     }
 
@@ -28,7 +32,8 @@ class DishMenuAdapter(private val listener: DishesMenuAdapterListener) :
         for (section in sections) {
             section.section?.title?.let { title ->
                 items.add(SectionedListItem.SectionHeader(title, title))
-                section.dishes.map { SectionedListItem.SectionItem(it, it.dish?.id.toString()) }.let { items.addAll(it) }
+                section.dishes.map { SectionedListItem.SectionItem(it, it.dish?.id.toString()) }
+                    .let { items.addAll(it) }
             }
         }
         return items
@@ -54,7 +59,7 @@ class DishMenuAdapter(private val listener: DishesMenuAdapterListener) :
 
     override fun onBindItemViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val item = getItem(position)
-        if (item is SectionedListItem.SectionItem){
+        if (item is SectionedListItem.SectionItem) {
             val menuDishItem = item.item as MenuDishItem
             holder as DishMenuItemViewHolder
             holder.deleteBtn.setOnClickListener {
@@ -71,7 +76,7 @@ class DishMenuAdapter(private val listener: DishesMenuAdapterListener) :
     }
 
     override fun onBindHeaderViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        if (getItem(position) is SectionedListItem.SectionHeader){
+        if (getItem(position) is SectionedListItem.SectionHeader) {
             holder as CategoryViewHolder
             holder.bind(getItem(position))
         }
@@ -94,22 +99,57 @@ class DishMenuAdapter(private val listener: DishesMenuAdapterListener) :
 
     }
 
-    class DishMenuItemViewHolder(val binding: ListItemMenuDishBinding) :
+    inner class DishMenuItemViewHolder(val binding: ListItemMenuDishBinding) :
         BaseViewHolder(binding.root) {
         val deleteBtn = binding.listItemDishMenuDeleteDish
         val reduceQuantityBtn = binding.listItemMenuDishQuantityMinus
         val raiseQuantityBtn = binding.listItemMenuDishQuantityPlus
+        val dishQuantityNumber = binding.listItemMenuDishQuantityNumber
+
+        init {
+            dishQuantityNumber.addTextChangedListener(object : TextWatcher {
+                override fun beforeTextChanged(
+                    s: CharSequence?,
+                    start: Int,
+                    count: Int,
+                    after: Int
+                ) {
+                }
+
+                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+
+                override fun afterTextChanged(s: Editable) {
+                    val cleanedInput = s.filter { it.isDigit() }
+                    if (!s.contentEquals(cleanedInput)) {
+                        dishQuantityNumber.setTextIfNeeded(cleanedInput.toString())
+                    } else {
+                        ((getItem(absoluteAdapterPosition) as SectionedListItem.SectionItem).item as MenuDishItem).dish?.id?.let {
+                            listener.onQuantityChange(it, s.toString().toIntOrNull() ?: 0)
+                        }
+                    }
+                }
+
+            })
+        }
+
         override fun bind(item: SectionedListItem) {
-            if (item is SectionedListItem.SectionItem){
+            if (item is SectionedListItem.SectionItem) {
                 val menuDishItem = item.item as MenuDishItem
                 binding.apply {
                     listItemDishMenuDishName.text = menuDishItem.dish?.name
                     listItemDishMenuDishPrice.text = menuDishItem.dish?.price?.formattedValue
-                    listItemMenuDishQuantityNumber.text = menuDishItem.quantity.toString()
+                    listItemMenuDishQuantityNumber.setTextIfNeeded(menuDishItem.quantity.toString())
                     Glide.with(binding.root.context).load(menuDishItem.dish?.imageGallery?.first())
                         .into(listItemDishMenuImage)
                 }
             }
         }
+    }
+}
+
+private fun EditText.setTextIfNeeded(text: CharSequence) {
+    if(!this.text.contentEquals(text)) {
+        setText(text)
+        setSelection(text.length)
     }
 }

@@ -98,6 +98,7 @@ class CreateCookingSlotFragmentNew : Fragment(R.layout.fragment_create_cooking_s
 
     private fun updateInputsWithState(state: CreateCookingSlotNewState) {
         binding.apply {
+            setHeaderTitle(state.isInEditMode)
             showTitle(state.selectedDate)
 
             createCookingSlotNewFragmentOperatingHoursView.setSubtitle(
@@ -117,6 +118,16 @@ class CreateCookingSlotFragmentNew : Fragment(R.layout.fragment_create_cooking_s
     private fun showTitle(selectedDate: Long?) {
         binding.createCookingSlotNewFragmentTitle.text =
             DateTime(selectedDate).prepareFormattedDate()
+    }
+
+    private fun setHeaderTitle(isEditMode: Boolean){
+        binding.apply {
+            if (isEditMode){
+                createCookingSlotNewFragmentTopBar.setTitle("Edit cooking slot")
+            }else{
+                createCookingSlotNewFragmentTopBar.setTitle("Create cooking slot")
+            }
+        }
     }
 
     private fun openOperatingHoursInfoBottomSheet() {

@@ -5,7 +5,114 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/wild_sand"
+    android:clipChildren="false"
+    android:clipToPadding="false"
     tools:context=".presentation.features.cooking_slot.fragments.CookingSlotMenuFragment">
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@id/createCookingSlotMenuFragmentGoToReviewBtn"
+        app:layout_constraintTop_toBottomOf="@id/createCookingSlotMenuFragmentTopBar">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingBottom="16dp">
+
+            <TextView
+                android:id="@+id/createCookingSlotMenuFragmentTitle"
+                style="@style/LatoBlack19DarkDarkGrey"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/medium"
+                android:layout_marginTop="22.6dp"
+                android:textColor="@color/dark"
+                tools:text="Friday, Nov 30, 2021" />
+
+            <TextView
+                android:id="@+id/createCookingSlotMenuFragmentOpeningHours"
+                style="@style/LatoReg13Black"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/medium"
+                android:layout_marginTop="7.7dp"
+                tools:text="12:15 PM - 4:00 PM" />
+
+            <FrameLayout
+                android:animateLayoutChanges="true"
+                android:id="@+id/createCookingSlotMenuFragmentAddDishesMainLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/createCookingSlotMenuFragmentAddDishesEmpty"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/medium"
+                    android:layout_marginTop="22.2dp"
+                    android:visibility="gone"
+                    app:cardBackgroundColor="#f1f1f1"
+                    app:cardCornerRadius="7.7dp"
+                    app:contentPaddingBottom="47.5dp"
+                    app:contentPaddingTop="47.5dp"
+                    app:layout_constraintTop_toBottomOf="@id/createCookingSlotMenuFragmentOpeningHours"
+                    app:strokeColor="#dcdcdf"
+                    app:strokeWidth="1.4dp">
+
+                    <TextView
+                        style="@style/LatoReg13Dark"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:drawablePadding="7.7dp"
+                        android:text="@string/select_dishes_amp_add_quantities"
+                        app:drawableTopCompat="@drawable/icons_add" />
+
+                </com.google.android.material.card.MaterialCardView>
+
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/createCookingSlotMenuFragmentAddDishesFull"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/medium"
+                    android:layout_marginTop="22.2dp"
+                    android:visibility="gone"
+                    app:cardBackgroundColor="#f1f1f1"
+                    app:cardCornerRadius="@dimen/medium"
+                    app:contentPaddingBottom="15dp"
+                    app:contentPaddingTop="13dp"
+                    app:layout_constraintTop_toBottomOf="@id/createCookingSlotMenuFragmentOpeningHours"
+                    app:strokeColor="#dcdcdf"
+                    app:strokeWidth="1.4dp">
+
+                    <TextView
+                        style="@style/LatoReg13Dark"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="start"
+                        android:layout_marginStart="13dp"
+                        android:drawablePadding="@dimen/medium"
+                        android:gravity="center"
+                        android:text="@string/add_additional_dishes"
+                        app:drawableStartCompat="@drawable/icons_add" />
+
+                </com.google.android.material.card.MaterialCardView>
+            </FrameLayout>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/createCookingSlotMenuFragmentDishesRv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/medium"
+                android:layout_marginTop="@dimen/big"
+                />
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
 
     <com.bupp.wood_spoon_chef.presentation.custom_views.CreateCookingSlotTopBar
         android:id="@+id/createCookingSlotMenuFragmentTopBar"
@@ -14,99 +121,6 @@
         app:cooking_slot_bar_icon="@drawable/ic_back_grey"
         app:layout_constraintTop_toTopOf="parent"
         app:title="@string/my_cooking_slot_menu" />
-
-    <TextView
-        android:id="@+id/createCookingSlotMenuFragmentTitle"
-        style="@style/LatoBlack19DarkDarkGrey"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/medium"
-        android:layout_marginTop="22.6dp"
-        android:textColor="@color/dark"
-        app:layout_constraintTop_toBottomOf="@id/createCookingSlotMenuFragmentTopBar"
-        tools:text="Friday, Nov 30, 2021" />
-
-    <TextView
-        android:id="@+id/createCookingSlotMenuFragmentOpeningHours"
-        style="@style/LatoReg13Black"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/medium"
-        android:layout_marginTop="7.7dp"
-        app:layout_constraintTop_toBottomOf="@id/createCookingSlotMenuFragmentTitle"
-        tools:text="12:15 PM - 4:00 PM" />
-
-    <LinearLayout
-        android:id="@+id/createCookingSlotMenuFragmentAddDishesMainLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/createCookingSlotMenuFragmentOpeningHours"
-        android:orientation="vertical">
-
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/createCookingSlotMenuFragmentAddDishesEmpty"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="@dimen/medium"
-            android:layout_marginTop="22.2dp"
-            app:cardBackgroundColor="#f1f1f1"
-            app:cardCornerRadius="7.7dp"
-            app:contentPaddingBottom="47.5dp"
-            app:contentPaddingTop="47.5dp"
-            android:visibility="gone"
-            app:layout_constraintTop_toBottomOf="@id/createCookingSlotMenuFragmentOpeningHours"
-            app:strokeColor="#dcdcdf"
-            app:strokeWidth="1.4dp">
-
-            <TextView
-                style="@style/LatoReg13Dark"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:drawablePadding="7.7dp"
-                android:text="@string/select_dishes_amp_add_quantities"
-                app:drawableTopCompat="@drawable/icons_add" />
-
-        </com.google.android.material.card.MaterialCardView>
-
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/createCookingSlotMenuFragmentAddDishesFull"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="@dimen/medium"
-            android:layout_marginTop="22.2dp"
-            app:cardBackgroundColor="#f1f1f1"
-            app:cardCornerRadius="@dimen/medium"
-            app:contentPaddingBottom="15dp"
-            app:contentPaddingTop="13dp"
-            android:visibility="gone"
-            app:layout_constraintTop_toBottomOf="@id/createCookingSlotMenuFragmentOpeningHours"
-            app:strokeColor="#dcdcdf"
-            app:strokeWidth="1.4dp">
-
-            <TextView
-                style="@style/LatoReg13Dark"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="start"
-                android:drawablePadding="@dimen/medium"
-                android:layout_marginStart="13dp"
-                android:gravity="center"
-                android:text="@string/add_additional_dishes"
-                app:drawableStartCompat="@drawable/icons_add" />
-
-        </com.google.android.material.card.MaterialCardView>
-    </LinearLayout>
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/createCookingSlotMenuFragmentDishesRv"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginHorizontal="@dimen/medium"
-        app:layout_constraintTop_toBottomOf="@id/createCookingSlotMenuFragmentAddDishesMainLayout"
-        app:layout_constraintBottom_toTopOf="@id/createCookingSlotMenuFragmentGoToReviewBtn"
-        android:layout_marginTop="@dimen/big" />
-
 
     <com.bupp.wood_spoon_chef.presentation.custom_views.OrangeBtnCornered
         android:id="@+id/createCookingSlotMenuFragmentGoToReviewBtn"

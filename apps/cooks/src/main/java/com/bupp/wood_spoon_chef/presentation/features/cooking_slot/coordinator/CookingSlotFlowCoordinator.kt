@@ -6,7 +6,7 @@ import kotlinx.coroutines.flow.SharedFlow
 enum class CookingSlotFlowStep {
     EDIT_DETAILS,
     EDIT_MENU,
-    PREVIEW_DETAILS
+    REVIEW_COOKING_SLOT
 }
 
 sealed class CookingSlotFlowNavigationEvent() {
@@ -39,10 +39,10 @@ class CookingSlotFlowCoordinator {
                     fromStep
                 )
                 CookingSlotFlowStep.EDIT_MENU -> CookingSlotFlowNavigationEvent.NavigateToStep(
-                    CookingSlotFlowStep.PREVIEW_DETAILS,
+                    CookingSlotFlowStep.REVIEW_COOKING_SLOT,
                     fromStep
                 )
-                CookingSlotFlowStep.PREVIEW_DETAILS -> CookingSlotFlowNavigationEvent.NavigateDone
+                CookingSlotFlowStep.REVIEW_COOKING_SLOT -> CookingSlotFlowNavigationEvent.NavigateDone
             }
         )
     }

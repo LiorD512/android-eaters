@@ -15,8 +15,8 @@ import com.bupp.wood_spoon_chef.data.remote.model.CookingSlot
 import com.bupp.wood_spoon_chef.databinding.FragmentDetailsCookingSlotNewBinding
 import com.bupp.wood_spoon_chef.presentation.custom_views.CreateCookingSlotTopBar
 import com.bupp.wood_spoon_chef.presentation.features.base.BaseFragment
+import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.CookingSlotActivity
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.fragments.CookingSlotMenuAdapter
-import com.bupp.wood_spoon_chef.presentation.features.main.calendar.create_cooking_slot.ArgumentModelCreateCookingSlot
 import com.bupp.wood_spoon_chef.utils.extensions.prepareFormattedDate
 import com.eatwoodspoon.android_utils.binding.viewBinding
 import com.shared.presentation.dialog.bottomsheet.ActionListBottomSheetFragment
@@ -66,32 +66,32 @@ class CookingSlotDetailsFragmentNew : BaseFragment(R.layout.fragment_details_coo
     private fun observeViewModelState() {
         viewLifecycleOwner.lifecycleScope.launch() {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                    viewModel.state.collect { state ->
-                        when (state) {
-                            CookingSlotDetailsState.Idle -> {
-                                handleProgressBar(false)
-                            }
-                            is CookingSlotDetailsState.Error -> {
-                                handleProgressBar(false)
-                                handleErrorEvent(state.error, binding.root)
-                            }
-                            CookingSlotDetailsState.Loading -> {
-                                handleProgressBar(true)
-                            }
-                            is CookingSlotDetailsState.Success -> {
-                                viewModel.selectedCookingSlot = state.cookingSlot
+                viewModel.state.collect { state ->
+                    when (state) {
+                        CookingSlotDetailsState.Idle -> {
+                            handleProgressBar(false)
+                        }
+                        is CookingSlotDetailsState.Error -> {
+                            handleProgressBar(false)
+                            handleErrorEvent(state.error, binding.root)
+                        }
+                        CookingSlotDetailsState.Loading -> {
+                            handleProgressBar(true)
+                        }
+                        is CookingSlotDetailsState.Success -> {
+                            viewModel.selectedCookingSlot = state.cookingSlot
 
-                                handleProgressBar(false)
-                                setupToolBar(state.cookingSlot)
+                            handleProgressBar(false)
+                            setupToolBar(state.cookingSlot)
 
-                                binding.createCookingSlotNewFragmentLastCallForOrderView.setSubtitle(
-                                    DateTime(state.cookingSlot.lastCallAt).prepareFormattedDate()
-                                )
-                                menuAdapter?.submitList(state.categoriesWithMenu)
-                            }
-                            CookingSlotDetailsState.SlotCanceled -> {
-                                onBackClick()
-                            }
+                            binding.createCookingSlotNewFragmentLastCallForOrderView.setSubtitle(
+                                DateTime(state.cookingSlot.lastCallAt).prepareFormattedDate()
+                            )
+                            menuAdapter?.submitList(state.categoriesWithMenu)
+                        }
+                        CookingSlotDetailsState.SlotCanceled -> {
+                            onBackClick()
+                        }
                     }
                 }
             }
@@ -167,16 +167,13 @@ class CookingSlotDetailsFragmentNew : BaseFragment(R.layout.fragment_details_coo
 
     private fun doOnEditAction() {
         viewModel.selectedCookingSlot?.let { slot ->
-            findNavController().apply {
-                val action = CookingSlotDetailsFragmentDirections
-                    .actionCookingSlotDetailsFragmentToCreateCookingSlotFragment(
-                        ArgumentModelCreateCookingSlot(
-                            selectedDateMillis = slot.startsAt.time,
-                            editableCookingSlotId = slot.id
-                        )
-                    )
-                navigate(action)
-            }
+            startActivity(
+                CookingSlotActivity().newInstance(
+                    requireContext(),
+                    selectedDate = slot.startsAt.time,
+                    cookingSlotId = slot.id
+                )
+            )
         }
     }
 
