@@ -6,15 +6,15 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.bupp.wood_spoon_chef.data.remote.model.MenuItem
 import com.bupp.wood_spoon_chef.databinding.ItemSlotReviewMenuBinding
 import com.bupp.wood_spoon_chef.databinding.ItemSlotSectionHeaderBinding
+import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.data.models.MenuDishItem
 import java.lang.RuntimeException
 
 sealed class CookingSlotMenuAdapterItem(open val type: CookingSlotMenuAdapterType) {
 
     class MenuAdapterItem(
-        val menuItem: MenuItem,
+        val menuItem: MenuDishItem,
         override val type: CookingSlotMenuAdapterType = CookingSlotMenuAdapterType.TYPE_MENU_ITEM
     ) : CookingSlotMenuAdapterItem(type)
 
@@ -77,12 +77,12 @@ class MenuItemViewHolder(
 ) : RecyclerView.ViewHolder(view.root) {
 
     fun bind(item: CookingSlotMenuAdapterItem.MenuAdapterItem) {
-        view.tvTitle.text = item.menuItem.dish.name
+        view.tvTitle.text = item.menuItem.dish?.name
         Glide.with(view.root.context)
-            .load(item.menuItem.dish.imageGallery?.first())
+            .load(item.menuItem.dish?.imageGallery?.first())
             .centerCrop()
             .into(view.ivMenuPicture)
-        view.tvPrice.text = item.menuItem.dish.price?.formattedValue
+        view.tvPrice.text = item.menuItem.dish?.price?.formattedValue
         view.tvAmountOfOrder.text = "${item.menuItem.unitsSold}/${item.menuItem.quantity} orders"
 
         view.counter.setCounter(item.menuItem.quantity)

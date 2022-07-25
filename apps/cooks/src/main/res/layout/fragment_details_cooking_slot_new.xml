@@ -32,7 +32,6 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-
             <com.bupp.wood_spoon_chef.presentation.custom_views.SectionView
                 android:id="@+id/sectionView"
                 android:layout_width="match_parent"

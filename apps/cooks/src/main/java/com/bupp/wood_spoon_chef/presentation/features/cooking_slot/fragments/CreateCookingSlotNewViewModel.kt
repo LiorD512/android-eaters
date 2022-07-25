@@ -10,7 +10,6 @@ import com.bupp.wood_spoon_chef.presentation.features.base.BaseViewModel
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.coordinator.CookingSlotFlowCoordinator
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.coordinator.CookingSlotFlowStep
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.data.repository.CookingSlotsDraftRepository
-import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.data.repository.getDraftValue
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.mapper.CookingSlotStateMapper
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
@@ -114,24 +113,33 @@ class CreateCookingSlotNewViewModel(
     fun onNextClick() {
         setInProgress(true)
         if (validateInputs()) {
-            viewModelScope.launch(Dispatchers.IO) {
-                try {
-                    when (val result = cookingSlotRepository.postCookingSlot(
-                        stateMapper.mapStateToCreateCookingSlotRequest(_state.value)
-                    )) {
-                        is ResponseSuccess -> {
-                            setInProgress(false)
-                            onValidationSuccess()
-                        }
-                        is ResponseError -> {
-                            setInProgress(false)
-                            _events.emit(CreateCookingSlotEvents.Error(result.error.message))
-                        }
+            validateIfPossibleCreateThisSlot()
+        }
+    }
+
+    private fun validateIfPossibleCreateThisSlot() {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                val request = stateMapper.mapStateToCreateCookingSlotRequest(
+                    startsTime = _state.value.operatingHours.startTime,
+                    endTime = _state.value.operatingHours.endTime,
+                    lastCallForOrder = _state.value.lastCallForOrder,
+                    recurringRule = _state.value.recurringRule
+                )
+
+                when (val result = cookingSlotRepository.postCookingSlot(request)) {
+                    is ResponseSuccess -> {
+                        setInProgress(false)
+                        onValidationSuccess()
                     }
-                } catch (ex: Exception) {
-                    setInProgress(false)
-                    _events.emit(CreateCookingSlotEvents.Error(ex.message))
+                    is ResponseError -> {
+                        setInProgress(false)
+                        _events.emit(CreateCookingSlotEvents.Error(result.error.message))
+                    }
                 }
+            } catch (ex: Exception) {
+                setInProgress(false)
+                _events.emit(CreateCookingSlotEvents.Error(ex.message))
             }
         }
     }

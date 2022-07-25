@@ -9,6 +9,7 @@ import biweekly.parameter.ICalParameters
 import biweekly.property.RecurrenceRule
 import biweekly.util.Frequency
 import biweekly.util.Recurrence
+import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.fragments.RecurringRule
 import timber.log.Timber
 import java.text.SimpleDateFormat
 import java.util.*
@@ -107,4 +108,19 @@ class RRuleTextFormatter {
 
     fun buildRRule(simpleRRule: SimpleRRule) =
         buildRRule(simpleRRule.frequency, simpleRRule.interval, simpleRRule.until)
+}
+
+fun formatRcs(recurringRule: RecurringRule?): String {
+    if (recurringRule != null) {
+        return "Cooking slot will occur ${recurringRule.frequency}, ${recurringRule.count} times"
+    }
+    return ""
+}
+
+fun formatRecurringRule(recurringRule: RecurringRule?): String? {
+    if (recurringRule == null) {
+        return null
+    }
+    return "FREQ=${recurringRule?.frequency};COUNT=${recurringRule?.count}".uppercase()
+
 }

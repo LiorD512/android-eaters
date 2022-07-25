@@ -10,7 +10,7 @@ class GetSectionsWithDishesUseCase(
     private val dishRepository: DishRepository
 ) : UseCase<Flow<ResponseResult<SectionWithDishes>>, GetSectionsWithDishesUseCase.Params> {
 
-    data class Params(val isForceLoad: Boolean)
+    data class Params(val isForceLoad: Boolean = false)
 
     override fun execute(params: Params): Flow<ResponseResult<SectionWithDishes>> =
         dishRepository.getSectionsWithDishes(params.isForceLoad)

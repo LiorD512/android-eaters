@@ -32,7 +32,7 @@
             android:layout_height="match_parent">
 
             <TextView
-                android:id="@+id/reviewSlotTitle"
+                android:id="@+id/tv_header_title"
                 style="@style/LatoBlack19DarkDarkGrey"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -46,7 +46,7 @@
                 tools:text="Friday, Nov 30, 2021" />
 
             <TextView
-                android:id="@+id/reviewSlotSubtitle"
+                android:id="@+id/tv_header_subtitle"
                 style="@style/LatoReg13Black"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -56,7 +56,7 @@
                 android:textColor="@color/dark"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/reviewSlotTitle"
+                app:layout_constraintTop_toBottomOf="@id/tv_header_title"
                 tools:text="12:15 PM - 4:00 PM" />
 
             <com.bupp.wood_spoon_chef.presentation.custom_views.SectionView
@@ -66,7 +66,7 @@
                 android:layout_marginTop="24dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/reviewSlotSubtitle">
+                app:layout_constraintTop_toBottomOf="@+id/tv_header_subtitle">
 
                 <com.bupp.wood_spoon_chef.presentation.custom_views.CreateCookingSlotOptionView
                     android:id="@+id/createCookingSlotNewFragmentLastCallForOrderView"
@@ -91,11 +91,14 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
+                android:layout_marginBottom="80dp"
                 app:cardCornerRadius="8dp"
                 app:cardElevation="0dp"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/sectionView">
+                app:layout_constraintTop_toBottomOf="@+id/sectionView"
+                app:layout_constraintVertical_bias="0.0">
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rv_menu"

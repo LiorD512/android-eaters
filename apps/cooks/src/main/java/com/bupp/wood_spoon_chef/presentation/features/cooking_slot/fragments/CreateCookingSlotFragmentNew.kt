@@ -1,7 +1,6 @@
 package com.bupp.wood_spoon_chef.presentation.features.cooking_slot.fragments
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.View
 import android.widget.Toast
 import androidx.lifecycle.Lifecycle
@@ -14,6 +13,7 @@ import com.bupp.wood_spoon_chef.presentation.features.base.BaseFragment
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.dialogs.OperatingHoursInfoBottomSheet
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.dialogs.TimePickerBottomSheet
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.fragments.base.CookingSlotParentFragment
+import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.rrules.formatRcs
 import com.bupp.wood_spoon_chef.utils.DateUtils.prepareFormattedDateForHours
 import com.bupp.wood_spoon_chef.utils.extensions.*
 import com.eatwoodspoon.android_utils.binding.viewBinding
@@ -22,7 +22,6 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import org.joda.time.DateTime
-import org.joda.time.format.DateTimeFormat
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 
@@ -33,7 +32,6 @@ class CreateCookingSlotFragmentNew : BaseFragment(R.layout.fragment_create_cooki
     private val viewModel: CreateCookingSlotNewViewModel by viewModel {
         parametersOf(findParent(CookingSlotParentFragment::class.java)?.cookingSlotCoordinator)
     }
-
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -189,13 +187,3 @@ private fun formatLastCallForOrderDate(lastCallForOrder: Long?): String {
     }
     return ""
 }
-
-private fun formatRcs(recurringRule: RecurringRule?): String {
-    if (recurringRule != null) {
-        return "Cooking slot will occur ${recurringRule.frequency}, ${recurringRule.count} times"
-    }
-    return ""
-}
-
-private fun DateTime.prepareFormattedDateForDateAndHour(): String =
-    DateTimeFormat.forPattern("EEEE, MMM dd, yyyy, hh:mm aa").print(this)
