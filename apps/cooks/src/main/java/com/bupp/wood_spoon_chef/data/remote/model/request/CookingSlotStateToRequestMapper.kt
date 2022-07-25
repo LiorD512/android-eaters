@@ -1,11 +1,11 @@
-package com.bupp.wood_spoon_chef.presentation.features.cooking_slot.mapper
+package com.bupp.wood_spoon_chef.data.remote.model.request
 
 import com.bupp.wood_spoon_chef.data.remote.model.CookingSlotRequest
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.fragments.CreateCookingSlotNewState
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.fragments.RecurringRule
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.rrules.formatRecurringRule
 
-class CookingSlotStateMapper {
+class CookingSlotStateToRequestMapper {
 
     fun mapStateToCreateCookingSlotRequest(
         startsTime: Long?,

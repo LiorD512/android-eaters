@@ -21,6 +21,6 @@ data class DishesMenuAdapterModel(
 data class MenuDishItem(
     val dish: Dish?,
     val quantity: Int = 1,
-    val unitsSold: Int = -1
+    val unitsSold: Int = 0
 )
 

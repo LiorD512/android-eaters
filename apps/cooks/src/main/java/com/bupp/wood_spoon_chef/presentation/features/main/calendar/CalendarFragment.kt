@@ -42,8 +42,13 @@ class CalendarFragment : BaseFragment(R.layout.fragment_calendar),
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentCalendarBinding.bind(view)
         initObservers()
-        getData(DateTime(viewModel.selectedDateFlow.value))
+
         initUi()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        getData(DateTime(viewModel.selectedDateFlow.value))
     }
 
     private fun getData(

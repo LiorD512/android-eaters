@@ -47,9 +47,11 @@ class CookingSlotReviewFragment : BaseFragment(R.layout.fragment_cooking_slot_re
                             handleProgressBar(isLoading = state.isLoading)
                         }
                         is ReviewCookingSlotState.ScreenDataState -> {
+                            handleProgressBar(false)
                             updateInputsWithState(state)
                         }
                         is ReviewCookingSlotState.Error -> {
+                            handleProgressBar(false)
                             handleErrorEvent(state.error, binding.root)
                         }
                         ReviewCookingSlotState.SlotCreatedSuccess -> {

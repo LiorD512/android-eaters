@@ -1,7 +1,9 @@
 package com.bupp.wood_spoon_chef.presentation.features.cooking_slot.fragments
 
 import androidx.lifecycle.viewModelScope
+import com.bupp.wood_spoon_chef.data.remote.model.CookingSlotRequest
 import com.bupp.wood_spoon_chef.data.remote.model.DishCategory
+import com.bupp.wood_spoon_chef.data.remote.model.MenuItemRequest
 import com.bupp.wood_spoon_chef.data.remote.model.SectionWithDishes
 import com.bupp.wood_spoon_chef.data.remote.network.base.*
 import com.bupp.wood_spoon_chef.data.repositories.CookingSlotRepository
@@ -11,7 +13,7 @@ import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.data.models.M
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.data.repository.CookingSlotsDraftRepository
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.fragments.base.CookingSlotDraft
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.mapper.AdapterModelCategoriesListMapper
-import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.mapper.CookingSlotStateMapper
+import com.bupp.wood_spoon_chef.data.remote.model.request.CookingSlotStateToRequestMapper
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.mapper.MenuDishItemToAdapterModelMapper
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
@@ -37,7 +39,7 @@ class CookingSlotReviewViewModel(
     private val menuItemToAdapterModelMapper: MenuDishItemToAdapterModelMapper,
     private val adapterModelCategoriesListMapper: AdapterModelCategoriesListMapper,
     private val cookingSlotRepository: CookingSlotRepository,
-    private val stateMapper: CookingSlotStateMapper
+    private val stateMapper: CookingSlotStateToRequestMapper
 ) : BaseViewModel() {
 
     private val _state = MutableStateFlow<ReviewCookingSlotState>(ReviewCookingSlotState.Idle)
@@ -51,14 +53,7 @@ class CookingSlotReviewViewModel(
         _state.emit(ReviewCookingSlotState.Loading())
 
         try {
-            val request = cookingSlotsDraftRepository.getDraft().map {
-                stateMapper.mapStateToCreateCookingSlotRequest(
-                    startsTime = it?.operatingHours?.startTime,
-                    endTime = it?.operatingHours?.endTime,
-                    lastCallForOrder = it?.lastCallForOrder,
-                    recurringRule = it?.recurringRule
-                )
-            }.first()
+            val request = prepareAddSlotRequest()
 
             when (val result = cookingSlotRepository.postCookingSlot(request)) {
                 is ResponseSuccess -> {
@@ -81,6 +76,27 @@ class CookingSlotReviewViewModel(
             }
         }
     }
+
+    private suspend fun prepareAddSlotRequest(): CookingSlotRequest =
+        cookingSlotsDraftRepository.getDraft().map {
+            val toList = it?.menuItems?.map { menuDishItem ->
+                MenuItemRequest(
+                    dishId = menuDishItem.dish?.id,
+                    quantity = menuDishItem.quantity
+                )
+            }?.toList() ?: emptyList()
+
+            stateMapper.mapStateToCreateCookingSlotRequest(
+                startsTime = it?.operatingHours?.startTime,
+                endTime = it?.operatingHours?.endTime,
+                lastCallForOrder = it?.lastCallForOrder,
+                recurringRule = it?.recurringRule,
+            )
+                .copy(submit = true)
+                .copy(menuItems = toList)
+
+        }.first()
+
 
     private fun getDraft() {
         viewModelScope.launch {

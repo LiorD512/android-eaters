@@ -1,6 +1,7 @@
 package com.bupp.wood_spoon_chef.presentation.features.cooking_slot.module
 
 import com.bupp.wood_spoon_chef.data.local.CookingSlotsDraftMemoryDataSource
+import com.bupp.wood_spoon_chef.data.remote.model.request.CookingSlotStateToRequestMapper
 import com.bupp.wood_spoon_chef.data.repositories.CookingSlotRepository
 import com.bupp.wood_spoon_chef.domain.GetIsCookingSlotNewFlowEnabledUseCase
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.fragments.CookingSlotMenuViewModel
@@ -25,7 +26,7 @@ val cookingSlotModule = module {
     factory { CookingSlotFlowCoordinator() }
 
     //mapper
-    factory { CookingSlotStateMapper() }
+    factory { CookingSlotStateToRequestMapper() }
     factory { OriginalCookingSlotToDraftCookingSlotMapper() }
     factory { MenuItemToMenuDishItemMapper() }
     factory { MenuDishItemToAdapterModelMapper() }
