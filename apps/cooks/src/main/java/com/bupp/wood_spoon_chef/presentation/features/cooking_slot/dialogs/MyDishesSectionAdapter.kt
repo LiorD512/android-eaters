@@ -94,7 +94,6 @@ class MyDishesSectionAdapter(
         if (item is SectionedListItem.SectionItem) {
             val myDishesPickerAdapterDish = item.item as MyDishesPickerAdapterDish
             holder as DishItemSelectionViewHolder
-            holder.selectedCb.setOnCheckedChangeListener(null)
             holder.selectedCb.isChecked = myDishesPickerAdapterDish.isSelected
             var isChecked: Boolean
             holder.dishItem.setOnClickListener {

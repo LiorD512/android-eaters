@@ -58,6 +58,7 @@
                 android:layout_height="wrap_content"
                 android:button="@drawable/dish_cb_selector"
                 android:gravity="top"
+                android:clickable="false"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 

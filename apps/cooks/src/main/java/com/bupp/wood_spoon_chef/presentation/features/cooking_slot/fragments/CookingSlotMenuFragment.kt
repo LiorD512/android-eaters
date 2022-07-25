@@ -3,6 +3,7 @@ package com.bupp.wood_spoon_chef.presentation.features.cooking_slot.fragments
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.View
+import android.widget.Toast
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
@@ -20,6 +21,7 @@ import com.bupp.wood_spoon_chef.utils.DateUtils.prepareFormattedDateForHours
 import com.bupp.wood_spoon_chef.utils.extensions.findParent
 import com.bupp.wood_spoon_chef.utils.extensions.prepareFormattedDate
 import com.bupp.wood_spoon_chef.utils.extensions.show
+import com.bupp.wood_spoon_chef.utils.extensions.showErrorToast
 import com.eatwoodspoon.android_utils.binding.viewBinding
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
@@ -53,7 +55,7 @@ class CookingSlotMenuFragment :
                 this@CookingSlotMenuFragment
             )
             createCookingSlotMenuFragmentGoToReviewBtn.setOnClickListener {
-                viewModel.onOpenReviewFragmentClicked()
+                viewModel.onOpenReviewFragmentClicked(requireContext())
             }
             createCookingSlotMenuFragmentAddDishesEmpty.setOnClickListener {
                 viewModel.onAddDishesClick()
@@ -86,6 +88,13 @@ class CookingSlotMenuFragment :
                             is CookingSlotMenuEvents.ShowMyDishesBottomSheet -> {
                                 openMyDishesBottomSheet(event.selectedDishes)
                             }
+                            is CookingSlotMenuEvents.Error -> {
+                                showErrorToast(
+                                    event.message,
+                                    binding.cookingSlotMenuFragmentMainLayout,
+                                    Toast.LENGTH_SHORT
+                                )
+                            }
                         }
                     }
                 }
@@ -101,11 +110,11 @@ class CookingSlotMenuFragment :
         }
     }
 
-    private fun setHeaderTitle(isEditMode: Boolean){
+    private fun setHeaderTitle(isEditMode: Boolean) {
         binding.apply {
-            if (isEditMode){
+            if (isEditMode) {
                 createCookingSlotMenuFragmentTopBar.setTitle(getString(R.string.edit_cooking_slot_menu))
-            }else{
+            } else {
                 createCookingSlotMenuFragmentTopBar.setTitle(getString(R.string.my_cooking_slot_menu))
             }
         }
@@ -172,11 +181,7 @@ class CookingSlotMenuFragment :
 
     override fun onQuantityChange(dishId: Long?, quantity: Int) {
         dishId?.let {
-            if (quantity >= 1) {
-                viewModel.updateQuantity(dishId, quantity)
-            } else {
-                viewModel.updateQuantity(dishId, 1)
-            }
+            viewModel.updateQuantity(dishId, quantity)
         }
     }
 }
