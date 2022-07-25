@@ -44,7 +44,7 @@ val cookingSlotModule = module {
     viewModel { params -> CookingSlotParentViewModel(params.get(), get(), get(), get()) }
     viewModel { params -> CreateCookingSlotNewViewModel(params.get(), get(), get(), get()) }
     viewModel { params -> CookingSlotMenuViewModel(params.get(), get(), get()) }
-    viewModel { MyDishesViewModel(get(), get()) }
+    viewModel { MyDishesViewModel(get()) }
     viewModel { FilterMenuViewModel(get()) }
     viewModel { CookingSlotReviewViewModel(get(), get(), get(), get(), get(),get()) }
 

@@ -13,20 +13,22 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bupp.wood_spoon_chef.R
 import com.bupp.wood_spoon_chef.common.TopCorneredBottomSheet
-import com.bupp.wood_spoon_chef.data.remote.model.DishCategory
 import com.bupp.wood_spoon_chef.databinding.BottomSheetFilterMenuBinding
 import com.bupp.wood_spoon_chef.presentation.custom_views.HeaderView
+import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.data.models.FilterAdapterSectionModel
 import com.bupp.wood_spoon_chef.utils.extensions.show
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class FilterMenuBottomSheet : TopCorneredBottomSheet(), HeaderView.HeaderViewListener,
-    DishCategoryAdapter.DishCategoryListener {
+class FilterMenuBottomSheet(
+    private val selectedSections: List<String>?
+) : TopCorneredBottomSheet(), HeaderView.HeaderViewListener,
+    FilterMenuAdapter.FilterMenuAdapterListener {
 
     private var binding: BottomSheetFilterMenuBinding? = null
     private val viewModel by viewModel<FilterMenuViewModel>()
-    private lateinit var dishCategoryAdapter: DishCategoryAdapter
+    private lateinit var filterMenuAdapter: FilterMenuAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -43,6 +45,7 @@ class FilterMenuBottomSheet : TopCorneredBottomSheet(), HeaderView.HeaderViewLis
         setFullScreenDialog()
         initUi()
         setupList()
+        setSelectedSections()
         observeViewModelState()
         observeViewModelEvents()
     }
@@ -50,7 +53,7 @@ class FilterMenuBottomSheet : TopCorneredBottomSheet(), HeaderView.HeaderViewLis
     private fun initUi() {
         binding?.apply {
             filterMenuBsHeaderView.setHeaderViewListener(this@FilterMenuBottomSheet)
-            filterMenuBsClearAll.setOnClickListener { dishCategoryAdapter.clearSelection() }
+            filterMenuBsClearAll.setOnClickListener { viewModel.onClearAllClick() }
             filterMenuBsApplyBtn.setOnClickListener { viewModel.onApplyClick() }
         }
     }
@@ -67,15 +70,14 @@ class FilterMenuBottomSheet : TopCorneredBottomSheet(), HeaderView.HeaderViewLis
         }
     }
 
-    private fun observeViewModelEvents(){
-        viewLifecycleOwner.lifecycleScope.launch{
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED){
+    private fun observeViewModelEvents() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 launch {
-                    viewModel.events.collect{event ->
-                        when(event){
-                            is FilterMenuEvent.SelectedCategory -> showClearAll()
-                            is FilterMenuEvent.PassSelectedCategory -> onApplyClick(
-                                event.dishCategory
+                    viewModel.events.collect { event ->
+                        when (event) {
+                            is FilterMenuEvent.ApplyClicked -> onApplyClick(
+                                event.selectedSections
                             )
                         }
                     }
@@ -84,14 +86,19 @@ class FilterMenuBottomSheet : TopCorneredBottomSheet(), HeaderView.HeaderViewLis
         }
     }
 
-    private fun onApplyClick(selectedCategory: DishCategory?){
-        setFragmentResult(DISH_CATEGORY_KEY, bundleOf(DISH_CATEGORY_VALUE to selectedCategory))
+    private fun onApplyClick(selectedSections: List<FilterAdapterSectionModel>?) {
+        setFragmentResult(
+            SELECTED_SECTIONS_KEY, bundleOf(
+                SELECTED_SECTIONS_VALUE to selectedSections
+            )
+        )
         dismiss()
     }
 
     private fun updateInputsWithState(state: FilterMenuState) {
         binding.apply {
-            updateList(state.dishCategories)
+            updateList(state.sectionList)
+            showClearAll(state.showClearAll)
         }
     }
 
@@ -99,14 +106,14 @@ class FilterMenuBottomSheet : TopCorneredBottomSheet(), HeaderView.HeaderViewLis
         binding?.apply {
             filterMenuBsCategoriesRv.apply {
                 layoutManager = LinearLayoutManager(requireContext())
-                dishCategoryAdapter = DishCategoryAdapter(this@FilterMenuBottomSheet)
-                adapter = dishCategoryAdapter
+                filterMenuAdapter = FilterMenuAdapter(this@FilterMenuBottomSheet)
+                adapter = filterMenuAdapter
             }
         }
     }
 
-    private fun updateList(data: List<DishCategory>?) {
-        dishCategoryAdapter.submitList(data)
+    private fun updateList(data: List<FilterAdapterSectionModel>?) {
+        filterMenuAdapter.submitList(data)
     }
 
     override fun clearClassVariables() {
@@ -117,25 +124,30 @@ class FilterMenuBottomSheet : TopCorneredBottomSheet(), HeaderView.HeaderViewLis
         dismiss()
     }
 
-    override fun onCategorySelected(dishCategory: DishCategory?, oldItemPosition: Int?) {
-        oldItemPosition?.let {
-            dishCategoryAdapter.notifyItemChanged(oldItemPosition)
-        }
-        viewModel.onCategorySelectedClick(dishCategory)
+    override fun onSectionSelected(sectionName: String, isSelected: Boolean) {
+        viewModel.onSectionSelected(sectionName, isSelected)
     }
 
-    private fun showClearAll(){
+    private fun setSelectedSections() {
+        viewModel.setSelectedSections(selectedSections)
+    }
+
+    private fun showClearAll(show: Boolean) {
         binding?.apply {
-            filterMenuBsClearAll.show(true)
+            filterMenuBsClearAll.show(show)
         }
     }
 
     companion object {
-        const val DISH_CATEGORY_KEY = "dishCategoryKey"
-        const val DISH_CATEGORY_VALUE = "dishCategoryValue"
+        const val SELECTED_SECTIONS_KEY = "selectedSectionsKey"
+        const val SELECTED_SECTIONS_VALUE = "selectedSectionsValue"
 
-        fun show(fragment: Fragment, listener: ((DishCategory?) -> Unit)) {
-            FilterMenuBottomSheet().show(
+        fun show(
+            fragment: Fragment,
+            selectedSections: List<String>?,
+            listener: ((List<FilterAdapterSectionModel>) -> Unit)
+        ) {
+            FilterMenuBottomSheet(selectedSections).show(
                 fragment.childFragmentManager,
                 FilterMenuBottomSheet::class.simpleName
             )
@@ -144,12 +156,13 @@ class FilterMenuBottomSheet : TopCorneredBottomSheet(), HeaderView.HeaderViewLis
     }
 }
 
-private fun Fragment.setDishCategoryResultListener(listener: ((DishCategory?) -> Unit)) {
+private fun Fragment.setDishCategoryResultListener(listener: ((List<FilterAdapterSectionModel>) -> Unit)) {
     childFragmentManager.setFragmentResultListener(
-        FilterMenuBottomSheet.DISH_CATEGORY_KEY,
+        FilterMenuBottomSheet.SELECTED_SECTIONS_KEY,
         this
     ) { _, bundle ->
-        val result = bundle.getParcelable<DishCategory>(FilterMenuBottomSheet.DISH_CATEGORY_VALUE)
+        val result =
+            bundle.get(FilterMenuBottomSheet.SELECTED_SECTIONS_VALUE) as List<FilterAdapterSectionModel>
         listener.invoke(result)
     }
 }

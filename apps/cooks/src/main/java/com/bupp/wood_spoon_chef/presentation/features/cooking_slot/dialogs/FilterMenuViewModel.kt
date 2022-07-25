@@ -1,25 +1,28 @@
 package com.bupp.wood_spoon_chef.presentation.features.cooking_slot.dialogs
 
 import androidx.lifecycle.viewModelScope
-import com.bupp.wood_spoon_chef.data.remote.model.DishCategory
-import com.bupp.wood_spoon_chef.data.repositories.MetaDataRepository
+import com.bupp.wood_spoon_chef.data.remote.model.Section
 import com.bupp.wood_spoon_chef.presentation.features.base.BaseViewModel
+import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.data.models.FilterAdapterSectionModel
+import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.data.models.MyDishesPickerAdapterModel
+import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.data.repository.DishesWithCategoryRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
 data class FilterMenuState(
-    val dishCategories: List<DishCategory>? = null,
-    val selectedCategory: DishCategory? = null
+    val sectionList: List<FilterAdapterSectionModel> = emptyList(),
+    val selectedSections: List<String>? = emptyList(),
+    val showClearAll: Boolean = false
 )
 
 sealed class FilterMenuEvent {
-    data class SelectedCategory(val dishCategory: DishCategory?) : FilterMenuEvent()
-    data class PassSelectedCategory(val dishCategory: DishCategory?): FilterMenuEvent()
+    data class ApplyClicked(val selectedSections: List<FilterAdapterSectionModel>?) :
+        FilterMenuEvent()
 }
 
 class FilterMenuViewModel(
-    private val metaDataRepository: MetaDataRepository
+    private val dishesWithCategoryRepository: DishesWithCategoryRepository
 ) : BaseViewModel() {
 
     private val _state = MutableStateFlow(FilterMenuState())
@@ -28,42 +31,81 @@ class FilterMenuViewModel(
     private val _events = MutableSharedFlow<FilterMenuEvent>()
     val events: SharedFlow<FilterMenuEvent> = _events
 
-
     init {
-        getDishCategories()
+        getSectionsList()
     }
 
-    private fun getDishCategories() = viewModelScope.launch(Dispatchers.IO) {
+    private fun getSectionsList() = viewModelScope.launch(Dispatchers.IO) {
         try {
-            val result = metaDataRepository.getDishCategories()
-            updateCategoryList(result)
+            val result = dishesWithCategoryRepository.getSectionsAndDishes()
+            val sections = result.getOrThrow().sections
+            sections?.let {
+                updateSectionList(convertSectionsToFilterAdapterModelList(it))
+            }
         } catch (e: Exception) {
             e.message
         }
     }
 
-    private fun updateCategoryList(data: List<DishCategory>) {
+    private fun updateSectionList(data: List<FilterAdapterSectionModel>) {
         _state.update {
-            it.copy(dishCategories = data)
+            it.copy(sectionList = updateSectionItem(data, it.selectedSections, true))
         }
+        showClearAll()
     }
 
-    private fun setSelectedCategory(selectedCategory: DishCategory?){
+    fun onSectionSelected(sectionName: String, isSelected: Boolean) {
+        val sectionNameList = mutableListOf<String>()
+        sectionNameList.add(sectionName)
         _state.update {
-            it.copy(selectedCategory = selectedCategory)
+            it.copy(sectionList = updateSectionItem(it.sectionList, sectionNameList, isSelected))
+        }
+        showClearAll()
+    }
+
+    private fun showClearAll() {
+        _state.update {
+            it.copy(showClearAll = it.sectionList.any { section -> section.isSelected })
         }
     }
 
-    fun onCategorySelectedClick(selectedCategory: DishCategory?){
-        viewModelScope.launch {
-            _events.emit(FilterMenuEvent.SelectedCategory(selectedCategory))
-            setSelectedCategory(selectedCategory)
+    fun setSelectedSections(selectedSections: List<String>?) {
+        _state.update {
+            it.copy(selectedSections = selectedSections)
         }
     }
 
-    fun onApplyClick(){
-        viewModelScope.launch {
-            _events.emit(FilterMenuEvent.PassSelectedCategory(_state.value.selectedCategory))
+    private fun updateSectionItem(
+        sectionList: List<FilterAdapterSectionModel>,
+        sectionNameList: List<String>?,
+        isSelected: Boolean
+    ): List<FilterAdapterSectionModel> {
+        return sectionList.updateItem(
+            where = { section -> sectionNameList?.contains(section.sectionName) == true }
+        ) {
+            it.copy(isSelected = isSelected)
         }
+    }
+
+    fun onApplyClick() {
+        viewModelScope.launch {
+            val selectedSections = _state.value.sectionList.filter { it.isSelected }
+            _events.emit(FilterMenuEvent.ApplyClicked(selectedSections))
+        }
+    }
+
+    fun onClearAllClick() {
+        setSelectedSections(null)
+        getSectionsList()
+    }
+
+    private fun convertSectionsToFilterAdapterModelList(
+        sectionList: List<Section>
+    ): List<FilterAdapterSectionModel> {
+        return sectionList.map { section ->
+            FilterAdapterSectionModel(
+                section.title ?: ""
+            )
+        }.toList()
     }
 }

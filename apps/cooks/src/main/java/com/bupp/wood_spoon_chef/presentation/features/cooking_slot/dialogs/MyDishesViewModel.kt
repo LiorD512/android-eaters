@@ -2,8 +2,8 @@ package com.bupp.wood_spoon_chef.presentation.features.cooking_slot.dialogs
 
 import androidx.lifecycle.viewModelScope
 import com.bupp.wood_spoon_chef.data.remote.model.SectionWithDishes
-import com.bupp.wood_spoon_chef.data.repositories.CookingSlotRepository
 import com.bupp.wood_spoon_chef.presentation.features.base.BaseViewModel
+import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.data.models.FilterAdapterSectionModel
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.data.models.MyDishesPickerAdapterDish
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.data.models.MyDishesPickerAdapterModel
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.data.repository.DishesWithCategoryRepository
@@ -15,18 +15,22 @@ import java.lang.Exception
 data class MyDishesState(
     val sectionedList: List<MyDishesPickerAdapterModel>? = null,
     val selectedDishesIds: List<Long> = emptyList(),
+    val selectedSections: List<String>? = emptyList(),
     val isListFiltered: Boolean? = false
 )
 
 sealed class MyDishesEvent {
     data class Error(val message: String? = null) : MyDishesEvent()
-    object ShowFilterMenu : MyDishesEvent()
+    data class ShowFilterMenu(
+        val selectedSections:
+        List<String>? = emptyList()
+    ) : MyDishesEvent()
+
     data class ShowEmptyState(val show: Boolean = false) : MyDishesEvent()
     data class AddDishes(val selectedDishes: List<Long> = emptyList()) : MyDishesEvent()
 }
 
 class MyDishesViewModel(
-    private val cookingSlotRepository: CookingSlotRepository,
     private val dishesWithCategoryRepository: DishesWithCategoryRepository
 ) : BaseViewModel() {
 
@@ -46,8 +50,8 @@ class MyDishesViewModel(
             val result = dishesWithCategoryRepository.getSectionsAndDishes()
             val currentDishes = result.getOrThrow().dishes
             val sections = result.getOrThrow().sections
-            val dishesWithoutSelected = currentDishes?.filter {
-                    dish -> !_state.value.selectedDishesIds.contains(dish.id)
+            val dishesWithoutSelected = currentDishes?.filter { dish ->
+                !_state.value.selectedDishesIds.contains(dish.id)
             }
             val filteredSectionsAndDishes = SectionWithDishes(dishesWithoutSelected, sections)
             updateSectionedList(parseDataForAdapter(filteredSectionsAndDishes))
@@ -74,26 +78,32 @@ class MyDishesViewModel(
         }
     }
 
-    fun setSelectedDishesIds(selectedDishesIds: List<Long>){
+    fun setSelectedDishesIds(selectedDishesIds: List<Long>) {
         _state.update {
             it.copy(selectedDishesIds = selectedDishesIds)
         }
     }
 
-    private fun updateSelectedDishes(){
+    private fun updateSelectedDishes() {
         _state.update {
             it.copy(sectionedList = updateSelectedDishes(it.sectionedList, it.selectedDishesIds))
         }
     }
 
-    fun filterBySectionName(name: String?) {
-        val filteredSections = dishesWithCategoryRepository.filterListByCategoryName(name)
+    fun filterBySectionName(sectionList: List<FilterAdapterSectionModel>) {
+        val filteredSections = dishesWithCategoryRepository.filterListByCategoryName(sectionList)
         updateSectionedList(parseDataForAdapter(filteredSections))
     }
 
     fun onFilterClick() {
         viewModelScope.launch {
-            _events.emit(MyDishesEvent.ShowFilterMenu)
+            _events.emit(MyDishesEvent.ShowFilterMenu(_state.value.selectedSections))
+        }
+    }
+
+    fun updateSelectedSections(selectedSections: List<String>?) {
+        _state.update {
+            it.copy(selectedSections = selectedSections)
         }
     }
 
@@ -104,8 +114,9 @@ class MyDishesViewModel(
     }
 
     fun onAddClick() {
-        val selectedDishes = _state.value.sectionedList?.flatMap { it.dishes ?: emptyList()}
-            ?.filter { selectedDish -> selectedDish.isSelected }?.map { dish -> dish.dish?.id} ?: emptyList()
+        val selectedDishes = _state.value.sectionedList?.flatMap { it.dishes ?: emptyList() }
+            ?.filter { selectedDish -> selectedDish.isSelected }?.map { dish -> dish.dish?.id }
+            ?: emptyList()
         viewModelScope.launch {
             _events.emit(MyDishesEvent.AddDishes(selectedDishes = selectedDishes as List<Long>))
         }
@@ -117,7 +128,9 @@ class MyDishesViewModel(
         isChecked: Boolean
     ): List<MyDishesPickerAdapterModel>? {
         return sectionedList?.map {
-            it.copy(dishes = it.dishes?.updateItem(where = { dish -> dish.dish?.id == dishId }) { myPickerDish ->
+            it.copy(dishes = it.dishes?.updateItem(
+                where = { dish -> dish.dish?.id == dishId }
+            ) { myPickerDish ->
                 myPickerDish.copy(isSelected = isChecked)
             })
         }
@@ -126,15 +139,19 @@ class MyDishesViewModel(
     private fun updateSelectedDishes(
         sectionedList: List<MyDishesPickerAdapterModel>?,
         selectedDishesIds: List<Long>
-    ): List<MyDishesPickerAdapterModel>?{
+    ): List<MyDishesPickerAdapterModel>? {
         return sectionedList?.map {
-            it.copy(dishes = it.dishes?.updateItem(where = { dish -> selectedDishesIds.contains(dish.dish?.id) }) { myPickerDish ->
+            it.copy(dishes = it.dishes?.updateItem(
+                where = { dish -> selectedDishesIds.contains(dish.dish?.id) }
+            ) { myPickerDish ->
                 myPickerDish.copy(isSelected = true)
             })
         }
     }
 
-    private fun parseDataForAdapter(response: SectionWithDishes?): List<MyDishesPickerAdapterModel> {
+    private fun parseDataForAdapter(
+        response: SectionWithDishes?
+    ): List<MyDishesPickerAdapterModel> {
         return response?.sections?.map { section ->
             val myDishesPickerAdapterDishes = mutableListOf<MyDishesPickerAdapterDish>()
             val dishes =
