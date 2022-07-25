@@ -108,6 +108,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="@dimen/medium"
                 android:layout_marginTop="@dimen/big"
+                tools:itemCount="3"
+                tools:listitem="@layout/list_item_menu_dish"
                 />
         </LinearLayout>
 

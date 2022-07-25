@@ -1,10 +1,8 @@
 package com.bupp.wood_spoon_chef.presentation.features.cooking_slot.fragments
 
 import android.text.Editable
-import android.text.TextUtils
 import android.text.TextWatcher
 import android.view.View
-import android.widget.EditText
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bupp.wood_spoon_chef.R
@@ -13,10 +11,12 @@ import com.bupp.wood_spoon_chef.databinding.ListItemMenuDishBinding
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.data.models.DishesMenuAdapterModel
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.data.models.MenuDishItem
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.dialogs.*
+import com.bupp.wood_spoon_chef.utils.extensions.setTextIfNeeded
 import java.util.*
 
-class DishMenuAdapter(private val listener: DishesMenuAdapterListener) :
-    SectionedListAdapter<DishesMenuAdapterModel>() {
+class DishMenuAdapter(
+    private val listener: DishesMenuAdapterListener
+) : SectionedListAdapter<DishesMenuAdapterModel>() {
 
     interface DishesMenuAdapterListener {
         fun onDeleteClick(dishId: Long?)
@@ -99,8 +99,10 @@ class DishMenuAdapter(private val listener: DishesMenuAdapterListener) :
 
     }
 
-    inner class DishMenuItemViewHolder(val binding: ListItemMenuDishBinding) :
-        BaseViewHolder(binding.root) {
+    inner class DishMenuItemViewHolder(
+        val binding: ListItemMenuDishBinding
+    ) : BaseViewHolder(binding.root) {
+
         val deleteBtn = binding.listItemDishMenuDeleteDish
         val reduceQuantityBtn = binding.listItemMenuDishQuantityMinus
         val raiseQuantityBtn = binding.listItemMenuDishQuantityPlus
@@ -144,12 +146,5 @@ class DishMenuAdapter(private val listener: DishesMenuAdapterListener) :
                 }
             }
         }
-    }
-}
-
-private fun EditText.setTextIfNeeded(text: CharSequence) {
-    if(!this.text.contentEquals(text)) {
-        setText(text)
-        setSelection(text.length)
     }
 }

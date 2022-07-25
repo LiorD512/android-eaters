@@ -1,7 +1,6 @@
 package com.bupp.wood_spoon_chef.presentation.features.cooking_slot.fragments
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.View
 import android.widget.Toast
 import androidx.lifecycle.Lifecycle
@@ -10,9 +9,11 @@ import androidx.lifecycle.repeatOnLifecycle
 import com.bupp.wood_spoon_chef.R
 import com.bupp.wood_spoon_chef.databinding.FragmentCreateCookingSlotNewBinding
 import com.bupp.wood_spoon_chef.presentation.custom_views.CreateCookingSlotTopBar
+import com.bupp.wood_spoon_chef.presentation.features.base.BaseFragment
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.dialogs.OperatingHoursInfoBottomSheet
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.dialogs.TimePickerBottomSheet
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.fragments.base.CookingSlotParentFragment
+import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.rrules.formatRcs
 import com.bupp.wood_spoon_chef.utils.DateUtils.prepareFormattedDateForHours
 import com.bupp.wood_spoon_chef.utils.extensions.*
 import com.eatwoodspoon.android_utils.binding.viewBinding
@@ -21,11 +22,10 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import org.joda.time.DateTime
-import org.joda.time.format.DateTimeFormat
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 
-class CreateCookingSlotFragmentNew : Fragment(R.layout.fragment_create_cooking_slot_new),
+class CreateCookingSlotFragmentNew : BaseFragment(R.layout.fragment_create_cooking_slot_new),
     CreateCookingSlotTopBar.CreateCookingSlotTopBarListener {
 
     private val binding by viewBinding(FragmentCreateCookingSlotNewBinding::bind)
@@ -81,7 +81,8 @@ class CreateCookingSlotFragmentNew : Fragment(R.layout.fragment_create_cooking_s
                                 Toast.LENGTH_SHORT
                             )
                             is CreateCookingSlotEvents.ShowOperatingHours -> openTimePickerBottomSheet(
-                                event.selectedDate
+                                event.selectedDate,
+                                event.operatingHours
                             )
                             is CreateCookingSlotEvents.ShowLastCallForOrder -> openLastCallForOrder(
                                 event.lastCallForOrder
@@ -100,6 +101,7 @@ class CreateCookingSlotFragmentNew : Fragment(R.layout.fragment_create_cooking_s
         binding.apply {
             setHeaderTitle(state.isInEditMode)
             showTitle(state.selectedDate)
+            handleProgressBar(state.inProgress)
 
             createCookingSlotNewFragmentOperatingHoursView.setSubtitle(
                 formatOperatingHours(
@@ -123,9 +125,9 @@ class CreateCookingSlotFragmentNew : Fragment(R.layout.fragment_create_cooking_s
     private fun setHeaderTitle(isEditMode: Boolean){
         binding.apply {
             if (isEditMode){
-                createCookingSlotNewFragmentTopBar.setTitle("Edit cooking slot")
+                createCookingSlotNewFragmentTopBar.setTitle(getString(R.string.edit_cooking_slot))
             }else{
-                createCookingSlotNewFragmentTopBar.setTitle("Create cooking slot")
+                createCookingSlotNewFragmentTopBar.setTitle(getString(R.string.create_cooking_slot))
             }
         }
     }
@@ -137,10 +139,10 @@ class CreateCookingSlotFragmentNew : Fragment(R.layout.fragment_create_cooking_s
         )
     }
 
-    private fun openTimePickerBottomSheet(selectedDate: Long?) {
+    private fun openTimePickerBottomSheet(selectedDate: Long?, operatingHours: OperatingHours?) {
         selectedDate?.let { date ->
             binding.createCookingSlotNewFragmentOperatingHoursError.show(false)
-            TimePickerBottomSheet.show(this,date){
+            TimePickerBottomSheet.show(this,date, operatingHours){
                 viewModel.setOperatingHours(it)
             }
         }
@@ -167,6 +169,9 @@ class CreateCookingSlotFragmentNew : Fragment(R.layout.fragment_create_cooking_s
             }
         }
     }
+
+
+    override fun clearClassVariables() {}
 }
 
 private fun formatOperatingHours(startTime: Long?, endTime: Long?): String {
@@ -182,13 +187,3 @@ private fun formatLastCallForOrderDate(lastCallForOrder: Long?): String {
     }
     return ""
 }
-
-private fun formatRcs(recurringRule: RecurringRule?): String {
-    if (recurringRule != null) {
-        return "Cooking slot will occur ${recurringRule.frequency}, ${recurringRule.count} times"
-    }
-    return ""
-}
-
-private fun DateTime.prepareFormattedDateForDateAndHour(): String =
-    DateTimeFormat.forPattern("EEEE, MMM dd, yyyy, hh:mm aa").print(this)

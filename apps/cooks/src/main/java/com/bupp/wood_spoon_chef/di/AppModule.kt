@@ -107,7 +107,7 @@ val appModule = module {
     viewModel { CookingSlotDetailsViewModel(get(), get()) }
 
     //calendar CookingSlotDetailsViewModel
-    viewModel { CookingSlotDetailsViewModelNew(get(), get()) }
+    viewModel { CookingSlotDetailsViewModelNew(get(), get(), get(), get(), get()) }
 
     //orders
     viewModel { CancelOrderViewModel(get(), get()) }

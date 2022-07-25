@@ -56,6 +56,7 @@ class MyDishesSectionAdapter(
     class DishItemSelectionViewHolder(val binding: ListItemDishSelectionBinding) :
         BaseViewHolder(binding.root) {
         val selectedCb: CheckBox = binding.listItemDishSelectionCb
+        val dishItem = binding.root
         override fun bind(item: SectionedListItem) {
             if (item is SectionedListItem.SectionItem) {
                 val myDishesPickerAdapterDish = item.item as MyDishesPickerAdapterDish
@@ -95,8 +96,10 @@ class MyDishesSectionAdapter(
             holder as DishItemSelectionViewHolder
             holder.selectedCb.setOnCheckedChangeListener(null)
             holder.selectedCb.isChecked = myDishesPickerAdapterDish.isSelected
-            holder.selectedCb.setOnCheckedChangeListener { _, isChecked ->
+            var isChecked: Boolean
+            holder.dishItem.setOnClickListener {
                 myDishesPickerAdapterDish.dish?.id?.let {
+                    isChecked= !holder.selectedCb.isChecked
                     listener.onDishSelected(isChecked, it)
                 }
             }

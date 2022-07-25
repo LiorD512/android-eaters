@@ -4,8 +4,8 @@
     android:layout_height="wrap_content"
     android:id="@+id/timePickerSwitcher"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:inAnimation="@anim/slide_left_enter"
-    android:outAnimation="@anim/slide_left_exit"
+    android:inAnimation="@anim/slide_right_enter"
+    android:outAnimation="@anim/slide_right_exit"
     android:background="@drawable/top_cornered_bkg">
 
     <LinearLayout

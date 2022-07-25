@@ -316,7 +316,7 @@ data class MenuItem(
     @Json(name = "_destroy") var _destroy: Boolean?
 ) : Parcelable {
     fun parseToMenuItemRequest(): MenuItemRequest {
-        return MenuItemRequest(id, dish.id, quantity, _destroy)
+        return MenuItemRequest(id, dish?.id, quantity, _destroy)
     }
 }
 

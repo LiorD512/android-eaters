@@ -8,7 +8,6 @@ import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.data.models.D
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.data.models.MenuDishItem
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.data.repository.DishesWithCategoryRepository
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.data.repository.CookingSlotsDraftRepository
-import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.data.repository.getDraftValue
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.dialogs.updateItem
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
@@ -16,7 +15,8 @@ import kotlinx.coroutines.launch
 data class CookingSlotMenuState(
     val operatingHours: OperatingHours = OperatingHours(null, null),
     val menuItems: List<MenuDishItem> = emptyList(),
-    val menuItemsByCategory: List<DishesMenuAdapterModel> = emptyList()
+    val menuItemsByCategory: List<DishesMenuAdapterModel> = emptyList(),
+    val isInEditMode: Boolean = false
 )
 
 sealed class CookingSlotMenuEvents {
@@ -42,8 +42,15 @@ class CookingSlotMenuViewModel(
                 draft?.let {
                     setMenuItems(draft.menuItems)
                     setOperatingHours(draft.operatingHours)
+                    setIsInEditMode(draft.originalCookingSlot != null)
                 }
             }
+        }
+    }
+
+    private fun setIsInEditMode(isInEditMode: Boolean){
+        _state.update {
+            it.copy(isInEditMode = isInEditMode)
         }
     }
 
@@ -74,7 +81,9 @@ class CookingSlotMenuViewModel(
             val newIdsActually = newIds.toMutableList().apply {
                 removeAll(currentlyAddedIds)
             }.toList()
-            val allUserDishes = dishesWithCategoryRepository.getSectionsAndDishes().getOrNull()?.dishes ?: emptyList()
+            val allUserDishes =
+                dishesWithCategoryRepository.getSectionsAndDishes().getOrNull()?.dishes
+                    ?: emptyList()
             val newMenuItems = newIdsActually.map { dishId ->
                 val dish = allUserDishes.find { it.id == dishId }
                 dish?.let { dish ->
@@ -112,26 +121,12 @@ class CookingSlotMenuViewModel(
     }
 
     fun updateQuantity(dishId: Long, quantity: Int) {
-        _state.update {
-            it.copy(
-                menuItemsByCategory = updateListWithQuantity
-                    (_state.value.menuItemsByCategory, dishId, quantity) ?: emptyList()
-            )
-        }
-    }
-
-    private fun updateListWithQuantity(
-        sectionedList: List<DishesMenuAdapterModel>?,
-        dishId: Long,
-        quantity: Int
-    ): List<DishesMenuAdapterModel>? {
-        return sectionedList?.map {
-            it.copy(dishes = it.dishes.updateItem(where = { dish -> dish.dish?.id == dishId }) { dishes ->
-                dishes.copy(quantity = quantity)
+        viewModelScope.launch {
+            setMenuItems(_state.value.menuItems.updateItem(where = { it.dish?.id == dishId }) {
+                it.copy(quantity = quantity)
             })
         }
     }
-
 
     private suspend fun combineMenuItemsBySections(
         menuItems: List<MenuDishItem>
