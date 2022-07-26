@@ -178,6 +178,12 @@ class CreateCookingSlotNewViewModel(
         }
     }
 
+    fun onMakeSlotRecurringClick(){
+        viewModelScope.launch {
+            _events.emit(CreateCookingSlotEvents.ShowRecurringRule(_state.value.recurringRule))
+        }
+    }
+
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
     private fun validateInputs(): Boolean {
         val errors = mutableListOf<Errors>()

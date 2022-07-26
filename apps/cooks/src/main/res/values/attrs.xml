@@ -258,6 +258,7 @@
         <attr name="title" />
         <attr name="subtitle" />
         <attr name="showSubTitle" />
+        <attr name="showMainIcon" format="boolean" />
     </declare-styleable>
 
     <declare-styleable name="CreateCookingSlotToggleView">
