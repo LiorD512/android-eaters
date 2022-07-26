@@ -1,4 +1,4 @@
-package com.bupp.wood_spoon_chef.presentation.features.cooking_slot.module
+package com.bupp.wood_spoon_chef.di
 
 import com.bupp.wood_spoon_chef.data.local.CookingSlotsDraftMemoryDataSource
 import com.bupp.wood_spoon_chef.data.remote.model.request.CookingSlotStateToRequestMapper
@@ -27,7 +27,7 @@ val cookingSlotModule = module {
 
     //mapper
     factory { CookingSlotStateToRequestMapper() }
-    factory { OriginalCookingSlotToDraftCookingSlotMapper() }
+    factory { OriginalCookingSlotToDraftCookingSlotMapper(get()) }
     factory { MenuItemToMenuDishItemMapper() }
     factory { MenuDishItemToAdapterModelMapper() }
     factory { AdapterModelCategoriesListMapper() }

@@ -82,6 +82,7 @@
     <string name="edit_cooking_slot">Edit cooking slot</string>
     <string name="create_cooking_slot">Create cooking slot</string>
     <string name="edit_cooking_slot_menu">Edit cooking slot menu</string>
+    <string name="update_slot">Update cooking slot</string>
     <string name="menu_empty_error">Menu cannot be empty</string>
     <string name="quantity_zero_error">Dish quantity cannot be 0</string>
 

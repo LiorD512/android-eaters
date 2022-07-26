@@ -1,6 +1,9 @@
 package com.bupp.wood_spoon_chef.presentation.features.cooking_slot.fragments
 
+import androidx.annotation.StringRes
 import androidx.lifecycle.viewModelScope
+import com.bupp.wood_spoon_chef.R
+import com.bupp.wood_spoon_chef.data.local.model.CookingSlotDraftData
 import com.bupp.wood_spoon_chef.data.remote.model.CookingSlotRequest
 import com.bupp.wood_spoon_chef.data.remote.model.DishCategory
 import com.bupp.wood_spoon_chef.data.remote.model.MenuItemRequest
@@ -11,7 +14,6 @@ import com.bupp.wood_spoon_chef.domain.GetSectionsWithDishesUseCase
 import com.bupp.wood_spoon_chef.presentation.features.base.BaseViewModel
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.data.models.MenuDishItem
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.data.repository.CookingSlotsDraftRepository
-import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.fragments.base.CookingSlotDraft
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.mapper.AdapterModelCategoriesListMapper
 import com.bupp.wood_spoon_chef.data.remote.model.request.CookingSlotStateToRequestMapper
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.mapper.MenuDishItemToAdapterModelMapper
@@ -25,6 +27,8 @@ sealed class ReviewCookingSlotState {
         val lastCallForOrder: Long? = null,
         val recurringRule: RecurringRule? = null,
         val menuItems: List<CookingSlotMenuAdapterItem> = emptyList(),
+        @StringRes
+        val btnActionStringRes: Int? = null
     ) : ReviewCookingSlotState()
 
     object Idle : ReviewCookingSlotState()
@@ -42,19 +46,29 @@ class CookingSlotReviewViewModel(
     private val stateMapper: CookingSlotStateToRequestMapper
 ) : BaseViewModel() {
 
+    private var isEditing: Boolean = false
+
     private val _state = MutableStateFlow<ReviewCookingSlotState>(ReviewCookingSlotState.Idle)
     val state: StateFlow<ReviewCookingSlotState> = _state
 
     init {
-        getDraft()
+        getDraftMenuItems()
     }
 
-    fun saveCookingSlot() = viewModelScope.launch {
+    fun saveOrUpdateCookingSlot() = viewModelScope.launch {
+        prepareAddSlotRequest().let { request ->
+            if (isEditing) {
+                updateCookingSlot(request)
+            } else {
+                saveCookingSlot(request)
+            }
+        }
+    }
+
+    private fun saveCookingSlot(request: CookingSlotRequest) = viewModelScope.launch {
         _state.emit(ReviewCookingSlotState.Loading())
 
         try {
-            val request = prepareAddSlotRequest()
-
             when (val result = cookingSlotRepository.postCookingSlot(request)) {
                 is ResponseSuccess -> {
                     _state.emit(ReviewCookingSlotState.SlotCreatedSuccess)
@@ -77,10 +91,38 @@ class CookingSlotReviewViewModel(
         }
     }
 
+    private fun updateCookingSlot(cookingSlotRequest: CookingSlotRequest) {
+        viewModelScope.launch {
+            _state.emit(ReviewCookingSlotState.Loading())
+
+            try {
+                cookingSlotsDraftRepository.getDraftValue()?.id?.let { draftSlotId ->
+                    when (val result =
+                        cookingSlotRepository.updateCookingSlot(draftSlotId, cookingSlotRequest)) {
+                        is ResponseSuccess -> {
+                            result.data?.let {
+                                _state.emit(ReviewCookingSlotState.SlotCreatedSuccess)
+                            }
+                        }
+                        is ResponseError -> {
+                            _state.emit(ReviewCookingSlotState.Error(result.error))
+                        }
+                    }
+                }
+
+            } catch (e: java.lang.Exception) {
+                e.message?.let { errorEvent.postRawValue(CustomError(it)) }
+            }
+            progressData.endProgress()
+        }
+
+    }
+
     private suspend fun prepareAddSlotRequest(): CookingSlotRequest =
         cookingSlotsDraftRepository.getDraft().map {
             val toList = it?.menuItems?.map { menuDishItem ->
                 MenuItemRequest(
+                    id = menuDishItem.menuItemId,
                     dishId = menuDishItem.dish?.id,
                     quantity = menuDishItem.quantity
                 )
@@ -98,15 +140,23 @@ class CookingSlotReviewViewModel(
         }.first()
 
 
-    private fun getDraft() {
+    private fun getDraftMenuItems() {
         viewModelScope.launch {
             cookingSlotsDraftRepository.getDraftValue()?.let { draft ->
+                isEditing = draft.isEditing
+
                 _state.emit(
                     ReviewCookingSlotState.ScreenDataState(
                         selectedDate = draft.selectedDate,
                         operatingHours = draft.operatingHours,
                         lastCallForOrder = draft.lastCallForOrder,
-                        recurringRule = draft.recurringRule
+                        recurringRule = draft.recurringRule,
+                        btnActionStringRes = if (draft.isEditing) {
+                            R.string.update_slot
+                        } else {
+                            R.string.save_cooking_slot
+                        }
+
                     )
                 )
             }
@@ -147,7 +197,7 @@ class CookingSlotReviewViewModel(
 
     private fun inflateCategoriesToMenuDishItems(
         sections: SectionWithDishes,
-        draftSlot: CookingSlotDraft?
+        draftSlot: CookingSlotDraftData?
     ): List<MenuDishItem> = draftSlot?.menuItems?.map { menuDishItem ->
         sections.sections?.forEach { section ->
             section.dishIds?.contains(menuDishItem.dish?.id)?.let { isContains ->

@@ -45,8 +45,12 @@ class CookingSlotDetailsFragmentNew : BaseFragment(R.layout.fragment_details_coo
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        parsNavArguments()
         observeViewModelState()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        parsNavArguments()
 
         binding.apply {
             toolbar.setCookingSlotTopBarListener(this@CookingSlotDetailsFragmentNew)

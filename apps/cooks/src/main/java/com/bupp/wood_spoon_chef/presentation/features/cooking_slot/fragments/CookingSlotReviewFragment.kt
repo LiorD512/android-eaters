@@ -2,6 +2,7 @@ package com.bupp.wood_spoon_chef.presentation.features.cooking_slot.fragments
 
 import android.os.Bundle
 import android.view.View
+import androidx.annotation.StringRes
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
@@ -39,7 +40,7 @@ class CookingSlotReviewFragment : BaseFragment(R.layout.fragment_cooking_slot_re
         lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.state.collect { state ->
-                    when(state) {
+                    when (state) {
                         ReviewCookingSlotState.Idle -> {
                             handleProgressBar(false)
                         }
@@ -72,6 +73,10 @@ class CookingSlotReviewFragment : BaseFragment(R.layout.fragment_cooking_slot_re
                 endTime = state.operatingHours.endTime
             )
 
+            state.btnActionStringRes?.let {
+                showButtonText(it)
+            }
+
             createCookingSlotNewFragmentLastCallForOrderView.setSubtitle(
                 formatLastCallForOrderDate(state.lastCallForOrder)
             )
@@ -80,6 +85,16 @@ class CookingSlotReviewFragment : BaseFragment(R.layout.fragment_cooking_slot_re
             )
 
             menuAdapter?.submitList(state.menuItems)
+        }
+    }
+
+    private fun showButtonText(
+        @StringRes resId: Int
+    ) {
+        binding.apply {
+            context?.resources?.getString(resId)?.let { string ->
+                btnSaveSlot.setText(string)
+            }
         }
     }
 
@@ -103,7 +118,7 @@ class CookingSlotReviewFragment : BaseFragment(R.layout.fragment_cooking_slot_re
             initList(this)
 
             btnSaveSlot.setOnClickListener {
-                viewModel.saveCookingSlot()
+                viewModel.saveOrUpdateCookingSlot()
             }
         }
     }
