@@ -1,6 +1,8 @@
 package com.bupp.wood_spoon_chef.presentation.features.cooking_slot.fragments
 
+import android.content.Context
 import androidx.lifecycle.viewModelScope
+import com.bupp.wood_spoon_chef.R
 import com.bupp.wood_spoon_chef.presentation.features.base.BaseViewModel
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.coordinator.CookingSlotFlowCoordinator
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.coordinator.CookingSlotFlowStep
@@ -20,6 +22,7 @@ data class CookingSlotMenuState(
 )
 
 sealed class CookingSlotMenuEvents {
+    data class Error(val message: String = "") : CookingSlotMenuEvents()
     data class ShowMyDishesBottomSheet(val selectedDishes: List<Long> = emptyList()) :
         CookingSlotMenuEvents()
 }
@@ -48,25 +51,32 @@ class CookingSlotMenuViewModel(
         }
     }
 
-    private fun setIsInEditMode(isInEditMode: Boolean){
+    private fun setIsInEditMode(isInEditMode: Boolean) {
         _state.update {
             it.copy(isInEditMode = isInEditMode)
         }
     }
 
-    fun onOpenReviewFragmentClicked() {
+    fun onOpenReviewFragmentClicked(context: Context) {
         viewModelScope.launch {
-            onValidationSuccess()
+            validateInputs(context)
         }
     }
 
-    private suspend fun onValidationSuccess() {
+    private suspend fun validateInputs(context: Context) {
         val currentDraft = cookingSlotsDraftRepository.getDraftValue() ?: return
-        val updatedDraft = currentDraft.copy(
-            menuItems = _state.value.menuItems
-        )
-        cookingSlotsDraftRepository.saveDraft(updatedDraft)
-        cookingSlotFlowNavigator.navigateNext(fromStep = CookingSlotFlowStep.EDIT_MENU)
+        if (_state.value.menuItems.isEmpty()) {
+            _events.emit(CookingSlotMenuEvents.Error(context.getString(R.string.menu_empty_error)))
+        } else if (_state.value.menuItems.any { it.quantity == 0 }) {
+            _events.emit(CookingSlotMenuEvents.Error(context.getString(R.string.quantity_zero_error)))
+        } else {
+            val updatedDraft = currentDraft.copy(
+                menuItems = _state.value.menuItems
+            )
+            cookingSlotsDraftRepository.saveDraft(updatedDraft)
+            cookingSlotFlowNavigator.navigateNext(fromStep = CookingSlotFlowStep.EDIT_MENU)
+        }
+
     }
 
     fun onAddDishesClick() {

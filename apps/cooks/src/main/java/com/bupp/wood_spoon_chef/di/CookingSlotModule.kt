@@ -1,6 +1,7 @@
-package com.bupp.wood_spoon_chef.presentation.features.cooking_slot.module
+package com.bupp.wood_spoon_chef.di
 
 import com.bupp.wood_spoon_chef.data.local.CookingSlotsDraftMemoryDataSource
+import com.bupp.wood_spoon_chef.data.remote.model.request.CookingSlotStateToRequestMapper
 import com.bupp.wood_spoon_chef.data.repositories.CookingSlotRepository
 import com.bupp.wood_spoon_chef.domain.GetIsCookingSlotNewFlowEnabledUseCase
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.fragments.CookingSlotMenuViewModel
@@ -14,6 +15,7 @@ import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.data.network.
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.data.network.DishesWithCategoryApiService
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.data.repository.CookingSlotsDraftRepository
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.data.repository.DishesWithCategoryRepository
+import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.dialogs.SlotRecurringViewModel
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.fragments.CookingSlotReviewViewModel
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.mapper.*
 import org.koin.androidx.viewmodel.dsl.viewModel
@@ -25,8 +27,8 @@ val cookingSlotModule = module {
     factory { CookingSlotFlowCoordinator() }
 
     //mapper
-    factory { CookingSlotStateMapper() }
-    factory { OriginalCookingSlotToDraftCookingSlotMapper() }
+    factory { CookingSlotStateToRequestMapper() }
+    factory { OriginalCookingSlotToDraftCookingSlotMapper(get()) }
     factory { MenuItemToMenuDishItemMapper() }
     factory { MenuDishItemToAdapterModelMapper() }
     factory { AdapterModelCategoriesListMapper() }
@@ -44,9 +46,10 @@ val cookingSlotModule = module {
     viewModel { params -> CookingSlotParentViewModel(params.get(), get(), get(), get()) }
     viewModel { params -> CreateCookingSlotNewViewModel(params.get(), get(), get(), get()) }
     viewModel { params -> CookingSlotMenuViewModel(params.get(), get(), get()) }
-    viewModel { MyDishesViewModel(get(), get()) }
+    viewModel { MyDishesViewModel(get()) }
     viewModel { FilterMenuViewModel(get()) }
     viewModel { CookingSlotReviewViewModel(get(), get(), get(), get(), get(),get()) }
+    viewModel { SlotRecurringViewModel() }
 
 }
 

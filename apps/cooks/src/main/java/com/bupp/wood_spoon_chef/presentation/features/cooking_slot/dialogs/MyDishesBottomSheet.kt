@@ -20,6 +20,7 @@ import com.bupp.wood_spoon_chef.common.TopCorneredBottomSheet
 import com.bupp.wood_spoon_chef.databinding.BottomSheetMyDishesBinding
 import com.bupp.wood_spoon_chef.presentation.custom_views.HeaderView
 import com.bupp.wood_spoon_chef.presentation.custom_views.SimpleTextWatcher
+import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.data.models.FilterAdapterSectionModel
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.data.models.MyDishesPickerAdapterModel
 import com.bupp.wood_spoon_chef.utils.extensions.show
 import com.bupp.wood_spoon_chef.utils.extensions.showErrorToast
@@ -97,7 +98,7 @@ class MyDishesBottomSheet(private val selectedDishesIds: List<Long>) : TopCorner
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.events.collect { event ->
                     when (event) {
-                        MyDishesEvent.ShowFilterMenu -> openFilterMenuBottomSheet()
+                        is MyDishesEvent.ShowFilterMenu -> openFilterMenuBottomSheet(event.selectedSections)
                         is MyDishesEvent.ShowEmptyState -> showEmptyResultState(event.show)
                         is MyDishesEvent.Error -> {
                             binding?.apply {
@@ -165,10 +166,11 @@ class MyDishesBottomSheet(private val selectedDishesIds: List<Long>) : TopCorner
         }
     }
 
-    private fun openFilterMenuBottomSheet() {
-        FilterMenuBottomSheet.show(this) {
-            viewModel.setIsListFiltered(it != null)
-            viewModel.filterBySectionName(it?.name)
+    private fun openFilterMenuBottomSheet(selectedSections: List<String>?) {
+        FilterMenuBottomSheet.show(this, selectedSections) {
+            viewModel.setIsListFiltered(it.isNotEmpty())
+            viewModel.filterBySectionName(it)
+            viewModel.updateSelectedSections(it.map { section -> section.sectionName})
         }
     }
 

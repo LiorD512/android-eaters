@@ -57,6 +57,14 @@ class CreateCookingSlotOptionView @JvmOverloads constructor(
                 setRightArrowIcon(icon)
             }
 
+            if (attrSet.hasValue(R.styleable.CreateCookingSlotOptionView_showMainIcon)) {
+                val icon = attrSet.getBoolean(
+                    R.styleable.CreateCookingSlotOptionView_showMainIcon,
+                    true
+                )
+                showMainIcon(icon)
+            }
+
             showSubtitle()
 
             attrSet.recycle()
@@ -102,5 +110,9 @@ class CreateCookingSlotOptionView @JvmOverloads constructor(
 
     fun setForwardBtnClickListener(clickListener: () -> Unit) {
         binding.createCookingSlotOptionViewForwardBtn.setOnClickListener { clickListener() }
+    }
+
+    private fun showMainIcon(show: Boolean){
+        binding.createCookingSlotOptionViewMainIcon.show(show)
     }
 }

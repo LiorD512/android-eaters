@@ -11,6 +11,7 @@ import com.bupp.wood_spoon_chef.databinding.FragmentCreateCookingSlotNewBinding
 import com.bupp.wood_spoon_chef.presentation.custom_views.CreateCookingSlotTopBar
 import com.bupp.wood_spoon_chef.presentation.features.base.BaseFragment
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.dialogs.OperatingHoursInfoBottomSheet
+import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.dialogs.SlotRecurringBottomSheet
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.dialogs.TimePickerBottomSheet
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.fragments.base.CookingSlotParentFragment
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.rrules.formatRcs
@@ -47,7 +48,7 @@ class CreateCookingSlotFragmentNew : BaseFragment(R.layout.fragment_create_cooki
             createCookingSlotNewFragmentOperatingHoursView.setOnSecondaryIconClickListener { openOperatingHoursInfoBottomSheet() }
             createCookingSlotNewFragmentOperatingHoursView.setAddClickListener { viewModel.onOperatingHoursClick() }
             createCookingSlotNewFragmentLastCallForOrderView.setForwardBtnClickListener { viewModel.onLastCallForOrderClick() }
-
+            createCookingSlotNewFragmentMakeRecurringView.setForwardBtnClickListener { viewModel.onMakeSlotRecurringClick()}
         }
     }
 
@@ -87,7 +88,7 @@ class CreateCookingSlotFragmentNew : BaseFragment(R.layout.fragment_create_cooki
                             is CreateCookingSlotEvents.ShowLastCallForOrder -> openLastCallForOrder(
                                 event.lastCallForOrder
                             )
-                            is CreateCookingSlotEvents.ShowRecurringRule -> openRecurringRule(
+                            is CreateCookingSlotEvents.ShowRecurringRule -> openSlotRecurringBottomSheet(
                                 event.recurringRule
                             )
                         }
@@ -152,8 +153,8 @@ class CreateCookingSlotFragmentNew : BaseFragment(R.layout.fragment_create_cooki
         viewModel.setLastCallForOrders(lastCallForOrder)
     }
 
-    private fun openRecurringRule(recurringRule: RecurringRule?) {
-        viewModel.setRecurringRule(recurringRule)
+    private fun openSlotRecurringBottomSheet(recurringRule: RecurringRule?) {
+        SlotRecurringBottomSheet.show(this)
     }
 
     override fun onBackClick() {

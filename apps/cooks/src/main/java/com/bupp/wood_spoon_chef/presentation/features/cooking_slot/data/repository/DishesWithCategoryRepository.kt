@@ -2,6 +2,7 @@ package com.bupp.wood_spoon_chef.presentation.features.cooking_slot.data.reposit
 
 import com.bupp.wood_spoon_chef.data.remote.model.SectionWithDishes
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.data.local.DishesWithCategoryMemoryDataSource
+import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.data.models.FilterAdapterSectionModel
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.data.network.DishesWithCategoryApiService
 
 class DishesWithCategoryRepository(
@@ -34,13 +35,11 @@ class DishesWithCategoryRepository(
         }
     }
 
-    fun filterListByCategoryName(name: String?): SectionWithDishes? {
-        return if (!name.isNullOrEmpty()) {
-            val filteredSections = memoryDataSource.getSectionsAndDishes()?.sections?.filter {
-                it.title.equals(
-                    name,
-                    true
-                )
+    fun filterListByCategoryName(sectionList: List<FilterAdapterSectionModel>): SectionWithDishes? {
+        val sectionName = sectionList.map { it.sectionName }
+        return if (sectionName.isNotEmpty()) {
+            val filteredSections = memoryDataSource.getSectionsAndDishes()?.sections?.filter { section ->
+                sectionName.any{it.equals(section.title, true)}
             }
             SectionWithDishes(memoryDataSource.getSectionsAndDishes()?.dishes, filteredSections)
         } else {

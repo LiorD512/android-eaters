@@ -10,7 +10,7 @@ import com.bupp.wood_spoon_chef.presentation.features.base.BaseViewModel
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.coordinator.CookingSlotFlowCoordinator
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.coordinator.CookingSlotFlowStep
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.data.repository.CookingSlotsDraftRepository
-import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.mapper.CookingSlotStateMapper
+import com.bupp.wood_spoon_chef.data.remote.model.request.CookingSlotStateToRequestMapper
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
@@ -57,7 +57,7 @@ sealed class CreateCookingSlotEvents {
 
 class CreateCookingSlotNewViewModel(
     private val cookingSlotFlowCoordinator: CookingSlotFlowCoordinator,
-    private val stateMapper: CookingSlotStateMapper,
+    private val stateMapper: CookingSlotStateToRequestMapper,
     private val cookingSlotRepository: CookingSlotRepository,
     private val cookingSlotsDraftRepository: CookingSlotsDraftRepository
 ) : BaseViewModel() {
@@ -175,6 +175,12 @@ class CreateCookingSlotNewViewModel(
         viewModelScope.launch {
             val lastCallForOrder = DateTime(_state.value.selectedDate).plusHours(9).millis
             _events.emit(CreateCookingSlotEvents.ShowLastCallForOrder(lastCallForOrder))
+        }
+    }
+
+    fun onMakeSlotRecurringClick(){
+        viewModelScope.launch {
+            _events.emit(CreateCookingSlotEvents.ShowRecurringRule(_state.value.recurringRule))
         }
     }
 

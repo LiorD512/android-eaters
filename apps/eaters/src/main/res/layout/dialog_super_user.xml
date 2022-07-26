@@ -46,7 +46,7 @@
 
         <com.bupp.wood_spoon_eaters.views.WSEditText
             app:hint="CHANGE BASE API CALL"
-            app:inputType="NUMBER"
+            app:inputType="INPUT_TYPE_TEXT_WITH_NUMBER"
             android:paddingHorizontal="15.4dp"
             android:paddingVertical="15.4dp"
             android:layout_marginBottom="15.4dp"

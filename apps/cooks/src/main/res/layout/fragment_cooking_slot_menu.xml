@@ -7,6 +7,7 @@
     android:background="@color/wild_sand"
     android:clipChildren="false"
     android:clipToPadding="false"
+    android:id="@+id/cookingSlotMenuFragmentMainLayout"
     tools:context=".presentation.features.cooking_slot.fragments.CookingSlotMenuFragment">
 
     <androidx.core.widget.NestedScrollView
@@ -130,7 +131,6 @@
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/medium"
         android:layout_marginBottom="14.4dp"
-        android:background="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:title="@string/go_to_review" />
 

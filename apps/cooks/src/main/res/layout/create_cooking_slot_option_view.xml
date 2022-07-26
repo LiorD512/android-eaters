@@ -17,8 +17,7 @@
         app:layout_constraintBottom_toBottomOf="@+id/createCookingSlotOptionViewTitle"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/createCookingSlotOptionViewTitle"
-        app:tint="@color/black"
-        tools:src="@drawable/icon_reccuring" />
+        app:tint="@color/black"/>
 
     <TextView
         android:id="@+id/createCookingSlotOptionViewTitle"
@@ -26,6 +25,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
+        app:layout_goneMarginStart="@dimen/medium"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="8dp"
         app:layout_constraintEnd_toStartOf="@+id/createCookingSlotOptionViewForwardBtn"
@@ -44,7 +44,8 @@
         app:layout_constraintBottom_toBottomOf="@+id/createCookingSlotOptionViewTitle"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/createCookingSlotOptionViewTitle"
-        tools:src="@drawable/ic_arrow_right" />
+        tools:src="@drawable/ic_arrow_right"
+        app:tint="@color/orangeish" />
 
     <TextView
         android:id="@+id/createCookingSlotOptionViewSubTitle"
