@@ -25,7 +25,7 @@ sealed class ReviewCookingSlotState {
         val selectedDate: Long? = null,
         val operatingHours: OperatingHours = OperatingHours(null, null),
         val lastCallForOrder: Long? = null,
-        val recurringRule: RecurringRule? = null,
+        val recurringRule: String? = null,
         val menuItems: List<CookingSlotMenuAdapterItem> = emptyList(),
         @StringRes
         val btnActionStringRes: Int? = null

@@ -11,6 +11,7 @@ import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.coordinator.C
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.coordinator.CookingSlotFlowStep
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.data.repository.CookingSlotsDraftRepository
 import com.bupp.wood_spoon_chef.data.remote.model.request.CookingSlotStateToRequestMapper
+import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.rrules.RRuleTextFormatter
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
@@ -24,16 +25,12 @@ data class OperatingHours(
     val endTime: Long?
 ) : Parcelable
 
-data class RecurringRule(
-    val frequency: String?,
-    val count: String?
-)
 
 data class CreateCookingSlotNewState(
     val selectedDate: Long? = null,
     val operatingHours: OperatingHours = OperatingHours(null, null),
     val lastCallForOrder: Long? = null,
-    val recurringRule: RecurringRule? = null,
+    val recurringRule: String? = null,
     val isInEditMode: Boolean = false,
     val errors: List<Errors> = emptyList(),
     val inProgress: Boolean = false
@@ -51,7 +48,7 @@ sealed class CreateCookingSlotEvents {
         CreateCookingSlotEvents()
 
     data class ShowLastCallForOrder(val lastCallForOrder: Long? = null) : CreateCookingSlotEvents()
-    data class ShowRecurringRule(val recurringRule: RecurringRule? = null) :
+    data class ShowRecurringRule(val recurringRule: String? = null) :
         CreateCookingSlotEvents()
 }
 
@@ -104,7 +101,7 @@ class CreateCookingSlotNewViewModel(
         }
     }
 
-    fun setRecurringRule(recurringRule: RecurringRule?) {
+    fun setRecurringRule(recurringRule: String?) {
         _state.update {
             it.copy(recurringRule = recurringRule)
         }
@@ -178,7 +175,7 @@ class CreateCookingSlotNewViewModel(
         }
     }
 
-    fun onMakeSlotRecurringClick(){
+    fun onMakeSlotRecurringClick() {
         viewModelScope.launch {
             _events.emit(CreateCookingSlotEvents.ShowRecurringRule(_state.value.recurringRule))
         }

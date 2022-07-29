@@ -89,7 +89,7 @@ class CreateCookingSlotOptionView @JvmOverloads constructor(
         )
     }
 
-    private fun setRightArrowIcon(@DrawableRes rightArrowIcon: Int) {
+     fun setRightArrowIcon(@DrawableRes rightArrowIcon: Int) {
         binding.createCookingSlotOptionViewForwardBtn.apply {
             if (rightArrowIcon == 0) {
                 isVisible = false
@@ -108,11 +108,13 @@ class CreateCookingSlotOptionView @JvmOverloads constructor(
         binding.createCookingSlotOptionViewSubTitle.show(binding.createCookingSlotOptionViewSubTitle.text.isNotEmpty())
     }
 
-    fun setForwardBtnClickListener(clickListener: () -> Unit) {
-        binding.createCookingSlotOptionViewForwardBtn.setOnClickListener { clickListener() }
+    private fun showMainIcon(show: Boolean) {
+        binding.createCookingSlotOptionViewMainIcon.show(show)
     }
 
-    private fun showMainIcon(show: Boolean){
-        binding.createCookingSlotOptionViewMainIcon.show(show)
+    fun showEndDrawable(show: Boolean) {
+        binding.createCookingSlotOptionViewForwardBtn.show(
+            show, useInvisible = true
+        )
     }
 }

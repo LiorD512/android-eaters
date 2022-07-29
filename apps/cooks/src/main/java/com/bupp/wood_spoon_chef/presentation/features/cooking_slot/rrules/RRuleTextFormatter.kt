@@ -7,9 +7,9 @@ import biweekly.io.WriteContext
 import biweekly.io.scribe.property.RecurrenceRuleScribe
 import biweekly.parameter.ICalParameters
 import biweekly.property.RecurrenceRule
+import biweekly.util.DayOfWeek
 import biweekly.util.Frequency
 import biweekly.util.Recurrence
-import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.fragments.RecurringRule
 import timber.log.Timber
 import java.text.SimpleDateFormat
 import java.util.*
@@ -18,7 +18,8 @@ import java.util.*
 data class SimpleRRule(
     val frequency: Frequency,
     val interval: Int,
-    val until: Date?
+    val until: Date?,
+    val days: List<DayOfWeek>?
 )
 
 class RRuleTextFormatter {
@@ -38,9 +39,10 @@ class RRuleTextFormatter {
             val recurrence = rrule.value;
 
             return SimpleRRule(
-                recurrence.frequency,
-                recurrence.interval,
-                recurrence.until ?: Date()
+                frequency = recurrence.frequency,
+                interval = recurrence.interval,
+                until = recurrence.until ?: Date(),
+                days = recurrence.byDay.map { it.day }
             )
 
         } catch (ex: RuntimeException) {
@@ -66,6 +68,12 @@ class RRuleTextFormatter {
                     )
                 }"
             )
+            if (!simpleRRule.days.isNullOrEmpty()){
+                simpleRRule.days.forEach {
+                    stringBuilder.append(" ${it.name}")
+                }
+            }
+
             if (simpleRRule.until != null) {
                 stringBuilder.append(" until ${dateFormat.format(Date(simpleRRule.until.time))}")
             }
@@ -91,11 +99,19 @@ class RRuleTextFormatter {
         return word + suffix
     }
 
-    fun buildRRule(frequency: Frequency, interval: Int, until: Date?): String? {
+    fun buildRRule(
+        frequency: Frequency,
+        interval: Int,
+        until: Date?,
+        days: List<DayOfWeek>?
+    ): String? {
         return try {
             val recurrence = Recurrence.Builder(frequency).interval(interval).apply {
                 until?.let {
                     until(until)
+                }
+                days?.let {
+                    byDay(days)
                 }
             }.build()
             val rrule = RecurrenceRule(recurrence)
@@ -107,20 +123,5 @@ class RRuleTextFormatter {
     }
 
     fun buildRRule(simpleRRule: SimpleRRule) =
-        buildRRule(simpleRRule.frequency, simpleRRule.interval, simpleRRule.until)
-}
-
-fun formatRcs(recurringRule: RecurringRule?): String {
-    if (recurringRule != null) {
-        return "Cooking slot will occur ${recurringRule.frequency}, ${recurringRule.count} times"
-    }
-    return ""
-}
-
-fun formatRecurringRule(recurringRule: RecurringRule?): String? {
-    if (recurringRule == null) {
-        return null
-    }
-    return "FREQ=${recurringRule?.frequency};COUNT=${recurringRule?.count}".uppercase()
-
+        buildRRule(simpleRRule.frequency, simpleRRule.interval, simpleRRule.until, simpleRRule.days)
 }
