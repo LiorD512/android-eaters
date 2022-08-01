@@ -141,7 +141,7 @@ class DishMenuAdapter(
                     listItemDishMenuDishName.text = menuDishItem.dish?.name
                     listItemDishMenuDishPrice.text = menuDishItem.dish?.price?.formattedValue
                     listItemMenuDishQuantityNumber.setTextIfNeeded(menuDishItem.quantity.toString())
-                    Glide.with(binding.root.context).load(menuDishItem.dish?.imageGallery?.first())
+                    Glide.with(binding.root.context).load(menuDishItem.dish?.imageGallery?.firstOrNull())
                         .into(listItemDishMenuImage)
                 }
             }

@@ -134,7 +134,6 @@ class CustomRecurringBottomSheet(
     }
 
     private fun updateInputsWithState(state: CustomRecurringState) {
-        setRruleText()
         setSelectedDays(state.selectedDays)
         setFrequencyAndIntervalText(
             formatFrequencyString(
@@ -177,12 +176,6 @@ class CustomRecurringBottomSheet(
 
     private fun setFrequencyAndIntervalText(frequencyTxt: String?) {
         binding?.customRecurringFrequencyInput?.text = frequencyTxt
-    }
-
-    private fun setRruleText() {
-        viewModel.mapStateToRule()?.let {
-            binding?.customRecurringFrequencyTxt?.text = RRuleTextFormatter().formatRRule(it)
-        }
     }
 
     override fun onHeaderBackClick() {

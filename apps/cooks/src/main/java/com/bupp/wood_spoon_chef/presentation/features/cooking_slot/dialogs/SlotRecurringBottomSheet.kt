@@ -16,6 +16,8 @@ import com.bupp.wood_spoon_chef.common.TopCorneredBottomSheet
 import com.bupp.wood_spoon_chef.databinding.BottomSheetSlotRecurringBinding
 import com.bupp.wood_spoon_chef.presentation.custom_views.CreateCookingSlotOptionView
 import com.bupp.wood_spoon_chef.presentation.custom_views.HeaderView
+import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.rrules.RRuleTextFormatter
+import com.bupp.wood_spoon_chef.utils.DateUtils
 import com.bupp.wood_spoon_chef.utils.extensions.showErrorToast
 import com.google.android.material.datepicker.*
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog
@@ -90,6 +92,8 @@ class SlotRecurringBottomSheet(
                 launch {
                     viewModel.state.collect { state ->
                         setSelectedFrequencyItem(state.selectedFrequency)
+                        setRruleText()
+                        setEndsAtText(state.endsAt)
                     }
                 }
             }
@@ -151,6 +155,12 @@ class SlotRecurringBottomSheet(
         }
     }
 
+    private fun setRruleText() {
+        binding?.makeSlotRecurringRuleTxt?.text = viewModel.mapStateToRule()?.let {
+            RRuleTextFormatter().formatRRule(it)
+        } ?: "Cooking slot will occur only once"
+    }
+
     private fun showEndsAtDatePicker(selectedDate: Long) {
         val validator = CompositeDateValidator.allOf(
             listOf(
@@ -179,6 +189,13 @@ class SlotRecurringBottomSheet(
         dismiss()
     }
 
+    private fun setEndsAtText(endsAt: Date?){
+        binding?.apply {
+            endsAt?.let {
+                makeSlotRecurringEndsAt.setTitle("Ends at ${DateUtils.parseDateToDayMonthDay(it)}")
+            } ?: makeSlotRecurringEndsAt.setTitle("Ends at")
+        }
+    }
     private fun onSaveClick(recurringRule: String?) {
         setFragmentResult(
             SELECTED_RULE_KEY,

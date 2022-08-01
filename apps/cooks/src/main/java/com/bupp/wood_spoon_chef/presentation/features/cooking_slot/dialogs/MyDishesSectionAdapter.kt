@@ -65,7 +65,7 @@ class MyDishesSectionAdapter(
                     listItemDishSelectionDishPrice.text =
                         myDishesPickerAdapterDish.dish?.price?.formattedValue
                     Glide.with(binding.root.context)
-                        .load(myDishesPickerAdapterDish.dish?.imageGallery?.first())
+                        .load(myDishesPickerAdapterDish.dish?.imageGallery?.firstOrNull())
                         .into(listItemDishSelectionImage)
                 }
             }

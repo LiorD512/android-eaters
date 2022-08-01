@@ -2,18 +2,18 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/cookingSlotMenuFragmentMainLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/wild_sand"
     android:clipChildren="false"
     android:clipToPadding="false"
-    android:id="@+id/cookingSlotMenuFragmentMainLayout"
     tools:context=".presentation.features.cooking_slot.fragments.CookingSlotMenuFragment">
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@id/createCookingSlotMenuFragmentGoToReviewBtn"
+        app:layout_constraintBottom_toTopOf="@id/createCookingSlotMenuFragmentGoToReviewBtnLayout"
         app:layout_constraintTop_toBottomOf="@id/createCookingSlotMenuFragmentTopBar">
 
         <LinearLayout
@@ -42,10 +42,10 @@
                 tools:text="12:15 PM - 4:00 PM" />
 
             <FrameLayout
-                android:animateLayoutChanges="true"
                 android:id="@+id/createCookingSlotMenuFragmentAddDishesMainLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:animateLayoutChanges="true"
                 android:orientation="vertical">
 
                 <com.google.android.material.card.MaterialCardView
@@ -110,8 +110,7 @@
                 android:layout_marginHorizontal="@dimen/medium"
                 android:layout_marginTop="@dimen/big"
                 tools:itemCount="3"
-                tools:listitem="@layout/list_item_menu_dish"
-                />
+                tools:listitem="@layout/list_item_menu_dish" />
         </LinearLayout>
 
     </androidx.core.widget.NestedScrollView>
@@ -125,13 +124,22 @@
         app:layout_constraintTop_toTopOf="parent"
         app:title="@string/my_cooking_slot_menu" />
 
-    <com.bupp.wood_spoon_chef.presentation.custom_views.OrangeBtnCornered
-        android:id="@+id/createCookingSlotMenuFragmentGoToReviewBtn"
+    <FrameLayout
+        android:id="@+id/createCookingSlotMenuFragmentGoToReviewBtnLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="@dimen/medium"
-        android:layout_marginBottom="14.4dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:title="@string/go_to_review" />
+        android:background="@drawable/transparent_to_white_80_gradient"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <com.bupp.wood_spoon_chef.presentation.custom_views.OrangeBtnCornered
+            android:id="@+id/createCookingSlotMenuFragmentGoToReviewBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/medium"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:title="@string/go_to_review" />
+
+    </FrameLayout>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

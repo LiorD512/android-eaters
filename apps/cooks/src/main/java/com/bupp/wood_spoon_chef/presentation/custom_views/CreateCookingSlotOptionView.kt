@@ -72,7 +72,7 @@ class CreateCookingSlotOptionView @JvmOverloads constructor(
         }
     }
 
-    private fun setTitle(title: String?) {
+    fun setTitle(title: String?) {
         binding.createCookingSlotOptionViewTitle.text = title
     }
 

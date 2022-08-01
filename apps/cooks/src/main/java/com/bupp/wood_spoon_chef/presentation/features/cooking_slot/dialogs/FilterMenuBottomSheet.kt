@@ -87,13 +87,11 @@ class FilterMenuBottomSheet(
     }
 
     private fun onApplyClick(selectedSections: List<FilterAdapterSectionModel>?) {
-        if (!selectedSections.isNullOrEmpty()) {
-            setFragmentResult(
-                SELECTED_SECTIONS_KEY, bundleOf(
-                    SELECTED_SECTIONS_VALUE to selectedSections
-                )
+        setFragmentResult(
+            SELECTED_SECTIONS_KEY, bundleOf(
+                SELECTED_SECTIONS_VALUE to selectedSections
             )
-        }
+        )
         dismiss()
     }
 
