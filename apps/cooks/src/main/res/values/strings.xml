@@ -99,6 +99,9 @@
     <string name="week">Week</string>
     <string name="days">Days</string>
     <string name="weeks">Weeks</string>
+    <string name="save">SAVE</string>
+    <string name="cancel">CANCEL</string>
+    <string name="ends_at">Ends at</string>
 
     <plurals name="day_plurals">
         <item quantity="one">@string/day</item>

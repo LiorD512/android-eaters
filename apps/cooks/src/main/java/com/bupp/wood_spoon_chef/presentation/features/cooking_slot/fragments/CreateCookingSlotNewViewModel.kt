@@ -11,7 +11,6 @@ import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.coordinator.C
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.coordinator.CookingSlotFlowStep
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.data.repository.CookingSlotsDraftRepository
 import com.bupp.wood_spoon_chef.data.remote.model.request.CookingSlotStateToRequestMapper
-import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.rrules.RRuleTextFormatter
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
@@ -48,7 +47,7 @@ sealed class CreateCookingSlotEvents {
         CreateCookingSlotEvents()
 
     data class ShowLastCallForOrder(val lastCallForOrder: Long? = null) : CreateCookingSlotEvents()
-    data class ShowRecurringRule(val recurringRule: String? = null) :
+    data class ShowRecurringRule(val recurringRule: String? = null, val selectedDate: Long) :
         CreateCookingSlotEvents()
 }
 
@@ -176,8 +175,10 @@ class CreateCookingSlotNewViewModel(
     }
 
     fun onMakeSlotRecurringClick() {
-        viewModelScope.launch {
-            _events.emit(CreateCookingSlotEvents.ShowRecurringRule(_state.value.recurringRule))
+        _state.value.selectedDate?.let {
+            viewModelScope.launch {
+                _events.emit(CreateCookingSlotEvents.ShowRecurringRule(_state.value.recurringRule, it))
+            }
         }
     }
 

@@ -89,7 +89,8 @@ class CreateCookingSlotFragmentNew : BaseFragment(R.layout.fragment_create_cooki
                                 event.lastCallForOrder
                             )
                             is CreateCookingSlotEvents.ShowRecurringRule -> openSlotRecurringBottomSheet(
-                                event.recurringRule
+                                event.recurringRule,
+                                event.selectedDate
                             )
                         }
                     }
@@ -155,8 +156,8 @@ class CreateCookingSlotFragmentNew : BaseFragment(R.layout.fragment_create_cooki
         viewModel.setLastCallForOrders(lastCallForOrder)
     }
 
-    private fun openSlotRecurringBottomSheet(recurringRule: String?) {
-        SlotRecurringBottomSheet.show(this, recurringRule){
+    private fun openSlotRecurringBottomSheet(recurringRule: String?, selectedDate: Long) {
+        SlotRecurringBottomSheet.show(this, recurringRule, selectedDate){
             viewModel.setRecurringRule(it)
         }
     }
