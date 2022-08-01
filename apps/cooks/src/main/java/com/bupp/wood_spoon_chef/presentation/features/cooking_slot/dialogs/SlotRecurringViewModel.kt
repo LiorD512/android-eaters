@@ -57,17 +57,24 @@ class SlotRecurringViewModel : BaseViewModel() {
     }
 
     private suspend fun validateInputs() {
-        with(_state.value) {
-            if (endsAt == null) {
-                _events.emit(SlotRecurringEvent.Error("Recurring slot must have Ends at date"))
-            } else {
+        when(_state.value.selectedFrequency){
+            RecurringFrequency.OneTime -> {
                 _events.emit(SlotRecurringEvent.OnSave(mapStateToRule()))
+            }
+            else -> {
+                with(_state.value) {
+                    if (endsAt == null) {
+                        _events.emit(SlotRecurringEvent.Error("Recurring slot must have Ends at date"))
+                    } else {
+                        _events.emit(SlotRecurringEvent.OnSave(mapStateToRule()))
+                    }
+                }
             }
         }
     }
 
-    private fun mapStateToRule(): String? {
-        val endsAt = _state.value.endsAt ?: return null
+     fun mapStateToRule(): String? {
+        val endsAt = _state.value.endsAt
         val simpleRule = when (_state.value.selectedFrequency) {
             is RecurringFrequency.OneTime -> null
             RecurringFrequency.EveryDay -> {

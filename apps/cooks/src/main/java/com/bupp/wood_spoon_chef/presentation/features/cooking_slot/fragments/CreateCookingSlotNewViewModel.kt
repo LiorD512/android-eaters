@@ -198,6 +198,7 @@ class CreateCookingSlotNewViewModel(
         with(_state.value) {
             if (operatingHours.startTime == null) {
                 errors.add(Errors.OperatingHours)
+                setInProgress(false)
             }
         }
         _state.update { it.copy(errors = errors.toList()) }

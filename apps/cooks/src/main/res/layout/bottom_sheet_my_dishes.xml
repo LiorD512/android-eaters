@@ -96,15 +96,21 @@
         android:layout_marginHorizontal="@dimen/medium"
         android:layout_marginTop="@dimen/big"
         android:paddingBottom="@dimen/medium"
-        app:layout_constraintBottom_toTopOf="@id/mydDishesBsAddBtn"
         app:layout_constraintTop_toBottomOf="@id/myDishesBsSearchView"
         tools:listitem="@layout/list_item_dish_selection" />
 
-    <com.bupp.wood_spoon_chef.presentation.custom_views.OrangeBtnCornered
-        android:id="@+id/mydDishesBsAddBtn"
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/medium"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:title="Add" />
+        android:background="@drawable/transparent_to_white_80_gradient"
+        android:layout_height="wrap_content">
+
+        <com.bupp.wood_spoon_chef.presentation.custom_views.OrangeBtnCornered
+            android:id="@+id/mydDishesBsAddBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/medium"
+            app:title="Add" />
+
+    </FrameLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

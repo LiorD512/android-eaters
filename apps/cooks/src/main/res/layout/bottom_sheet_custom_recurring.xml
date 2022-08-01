@@ -136,16 +136,7 @@
 
             </com.bupp.wood_spoon_chef.presentation.custom_views.SectionView>
 
-            <TextView
-                android:id="@+id/customRecurringFrequencyTxt"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                style="@style/LatoReg11Black"
-                tools:text="Cooking slot will occur every week on Sunday and Tuesday"
-                android:layout_margin="@dimen/medium" />
-
         </LinearLayout>
-
 
     </androidx.core.widget.NestedScrollView>
 
