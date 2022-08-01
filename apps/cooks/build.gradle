@@ -154,7 +154,6 @@ dependencies {
 
     //ship book
     implementation 'io.shipbook:shipbooksdk:1.6.2'
-    implementation 'com.jakewharton.timber:timber:4.7.1'
 
     implementation 'net.sf.biweekly:biweekly:0.6.6'
 }

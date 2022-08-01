@@ -1,8 +1,10 @@
 package com.bupp.wood_spoon_chef.di
 
+import com.bupp.wood_spoon_chef.R
 import com.bupp.wood_spoon_chef.data.local.CookingSlotsDraftMemoryDataSource
-import com.bupp.wood_spoon_chef.data.remote.model.request.CookingSlotStateToRequestMapper
+import com.bupp.wood_spoon_chef.data.remote.model.request.CookingSlotRequestMapper
 import com.bupp.wood_spoon_chef.data.repositories.CookingSlotRepository
+import com.bupp.wood_spoon_chef.domain.GetFormattedSelectedHoursAndMinutesUseCase
 import com.bupp.wood_spoon_chef.domain.GetIsCookingSlotNewFlowEnabledUseCase
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.fragments.CookingSlotMenuViewModel
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.fragments.CreateCookingSlotNewViewModel
@@ -18,7 +20,9 @@ import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.data.reposito
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.dialogs.CustomRecurringViewModel
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.dialogs.SlotRecurringViewModel
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.fragments.CookingSlotReviewViewModel
+import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.last_call.LastCallBottomSheetViewModel
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.mapper.*
+import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 import retrofit2.Retrofit
@@ -27,8 +31,13 @@ val cookingSlotModule = module {
 
     factory { CookingSlotFlowCoordinator() }
 
+    //UseCase
+    factory {
+        GetFormattedSelectedHoursAndMinutesUseCase(androidContext().resources.getString(R.string.format_last_call_subtitle))
+    }
+
     //mapper
-    factory { CookingSlotStateToRequestMapper() }
+    factory { CookingSlotRequestMapper() }
     factory { OriginalCookingSlotToDraftCookingSlotMapper(get()) }
     factory { MenuItemToMenuDishItemMapper() }
     factory { MenuDishItemToAdapterModelMapper() }
@@ -45,12 +54,13 @@ val cookingSlotModule = module {
     single { CookingSlotsDraftRepository(get()) }
 
     viewModel { params -> CookingSlotParentViewModel(params.get(), get(), get(), get()) }
-    viewModel { params -> CreateCookingSlotNewViewModel(params.get(), get(), get(), get()) }
+    viewModel { params -> CreateCookingSlotNewViewModel(params.get(), get(), get(), get(), get()) }
     viewModel { params -> CookingSlotMenuViewModel(params.get(), get(), get()) }
     viewModel { MyDishesViewModel(get()) }
     viewModel { FilterMenuViewModel(get()) }
     viewModel { CookingSlotReviewViewModel(get(), get(), get(), get(), get(),get()) }
     viewModel { SlotRecurringViewModel() }
+    viewModel { LastCallBottomSheetViewModel(get()) }
     viewModel { CustomRecurringViewModel() }
 
 }

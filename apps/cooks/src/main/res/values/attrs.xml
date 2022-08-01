@@ -160,6 +160,7 @@
         <attr name="textColor" />
         <attr name="isPink" format="boolean" />
         <attr name="isOrangeish" format="boolean" />
+        <attr name="isBtnSmall" format="boolean" />
     </declare-styleable>
 
     <declare-styleable name="SelectableBtn">

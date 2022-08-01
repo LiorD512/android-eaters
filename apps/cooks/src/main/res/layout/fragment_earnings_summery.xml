@@ -101,6 +101,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:isOrangeish="true"
+            app:isBtnSmall="true"
             android:layout_marginHorizontal="15.4dp"
             android:layout_marginBottom="15dp"
             app:title="Add payment method"/>

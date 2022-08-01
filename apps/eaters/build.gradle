@@ -63,7 +63,6 @@ dependencies {
     implementation "androidx.viewpager2:viewpager2:1.0.0"
     implementation "androidx.recyclerview:recyclerview:1.2.1"
     implementation 'com.github.gayanvoice:android-animations-kotlin:1.0.1'
-    implementation 'it.sephiroth.android.library.targettooltip:target-tooltip-library:2.0.3'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'androidx.lifecycle:lifecycle-livedata-ktx'
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx'

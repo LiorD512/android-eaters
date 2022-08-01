@@ -3,13 +3,17 @@ package com.bupp.wood_spoon_chef.presentation.custom_views
 import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
+import android.view.SoundEffectConstants
 import android.widget.FrameLayout
 import com.bupp.wood_spoon_chef.R
 import com.bupp.wood_spoon_chef.databinding.PeachRoundedBtnBinding
+import com.bupp.wood_spoon_chef.utils.extensions.addForegroundRipple
 
-class PeachRoundedBtn @JvmOverloads
-constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) :
-    FrameLayout(context, attrs, defStyleAttr) {
+class PeachRoundedBtn @JvmOverloads constructor(
+    context: Context,
+    attrs: AttributeSet? = null,
+    defStyleAttr: Int = 0
+) : FrameLayout(context, attrs, defStyleAttr) {
 
     private val binding: PeachRoundedBtnBinding =
         PeachRoundedBtnBinding.inflate(LayoutInflater.from(context), this, true)
@@ -26,7 +30,7 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
                 val title = attrSet.getString(R.styleable.PeachRoundedBtn_title)
                 setTitle(title)
             }
-
+            addForegroundRipple()
             attrSet.recycle()
         }
     }

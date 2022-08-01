@@ -9,6 +9,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import com.bupp.wood_spoon_chef.R
 import com.bupp.wood_spoon_chef.databinding.CreateCookingSlotOptionViewBinding
+import com.bupp.wood_spoon_chef.utils.extensions.addForegroundRipple
 import com.bupp.wood_spoon_chef.utils.extensions.show
 
 class CreateCookingSlotOptionView @JvmOverloads constructor(
@@ -89,7 +90,14 @@ class CreateCookingSlotOptionView @JvmOverloads constructor(
         )
     }
 
-     fun setEndIcon(@DrawableRes endIcon: Int) {
+    private fun setRightArrowIcon(@DrawableRes rightArrowIcon: Int) {
+        binding.root.apply {
+            addForegroundRipple()
+            isClickable = true
+        }
+    }
+
+    fun setEndIcon(@DrawableRes endIcon: Int) {
         binding.createCookingSlotOptionViewForwardBtn.apply {
             if (endIcon == 0) {
                 isVisible = false
@@ -108,7 +116,7 @@ class CreateCookingSlotOptionView @JvmOverloads constructor(
         binding.createCookingSlotOptionViewSubTitle.show(binding.createCookingSlotOptionViewSubTitle.text.isNotEmpty())
     }
 
-    private fun showMainIcon(show: Boolean) {
+    fun showMainIcon(show: Boolean) {
         binding.createCookingSlotOptionViewMainIcon.show(show)
     }
 

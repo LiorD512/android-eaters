@@ -10,10 +10,12 @@ import com.bupp.wood_spoon_chef.R
 import com.bupp.wood_spoon_chef.databinding.FragmentCreateCookingSlotNewBinding
 import com.bupp.wood_spoon_chef.presentation.custom_views.CreateCookingSlotTopBar
 import com.bupp.wood_spoon_chef.presentation.features.base.BaseFragment
+import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.last_call.LastCallForOrdersBottomSheet
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.dialogs.OperatingHoursInfoBottomSheet
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.dialogs.SlotRecurringBottomSheet
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.dialogs.TimePickerBottomSheet
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.fragments.base.CookingSlotParentFragment
+import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.last_call.SelectedHoursAndMinutes
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.rrules.RRuleTextFormatter
 import com.bupp.wood_spoon_chef.utils.DateUtils.prepareFormattedDateForHours
 import com.bupp.wood_spoon_chef.utils.extensions.*
@@ -46,11 +48,27 @@ class CreateCookingSlotFragmentNew : BaseFragment(R.layout.fragment_create_cooki
         binding.apply {
             createCookingSlotNewFragmentTopBar.setCookingSlotTopBarListener(this@CreateCookingSlotFragmentNew)
             createCookingSlotNewFragmentNextBtn.setSafeOnClickListener { viewModel.onNextClick() }
-            createCookingSlotNewFragmentOperatingHoursView.setOnSecondaryIconClickListener { openOperatingHoursInfoBottomSheet() }
-            createCookingSlotNewFragmentOperatingHoursView.setAddClickListener { viewModel.onOperatingHoursClick() }
-            createCookingSlotNewFragmentLastCallForOrderView.setOnClickListener { viewModel.onLastCallForOrderClick() }
-            createCookingSlotNewFragmentMakeRecurringView.setOnClickListener { viewModel.onMakeSlotRecurringClick()}
+            createCookingSlotNewFragmentOperatingHoursView.apply {
+                setOnSecondaryIconClickListener { openOperatingHoursInfoBottomSheet() }
+                setAddClickListener { viewModel.onOperatingHoursClick() }
+            }
+
+            createCookingSlotNewFragmentMakeRecurringView.setOnClickListener { viewModel.onMakeSlotRecurringClick() }
+            createCookingSlotNewFragmentLastCallForOrderView.setOnClickListener {
+                showLastCallForOrdersBottomSheet()
+            }
         }
+    }
+
+    private fun showLastCallForOrdersBottomSheet() {
+        LastCallForOrdersBottomSheet.show(this) {
+            onLastCallSelected(it)
+        }
+    }
+
+    private fun onLastCallSelected(it: SelectedHoursAndMinutes) {
+        viewModel.setSelectedHoursAndMinutes(it)
+
     }
 
     private fun observeViewModelState() {
@@ -86,9 +104,6 @@ class CreateCookingSlotFragmentNew : BaseFragment(R.layout.fragment_create_cooki
                                 event.selectedDate,
                                 event.operatingHours
                             )
-                            is CreateCookingSlotEvents.ShowLastCallForOrder -> openLastCallForOrder(
-                                event.lastCallForOrder
-                            )
                             is CreateCookingSlotEvents.ShowRecurringRule -> openSlotRecurringBottomSheet(
                                 event.recurringRule,
                                 event.selectedDate
@@ -111,9 +126,13 @@ class CreateCookingSlotFragmentNew : BaseFragment(R.layout.fragment_create_cooki
                     state.operatingHours.startTime, state.operatingHours.endTime
                 )
             )
-            createCookingSlotNewFragmentLastCallForOrderView.setSubtitle(
-                formatLastCallForOrderDate(state.lastCallForOrder)
-            )
+
+            state.selectedHoursAndMinutes?.let { selectedHoursAndMinutes ->
+                createCookingSlotNewFragmentLastCallForOrderView.setSubtitle(
+                    viewModel.formatSelectedLastCall(selectedHoursAndMinutes)
+                )
+            }
+
             createCookingSlotNewFragmentMakeRecurringView.setSubtitle(
                 state.recurringRule?.let {
                     RRuleTextFormatter().formatRRule(it)
@@ -127,11 +146,11 @@ class CreateCookingSlotFragmentNew : BaseFragment(R.layout.fragment_create_cooki
             DateTime(selectedDate).prepareFormattedDate()
     }
 
-    private fun setHeaderTitle(isEditMode: Boolean){
+    private fun setHeaderTitle(isEditMode: Boolean) {
         binding.apply {
-            if (isEditMode){
+            if (isEditMode) {
                 createCookingSlotNewFragmentTopBar.setTitle(getString(R.string.edit_cooking_slot))
-            }else{
+            } else {
                 createCookingSlotNewFragmentTopBar.setTitle(getString(R.string.create_cooking_slot))
             }
         }
@@ -147,14 +166,10 @@ class CreateCookingSlotFragmentNew : BaseFragment(R.layout.fragment_create_cooki
     private fun openTimePickerBottomSheet(selectedDate: Long?, operatingHours: OperatingHours?) {
         selectedDate?.let { date ->
             binding.createCookingSlotNewFragmentOperatingHoursError.show(false)
-            TimePickerBottomSheet.show(this,date, operatingHours){
+            TimePickerBottomSheet.show(this, date, operatingHours) {
                 viewModel.setOperatingHours(it)
             }
         }
-    }
-
-    private fun openLastCallForOrder(lastCallForOrder: Long?) {
-        viewModel.setLastCallForOrders(lastCallForOrder)
     }
 
     private fun openSlotRecurringBottomSheet(recurringRule: String?, selectedDate: Long) {
@@ -183,13 +198,6 @@ class CreateCookingSlotFragmentNew : BaseFragment(R.layout.fragment_create_cooki
 private fun formatOperatingHours(startTime: Long?, endTime: Long?): String {
     if (startTime != null && endTime != null) {
         return "${DateTime(startTime).prepareFormattedDateForHours()} - ${DateTime(endTime).prepareFormattedDateForHours()}"
-    }
-    return ""
-}
-
-private fun formatLastCallForOrderDate(lastCallForOrder: Long?): String {
-    if (lastCallForOrder != null) {
-        return DateTime(lastCallForOrder).prepareFormattedDateForDateAndHour()
     }
     return ""
 }

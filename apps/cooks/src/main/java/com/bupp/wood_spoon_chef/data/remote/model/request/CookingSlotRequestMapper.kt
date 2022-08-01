@@ -1,11 +1,10 @@
 package com.bupp.wood_spoon_chef.data.remote.model.request
 
 import com.bupp.wood_spoon_chef.data.remote.model.CookingSlotRequest
-import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.fragments.CreateCookingSlotNewState
 
-class CookingSlotStateToRequestMapper {
+class CookingSlotRequestMapper {
 
-    fun mapStateToCreateCookingSlotRequest(
+    fun mapCookingSlotToRequest(
         startsTime: Long?,
         endTime: Long?,
         lastCallForOrder: Long?,
