@@ -19,7 +19,7 @@ data class DishesMenuAdapterModel(
 )
 
 data class MenuDishItem(
-    val menuItemId: Long = -1,
+    val menuItemId: Long? = null,
     val dish: Dish?,
     val quantity: Int = 1,
     val unitsSold: Int = 0

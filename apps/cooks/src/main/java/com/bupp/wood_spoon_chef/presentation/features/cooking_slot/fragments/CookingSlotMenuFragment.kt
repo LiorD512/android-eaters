@@ -23,6 +23,7 @@ import com.bupp.wood_spoon_chef.utils.extensions.prepareFormattedDate
 import com.bupp.wood_spoon_chef.utils.extensions.show
 import com.bupp.wood_spoon_chef.utils.extensions.showErrorToast
 import com.eatwoodspoon.android_utils.binding.viewBinding
+import com.eatwoodspoon.android_utils.views.setSafeOnClickListener
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import org.joda.time.DateTime
@@ -54,7 +55,7 @@ class CookingSlotMenuFragment :
             createCookingSlotMenuFragmentTopBar.setCookingSlotTopBarListener(
                 this@CookingSlotMenuFragment
             )
-            createCookingSlotMenuFragmentGoToReviewBtn.setOnClickListener {
+            createCookingSlotMenuFragmentGoToReviewBtn.setSafeOnClickListener {
                 viewModel.onOpenReviewFragmentClicked(requireContext())
             }
             createCookingSlotMenuFragmentAddDishesEmpty.setOnClickListener {
