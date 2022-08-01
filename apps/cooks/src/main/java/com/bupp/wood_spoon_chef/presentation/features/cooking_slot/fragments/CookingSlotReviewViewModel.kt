@@ -18,6 +18,7 @@ import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.mapper.Adapte
 import com.bupp.wood_spoon_chef.data.remote.model.request.CookingSlotRequestMapper
 import com.bupp.wood_spoon_chef.domain.GetFormattedSelectedHoursAndMinutesUseCase
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.mapper.MenuDishItemToAdapterModelMapper
+import com.bupp.wood_spoon_chef.utils.extensions.getErrorMsgByType
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
@@ -78,7 +79,7 @@ class CookingSlotReviewViewModel(
                     _state.emit(
                         ReviewCookingSlotState.Error(
                             CustomError(
-                                result.error.message ?: ""
+                                result.error.getErrorMsgByType()
                             )
                         )
                     )

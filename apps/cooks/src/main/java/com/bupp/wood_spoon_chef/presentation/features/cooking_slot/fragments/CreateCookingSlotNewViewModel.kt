@@ -10,6 +10,7 @@ import com.bupp.wood_spoon_chef.presentation.features.base.BaseViewModel
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.coordinator.CookingSlotFlowCoordinator
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.coordinator.CookingSlotFlowStep
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.data.repository.CookingSlotsDraftRepository
+import com.bupp.wood_spoon_chef.utils.extensions.getErrorMsgByType
 import com.bupp.wood_spoon_chef.data.remote.model.request.CookingSlotRequestMapper
 import com.bupp.wood_spoon_chef.domain.GetFormattedSelectedHoursAndMinutesUseCase
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.last_call.SelectedHoursAndMinutes
@@ -137,7 +138,7 @@ class CreateCookingSlotNewViewModel(
                     }
                     is ResponseError -> {
                         setInProgress(false)
-                        _events.emit(CreateCookingSlotEvents.Error(result.error.message))
+                        _events.emit(CreateCookingSlotEvents.Error(result.error.getErrorMsgByType()))
                     }
                 }
             } catch (ex: Exception) {
