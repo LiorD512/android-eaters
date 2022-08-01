@@ -18,6 +18,7 @@ import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.rrules.RRuleT
 import com.bupp.wood_spoon_chef.utils.DateUtils.prepareFormattedDateForHours
 import com.bupp.wood_spoon_chef.utils.extensions.*
 import com.eatwoodspoon.android_utils.binding.viewBinding
+import com.eatwoodspoon.android_utils.views.setSafeOnClickListener
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
@@ -44,7 +45,7 @@ class CreateCookingSlotFragmentNew : BaseFragment(R.layout.fragment_create_cooki
     private fun initUi() {
         binding.apply {
             createCookingSlotNewFragmentTopBar.setCookingSlotTopBarListener(this@CreateCookingSlotFragmentNew)
-            createCookingSlotNewFragmentNextBtn.setOnClickListener { viewModel.onNextClick() }
+            createCookingSlotNewFragmentNextBtn.setSafeOnClickListener { viewModel.onNextClick() }
             createCookingSlotNewFragmentOperatingHoursView.setOnSecondaryIconClickListener { openOperatingHoursInfoBottomSheet() }
             createCookingSlotNewFragmentOperatingHoursView.setAddClickListener { viewModel.onOperatingHoursClick() }
             createCookingSlotNewFragmentLastCallForOrderView.setOnClickListener { viewModel.onLastCallForOrderClick() }
@@ -89,7 +90,8 @@ class CreateCookingSlotFragmentNew : BaseFragment(R.layout.fragment_create_cooki
                                 event.lastCallForOrder
                             )
                             is CreateCookingSlotEvents.ShowRecurringRule -> openSlotRecurringBottomSheet(
-                                event.recurringRule
+                                event.recurringRule,
+                                event.selectedDate
                             )
                         }
                     }
@@ -155,8 +157,8 @@ class CreateCookingSlotFragmentNew : BaseFragment(R.layout.fragment_create_cooki
         viewModel.setLastCallForOrders(lastCallForOrder)
     }
 
-    private fun openSlotRecurringBottomSheet(recurringRule: String?) {
-        SlotRecurringBottomSheet.show(this, recurringRule){
+    private fun openSlotRecurringBottomSheet(recurringRule: String?, selectedDate: Long) {
+        SlotRecurringBottomSheet.show(this, recurringRule, selectedDate){
             viewModel.setRecurringRule(it)
         }
     }

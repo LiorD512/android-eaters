@@ -146,7 +146,7 @@ class CookingSlotDetailsFragmentNew : BaseFragment(R.layout.fragment_details_coo
 
         ActionListBottomSheetFragment.newInstance(
             editAction,
-            duplicateAction,
+//            duplicateAction,
             deleteAction
         ).showWithResultListener(parentFragmentManager, null, this) { action ->
             when (action) {
@@ -170,6 +170,7 @@ class CookingSlotDetailsFragmentNew : BaseFragment(R.layout.fragment_details_coo
     }
 
     private fun doOnEditAction() {
+        findNavController().popBackStack()
         viewModel.selectedCookingSlot?.let { slot ->
             startActivity(
                 CookingSlotActivity().newInstance(

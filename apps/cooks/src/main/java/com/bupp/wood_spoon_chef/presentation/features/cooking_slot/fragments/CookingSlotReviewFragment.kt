@@ -16,6 +16,7 @@ import com.bupp.wood_spoon_chef.utils.DateUtils.prepareFormattedDateForHours
 import com.bupp.wood_spoon_chef.utils.extensions.prepareFormattedDate
 import com.bupp.wood_spoon_chef.utils.extensions.prepareFormattedDateForDateAndHour
 import com.eatwoodspoon.android_utils.binding.viewBinding
+import com.eatwoodspoon.android_utils.views.setSafeOnClickListener
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import org.joda.time.DateTime
@@ -115,7 +116,7 @@ class CookingSlotReviewFragment : BaseFragment(R.layout.fragment_cooking_slot_re
             reviewFragmentTopBar.setCookingSlotTopBarListener(this@CookingSlotReviewFragment)
             initList(this)
 
-            btnSaveSlot.setOnClickListener {
+            btnSaveSlot.setSafeOnClickListener {
                 viewModel.saveOrUpdateCookingSlot()
             }
         }

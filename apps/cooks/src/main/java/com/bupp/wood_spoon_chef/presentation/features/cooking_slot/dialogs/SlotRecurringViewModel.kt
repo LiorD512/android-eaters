@@ -9,7 +9,6 @@ import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.rrules.RRuleT
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.rrules.SimpleRRule
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
-import org.joda.time.DateTime
 import java.util.*
 
 @Keep
@@ -29,14 +28,16 @@ sealed class RecurringFrequency(open val name: RecurringFrequencyName) {
 }
 
 data class SlotRecurringState(
+    val selectedDate: Long? = null,
     val selectedFrequency: RecurringFrequency = RecurringFrequency.OneTime,
-    val endsAt: Date? = DateTime(Date()).plusMonths(3).toDate()
+    val endsAt: Date? = null
 )
 
 sealed class SlotRecurringEvent {
     data class Error(val message: String) : SlotRecurringEvent()
     data class ShowCustomPicker(val recurringRule: String? = null) : SlotRecurringEvent()
     data class OnSave(val recurringRule: String?) : SlotRecurringEvent()
+    data class ShowEndAtDatePicker(val selectedDate: Long?): SlotRecurringEvent()
 }
 
 class SlotRecurringViewModel : BaseViewModel() {
@@ -55,11 +56,11 @@ class SlotRecurringViewModel : BaseViewModel() {
         }
     }
 
-    private suspend fun validateInputs(){
-        with(_state.value){
-            if (endsAt == null){
+    private suspend fun validateInputs() {
+        with(_state.value) {
+            if (endsAt == null) {
                 _events.emit(SlotRecurringEvent.Error("Recurring slot must have Ends at date"))
-            }else{
+            } else {
                 _events.emit(SlotRecurringEvent.OnSave(mapStateToRule()))
             }
         }
@@ -87,7 +88,8 @@ class SlotRecurringViewModel : BaseViewModel() {
         return simpleRule?.let { rRuleTextFormatter.buildRRule(it) }
     }
 
-    fun init(rrule: String?) {
+    fun init(rrule: String?, selectedDate: Long?) {
+        setSelectedDate(selectedDate)
         viewModelScope.launch {
             mapRuleToState(rrule)
         }
@@ -164,6 +166,24 @@ class SlotRecurringViewModel : BaseViewModel() {
     fun setRecurringFrequencyToCustom(recurringRule: String) {
         _state.update {
             it.copy(selectedFrequency = RecurringFrequency.Custom(recurringRule))
+        }
+    }
+
+    fun onEndsAtClick(){
+        viewModelScope.launch {
+            _events.emit(SlotRecurringEvent.ShowEndAtDatePicker(_state.value.selectedDate))
+        }
+    }
+
+    fun setEndDate(endsAt: Date) {
+        _state.update {
+            it.copy(endsAt = endsAt)
+        }
+    }
+
+    private fun setSelectedDate(selectedDate: Long?){
+        _state.update {
+            it.copy(selectedDate = selectedDate)
         }
     }
 

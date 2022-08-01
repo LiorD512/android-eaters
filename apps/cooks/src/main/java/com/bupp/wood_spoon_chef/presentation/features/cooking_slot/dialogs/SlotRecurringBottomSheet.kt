@@ -17,13 +17,18 @@ import com.bupp.wood_spoon_chef.databinding.BottomSheetSlotRecurringBinding
 import com.bupp.wood_spoon_chef.presentation.custom_views.CreateCookingSlotOptionView
 import com.bupp.wood_spoon_chef.presentation.custom_views.HeaderView
 import com.bupp.wood_spoon_chef.utils.extensions.showErrorToast
+import com.google.android.material.datepicker.*
+import com.wdullaer.materialdatetimepicker.date.DatePickerDialog
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import org.joda.time.DateTime
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import java.util.*
 
 class SlotRecurringBottomSheet(
-    private val recurringRule: String?
-) : TopCorneredBottomSheet(), HeaderView.HeaderViewListener {
+    private val recurringRule: String?,
+    private val selectedDate: Long
+) : TopCorneredBottomSheet(), HeaderView.HeaderViewListener, DatePickerDialog.OnDateSetListener {
 
     private var binding: BottomSheetSlotRecurringBinding? = null
     private val viewModel by viewModel<SlotRecurringViewModel>()
@@ -43,7 +48,7 @@ class SlotRecurringBottomSheet(
         super.onViewCreated(view, savedInstanceState)
         setFullScreenDialog()
         initUi()
-        viewModel.init(recurringRule)
+        viewModel.init(recurringRule, selectedDate)
         observeViewModelState()
         observeViewModelEvents()
     }
@@ -59,7 +64,7 @@ class SlotRecurringBottomSheet(
             )
 
             optionViewList.forEach {
-                it.setOnClickListener{ optionView->
+                it.setOnClickListener { optionView ->
                     viewModel.onItemClicked(RecurringFrequencyName.valueOf(optionView.tag.toString()))
                 }
             }
@@ -70,6 +75,11 @@ class SlotRecurringBottomSheet(
             makeSlotRecurringSaveBtn.setOnClickListener {
                 viewModel.onSaveClick()
             }
+
+            makeSlotRecurringEndsAt.setOnClickListener {
+                viewModel.onEndsAtClick()
+            }
+
 
         }
     }
@@ -98,8 +108,15 @@ class SlotRecurringBottomSheet(
                         is SlotRecurringEvent.Error -> {
                             binding?.let {
                                 showErrorToast(
-                                    event.message, it.makeSlotRecurringMainLayout, Toast.LENGTH_SHORT
+                                    event.message,
+                                    it.makeSlotRecurringMainLayout,
+                                    Toast.LENGTH_SHORT
                                 )
+                            }
+                        }
+                        is SlotRecurringEvent.ShowEndAtDatePicker -> {
+                            event.selectedDate?.let {
+                                showEndsAtDatePicker(it)
                             }
                         }
                     }
@@ -110,16 +127,16 @@ class SlotRecurringBottomSheet(
 
     private fun setSelectedFrequencyItem(selectedFrequency: RecurringFrequency) {
         binding?.apply {
-             optionViewList.forEach {
+            optionViewList.forEach {
                 it.apply {
                     showEndDrawable(tag.equals(selectedFrequency.name.name))
                 }
             }
 
             makeSlotRecurringCustom.apply {
-                if (tag.equals(selectedFrequency.name.name)){
+                if (tag.equals(selectedFrequency.name.name)) {
                     setEndIcon(R.drawable.ic_check_v)
-                }else{
+                } else {
                     setEndIcon(R.drawable.ic_arrow_right)
                 }
             }
@@ -127,11 +144,35 @@ class SlotRecurringBottomSheet(
     }
 
     private fun openCustomRecurringBottomSheet(recurringRule: String?) {
-        CustomRecurringBottomSheet.show(this, recurringRule){
-            if (!it.isNullOrEmpty()){
+        CustomRecurringBottomSheet.show(this, recurringRule) {
+            if (!it.isNullOrEmpty()) {
                 viewModel.setRecurringFrequencyToCustom(it)
             }
         }
+    }
+
+    private fun showEndsAtDatePicker(selectedDate: Long) {
+        val validator = CompositeDateValidator.allOf(
+            listOf(
+                DateValidatorPointForward.from(selectedDate),
+                DateValidatorPointBackward.before(DateTime(selectedDate).plusMonths(3).millis)
+            )
+        )
+        val calendarConstraints = CalendarConstraints.Builder().setValidator(validator).build()
+
+        val picker = MaterialDatePicker.Builder.datePicker().setTitleText(getString(R.string.ends_at))
+            .setPositiveButtonText(getString(R.string.save)).setNegativeButtonText(getString(R.string.cancel))
+            .setTheme(R.style.MaterialCalendarTheme)
+            .setCalendarConstraints(calendarConstraints)
+            .setSelection(selectedDate).build()
+
+        picker.addOnPositiveButtonClickListener {
+            viewModel.setEndDate(Date(it))
+        }
+        picker.addOnNegativeButtonClickListener {
+            dismiss()
+        }
+        picker.show(childFragmentManager, "EndsAtDatePicker")
     }
 
     override fun onHeaderBackClick() {
@@ -157,14 +198,19 @@ class SlotRecurringBottomSheet(
         fun show(
             fragment: Fragment,
             recurringRule: String?,
+            selectedDate: Long,
             listener: ((String?) -> Unit)
         ) {
-            SlotRecurringBottomSheet(recurringRule).show(
+            SlotRecurringBottomSheet(recurringRule, selectedDate).show(
                 fragment.childFragmentManager,
                 SlotRecurringBottomSheet::class.simpleName
             )
             fragment.setRecurringRuleResultListener(listener)
         }
+    }
+
+    override fun onDateSet(view: DatePickerDialog?, year: Int, monthOfYear: Int, dayOfMonth: Int) {
+        TODO("Not yet implemented")
     }
 }
 
