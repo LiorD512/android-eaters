@@ -10,7 +10,9 @@ import com.bupp.wood_spoon_chef.presentation.features.base.BaseViewModel
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.coordinator.CookingSlotFlowCoordinator
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.coordinator.CookingSlotFlowStep
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.data.repository.CookingSlotsDraftRepository
-import com.bupp.wood_spoon_chef.data.remote.model.request.CookingSlotStateToRequestMapper
+import com.bupp.wood_spoon_chef.data.remote.model.request.CookingSlotRequestMapper
+import com.bupp.wood_spoon_chef.domain.GetFormattedSelectedHoursAndMinutesUseCase
+import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.last_call.SelectedHoursAndMinutes
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
@@ -28,7 +30,7 @@ data class OperatingHours(
 data class CreateCookingSlotNewState(
     val selectedDate: Long? = null,
     val operatingHours: OperatingHours = OperatingHours(null, null),
-    val lastCallForOrder: Long? = null,
+    val selectedHoursAndMinutes: SelectedHoursAndMinutes? = null,
     val recurringRule: String? = null,
     val isInEditMode: Boolean = false,
     val errors: List<Errors> = emptyList(),
@@ -53,9 +55,10 @@ sealed class CreateCookingSlotEvents {
 
 class CreateCookingSlotNewViewModel(
     private val cookingSlotFlowCoordinator: CookingSlotFlowCoordinator,
-    private val stateMapper: CookingSlotStateToRequestMapper,
+    private val cookingSlotRequestMapper: CookingSlotRequestMapper,
     private val cookingSlotRepository: CookingSlotRepository,
-    private val cookingSlotsDraftRepository: CookingSlotsDraftRepository
+    private val cookingSlotsDraftRepository: CookingSlotsDraftRepository,
+    private val getFormattedSelectedHoursAndMinutesUseCase: GetFormattedSelectedHoursAndMinutesUseCase
 ) : BaseViewModel() {
 
     private val _state = MutableStateFlow(CreateCookingSlotNewState())
@@ -69,7 +72,6 @@ class CreateCookingSlotNewViewModel(
             cookingSlotsDraftRepository.getDraft().filterNotNull().collect { draft ->
                 setSelectedDate(draft.selectedDate)
                 setOperatingHours(draft.operatingHours)
-                setLastCallForOrders(draft.lastCallForOrder)
                 setRecurringRule(draft.recurringRule)
                 setIsInEditMode(draft.originalCookingSlot != null)
             }
@@ -94,17 +96,22 @@ class CreateCookingSlotNewViewModel(
         }
     }
 
-    fun setLastCallForOrders(lastCallForOrder: Long?) {
-        _state.update {
-            it.copy(lastCallForOrder = lastCallForOrder)
-        }
-    }
-
     fun setRecurringRule(recurringRule: String?) {
         _state.update {
             it.copy(recurringRule = recurringRule)
         }
     }
+
+    fun setSelectedHoursAndMinutes(selectedHoursAndMinutes: SelectedHoursAndMinutes) {
+        _state.update {
+            it.copy(selectedHoursAndMinutes = selectedHoursAndMinutes)
+        }
+    }
+
+    fun formatSelectedLastCall(selectedHoursAndMinutes: SelectedHoursAndMinutes) =
+        getFormattedSelectedHoursAndMinutesUseCase.execute(
+            GetFormattedSelectedHoursAndMinutesUseCase.Params(selectedHoursAndMinutes)
+        )
 
     fun onNextClick() {
         setInProgress(true)
@@ -116,10 +123,10 @@ class CreateCookingSlotNewViewModel(
     private fun validateIfPossibleCreateThisSlot() {
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                val request = stateMapper.mapStateToCreateCookingSlotRequest(
+                val request = cookingSlotRequestMapper.mapCookingSlotToRequest(
                     startsTime = _state.value.operatingHours.startTime,
                     endTime = _state.value.operatingHours.endTime,
-                    lastCallForOrder = _state.value.lastCallForOrder,
+                    lastCallForOrder = getSelectedLastCallDate().millis,
                     recurringRule = _state.value.recurringRule
                 )
 
@@ -140,12 +147,23 @@ class CreateCookingSlotNewViewModel(
         }
     }
 
+    private fun getSelectedLastCallDate(): DateTime {
+        var lastCallForOrderDate = DateTime(_state.value.operatingHours.startTime)
+        _state.value.selectedHoursAndMinutes?.hours?.let {
+            lastCallForOrderDate = lastCallForOrderDate.minusHours(it % 12)
+        }
+        _state.value.selectedHoursAndMinutes?.minutes?.let {
+            lastCallForOrderDate = lastCallForOrderDate.minusMinutes(it % 60)
+        }
+        return lastCallForOrderDate
+    }
+
     private suspend fun onValidationSuccess() {
         val currentDraft = cookingSlotsDraftRepository.getDraftValue() ?: return
         val updatedDraft = currentDraft.copy(
             selectedDate = state.value.selectedDate,
             operatingHours = state.value.operatingHours,
-            lastCallForOrder = state.value.lastCallForOrder,
+            lastCallForOrder = getSelectedLastCallDate().millis,
             recurringRule = state.value.recurringRule
         )
         cookingSlotsDraftRepository.saveDraft(updatedDraft)
@@ -163,14 +181,6 @@ class CreateCookingSlotNewViewModel(
                     _state.value.selectedDate
                 )
             )
-        }
-    }
-
-
-    fun onLastCallForOrderClick() {
-        viewModelScope.launch {
-            val lastCallForOrder = DateTime(_state.value.selectedDate).plusHours(9).millis
-            _events.emit(CreateCookingSlotEvents.ShowLastCallForOrder(lastCallForOrder))
         }
     }
 

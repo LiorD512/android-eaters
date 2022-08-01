@@ -3,6 +3,7 @@ package com.bupp.wood_spoon_chef.presentation.custom_views
 import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
+import android.view.View
 import android.widget.LinearLayout
 import androidx.core.content.ContextCompat
 import com.bupp.wood_spoon_chef.R
@@ -17,7 +18,6 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
         CreateCookingSlotActionViewBinding.inflate(
             LayoutInflater.from(context), this, true
         )
-
 
     init {
         initAttrs(attrs)
@@ -102,8 +102,10 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
         binding.createCookingSlotActionViewAddBtn.setOnClickListener { clickListener() }
     }
 
-    fun setOnSecondaryIconClickListener(clickListener: () -> Unit) {
-        binding.createCookingSlotActionViewSecondaryIcon.setOnClickListener { clickListener() }
+    fun setOnSecondaryIconClickListener(clickListener: (View) -> Unit) {
+        binding.createCookingSlotActionViewSecondaryIcon.setOnClickListener {
+            clickListener(it)
+        }
     }
 
     private fun setSubtitleAllCaps(allCaps: Boolean) {

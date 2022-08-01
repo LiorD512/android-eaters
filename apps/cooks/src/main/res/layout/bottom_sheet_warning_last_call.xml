@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/top_cornered_bkg"
+    android:paddingBottom="16dp">
+
+    <TextView
+        android:id="@+id/tv_bottom_sheet_title"
+        style="@style/LatoBlack19DarkDarkGrey"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:gravity="center"
+        android:text="@string/title_warning_dialog"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_description"
+        style="@style/LatoReg15PurpelyGrey"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="16dp"
+        android:gravity="center"
+        android:text="@string/warning_title_bottom_sheet"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_bottom_sheet_title" />
+
+    <TextView
+        android:id="@+id/tv_sub_description"
+        style="@style/LatoBlack15Orangish"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="16dp"
+        android:text="@string/warning_sub_description_bottom_sheet"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_description" />
+
+
+    <com.bupp.wood_spoon_chef.presentation.custom_views.OrangeBtnCornered
+        android:id="@+id/btn_continue"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="8dp"
+        app:isOrangeish="true"
+        app:layout_constraintBottom_toBottomOf="@+id/btn_cancel"
+        app:layout_constraintEnd_toStartOf="@+id/btn_cancel"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/btn_cancel"
+        app:title="@string/action_continue" />
+
+    <com.bupp.wood_spoon_chef.presentation.custom_views.OrangeBtnCornered
+        android:id="@+id/btn_cancel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/btn_continue"
+        app:layout_constraintTop_toBottomOf="@+id/tv_sub_description"
+        app:title="@string/action_cancel" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

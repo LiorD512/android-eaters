@@ -11,4 +11,6 @@ dependencies {
     implementation 'androidx.lifecycle:lifecycle-livedata-core-ktx'
     implementation 'androidx.fragment:fragment-ktx'
     implementation 'androidx.appcompat:appcompat'
+    api 'it.sephiroth.android.library.targettooltip:target-tooltip-library:2.0.3'
+    api 'com.jakewharton.timber:timber:4.7.1'
 }

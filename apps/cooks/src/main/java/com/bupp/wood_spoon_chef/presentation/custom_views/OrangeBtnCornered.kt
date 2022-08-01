@@ -37,6 +37,12 @@ class OrangeBtnCornered : FrameLayout{
                     setOrangeishUi()
                 }
             }
+            if (a.hasValue(R.styleable.OrangeBtnCornered_isBtnSmall)) {
+                val isSmall = a.getBoolean(R.styleable.OrangeBtnCornered_isBtnSmall, false)
+                if(isSmall){
+                    setSmallUI()
+                }
+            }
             a.recycle()
         }
     }
@@ -57,7 +63,7 @@ class OrangeBtnCornered : FrameLayout{
             orangeBtnText.setTextColor(ContextCompat.getColor(root.context, R.color.orangeish))
             orangeBtnBackground.background = ContextCompat.getDrawable(root.context, R.drawable.rectangle_orangish_12_cornered)
         }
-        setSmallUI()
+
     }
 
     private fun setSmallUI(){

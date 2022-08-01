@@ -61,16 +61,16 @@ class RRuleTextFormatter {
         try {
             val stringBuilder = StringBuilder()
             stringBuilder.append(
-                "Repeats every ${simpleRRule.interval} ${
+                "Cooking slot will occur every ${simpleRRule.interval} ${
                     formatFrequency(
                         simpleRRule.frequency,
                         simpleRRule.interval
                     )
                 }"
             )
-            if (!simpleRRule.days.isNullOrEmpty()){
+            if (!simpleRRule.days.isNullOrEmpty()) {
                 simpleRRule.days.forEach {
-                    stringBuilder.append(" ${it.name}")
+                    stringBuilder.append(" ${formatDayOfWeek(it)}")
                 }
             }
 
@@ -82,6 +82,18 @@ class RRuleTextFormatter {
         } catch (ex: RuntimeException) {
             Timber.e(ex)
             return null
+        }
+    }
+
+    private fun formatDayOfWeek(dayOfWeek: DayOfWeek): String {
+        return when (dayOfWeek) {
+            DayOfWeek.SUNDAY -> "Sunday"
+            DayOfWeek.MONDAY -> "Monday"
+            DayOfWeek.TUESDAY -> "Tuesday"
+            DayOfWeek.WEDNESDAY -> "Wednesday"
+            DayOfWeek.THURSDAY -> "Thursday"
+            DayOfWeek.FRIDAY -> "Friday"
+            DayOfWeek.SATURDAY -> "Saturday"
         }
     }
 

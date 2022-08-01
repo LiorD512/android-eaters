@@ -15,7 +15,8 @@ import com.bupp.wood_spoon_chef.presentation.features.base.BaseViewModel
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.data.models.MenuDishItem
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.data.repository.CookingSlotsDraftRepository
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.mapper.AdapterModelCategoriesListMapper
-import com.bupp.wood_spoon_chef.data.remote.model.request.CookingSlotStateToRequestMapper
+import com.bupp.wood_spoon_chef.data.remote.model.request.CookingSlotRequestMapper
+import com.bupp.wood_spoon_chef.domain.GetFormattedSelectedHoursAndMinutesUseCase
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.mapper.MenuDishItemToAdapterModelMapper
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
@@ -43,7 +44,7 @@ class CookingSlotReviewViewModel(
     private val menuItemToAdapterModelMapper: MenuDishItemToAdapterModelMapper,
     private val adapterModelCategoriesListMapper: AdapterModelCategoriesListMapper,
     private val cookingSlotRepository: CookingSlotRepository,
-    private val stateMapper: CookingSlotStateToRequestMapper
+    private val stateMapper: CookingSlotRequestMapper
 ) : BaseViewModel() {
 
     private var isEditing: Boolean = false
@@ -128,7 +129,7 @@ class CookingSlotReviewViewModel(
                 )
             }?.toList() ?: emptyList()
 
-            stateMapper.mapStateToCreateCookingSlotRequest(
+            stateMapper.mapCookingSlotToRequest(
                 startsTime = it?.operatingHours?.startTime,
                 endTime = it?.operatingHours?.endTime,
                 lastCallForOrder = it?.lastCallForOrder,
