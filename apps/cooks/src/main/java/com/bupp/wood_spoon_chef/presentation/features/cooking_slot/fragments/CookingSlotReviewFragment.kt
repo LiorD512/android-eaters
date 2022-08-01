@@ -12,7 +12,6 @@ import com.bupp.wood_spoon_chef.R
 import com.bupp.wood_spoon_chef.databinding.FragmentCookingSlotReviewBinding
 import com.bupp.wood_spoon_chef.presentation.custom_views.CreateCookingSlotTopBar
 import com.bupp.wood_spoon_chef.presentation.features.base.BaseFragment
-import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.rrules.formatRcs
 import com.bupp.wood_spoon_chef.utils.DateUtils.prepareFormattedDateForHours
 import com.bupp.wood_spoon_chef.utils.extensions.prepareFormattedDate
 import com.bupp.wood_spoon_chef.utils.extensions.prepareFormattedDateForDateAndHour
@@ -81,8 +80,7 @@ class CookingSlotReviewFragment : BaseFragment(R.layout.fragment_cooking_slot_re
                 formatLastCallForOrderDate(state.lastCallForOrder)
             )
             createCookingSlotNewFragmentMakeRecurringView.setSubtitle(
-                formatRcs(state.recurringRule)
-            )
+                state.recurringRule)
 
             menuAdapter?.submitList(state.menuItems)
         }

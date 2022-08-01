@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/makeSlotRecurringMainLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:background="@drawable/top_cornered_bkg">
 
     <com.bupp.wood_spoon_chef.presentation.custom_views.HeaderView
@@ -30,27 +30,30 @@
             android:layout_marginTop="@dimen/medium">
 
             <com.bupp.wood_spoon_chef.presentation.custom_views.CreateCookingSlotOptionView
-                android:id="@+id/makeSlotRecurringNever"
+                android:id="@+id/makeSlotRecurringOneTime"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                app:endIcon="@drawable/ic_check_v"
                 app:showMainIcon="false"
-                app:rightArrowIcon="@drawable/ic_check_v"
-                app:title="Never" />
+                android:tag="ONE_TIME"
+                app:title="One time" />
 
             <com.bupp.wood_spoon_chef.presentation.custom_views.CreateCookingSlotOptionView
                 android:id="@+id/makeSlotRecurringEveryDay"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                app:endIcon="@drawable/ic_check_v"
                 app:showMainIcon="false"
-                app:rightArrowIcon="@drawable/ic_check_v"
+                android:tag="EVERY_DAY"
                 app:title="Every day" />
 
             <com.bupp.wood_spoon_chef.presentation.custom_views.CreateCookingSlotOptionView
                 android:id="@+id/makeSlotRecurringEveryWeek"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                app:endIcon="@drawable/ic_check_v"
                 app:showMainIcon="false"
-                app:rightArrowIcon="@drawable/ic_check_v"
+                android:tag="EVERY_WEEK"
                 app:title="Every week" />
 
         </com.bupp.wood_spoon_chef.presentation.custom_views.SectionView>
@@ -64,15 +67,38 @@
                 android:id="@+id/makeSlotRecurringCustom"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                app:endIcon="@drawable/ic_arrow_right"
                 app:showMainIcon="false"
-                app:rightArrowIcon="@drawable/ic_arrow_right"
+                android:tag="CUSTOM"
                 app:title="Custom" />
+
+        </com.bupp.wood_spoon_chef.presentation.custom_views.SectionView>
+
+        <com.bupp.wood_spoon_chef.presentation.custom_views.SectionView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/medium">
+
+            <com.bupp.wood_spoon_chef.presentation.custom_views.CreateCookingSlotOptionView
+                android:id="@+id/makeSlotRecurringEndsAt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:endIcon="@drawable/ic_arrow_right"
+                app:showMainIcon="false"
+                app:title="Ends at" />
 
         </com.bupp.wood_spoon_chef.presentation.custom_views.SectionView>
 
 
     </LinearLayout>
 
+    <com.bupp.wood_spoon_chef.presentation.custom_views.OrangeBtnCornered
+        android:id="@+id/makeSlotRecurringSaveBtn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_margin="@dimen/medium"
+        app:title="Save"/>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

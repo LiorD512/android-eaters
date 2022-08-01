@@ -14,7 +14,7 @@ import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.dialogs.Opera
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.dialogs.SlotRecurringBottomSheet
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.dialogs.TimePickerBottomSheet
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.fragments.base.CookingSlotParentFragment
-import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.rrules.formatRcs
+import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.rrules.RRuleTextFormatter
 import com.bupp.wood_spoon_chef.utils.DateUtils.prepareFormattedDateForHours
 import com.bupp.wood_spoon_chef.utils.extensions.*
 import com.eatwoodspoon.android_utils.binding.viewBinding
@@ -47,8 +47,8 @@ class CreateCookingSlotFragmentNew : BaseFragment(R.layout.fragment_create_cooki
             createCookingSlotNewFragmentNextBtn.setOnClickListener { viewModel.onNextClick() }
             createCookingSlotNewFragmentOperatingHoursView.setOnSecondaryIconClickListener { openOperatingHoursInfoBottomSheet() }
             createCookingSlotNewFragmentOperatingHoursView.setAddClickListener { viewModel.onOperatingHoursClick() }
-            createCookingSlotNewFragmentLastCallForOrderView.setForwardBtnClickListener { viewModel.onLastCallForOrderClick() }
-            createCookingSlotNewFragmentMakeRecurringView.setForwardBtnClickListener { viewModel.onMakeSlotRecurringClick()}
+            createCookingSlotNewFragmentLastCallForOrderView.setOnClickListener { viewModel.onLastCallForOrderClick() }
+            createCookingSlotNewFragmentMakeRecurringView.setOnClickListener { viewModel.onMakeSlotRecurringClick()}
         }
     }
 
@@ -113,7 +113,9 @@ class CreateCookingSlotFragmentNew : BaseFragment(R.layout.fragment_create_cooki
                 formatLastCallForOrderDate(state.lastCallForOrder)
             )
             createCookingSlotNewFragmentMakeRecurringView.setSubtitle(
-                formatRcs(state.recurringRule)
+                state.recurringRule?.let {
+                    RRuleTextFormatter().formatRRule(it)
+                }
             )
         }
     }
@@ -153,8 +155,10 @@ class CreateCookingSlotFragmentNew : BaseFragment(R.layout.fragment_create_cooki
         viewModel.setLastCallForOrders(lastCallForOrder)
     }
 
-    private fun openSlotRecurringBottomSheet(recurringRule: RecurringRule?) {
-        SlotRecurringBottomSheet.show(this)
+    private fun openSlotRecurringBottomSheet(recurringRule: String?) {
+        SlotRecurringBottomSheet.show(this, recurringRule){
+            viewModel.setRecurringRule(it)
+        }
     }
 
     override fun onBackClick() {
@@ -170,7 +174,6 @@ class CreateCookingSlotFragmentNew : BaseFragment(R.layout.fragment_create_cooki
             }
         }
     }
-
 
     override fun clearClassVariables() {}
 }

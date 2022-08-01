@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/customFreqBsMainLayout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/top_cornered_bkg"
+    android:inAnimation="@anim/slide_right_enter"
+    android:orientation="vertical"
+    android:outAnimation="@anim/slide_right_exit">
+
+    <TextView
+        style="@style/LatoBlack19DarkDarkGrey"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="18.2dp"
+        android:gravity="center"
+        android:text="@string/every" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="21dp"
+        android:background="@color/silver" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginHorizontal="@dimen/small"
+        android:layout_marginTop="21dp"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <NumberPicker
+            android:id="@+id/customFreqBsIntervalPicker"
+            android:layout_width="wrap_content"
+            android:descendantFocusability="blocksDescendants"
+            android:layout_height="wrap_content" />
+
+        <NumberPicker
+            android:id="@+id/customFreqBsFrequencyPicker"
+            android:layout_width="wrap_content"
+            android:descendantFocusability="blocksDescendants"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
+    <com.bupp.wood_spoon_chef.presentation.custom_views.OrangeBtnCornered
+        android:id="@+id/customFreqBsSaveBtn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/small"
+        app:title="Save" />
+
+</LinearLayout>

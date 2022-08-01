@@ -11,7 +11,7 @@
     <attr name="maxChar" format="integer" />
     <attr name="maxLines" format="integer" />
     <attr name="mainIcon" format="reference" />
-    <attr name="rightArrowIcon" format="reference" />
+    <attr name="endIcon" format="reference" />
     <attr name="count" format="integer" />
     <attr name="showSubTitle" format="boolean" />
     <attr name="toolTipType" format="enum">
@@ -254,7 +254,7 @@
 
     <declare-styleable name="CreateCookingSlotOptionView">
         <attr name="mainIcon" />
-        <attr name="rightArrowIcon" />
+        <attr name="endIcon" />
         <attr name="title" />
         <attr name="subtitle" />
         <attr name="showSubTitle" />

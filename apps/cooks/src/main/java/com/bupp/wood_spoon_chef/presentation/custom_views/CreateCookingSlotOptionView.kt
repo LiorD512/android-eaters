@@ -49,12 +49,12 @@ class CreateCookingSlotOptionView @JvmOverloads constructor(
                 setIcon(icon)
             }
 
-            if (attrSet.hasValue(R.styleable.CreateCookingSlotOptionView_rightArrowIcon)) {
+            if (attrSet.hasValue(R.styleable.CreateCookingSlotOptionView_endIcon)) {
                 val icon = attrSet.getResourceId(
-                    R.styleable.CreateCookingSlotOptionView_rightArrowIcon,
+                    R.styleable.CreateCookingSlotOptionView_endIcon,
                     0
                 )
-                setRightArrowIcon(icon)
+                setEndIcon(icon)
             }
 
             if (attrSet.hasValue(R.styleable.CreateCookingSlotOptionView_showMainIcon)) {
@@ -89,15 +89,15 @@ class CreateCookingSlotOptionView @JvmOverloads constructor(
         )
     }
 
-    private fun setRightArrowIcon(@DrawableRes rightArrowIcon: Int) {
+     fun setEndIcon(@DrawableRes endIcon: Int) {
         binding.createCookingSlotOptionViewForwardBtn.apply {
-            if (rightArrowIcon == 0) {
+            if (endIcon == 0) {
                 isVisible = false
             } else {
                 setImageDrawable(
                     ContextCompat.getDrawable(
                         context,
-                        rightArrowIcon
+                        endIcon
                     )
                 )
             }
@@ -108,11 +108,13 @@ class CreateCookingSlotOptionView @JvmOverloads constructor(
         binding.createCookingSlotOptionViewSubTitle.show(binding.createCookingSlotOptionViewSubTitle.text.isNotEmpty())
     }
 
-    fun setForwardBtnClickListener(clickListener: () -> Unit) {
-        binding.createCookingSlotOptionViewForwardBtn.setOnClickListener { clickListener() }
+    private fun showMainIcon(show: Boolean) {
+        binding.createCookingSlotOptionViewMainIcon.show(show)
     }
 
-    private fun showMainIcon(show: Boolean){
-        binding.createCookingSlotOptionViewMainIcon.show(show)
+    fun showEndDrawable(show: Boolean) {
+        binding.createCookingSlotOptionViewForwardBtn.show(
+            show, useInvisible = true
+        )
     }
 }

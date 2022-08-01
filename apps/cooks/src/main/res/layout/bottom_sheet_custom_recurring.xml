@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/customRecurringMainLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/top_cornered_bkg">
+
+    <com.bupp.wood_spoon_chef.presentation.custom_views.HeaderView
+        android:id="@+id/customRecurringHeaderView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:title="Custom"
+        app:type="HEADER_VIEW_TYPE_TITLE_BACK" />
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:background="@color/wild_sand"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/customRecurringHeaderView">
+
+        <LinearLayout
+            android:id="@+id/customRecurringActionLayout"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:orientation="vertical">
+
+            <com.bupp.wood_spoon_chef.presentation.custom_views.SectionView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/medium">
+
+                <LinearLayout
+                    android:id="@+id/customRecurringFrequency"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:paddingVertical="15dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        style="@style/LatoBold13Black"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/medium"
+                        app:layout_constraintEnd_toStartOf="@+id/createCookingSlotOptionViewForwardBtn"
+                        app:layout_constraintStart_toEndOf="@+id/createCookingSlotOptionViewMainIcon"
+                        app:layout_constraintTop_toTopOf="parent"
+                        android:text="@string/every" />
+
+                    <TextView
+                        android:id="@+id/customRecurringFrequencyInput"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        style="@style/LatoReg13Black"
+                        android:textColor="@color/greyish_brown"
+                        android:layout_marginEnd="15dp"/>
+
+                </LinearLayout>
+
+            </com.bupp.wood_spoon_chef.presentation.custom_views.SectionView>
+
+            <com.bupp.wood_spoon_chef.presentation.custom_views.SectionView
+                android:id="@+id/customRecurringDaysSection"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/medium">
+
+                <com.bupp.wood_spoon_chef.presentation.custom_views.CreateCookingSlotOptionView
+                    android:id="@+id/customRecurringSunday"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:endIcon="@drawable/ic_check_v"
+                    app:showMainIcon="false"
+                    android:tag="@string/sunday"
+                    app:title="@string/sunday" />
+
+                <com.bupp.wood_spoon_chef.presentation.custom_views.CreateCookingSlotOptionView
+                    android:id="@+id/customRecurringMonday"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:endIcon="@drawable/ic_check_v"
+                    app:showMainIcon="false"
+                    android:tag="@string/monday"
+                    app:title="@string/monday" />
+
+                <com.bupp.wood_spoon_chef.presentation.custom_views.CreateCookingSlotOptionView
+                    android:id="@+id/customRecurringTuesday"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:endIcon="@drawable/ic_check_v"
+                    app:showMainIcon="false"
+                    android:tag="@string/tuesday"
+                    app:title="@string/tuesday" />
+
+                <com.bupp.wood_spoon_chef.presentation.custom_views.CreateCookingSlotOptionView
+                    android:id="@+id/customRecurringWednesday"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:endIcon="@drawable/ic_check_v"
+                    app:showMainIcon="false"
+                    android:tag="@string/wednesday"
+                    app:title="@string/wednesday" />
+
+                <com.bupp.wood_spoon_chef.presentation.custom_views.CreateCookingSlotOptionView
+                    android:id="@+id/customRecurringThursday"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:endIcon="@drawable/ic_check_v"
+                    app:showMainIcon="false"
+                    android:tag="@string/thursday"
+                    app:title="@string/thursday" />
+
+                <com.bupp.wood_spoon_chef.presentation.custom_views.CreateCookingSlotOptionView
+                    android:id="@+id/customRecurringFriday"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:endIcon="@drawable/ic_check_v"
+                    app:showMainIcon="false"
+                    android:tag="@string/friday"
+                    app:title="@string/friday" />
+
+                <com.bupp.wood_spoon_chef.presentation.custom_views.CreateCookingSlotOptionView
+                    android:id="@+id/customRecurringSaturday"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:endIcon="@drawable/ic_check_v"
+                    app:showMainIcon="false"
+                    android:tag="@string/saturday"
+                    app:title="@string/saturday" />
+
+            </com.bupp.wood_spoon_chef.presentation.custom_views.SectionView>
+
+            <TextView
+                android:id="@+id/customRecurringFrequencyTxt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@style/LatoReg11Black"
+                tools:text="Cooking slot will occur every week on Sunday and Tuesday"
+                android:layout_margin="@dimen/medium" />
+
+        </LinearLayout>
+
+
+    </androidx.core.widget.NestedScrollView>
+
+    <com.bupp.wood_spoon_chef.presentation.custom_views.OrangeBtnCornered
+        android:id="@+id/customRecurringSaveBtn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_margin="@dimen/medium"
+        app:title="Save"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
