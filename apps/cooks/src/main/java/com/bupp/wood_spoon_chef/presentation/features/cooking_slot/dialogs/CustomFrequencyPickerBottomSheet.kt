@@ -12,7 +12,8 @@ import com.bupp.wood_spoon_chef.common.TopCorneredBottomSheet
 import com.bupp.wood_spoon_chef.databinding.BottomSheetCustomeFreqPickerBinding
 
 class CustomFrequencyPickerBottomSheet(
-    private val interval: Int
+    private val interval: Int,
+    private val frequency: String
 ) : TopCorneredBottomSheet() {
 
     private var binding: BottomSheetCustomeFreqPickerBinding? = null
@@ -69,25 +70,30 @@ class CustomFrequencyPickerBottomSheet(
                     }
                 }
             }
-            interval.let {
-                frequencyValues = if (it == 1) {
-                    listOf("Day", "Week")
-                } else {
-                    listOf("Days", "Weeks")
-                }
-            }
 
-            customFreqBsIntervalPicker.setOnValueChangedListener { _, _, newVal ->
-                frequencyValues = if (newVal == 1) {
-                    listOf("Day", "Week")
-                } else {
-                    listOf("Days", "Weeks")
+            setFrequencyList(interval)
+
+                customFreqBsIntervalPicker.setOnValueChangedListener { _, _, newVal ->
+                    setFrequencyList(newVal)
+                    initFrequencyPicker()
                 }
-                initFrequencyPicker()
-            }
         }
 
         initFrequencyPicker()
+    }
+
+    private fun setFrequencyList(interval: Int) {
+        frequencyValues = if (interval == 1) {
+            listOf(
+                resources.getQuantityString(R.plurals.day_plurals, 1),
+                resources.getQuantityString(R.plurals.week_plurals, 1)
+            )
+        } else {
+            listOf(
+                resources.getQuantityString(R.plurals.day_plurals, interval),
+                resources.getQuantityString(R.plurals.week_plurals, interval)
+            )
+        }
     }
 
     private fun initFrequencyPicker() {
@@ -96,6 +102,13 @@ class CustomFrequencyPickerBottomSheet(
             customFreqBsFrequencyPicker.maxValue = frequencyValues.size - 1
             customFreqBsFrequencyPicker.wrapSelectorWheel = true
             customFreqBsFrequencyPicker.displayedValues = frequencyValues.toTypedArray()
+            val index = frequencyValues.indices.find {
+                frequencyValues[it].contains(
+                    frequency.dropLast(frequency.length.minus(2)), true
+                )
+            } ?: 0
+
+            customFreqBsFrequencyPicker.value = index
         }
     }
 
@@ -111,9 +124,10 @@ class CustomFrequencyPickerBottomSheet(
         fun show(
             fragment: Fragment,
             interval: Int,
+            frequency: String,
             listener: ((String, Int) -> Unit)
         ) {
-            CustomFrequencyPickerBottomSheet(interval).show(
+            CustomFrequencyPickerBottomSheet(interval, frequency).show(
                 fragment.childFragmentManager,
                 CustomFrequencyPickerBottomSheet::class.simpleName
             )

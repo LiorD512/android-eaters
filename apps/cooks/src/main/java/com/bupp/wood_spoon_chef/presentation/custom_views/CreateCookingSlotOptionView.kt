@@ -49,12 +49,12 @@ class CreateCookingSlotOptionView @JvmOverloads constructor(
                 setIcon(icon)
             }
 
-            if (attrSet.hasValue(R.styleable.CreateCookingSlotOptionView_rightArrowIcon)) {
+            if (attrSet.hasValue(R.styleable.CreateCookingSlotOptionView_endIcon)) {
                 val icon = attrSet.getResourceId(
-                    R.styleable.CreateCookingSlotOptionView_rightArrowIcon,
+                    R.styleable.CreateCookingSlotOptionView_endIcon,
                     0
                 )
-                setRightArrowIcon(icon)
+                setEndIcon(icon)
             }
 
             if (attrSet.hasValue(R.styleable.CreateCookingSlotOptionView_showMainIcon)) {
@@ -89,15 +89,15 @@ class CreateCookingSlotOptionView @JvmOverloads constructor(
         )
     }
 
-     fun setRightArrowIcon(@DrawableRes rightArrowIcon: Int) {
+     fun setEndIcon(@DrawableRes endIcon: Int) {
         binding.createCookingSlotOptionViewForwardBtn.apply {
-            if (rightArrowIcon == 0) {
+            if (endIcon == 0) {
                 isVisible = false
             } else {
                 setImageDrawable(
                     ContextCompat.getDrawable(
                         context,
-                        rightArrowIcon
+                        endIcon
                     )
                 )
             }

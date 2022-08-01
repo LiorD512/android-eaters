@@ -104,7 +104,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
                     app:mainIcon="@drawable/icon_bell"
-                    app:rightArrowIcon="@drawable/ic_arrow_right"
+                    app:endIcon="@drawable/ic_arrow_right"
                     app:title="Last call for orders"/>
 
                 <com.bupp.wood_spoon_chef.presentation.custom_views.CreateCookingSlotOptionView
@@ -112,7 +112,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:mainIcon="@drawable/icon_reccuring"
-                    app:rightArrowIcon="@drawable/ic_arrow_right"
+                    app:endIcon="@drawable/ic_arrow_right"
                     app:title="Make slot recurring"/>
 
                 <com.bupp.wood_spoon_chef.presentation.custom_views.CreateCookingSlotToggleView

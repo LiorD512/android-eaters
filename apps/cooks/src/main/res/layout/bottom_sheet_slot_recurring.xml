@@ -33,7 +33,7 @@
                 android:id="@+id/makeSlotRecurringOneTime"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:rightArrowIcon="@drawable/ic_check_v"
+                app:endIcon="@drawable/ic_check_v"
                 app:showMainIcon="false"
                 android:tag="ONE_TIME"
                 app:title="One time" />
@@ -42,7 +42,7 @@
                 android:id="@+id/makeSlotRecurringEveryDay"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:rightArrowIcon="@drawable/ic_check_v"
+                app:endIcon="@drawable/ic_check_v"
                 app:showMainIcon="false"
                 android:tag="EVERY_DAY"
                 app:title="Every day" />
@@ -51,7 +51,7 @@
                 android:id="@+id/makeSlotRecurringEveryWeek"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:rightArrowIcon="@drawable/ic_check_v"
+                app:endIcon="@drawable/ic_check_v"
                 app:showMainIcon="false"
                 android:tag="EVERY_WEEK"
                 app:title="Every week" />
@@ -67,7 +67,7 @@
                 android:id="@+id/makeSlotRecurringCustom"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:rightArrowIcon="@drawable/ic_arrow_right"
+                app:endIcon="@drawable/ic_arrow_right"
                 app:showMainIcon="false"
                 android:tag="CUSTOM"
                 app:title="Custom" />
@@ -83,7 +83,7 @@
                 android:id="@+id/makeSlotRecurringEndsAt"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:rightArrowIcon="@drawable/ic_arrow_right"
+                app:endIcon="@drawable/ic_arrow_right"
                 app:showMainIcon="false"
                 app:title="Ends at" />
 

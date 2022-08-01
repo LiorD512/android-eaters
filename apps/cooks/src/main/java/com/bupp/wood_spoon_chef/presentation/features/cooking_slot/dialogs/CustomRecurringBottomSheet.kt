@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResult
@@ -19,6 +20,7 @@ import com.bupp.wood_spoon_chef.presentation.custom_views.CreateCookingSlotOptio
 import com.bupp.wood_spoon_chef.presentation.custom_views.HeaderView
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.rrules.RRuleTextFormatter
 import com.bupp.wood_spoon_chef.utils.extensions.show
+import com.bupp.wood_spoon_chef.utils.extensions.showErrorToast
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
@@ -90,10 +92,18 @@ class CustomRecurringBottomSheet(
                         is CustomRecurringEvent.ShowCustomFrequencyPicker -> {
                             CustomFrequencyPickerBottomSheet.show(
                                 this@CustomRecurringBottomSheet,
-                                event.interval
+                                event.interval,
+                                event.frequency
                             ) { frequency, interval ->
-                                viewModel.setFrequency(frequency)
+                                viewModel.setFrequency(requireContext(), frequency)
                                 viewModel.setInterval(interval)
+                            }
+                        }
+                        is CustomRecurringEvent.Error -> {
+                            binding?.let {
+                                showErrorToast(
+                                    event.message, it.customRecurringMainLayout, Toast.LENGTH_SHORT
+                                )
                             }
                         }
                     }
@@ -126,12 +136,38 @@ class CustomRecurringBottomSheet(
     private fun updateInputsWithState(state: CustomRecurringState) {
         setRruleText()
         setSelectedDays(state.selectedDays)
-        setFrequencyAndIntervalText("${state.customInterval} ${state.customFrequency}")
+        setFrequencyAndIntervalText(
+            formatFrequencyString(
+                state.customFrequency,
+                state.customInterval
+            )
+        )
         when (state.customFrequency) {
-            CustomFrequency.Days, CustomFrequency.Day -> showDaysSection(false)
-            CustomFrequency.Weeks, CustomFrequency.Week -> showDaysSection(true)
+            CustomFrequency.DAY -> showDaysSection(false)
+            CustomFrequency.WEEK -> showDaysSection(true)
         }
     }
+
+    private fun formatFrequencyString(
+        customFrequency: CustomFrequency,
+        interval: Int
+    ): String {
+        return when (customFrequency) {
+            CustomFrequency.DAY -> "$interval ${
+                resources.getQuantityString(
+                    R.plurals.day_plurals,
+                    interval
+                )
+            }"
+            CustomFrequency.WEEK -> "$interval ${
+                resources.getQuantityString(
+                    R.plurals.week_plurals,
+                    interval
+                )
+            }"
+        }
+    }
+
 
     private fun showDaysSection(show: Boolean) {
         binding?.apply {

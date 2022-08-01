@@ -34,6 +34,7 @@ data class SlotRecurringState(
 )
 
 sealed class SlotRecurringEvent {
+    data class Error(val message: String) : SlotRecurringEvent()
     data class ShowCustomPicker(val recurringRule: String? = null) : SlotRecurringEvent()
     data class OnSave(val recurringRule: String?) : SlotRecurringEvent()
 }
@@ -50,12 +51,22 @@ class SlotRecurringViewModel : BaseViewModel() {
 
     fun onSaveClick() {
         viewModelScope.launch {
-            _events.emit(SlotRecurringEvent.OnSave(mapStateToRule()))
+            validateInputs()
+        }
+    }
+
+    private suspend fun validateInputs(){
+        with(_state.value){
+            if (endsAt == null){
+                _events.emit(SlotRecurringEvent.Error("Recurring slot must have Ends at date"))
+            }else{
+                _events.emit(SlotRecurringEvent.OnSave(mapStateToRule()))
+            }
         }
     }
 
     private fun mapStateToRule(): String? {
-        val endsAt = _state.value.endsAt ?: return null // todo - validate end date
+        val endsAt = _state.value.endsAt ?: return null
         val simpleRule = when (_state.value.selectedFrequency) {
             is RecurringFrequency.OneTime -> null
             RecurringFrequency.EveryDay -> {
@@ -77,17 +88,23 @@ class SlotRecurringViewModel : BaseViewModel() {
     }
 
     fun init(rrule: String?) {
-        mapRuleToState(rrule)
+        viewModelScope.launch {
+            mapRuleToState(rrule)
+        }
     }
 
-    private fun mapRuleToState(rrule: String?) {
+    private suspend fun mapRuleToState(rrule: String?) {
         rrule?.let { recurringRule ->
             val simpleRule = rRuleTextFormatter.parseRRule(recurringRule)
             if (simpleRule == null) {
-                //TODO Report invalid rule
                 _state.update {
                     it.copy(selectedFrequency = RecurringFrequency.OneTime)
                 }
+                _events.emit(
+                    SlotRecurringEvent.Error(
+                        "Invalid recurring setting, please select again"
+                    )
+                )
             } else {
                 when {
                     !simpleRule.days.isNullOrEmpty() || simpleRule.interval > 1 -> {
@@ -103,9 +120,10 @@ class SlotRecurringViewModel : BaseViewModel() {
                             Frequency.WEEKLY -> _state.update {
                                 it.copy(selectedFrequency = RecurringFrequency.EveryWeek)
                             }
-                            else -> _state.update {
-                                //TODO Report unsupported freq
-                                it.copy(selectedFrequency = RecurringFrequency.OneTime)
+                            else -> {
+                                _state.update {
+                                    it.copy(selectedFrequency = RecurringFrequency.OneTime)
+                                }
                             }
                         }
                     }
@@ -143,7 +161,7 @@ class SlotRecurringViewModel : BaseViewModel() {
         }
     }
 
-    fun setRecurringFrequencyToCustom(recurringRule: String?){
+    fun setRecurringFrequencyToCustom(recurringRule: String) {
         _state.update {
             it.copy(selectedFrequency = RecurringFrequency.Custom(recurringRule))
         }

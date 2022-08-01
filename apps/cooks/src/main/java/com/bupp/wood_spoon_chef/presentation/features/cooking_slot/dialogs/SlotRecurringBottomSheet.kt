@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResult
@@ -15,6 +16,7 @@ import com.bupp.wood_spoon_chef.common.TopCorneredBottomSheet
 import com.bupp.wood_spoon_chef.databinding.BottomSheetSlotRecurringBinding
 import com.bupp.wood_spoon_chef.presentation.custom_views.CreateCookingSlotOptionView
 import com.bupp.wood_spoon_chef.presentation.custom_views.HeaderView
+import com.bupp.wood_spoon_chef.utils.extensions.showErrorToast
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -93,6 +95,13 @@ class SlotRecurringBottomSheet(
                             event.recurringRule
                         )
                         is SlotRecurringEvent.OnSave -> onSaveClick(event.recurringRule)
+                        is SlotRecurringEvent.Error -> {
+                            binding?.let {
+                                showErrorToast(
+                                    event.message, it.makeSlotRecurringMainLayout, Toast.LENGTH_SHORT
+                                )
+                            }
+                        }
                     }
                 }
             }
@@ -109,9 +118,9 @@ class SlotRecurringBottomSheet(
 
             makeSlotRecurringCustom.apply {
                 if (tag.equals(selectedFrequency.name.name)){
-                    setRightArrowIcon(R.drawable.ic_check_v)
+                    setEndIcon(R.drawable.ic_check_v)
                 }else{
-                    setRightArrowIcon(R.drawable.ic_arrow_right)
+                    setEndIcon(R.drawable.ic_arrow_right)
                 }
             }
         }

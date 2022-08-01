@@ -1,9 +1,11 @@
 package com.bupp.wood_spoon_chef.presentation.features.cooking_slot.dialogs
 
+import android.content.Context
 import androidx.annotation.Keep
 import androidx.lifecycle.viewModelScope
 import biweekly.util.DayOfWeek
 import biweekly.util.Frequency
+import com.bupp.wood_spoon_chef.R
 import com.bupp.wood_spoon_chef.presentation.features.base.BaseViewModel
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.rrules.RRuleTextFormatter
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.rrules.SimpleRRule
@@ -12,23 +14,23 @@ import kotlinx.coroutines.launch
 
 @Keep
 enum class CustomFrequency {
-    Days,
-    Weeks,
-    Day,
-    Week
+    DAY,
+    WEEK
 }
-
 
 data class CustomRecurringState(
     val selectedDays: List<DayOfWeek> = emptyList(),
-    val customFrequency: CustomFrequency = CustomFrequency.Day,
+    val customFrequency: CustomFrequency = CustomFrequency.DAY,
     val customInterval: Int = 1,
     val recurringRule: String? = null
 )
 
 sealed class CustomRecurringEvent {
+    data class Error(val message: String) : CustomRecurringEvent()
     data class SaveRecurringRule(val recurringRule: String?) : CustomRecurringEvent()
-    data class ShowCustomFrequencyPicker(val interval: Int) : CustomRecurringEvent()
+    data class ShowCustomFrequencyPicker(
+        val interval: Int, val frequency: String
+    ) : CustomRecurringEvent()
 }
 
 class CustomRecurringViewModel : BaseViewModel() {
@@ -42,40 +44,34 @@ class CustomRecurringViewModel : BaseViewModel() {
     private val rRuleTextFormatter = RRuleTextFormatter()
 
     fun init(recurringRule: String?) {
-        mapRuleToState(recurringRule)
+        viewModelScope.launch {
+            mapRuleToState(recurringRule)
+        }
     }
 
-    private fun mapRuleToState(rrule: String?) {
-        rrule?.let { rrule ->
-            val simpleRule = rRuleTextFormatter.parseRRule(rrule)
+    private suspend fun mapRuleToState(rrule: String?) {
+        rrule?.let { recurringRule ->
+            val simpleRule = rRuleTextFormatter.parseRRule(recurringRule)
             if (simpleRule == null) {
-                //TODO Report invalid rule
                 _state.update {
                     it.copy(selectedDays = emptyList())
                 }
+                _events.emit(
+                    CustomRecurringEvent.Error(
+                        "Invalid recurring setting, please select again"
+                    )
+                )
             } else {
                 when (simpleRule.frequency) {
                     Frequency.DAILY -> {
-                        if (simpleRule.interval == 1) {
-                            _state.update {
-                                it.copy(customFrequency = CustomFrequency.Day)
-                            }
-                        } else {
-                            _state.update {
-                                it.copy(customFrequency = CustomFrequency.Days)
-                            }
+                        _state.update {
+                            it.copy(customFrequency = CustomFrequency.DAY)
                         }
                     }
 
                     Frequency.WEEKLY -> {
-                        if (simpleRule.interval == 1) {
-                            _state.update {
-                                it.copy(customFrequency = CustomFrequency.Week)
-                            }
-                        } else {
-                            _state.update {
-                                it.copy(customFrequency = CustomFrequency.Weeks)
-                            }
+                        _state.update {
+                            it.copy(customFrequency = CustomFrequency.WEEK)
                         }
                     }
                     else -> {}
@@ -92,7 +88,7 @@ class CustomRecurringViewModel : BaseViewModel() {
 
     fun mapStateToRule(): String? {
         val simpleRule = when (_state.value.customFrequency) {
-            CustomFrequency.Days, CustomFrequency.Day -> {
+            CustomFrequency.DAY -> {
                 SimpleRRule(
                     Frequency.DAILY,
                     _state.value.customInterval,
@@ -100,14 +96,12 @@ class CustomRecurringViewModel : BaseViewModel() {
                     days = emptyList()
                 )
             }
-            CustomFrequency.Weeks, CustomFrequency.Week -> {
-                SimpleRRule(
-                    Frequency.WEEKLY,
-                    _state.value.customInterval,
-                    null,
-                    days = _state.value.selectedDays
-                )
-            }
+            CustomFrequency.WEEK -> SimpleRRule(
+                Frequency.WEEKLY,
+                _state.value.customInterval,
+                null,
+                days = _state.value.selectedDays
+            )
         }
 
         return simpleRule.let { rRuleTextFormatter.buildRRule(it) }
@@ -123,7 +117,8 @@ class CustomRecurringViewModel : BaseViewModel() {
         viewModelScope.launch {
             _events.emit(
                 CustomRecurringEvent.ShowCustomFrequencyPicker(
-                    _state.value.customInterval
+                    _state.value.customInterval,
+                    _state.value.customFrequency.name
                 )
             )
         }
@@ -135,9 +130,11 @@ class CustomRecurringViewModel : BaseViewModel() {
         }
     }
 
-    fun setFrequency(frequency: String) {
+    fun setFrequency(context: Context, frequency: String) {
         _state.update {
-            it.copy(customFrequency = CustomFrequency.valueOf(frequency))
+            it.copy(
+                customFrequency = frequencyStringToCustomFrequency(context, frequency)
+            )
         }
     }
 
@@ -160,6 +157,19 @@ class CustomRecurringViewModel : BaseViewModel() {
             }
             setSelectedDays(newDaysList)
             mapStateToRule()
+        }
+    }
+
+    private fun frequencyStringToCustomFrequency(
+        context: Context, frequency: String
+    ): CustomFrequency {
+        return when (frequency) {
+            context.getString(R.string.day), context.getString(R.string.days) -> {
+                CustomFrequency.DAY
+            }
+            else -> {
+                CustomFrequency.WEEK
+            }
         }
     }
 

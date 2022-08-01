@@ -59,8 +59,7 @@
                         android:layout_height="wrap_content"
                         style="@style/LatoReg13Black"
                         android:textColor="@color/greyish_brown"
-                        android:layout_marginEnd="15dp"
-                        android:text="@string/one_week" />
+                        android:layout_marginEnd="15dp"/>
 
                 </LinearLayout>
 
@@ -76,7 +75,7 @@
                     android:id="@+id/customRecurringSunday"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:rightArrowIcon="@drawable/ic_check_v"
+                    app:endIcon="@drawable/ic_check_v"
                     app:showMainIcon="false"
                     android:tag="@string/sunday"
                     app:title="@string/sunday" />
@@ -85,7 +84,7 @@
                     android:id="@+id/customRecurringMonday"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:rightArrowIcon="@drawable/ic_check_v"
+                    app:endIcon="@drawable/ic_check_v"
                     app:showMainIcon="false"
                     android:tag="@string/monday"
                     app:title="@string/monday" />
@@ -94,7 +93,7 @@
                     android:id="@+id/customRecurringTuesday"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:rightArrowIcon="@drawable/ic_check_v"
+                    app:endIcon="@drawable/ic_check_v"
                     app:showMainIcon="false"
                     android:tag="@string/tuesday"
                     app:title="@string/tuesday" />
@@ -103,7 +102,7 @@
                     android:id="@+id/customRecurringWednesday"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:rightArrowIcon="@drawable/ic_check_v"
+                    app:endIcon="@drawable/ic_check_v"
                     app:showMainIcon="false"
                     android:tag="@string/wednesday"
                     app:title="@string/wednesday" />
@@ -112,7 +111,7 @@
                     android:id="@+id/customRecurringThursday"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:rightArrowIcon="@drawable/ic_check_v"
+                    app:endIcon="@drawable/ic_check_v"
                     app:showMainIcon="false"
                     android:tag="@string/thursday"
                     app:title="@string/thursday" />
@@ -121,7 +120,7 @@
                     android:id="@+id/customRecurringFriday"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:rightArrowIcon="@drawable/ic_check_v"
+                    app:endIcon="@drawable/ic_check_v"
                     app:showMainIcon="false"
                     android:tag="@string/friday"
                     app:title="@string/friday" />
@@ -130,7 +129,7 @@
                     android:id="@+id/customRecurringSaturday"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:rightArrowIcon="@drawable/ic_check_v"
+                    app:endIcon="@drawable/ic_check_v"
                     app:showMainIcon="false"
                     android:tag="@string/saturday"
                     app:title="@string/saturday" />

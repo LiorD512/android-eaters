@@ -95,6 +95,18 @@
     <string name="friday">Friday</string>
     <string name="saturday">Saturday</string>
     <string name="every">Every</string>
-    <string name="one_day">1 Day</string>
-    <string name="one_week">1 Week</string>
+    <string name="day">Day</string>
+    <string name="week">Week</string>
+    <string name="days">Days</string>
+    <string name="weeks">Weeks</string>
+
+    <plurals name="day_plurals">
+        <item quantity="one">@string/day</item>
+        <item quantity="other">@string/days</item>
+    </plurals>
+
+    <plurals name="week_plurals">
+        <item quantity="one">@string/week</item>
+        <item quantity="other">@string/weeks</item>
+    </plurals>
 </resources>
