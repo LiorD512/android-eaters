@@ -16,7 +16,6 @@ class CookingSlotRequestMapper {
         lastCallAt = lastCallForOrder?.div(1000),
         freeDelivery = false,
         worldwide = false,
-        recurringSlot = false,
         menuItems = mutableListOf(),
         recurringRule = recurringRule,
         submit = false

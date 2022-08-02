@@ -38,7 +38,7 @@ class CookingSlotParentViewModel(
                             val editedSlot = originalCookingSlotToDraftCookingSlotMapper
                                 .mapOriginalCookingSlotToDraft(
                                     originalCookingSlot = slot
-                                ).copy(isEditing = true)
+                                )
                             cookingSlotsDraftRepository.saveDraft(editedSlot)
                         }
                         cookingSlotFlowNavigator.startFlow()

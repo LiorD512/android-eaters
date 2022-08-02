@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.os.Parcelable
 import android.view.View
 import androidx.annotation.Keep
+import androidx.core.view.isVisible
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
@@ -17,6 +18,7 @@ import com.bupp.wood_spoon_chef.presentation.custom_views.CreateCookingSlotTopBa
 import com.bupp.wood_spoon_chef.presentation.features.base.BaseFragment
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.CookingSlotActivity
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.fragments.CookingSlotMenuAdapter
+import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.rrules.RRuleTextFormatter
 import com.bupp.wood_spoon_chef.utils.extensions.prepareFormattedDate
 import com.eatwoodspoon.android_utils.binding.viewBinding
 import com.shared.presentation.dialog.bottomsheet.ActionListBottomSheetFragment
@@ -91,6 +93,16 @@ class CookingSlotDetailsFragmentNew : BaseFragment(R.layout.fragment_details_coo
                             binding.createCookingSlotNewFragmentLastCallForOrderView.setSubtitle(
                                 DateTime(state.cookingSlot.lastCallAt).prepareFormattedDate()
                             )
+                            binding.createCookingSlotNewFragmentMakeRecurringView.isVisible =
+                                !state.cookingSlot.recurringRule.isNullOrEmpty()
+                            binding.createCookingSlotNewFragmentMakeRecurringView.setSubtitle(
+                                state.cookingSlot.recurringRule?.let {
+                                    RRuleTextFormatter().formatToHumanReadable(
+                                        it
+                                    )
+                                }
+                            )
+
                             menuAdapter?.submitList(state.categoriesWithMenu)
                         }
                         CookingSlotDetailsState.SlotCanceled -> {

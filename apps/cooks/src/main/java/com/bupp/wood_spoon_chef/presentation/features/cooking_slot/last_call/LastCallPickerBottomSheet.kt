@@ -23,6 +23,8 @@ data class SelectedHoursAndMinutes(
     var minutes: Int
 ) : Parcelable
 
+fun SelectedHoursAndMinutes.isZero() = hours == 0 && minutes == 0
+
 class LastCallPickerBottomSheet : TopCorneredBottomSheet() {
 
     private var binding: BottomSheetLastCallTimePickerBinding? = null

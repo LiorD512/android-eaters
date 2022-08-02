@@ -51,7 +51,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:mainIcon="@drawable/icon_reccuring"
-                    app:title="Make slot recurring"
+                    app:title="Slot is recurring"
                     tools:subtitle="@tools:sample/lorem/random"/>
 
                 <com.bupp.wood_spoon_chef.presentation.custom_views.CreateCookingSlotOptionView
@@ -59,7 +59,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:mainIcon="@drawable/icon_ship"
-                    app:title="Ship nationwide" />
+                    app:title="Ship nationwide"
+                    android:visibility="gone"/>
 
             </com.bupp.wood_spoon_chef.presentation.custom_views.SectionView>
 
