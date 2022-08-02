@@ -14,7 +14,7 @@ class OriginalCookingSlotToDraftCookingSlotMapper(
             originalCookingSlot.startsAt.time, originalCookingSlot.endsAt.time
         ),
         lastCallForOrder = originalCookingSlot.lastCallAt?.time,
-        recurringRule = null,
+        recurringRule = originalCookingSlot.recurringRule,
         menuItems = originalCookingSlot.menuItems
             .map { menuItemToMenuDishItemMapper.map(it) }
             .toList(),

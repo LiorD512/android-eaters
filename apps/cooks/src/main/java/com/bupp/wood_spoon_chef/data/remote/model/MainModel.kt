@@ -338,7 +338,7 @@ data class CookingSlotRequest(
     @Json(name = "last_call_at") var lastCallAt: Long? = null,
     @Json(name = "free_delivery") var freeDelivery: Boolean = false,
     @Json(name = "nationwide_shipping") var worldwide: Boolean = false,
-    @Json(name = "recurring_slot") var recurringSlot: Boolean = false,
+//    @Json(name = "recurring_slot") var recurringSlot: Boolean = false,
     @Json(name = "menu_items") var menuItems: List<MenuItemRequest> = mutableListOf(),
     @Json(name = "rrule") val recurringRule: String? = null,
     @Json(name = "submit") var submit: Boolean? = null
@@ -371,6 +371,7 @@ data class CookingSlot(
     @Json(name = "status") val status: String?,
     @Json(name = "total_profit") val totalProfit: Price?,
     @Json(name = "menu_items") val menuItems: List<MenuItem> = mutableListOf(),
+    @Json(name = "rrule") val recurringRule: String? = null,
     val orders: List<Order>?
 ) : Parcelable
 

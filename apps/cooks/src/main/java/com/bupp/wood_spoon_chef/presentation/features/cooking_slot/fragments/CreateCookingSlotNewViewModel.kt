@@ -15,12 +15,14 @@ import com.bupp.wood_spoon_chef.utils.extensions.getErrorMsgByType
 import com.bupp.wood_spoon_chef.data.remote.model.request.CookingSlotRequestMapper
 import com.bupp.wood_spoon_chef.domain.GetFormattedSelectedHoursAndMinutesUseCase
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.last_call.SelectedHoursAndMinutes
+import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.last_call.isZero
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 import org.joda.time.DateTime
 import java.lang.Exception
+import java.lang.IllegalArgumentException
 
 @Parcelize
 data class OperatingHours(
@@ -34,11 +36,13 @@ data class CreateCookingSlotNewState(
     val operatingHours: OperatingHours = OperatingHours(null, null),
     val selectedHoursAndMinutes: SelectedHoursAndMinutes? = null,
     val recurringRule: String? = null,
-    val isInEditMode: Boolean = false,
+    val cookingSlotId: Long? = null,
     val errors: List<Errors> = emptyList(),
     val inProgress: Boolean = false,
-    val recurringViewVisible: Boolean = true
-)
+    val recurringViewVisible: Boolean = true,
+) {
+    val isInEditMode = cookingSlotId != null
+}
 
 enum class Errors {
     OperatingHours
@@ -77,7 +81,7 @@ class CreateCookingSlotNewViewModel(
                 setOperatingHours(draft.operatingHours)
                 setRecurringRule(draft.recurringRule)
                 setRecurringViewVisible(draft)
-                setIsInEditMode(draft.originalCookingSlot != null)
+                setCookingSlotId(draft.originalCookingSlot?.id)
             }
         }
     }
@@ -94,9 +98,9 @@ class CreateCookingSlotNewViewModel(
         }
     }
 
-    private fun setIsInEditMode(isInEditMode: Boolean) {
+    private fun setCookingSlotId(cookingSlotId: Long?) {
         _state.update {
-            it.copy(isInEditMode = isInEditMode)
+            it.copy(cookingSlotId = cookingSlotId)
         }
     }
 
@@ -114,7 +118,13 @@ class CreateCookingSlotNewViewModel(
 
     fun setSelectedHoursAndMinutes(selectedHoursAndMinutes: SelectedHoursAndMinutes) {
         _state.update {
-            it.copy(selectedHoursAndMinutes = selectedHoursAndMinutes)
+            it.copy(
+                selectedHoursAndMinutes = if (selectedHoursAndMinutes.isZero()) {
+                    null
+                } else {
+                    selectedHoursAndMinutes
+                }
+            )
         }
     }
 
@@ -140,7 +150,14 @@ class CreateCookingSlotNewViewModel(
                     recurringRule = _state.value.recurringRule
                 )
 
-                when (val result = cookingSlotRepository.postCookingSlot(request)) {
+                val result = if(_state.value.isInEditMode) {
+                    val slotId = _state.value.cookingSlotId ?: throw IllegalArgumentException("No slot id in eduit mode")
+                    cookingSlotRepository.updateCookingSlot(slotId, request)
+                } else {
+                    cookingSlotRepository.postCookingSlot(request)
+                }
+
+                when (result) {
                     is ResponseSuccess -> {
                         setInProgress(false)
                         onValidationSuccess()

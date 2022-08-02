@@ -11,7 +11,7 @@ data class CookingSlotDraftData(
     val recurringRule: String? = null,
     val menuItems: List<MenuDishItem> = mutableListOf(),
     val originalCookingSlot: CookingSlot?,
-    val isEditing: Boolean = false
 ) {
     val id = originalCookingSlot?.id
+    val isEditing: Boolean = originalCookingSlot != null
 }
