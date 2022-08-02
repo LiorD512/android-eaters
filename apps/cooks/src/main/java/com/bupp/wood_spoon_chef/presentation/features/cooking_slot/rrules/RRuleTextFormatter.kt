@@ -32,7 +32,7 @@ class RRuleTextFormatter {
     private val writeContext = WriteContext(ICalVersion.V2_0, TimezoneInfo(), null)
     private val dateFormat = SimpleDateFormat("MMM d", Locale.getDefault())
 
-    fun parseRRule(rruleString: String): SimpleRRule? {
+    fun parseRRule(rruleString: String, until: Date? = null): SimpleRRule? {
         try {
 
             val rrule = scribe.parseText(rruleString, null, ICalParameters(), parseContext);
@@ -41,7 +41,7 @@ class RRuleTextFormatter {
             return SimpleRRule(
                 frequency = recurrence.frequency,
                 interval = recurrence.interval,
-                until = recurrence.until ?: Date(),
+                until = until ?: recurrence.until,
                 days = recurrence.byDay.map { it.day }
             )
 

@@ -79,7 +79,7 @@ class MenuItemViewHolder(
     fun bind(item: CookingSlotMenuAdapterItem.MenuAdapterItem) {
         view.tvTitle.text = item.menuItem.dish?.name
         Glide.with(view.root.context)
-            .load(item.menuItem.dish?.imageGallery?.first())
+            .load(item.menuItem.dish?.imageGallery?.firstOrNull())
             .centerCrop()
             .into(view.ivMenuPicture)
         view.tvPrice.text = item.menuItem.dish?.price?.formattedValue
