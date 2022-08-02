@@ -3,6 +3,7 @@ package com.bupp.wood_spoon_chef.presentation.features.cooking_slot.fragments
 import android.os.Parcelable
 import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.viewModelScope
+import com.bupp.wood_spoon_chef.data.local.model.CookingSlotDraftData
 import com.bupp.wood_spoon_chef.data.remote.network.base.ResponseError
 import com.bupp.wood_spoon_chef.data.remote.network.base.ResponseSuccess
 import com.bupp.wood_spoon_chef.data.repositories.CookingSlotRepository
@@ -35,7 +36,8 @@ data class CreateCookingSlotNewState(
     val recurringRule: String? = null,
     val isInEditMode: Boolean = false,
     val errors: List<Errors> = emptyList(),
-    val inProgress: Boolean = false
+    val inProgress: Boolean = false,
+    val recurringViewVisible: Boolean = true
 )
 
 enum class Errors {
@@ -74,8 +76,15 @@ class CreateCookingSlotNewViewModel(
                 setSelectedDate(draft.selectedDate)
                 setOperatingHours(draft.operatingHours)
                 setRecurringRule(draft.recurringRule)
+                setRecurringViewVisible(draft)
                 setIsInEditMode(draft.originalCookingSlot != null)
             }
+        }
+    }
+
+    private fun setRecurringViewVisible(draft: CookingSlotDraftData) {
+        _state.update {
+            it.copy(recurringViewVisible = !draft.isEditing || draft.recurringRule != null)
         }
     }
 
@@ -188,7 +197,12 @@ class CreateCookingSlotNewViewModel(
     fun onMakeSlotRecurringClick() {
         _state.value.selectedDate?.let {
             viewModelScope.launch {
-                _events.emit(CreateCookingSlotEvents.ShowRecurringRule(_state.value.recurringRule, it))
+                _events.emit(
+                    CreateCookingSlotEvents.ShowRecurringRule(
+                        _state.value.recurringRule,
+                        it
+                    )
+                )
             }
         }
     }
