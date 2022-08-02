@@ -17,6 +17,7 @@ import com.bupp.wood_spoon_chef.databinding.FragmentDetailsCookingSlotNewBinding
 import com.bupp.wood_spoon_chef.presentation.custom_views.CreateCookingSlotTopBar
 import com.bupp.wood_spoon_chef.presentation.features.base.BaseFragment
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.CookingSlotActivity
+import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.dialogs.ConfirmationBottomSheet
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.fragments.CookingSlotMenuAdapter
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.rrules.RRuleTextFormatter
 import com.bupp.wood_spoon_chef.utils.extensions.prepareFormattedDate
@@ -175,9 +176,45 @@ class CookingSlotDetailsFragmentNew : BaseFragment(R.layout.fragment_details_coo
         }
     }
 
+    //TODO move this logic to VM
     private fun doOnDeleteAction() {
-        viewModel.selectedCookingSlot?.id?.let { id ->
-            viewModel.cancelCookingSlot(id)
+        val cookingSlotId = viewModel.selectedCookingSlot?.id ?: return
+        val isRecurring = viewModel.selectedCookingSlot?.recurringRule?.isNotEmpty() == true
+
+        if(false && isRecurring) {
+            showDetachDialog()
+        }else{
+            viewModel.cancelCookingSlot(cookingSlotId, null)
+        }
+    }
+
+    private fun showDetachDialog() {
+        val cookingSlotId = viewModel.selectedCookingSlot?.id ?: return
+
+        val confirmationArgs = ConfirmationBottomSheet.ConfirmationArguments(
+            getString(R.string.delete_cooking_slot_title),
+            getString(R.string.delete_cooking_slot_subject),
+            ConfirmationBottomSheet.ConfirmationAction(
+                ConfirmationBottomSheet.ConfirmationAction.ConfirmationButtonType.PRIMARY,
+                getString(R.string.this_and_following)
+            ),
+            ConfirmationBottomSheet.ConfirmationAction(
+                ConfirmationBottomSheet.ConfirmationAction.ConfirmationButtonType.SECONDARY,
+                getString(R.string.this_slot)
+            )
+        )
+
+        ConfirmationBottomSheet.newInstance(confirmationArgs).showWithResultListener(
+            parentFragmentManager, null, this
+        ) { action ->
+            when (action.type) {
+                ConfirmationBottomSheet.ConfirmationAction.ConfirmationButtonType.PRIMARY -> {
+                    viewModel.cancelCookingSlot(cookingSlotId, false)
+                }
+                ConfirmationBottomSheet.ConfirmationAction.ConfirmationButtonType.SECONDARY -> {
+                    viewModel.cancelCookingSlot(cookingSlotId, true)
+                }
+            }
         }
     }
 

@@ -86,7 +86,7 @@ class CookingSlotDetailsViewModelNew(
         )
     }
 
-    fun cancelCookingSlot(slotId: Long) = viewModelScope.launch {
+    fun cancelCookingSlot(slotId: Long, singleSlot: Boolean?) = viewModelScope.launch {
         _state.emit(CookingSlotDetailsState.Loading)
 
         try {

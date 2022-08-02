@@ -34,9 +34,13 @@ sealed class ReviewCookingSlotState {
     ) : ReviewCookingSlotState()
 
     object Idle : ReviewCookingSlotState()
-    object SlotCreatedSuccess : ReviewCookingSlotState()
     class Loading(val isLoading: Boolean = true) : ReviewCookingSlotState()
     class Error(val error: MTError) : ReviewCookingSlotState()
+}
+
+sealed class ReviewCookingSlotEvents {
+    object ShowUpdateDetachDialog : ReviewCookingSlotEvents()
+    object SlotCreatedSuccess : ReviewCookingSlotEvents()
 }
 
 class CookingSlotReviewViewModel(
@@ -53,18 +57,27 @@ class CookingSlotReviewViewModel(
     private val _state = MutableStateFlow<ReviewCookingSlotState>(ReviewCookingSlotState.Idle)
     val state: StateFlow<ReviewCookingSlotState> = _state
 
+    private val _events = MutableSharedFlow<ReviewCookingSlotEvents>()
+    val events: SharedFlow<ReviewCookingSlotEvents> = _events
+
     init {
         getDraftMenuItems()
     }
 
     fun saveOrUpdateCookingSlot() = viewModelScope.launch {
-        prepareAddSlotRequest().let { request ->
-            if (isEditing) {
-                updateCookingSlot(request)
-            } else {
-                saveCookingSlot(request)
-            }
+        if (isEditing) {
+            _events.emit(ReviewCookingSlotEvents.ShowUpdateDetachDialog)
+            return@launch
         }
+        saveCookingSlot(prepareAddSlotRequest())
+    }
+
+    fun onDetachDialogResult(singleEvent: Boolean) = viewModelScope.launch {
+        updateCookingSlot(
+            prepareAddSlotRequest().copy(
+                detach = singleEvent
+            )
+        )
     }
 
     private fun saveCookingSlot(request: CookingSlotRequest) = viewModelScope.launch {
@@ -73,7 +86,7 @@ class CookingSlotReviewViewModel(
         try {
             when (val result = cookingSlotRepository.postCookingSlot(request)) {
                 is ResponseSuccess -> {
-                    _state.emit(ReviewCookingSlotState.SlotCreatedSuccess)
+                    _events.emit(ReviewCookingSlotEvents.SlotCreatedSuccess)
                 }
                 is ResponseError -> {
                     _state.emit(
@@ -103,7 +116,7 @@ class CookingSlotReviewViewModel(
                         cookingSlotRepository.updateCookingSlot(draftSlotId, cookingSlotRequest)) {
                         is ResponseSuccess -> {
                             result.data?.let {
-                                _state.emit(ReviewCookingSlotState.SlotCreatedSuccess)
+                                _events.emit(ReviewCookingSlotEvents.SlotCreatedSuccess)
                             }
                         }
                         is ResponseError -> {
