@@ -9,16 +9,21 @@ import com.bupp.wood_spoon_chef.R
 import com.bupp.wood_spoon_chef.databinding.OrangeBtnCorneredBinding
 import com.bupp.wood_spoon_chef.utils.Utils
 
-class OrangeBtnCornered : FrameLayout{
+class OrangeBtnCornered : FrameLayout {
 
-    private var binding: OrangeBtnCorneredBinding = OrangeBtnCorneredBinding.inflate(LayoutInflater.from(context), this, true)
+    private var binding: OrangeBtnCorneredBinding =
+        OrangeBtnCorneredBinding.inflate(LayoutInflater.from(context), this, true)
 
     constructor(context: Context) : this(context, null)
 
     constructor(context: Context, attrs: AttributeSet?) :
             this(context, attrs, 0)
 
-    constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr) {
+    constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(
+        context,
+        attrs,
+        defStyleAttr
+    ) {
         if (attrs != null) {
             val a = context.obtainStyledAttributes(attrs, R.styleable.OrangeBtnCornered)
             if (a.hasValue(R.styleable.OrangeBtnCornered_title)) {
@@ -27,54 +32,74 @@ class OrangeBtnCornered : FrameLayout{
             }
             if (a.hasValue(R.styleable.OrangeBtnCornered_isPink)) {
                 val isPink = a.getBoolean(R.styleable.OrangeBtnCornered_isPink, false)
-                if(isPink){
+                if (isPink) {
                     setPinkUi()
                 }
             }
             if (a.hasValue(R.styleable.OrangeBtnCornered_isOrangeish)) {
                 val isOrangeish = a.getBoolean(R.styleable.OrangeBtnCornered_isOrangeish, false)
-                if(isOrangeish){
+                if (isOrangeish) {
                     setOrangeishUi()
                 }
             }
             if (a.hasValue(R.styleable.OrangeBtnCornered_isBtnSmall)) {
                 val isSmall = a.getBoolean(R.styleable.OrangeBtnCornered_isBtnSmall, false)
-                if(isSmall){
+                if (isSmall) {
                     setSmallUI()
                 }
             }
+
+            if (a.hasValue(R.styleable.OrangeBtnCornered_isPinkOrangeishTitle)) {
+                val isPinkWithOrangeishTitle = a.getBoolean(R.styleable.OrangeBtnCornered_isPinkOrangeishTitle, false)
+                if (isPinkWithOrangeishTitle) {
+                    setPinkUiWithOrangeishUi()
+                }
+            }
+
             a.recycle()
         }
     }
 
-    fun setText(text: String){
+    fun setText(text: String) {
         binding.orangeBtnText.text = text
     }
 
-    private fun setPinkUi(){
-        with(binding){
-            orangeBtnText.setTextColor(ContextCompat.getColor(root.context, R.color.coral))
-            orangeBtnBackground.background = ContextCompat.getDrawable(root.context, R.drawable.rectangle_pink_btn_cornered)
+    private fun setPinkUiWithOrangeishUi() {
+        with(binding) {
+            orangeBtnText.setTextColor(ContextCompat.getColor(root.context, R.color.orangeish))
+            orangeBtnBackground.background =
+                ContextCompat.getDrawable(root.context, R.drawable.rectangle_pink_btn_cornered)
         }
     }
 
-    private fun setOrangeishUi(){
+    private fun setPinkUi() {
+        with(binding) {
+            orangeBtnText.setTextColor(ContextCompat.getColor(root.context, R.color.coral))
+            orangeBtnBackground.background =
+                ContextCompat.getDrawable(root.context, R.drawable.rectangle_pink_btn_cornered)
+        }
+    }
+
+    private fun setOrangeishUi() {
         binding.apply {
             orangeBtnText.setTextColor(ContextCompat.getColor(root.context, R.color.orangeish))
-            orangeBtnBackground.background = ContextCompat.getDrawable(root.context, R.drawable.rectangle_orangish_12_cornered)
+            orangeBtnBackground.background =
+                ContextCompat.getDrawable(root.context, R.drawable.rectangle_orangish_12_cornered)
         }
 
     }
 
-    private fun setSmallUI(){
+    private fun setSmallUI() {
         val topBottomPadding = Utils.toPx(5)
         val leftRightPadding = Utils.toPx(12)
 
-        with(binding){
-            orangeBtnText.setPadding(leftRightPadding,
+        with(binding) {
+            orangeBtnText.setPadding(
+                leftRightPadding,
                 topBottomPadding,
                 leftRightPadding,
-                topBottomPadding)
+                topBottomPadding
+            )
             orangeBtnText.textSize = 11.5F
         }
     }

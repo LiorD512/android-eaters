@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/confirmationBsMainLayout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/top_cornered_bkg"
+    android:paddingBottom="@dimen/medium">
+
+    <TextView
+        android:id="@+id/confirmationBsTitle"
+        style="@style/LatoBlack19DarkDarkGrey"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/big"
+        android:gravity="center"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Update cooking slot" />
+
+    <TextView
+        android:id="@+id/confirmationBsSubject"
+        style="@style/LatoReg13Black"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="37dp"
+        android:layout_marginTop="@dimen/big"
+        android:gravity="center"
+        app:layout_constraintTop_toBottomOf="@id/confirmationBsTitle"
+        tools:text="For which cooking slots would you like to save the changes you made?" />
+
+    <com.bupp.wood_spoon_chef.presentation.custom_views.OrangeBtnCornered
+        android:id="@+id/confirmationBsSecondaryBtn"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/medium"
+        android:layout_marginTop="@dimen/big"
+        android:layout_marginEnd="@dimen/small"
+        app:isPinkOrangeishTitle="true"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/confirmationBsPrimaryBtn"
+        app:layout_constraintTop_toBottomOf="@id/confirmationBsSubject" />
+
+    <com.bupp.wood_spoon_chef.presentation.custom_views.OrangeBtnCornered
+        android:id="@+id/confirmationBsPrimaryBtn"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/big"
+        android:layout_marginEnd="@dimen/medium"
+        android:layout_marginStart="@dimen/small"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/confirmationBsSecondaryBtn"
+        app:layout_constraintTop_toBottomOf="@id/confirmationBsSubject" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
