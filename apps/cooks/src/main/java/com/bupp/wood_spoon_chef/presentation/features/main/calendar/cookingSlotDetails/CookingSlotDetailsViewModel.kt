@@ -78,7 +78,7 @@ class CookingSlotDetailsViewModel(
         progressData.startProgress()
 
         try {
-            when (val result = cookingSlotRepository.cancelCookingSlot(cookingSlotId)) {
+            when (val result = cookingSlotRepository.cancelCookingSlot(cookingSlotId, null)) {
                 is ResponseSuccess -> {
                     doOnSuccessCancelSlot(cookingSlotId)
                 }

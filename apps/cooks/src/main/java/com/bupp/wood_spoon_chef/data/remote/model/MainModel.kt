@@ -312,7 +312,7 @@ data class MenuItem(
     @Json(name = "cooking_slot") val cookingSlot: CookingSlot?,
     @Json(name = "dish") val dish: Dish,
     @Json(name = "quantity") var quantity: Int,
-    @Json(name = "units_sold") val unitsSold: Int,
+    @Json(name = "units_sold") val unitsSold: Int?,
     @Json(name = "_destroy") var _destroy: Boolean?
 ) : Parcelable {
     fun parseToMenuItemRequest(): MenuItemRequest {

@@ -181,7 +181,7 @@ class CookingSlotDetailsFragmentNew : BaseFragment(R.layout.fragment_details_coo
         val cookingSlotId = viewModel.selectedCookingSlot?.id ?: return
         val isRecurring = viewModel.selectedCookingSlot?.recurringRule?.isNotEmpty() == true
 
-        if(false && isRecurring) {
+        if(isRecurring) {
             showDetachDialog()
         }else{
             viewModel.cancelCookingSlot(cookingSlotId, null)

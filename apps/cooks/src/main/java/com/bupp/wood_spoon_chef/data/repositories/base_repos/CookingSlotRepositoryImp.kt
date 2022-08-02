@@ -21,7 +21,7 @@ interface BaseCookingSlotRepository {
         cookingSlotRequest: CookingSlotRequest
     ): ResponseResult<CookingSlot>
 
-    suspend fun cancelCookingSlot(id: Long): ResponseResult<Any>
+    suspend fun cancelCookingSlot(id: Long, detach: Boolean?): ResponseResult<Any>
     suspend fun getTraceableCookingSlot(): ResponseResult<List<CookingSlot>>
     suspend fun updateCookingSlotAvailability(
         cookingSlotId: Long,
@@ -58,8 +58,8 @@ open class CookingSlotRepositoryImp(
         return responseHandler.safeApiCall { service.updateCookingSlot(id, cookingSlotRequest) }
     }
 
-    override suspend fun cancelCookingSlot(id: Long): ResponseResult<Any> {
-        return responseHandler.safeApiCall { service.cancelCookingSlot(id) }
+    override suspend fun cancelCookingSlot(id: Long, detach: Boolean?): ResponseResult<Any> {
+        return responseHandler.safeApiCall { service.cancelCookingSlot(id, detach) }
     }
 
     override suspend fun getTraceableCookingSlot(): ResponseResult<List<CookingSlot>> {

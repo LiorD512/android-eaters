@@ -10,10 +10,10 @@ class CancelCookingSlotUseCase(
     private val cookingSlotRepository: CookingSlotRepository
 ) : UseCase<Flow<ResponseResult<Any>>, CancelCookingSlotUseCase.Params> {
 
-    data class Params(val cookingSlotId: Long)
+    data class Params(val cookingSlotId: Long, val detach: Boolean?)
 
     override fun execute(params: Params): Flow<ResponseResult<Any>> = flow {
-        val result = cookingSlotRepository.cancelCookingSlot(params.cookingSlotId)
+        val result = cookingSlotRepository.cancelCookingSlot(params.cookingSlotId, params.detach)
         emit(result)
     }
 }

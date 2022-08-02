@@ -61,7 +61,7 @@ class OrdersViewModel(
     fun cancelCookingSlot(cookingSlotId: Long) {
         viewModelScope.launch {
             progressData.startProgress()
-            when (val response = cookingSlotRepository.cancelCookingSlot(cookingSlotId)) {
+            when (val response = cookingSlotRepository.cancelCookingSlot(cookingSlotId, null)) {
                 is ResponseSuccess -> {
                     cancelCookingSlotEvent.postValue(CancelCookingSlotEvent(true))
                 }
