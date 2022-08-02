@@ -93,6 +93,10 @@
     <string name="warning_title_bottom_sheet">We don’t recommend setting a last call for your cooking slot. After your last call, customers won’t be able to order from you.</string>
     <string name="warning_sub_description_bottom_sheet">Do you wish to continue?</string>
     <string name="action_continue">Continue</string>
+    <string name="update_cooking_slot_title">Update cooking slot</string>
+    <string name="update_cooking_slot_subject">For which cooking slots would you like to save the changes you made?</string>
+    <string name="this_and_following">This and following</string>
+    <string name="this_slot">This slot</string>
 
     //day of week
     <string name="sunday">Sunday</string>

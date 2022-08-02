@@ -12,6 +12,7 @@ import com.bupp.wood_spoon_chef.R
 import com.bupp.wood_spoon_chef.databinding.FragmentCookingSlotReviewBinding
 import com.bupp.wood_spoon_chef.presentation.custom_views.CreateCookingSlotTopBar
 import com.bupp.wood_spoon_chef.presentation.features.base.BaseFragment
+import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.dialogs.ConfirmationBottomSheet
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.rrules.RRuleTextFormatter
 import com.bupp.wood_spoon_chef.utils.DateUtils.prepareFormattedDateForHours
 import com.bupp.wood_spoon_chef.utils.extensions.prepareFormattedDate
@@ -121,6 +122,33 @@ class CookingSlotReviewFragment : BaseFragment(R.layout.fragment_cooking_slot_re
 
             btnSaveSlot.setSafeOnClickListener {
                 viewModel.saveOrUpdateCookingSlot()
+            }
+        }
+    }
+
+    private fun showConfirmationDialog() {
+
+        val confirmationArgs = ConfirmationBottomSheet.ConfirmationArguments(
+            getString(R.string.update_cooking_slot_title),
+            getString(R.string.update_cooking_slot_subject),
+            ConfirmationBottomSheet.ConfirmationAction(
+                ConfirmationBottomSheet.ConfirmationAction.ConfirmationButtonType.PRIMARY,
+                getString(R.string.this_and_following)
+            ),
+            ConfirmationBottomSheet.ConfirmationAction(
+                ConfirmationBottomSheet.ConfirmationAction.ConfirmationButtonType.SECONDARY,
+                getString(R.string.this_slot)
+            )
+        )
+
+        ConfirmationBottomSheet.newInstance(confirmationArgs).showWithResultListener(
+            parentFragmentManager, null, this
+        ) { action ->
+            when (action.type) {
+                ConfirmationBottomSheet.ConfirmationAction.ConfirmationButtonType.PRIMARY -> {
+                }
+                ConfirmationBottomSheet.ConfirmationAction.ConfirmationButtonType.SECONDARY -> {
+                }
             }
         }
     }
