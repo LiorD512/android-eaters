@@ -23,21 +23,22 @@ sealed class RecurringFrequency(open val name: RecurringFrequencyName) {
     object OneTime : RecurringFrequency(RecurringFrequencyName.ONE_TIME)
     object EveryDay : RecurringFrequency(RecurringFrequencyName.EVERY_DAY)
     object EveryWeek : RecurringFrequency(RecurringFrequencyName.EVERY_WEEK)
-    data class Custom(val recurringRule: String? = null) :
+    data class Custom(val recurringRule: SimpleRRule? = null) :
         RecurringFrequency(RecurringFrequencyName.CUSTOM)
 }
 
 data class SlotRecurringState(
     val selectedDate: Long? = null,
     val selectedFrequency: RecurringFrequency = RecurringFrequency.OneTime,
-    val endsAt: Date? = null
+    val endsAt: Date? = null,
+    val humanReadableText: String? = null
 )
 
 sealed class SlotRecurringEvent {
     data class Error(val message: String) : SlotRecurringEvent()
-    data class ShowCustomPicker(val recurringRule: String? = null) : SlotRecurringEvent()
+    data class ShowCustomPicker(val recurringRule: SimpleRRule? = null) : SlotRecurringEvent()
     data class OnSave(val recurringRule: String?) : SlotRecurringEvent()
-    data class ShowEndAtDatePicker(val selectedDate: Long?): SlotRecurringEvent()
+    data class ShowEndAtDatePicker(val selectedDate: Long?) : SlotRecurringEvent()
 }
 
 class SlotRecurringViewModel : BaseViewModel() {
@@ -57,7 +58,7 @@ class SlotRecurringViewModel : BaseViewModel() {
     }
 
     private suspend fun validateInputs() {
-        when(_state.value.selectedFrequency){
+        when (_state.value.selectedFrequency) {
             RecurringFrequency.OneTime -> {
                 _events.emit(SlotRecurringEvent.OnSave(mapStateToRule()))
             }
@@ -73,32 +74,39 @@ class SlotRecurringViewModel : BaseViewModel() {
         }
     }
 
-     fun mapStateToRule(): String? {
+    private fun mapStateToSimpleRule(): SimpleRRule? {
         val endsAt = _state.value.endsAt
         val simpleRule = when (_state.value.selectedFrequency) {
             is RecurringFrequency.OneTime -> null
             RecurringFrequency.EveryDay -> {
-                SimpleRRule(Frequency.DAILY, 1, endsAt, null)
+                SimpleRRule(Frequency.DAILY, 1, null, null)
             }
             RecurringFrequency.EveryWeek -> {
-                SimpleRRule(Frequency.WEEKLY, 1, endsAt, null)
+                SimpleRRule(Frequency.WEEKLY, 1, null, null)
             }
             is RecurringFrequency.Custom -> {
-                val recurringRule =
-                    (_state.value.selectedFrequency as? RecurringFrequency.Custom)?.recurringRule
-                recurringRule?.let {
-                    rRuleTextFormatter.parseRRule(recurringRule)
-                }
+                (_state.value.selectedFrequency as? RecurringFrequency.Custom)?.recurringRule
             }
-        }
+        }?.copy(until = endsAt)
 
-        return simpleRule?.let { rRuleTextFormatter.buildRRule(it) }
+        return simpleRule
     }
+
+    private fun mapStateToRule() = mapStateToSimpleRule()?.let { rRuleTextFormatter.buildRRule(it) }
+
+    private fun mapStateToHumanReadable() =
+        mapStateToSimpleRule()?.let { rRuleTextFormatter.formatToHumanReadable(it) }
+            ?: "Cooking slot will occur only once"
 
     fun init(rrule: String?, selectedDate: Long?) {
         setSelectedDate(selectedDate)
         viewModelScope.launch {
             mapRuleToState(rrule)
+        }
+        viewModelScope.launch {
+            _state.collect {
+                _state.update { it.copy(humanReadableText = mapStateToHumanReadable()) }
+            }
         }
     }
 
@@ -118,7 +126,7 @@ class SlotRecurringViewModel : BaseViewModel() {
                 when {
                     !simpleRule.days.isNullOrEmpty() || simpleRule.interval > 1 -> {
                         _state.update {
-                            it.copy(selectedFrequency = RecurringFrequency.Custom(recurringRule))
+                            it.copy(selectedFrequency = RecurringFrequency.Custom(simpleRule))
                         }
                     }
                     else -> {
@@ -170,13 +178,13 @@ class SlotRecurringViewModel : BaseViewModel() {
         }
     }
 
-    fun setRecurringFrequencyToCustom(recurringRule: String) {
+    fun setRecurringFrequencyToCustom(recurringRule: SimpleRRule) {
         _state.update {
             it.copy(selectedFrequency = RecurringFrequency.Custom(recurringRule))
         }
     }
 
-    fun onEndsAtClick(){
+    fun onEndsAtClick() {
         viewModelScope.launch {
             _events.emit(SlotRecurringEvent.ShowEndAtDatePicker(_state.value.selectedDate))
         }
@@ -188,13 +196,13 @@ class SlotRecurringViewModel : BaseViewModel() {
         }
     }
 
-    private fun setSelectedDate(selectedDate: Long?){
+    private fun setSelectedDate(selectedDate: Long?) {
         _state.update {
             it.copy(selectedDate = selectedDate)
         }
     }
 
-    private fun showCustomPicker(recurringRule: String?) {
+    private fun showCustomPicker(recurringRule: SimpleRRule?) {
         viewModelScope.launch {
             _events.emit(SlotRecurringEvent.ShowCustomPicker(recurringRule))
         }

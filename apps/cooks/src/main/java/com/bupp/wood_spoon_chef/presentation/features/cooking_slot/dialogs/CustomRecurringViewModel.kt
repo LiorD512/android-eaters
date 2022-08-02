@@ -27,7 +27,7 @@ data class CustomRecurringState(
 
 sealed class CustomRecurringEvent {
     data class Error(val message: String) : CustomRecurringEvent()
-    data class SaveRecurringRule(val recurringRule: String?) : CustomRecurringEvent()
+    data class SaveRecurringRule(val recurringRule: SimpleRRule) : CustomRecurringEvent()
     data class ShowCustomFrequencyPicker(
         val interval: Int, val frequency: String
     ) : CustomRecurringEvent()
@@ -43,50 +43,48 @@ class CustomRecurringViewModel : BaseViewModel() {
 
     private val rRuleTextFormatter = RRuleTextFormatter()
 
-    fun init(recurringRule: String?) {
+    fun init(recurringRule: SimpleRRule?) {
         viewModelScope.launch {
             mapRuleToState(recurringRule)
         }
     }
 
-    private suspend fun mapRuleToState(rrule: String?) {
-        rrule?.let { recurringRule ->
-            val simpleRule = rRuleTextFormatter.parseRRule(recurringRule)
-            if (simpleRule == null) {
-                _state.update {
-                    it.copy(selectedDays = emptyList())
-                }
-                _events.emit(
-                    CustomRecurringEvent.Error(
-                        "Invalid recurring setting, please select again"
-                    )
+    private suspend fun mapRuleToState(simpleRule: SimpleRRule?) {
+        if (simpleRule == null) {
+            _state.update {
+                it.copy(selectedDays = emptyList())
+            }
+            _events.emit(
+                CustomRecurringEvent.Error(
+                    "Invalid recurring setting, please select again"
                 )
-            } else {
-                when (simpleRule.frequency) {
-                    Frequency.DAILY -> {
-                        _state.update {
-                            it.copy(customFrequency = CustomFrequency.DAY)
-                        }
+            )
+        } else {
+            when (simpleRule.frequency) {
+                Frequency.DAILY -> {
+                    _state.update {
+                        it.copy(customFrequency = CustomFrequency.DAY)
                     }
+                }
 
-                    Frequency.WEEKLY -> {
-                        _state.update {
-                            it.copy(customFrequency = CustomFrequency.WEEK)
-                        }
+                Frequency.WEEKLY -> {
+                    _state.update {
+                        it.copy(customFrequency = CustomFrequency.WEEK)
                     }
-                    else -> {}
+                }
+                else -> {
                 }
             }
-            _state.update {
-                it.copy(customInterval = simpleRule?.interval ?: 1)
-            }
-            _state.update {
-                it.copy(selectedDays = simpleRule?.days ?: emptyList())
-            }
+        }
+        _state.update {
+            it.copy(customInterval = simpleRule?.interval ?: 1)
+        }
+        _state.update {
+            it.copy(selectedDays = simpleRule?.days ?: emptyList())
         }
     }
 
-    fun mapStateToRule(): String? {
+    private fun mapStateToRule(): SimpleRRule {
         val simpleRule = when (_state.value.customFrequency) {
             CustomFrequency.DAY -> {
                 SimpleRRule(
@@ -104,7 +102,7 @@ class CustomRecurringViewModel : BaseViewModel() {
             )
         }
 
-        return simpleRule.let { rRuleTextFormatter.buildRRule(it) }
+        return simpleRule
     }
 
     fun onSaveClick() {

@@ -1,5 +1,6 @@
 package com.bupp.wood_spoon_chef.presentation.features.cooking_slot.rrules
 
+import android.os.Parcelable
 import biweekly.ICalVersion
 import biweekly.io.ParseContext
 import biweekly.io.TimezoneInfo
@@ -10,17 +11,18 @@ import biweekly.property.RecurrenceRule
 import biweekly.util.DayOfWeek
 import biweekly.util.Frequency
 import biweekly.util.Recurrence
+import kotlinx.parcelize.Parcelize
 import timber.log.Timber
 import java.text.SimpleDateFormat
 import java.util.*
 
-
+@Parcelize
 data class SimpleRRule(
     val frequency: Frequency,
     val interval: Int,
     val until: Date?,
     val days: List<DayOfWeek>?
-)
+): Parcelable
 
 class RRuleTextFormatter {
 
@@ -51,13 +53,13 @@ class RRuleTextFormatter {
         }
     }
 
-    fun formatRRule(rruleString: String) = run {
+    fun formatToHumanReadable(rruleString: String) = run {
         parseRRule(rruleString)?.let {
-            formatRRule(it)
+            formatToHumanReadable(it)
         }
     }
 
-    fun formatRRule(simpleRRule: SimpleRRule): String? {
+    fun formatToHumanReadable(simpleRRule: SimpleRRule): String? {
         try {
             val stringBuilder = StringBuilder()
             stringBuilder.append(

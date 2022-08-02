@@ -137,7 +137,7 @@ class CreateCookingSlotFragmentNew : BaseFragment(R.layout.fragment_create_cooki
             createCookingSlotNewFragmentMakeRecurringView.isVisible = state.recurringViewVisible
             createCookingSlotNewFragmentMakeRecurringView.setSubtitle(
                 state.recurringRule?.let {
-                    RRuleTextFormatter().formatRRule(it)
+                    RRuleTextFormatter().formatToHumanReadable(it)
                 }
             )
         }
