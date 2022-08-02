@@ -18,15 +18,13 @@ import com.bupp.wood_spoon_chef.common.TopCorneredBottomSheet
 import com.bupp.wood_spoon_chef.databinding.BottomSheetCustomRecurringBinding
 import com.bupp.wood_spoon_chef.presentation.custom_views.CreateCookingSlotOptionView
 import com.bupp.wood_spoon_chef.presentation.custom_views.HeaderView
-import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.rrules.RRuleTextFormatter
+import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.rrules.SimpleRRule
 import com.bupp.wood_spoon_chef.utils.extensions.show
 import com.bupp.wood_spoon_chef.utils.extensions.showErrorToast
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
-class CustomRecurringBottomSheet(
-    private val recurringRule: String?
-) : TopCorneredBottomSheet(), HeaderView.HeaderViewListener {
+class CustomRecurringBottomSheet() : TopCorneredBottomSheet(), HeaderView.HeaderViewListener {
 
     private var binding: BottomSheetCustomRecurringBinding? = null
     private val viewModel by viewModels<CustomRecurringViewModel>()
@@ -45,6 +43,7 @@ class CustomRecurringBottomSheet(
         super.onViewCreated(view, savedInstanceState)
         setFullScreenDialog()
         initUi()
+        val recurringRule = arguments?.getParcelable<SimpleRRule>(RULE_ARG_KEY)
         viewModel.init(recurringRule)
         observeViewModelState()
         observeViewModelEvents()
@@ -112,7 +111,7 @@ class CustomRecurringBottomSheet(
         }
     }
 
-    private fun onSaveClick(recurringRule: String?) {
+    private fun onSaveClick(recurringRule: SimpleRRule?) {
         setFragmentResult(
             CUSTOM_RULE_KEY,
             bundleOf(CUSTOM_RULE_VALUE to recurringRule)
@@ -190,13 +189,16 @@ class CustomRecurringBottomSheet(
 
         const val CUSTOM_RULE_KEY = "customRuleKey"
         const val CUSTOM_RULE_VALUE = "customRuleValue"
+        const val RULE_ARG_KEY = "rrule_arg_key"
 
         fun show(
             fragment: Fragment,
-            recurringRule: String?,
-            listener: ((String?) -> Unit)
+            recurringRule: SimpleRRule?,
+            listener: ((SimpleRRule?) -> Unit)
         ) {
-            CustomRecurringBottomSheet(recurringRule).show(
+            CustomRecurringBottomSheet().apply {
+                arguments = bundleOf(RULE_ARG_KEY to recurringRule)
+            }.show(
                 fragment.childFragmentManager,
                 CustomRecurringBottomSheet::class.simpleName
             )
@@ -206,12 +208,12 @@ class CustomRecurringBottomSheet(
     }
 }
 
-private fun Fragment.setRecurringRuleResultListener(listener: ((String?) -> Unit)) {
+private fun Fragment.setRecurringRuleResultListener(listener: ((SimpleRRule?) -> Unit)) {
     childFragmentManager.setFragmentResultListener(
         CustomRecurringBottomSheet.CUSTOM_RULE_KEY,
         this
     ) { _, bundle ->
-        val result = bundle.getString(CustomRecurringBottomSheet.CUSTOM_RULE_VALUE)
+        val result = bundle.getParcelable<SimpleRRule>(CustomRecurringBottomSheet.CUSTOM_RULE_VALUE)
         listener.invoke(result)
     }
 }

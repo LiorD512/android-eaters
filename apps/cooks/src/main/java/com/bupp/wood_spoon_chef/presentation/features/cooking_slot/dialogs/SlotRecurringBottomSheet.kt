@@ -16,7 +16,7 @@ import com.bupp.wood_spoon_chef.common.TopCorneredBottomSheet
 import com.bupp.wood_spoon_chef.databinding.BottomSheetSlotRecurringBinding
 import com.bupp.wood_spoon_chef.presentation.custom_views.CreateCookingSlotOptionView
 import com.bupp.wood_spoon_chef.presentation.custom_views.HeaderView
-import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.rrules.RRuleTextFormatter
+import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.rrules.SimpleRRule
 import com.bupp.wood_spoon_chef.utils.DateUtils
 import com.bupp.wood_spoon_chef.utils.extensions.showErrorToast
 import com.google.android.material.datepicker.*
@@ -92,7 +92,7 @@ class SlotRecurringBottomSheet(
                 launch {
                     viewModel.state.collect { state ->
                         setSelectedFrequencyItem(state.selectedFrequency)
-                        setRruleText()
+                        setRruleText(state.humanReadableText)
                         setEndsAtText(state.endsAt)
                     }
                 }
@@ -147,18 +147,16 @@ class SlotRecurringBottomSheet(
         }
     }
 
-    private fun openCustomRecurringBottomSheet(recurringRule: String?) {
-        CustomRecurringBottomSheet.show(this, recurringRule) {
-            if (!it.isNullOrEmpty()) {
+    private fun openCustomRecurringBottomSheet(recurringRule: SimpleRRule?) {
+        CustomRecurringBottomSheet.show(this, recurringRule) { simpleRule ->
+            simpleRule?.let {
                 viewModel.setRecurringFrequencyToCustom(it)
             }
         }
     }
 
-    private fun setRruleText() {
-        binding?.makeSlotRecurringRuleTxt?.text = viewModel.mapStateToRule()?.let {
-            RRuleTextFormatter().formatRRule(it)
-        } ?: "Cooking slot will occur only once"
+    private fun setRruleText(humanReadableText: String?) {
+        binding?.makeSlotRecurringRuleTxt?.text = humanReadableText
     }
 
     private fun showEndsAtDatePicker(selectedDate: Long) {
@@ -170,11 +168,13 @@ class SlotRecurringBottomSheet(
         )
         val calendarConstraints = CalendarConstraints.Builder().setValidator(validator).build()
 
-        val picker = MaterialDatePicker.Builder.datePicker().setTitleText(getString(R.string.ends_at))
-            .setPositiveButtonText(getString(R.string.save)).setNegativeButtonText(getString(R.string.cancel))
-            .setTheme(R.style.MaterialCalendarTheme)
-            .setCalendarConstraints(calendarConstraints)
-            .setSelection(selectedDate).build()
+        val picker =
+            MaterialDatePicker.Builder.datePicker().setTitleText(getString(R.string.ends_at))
+                .setPositiveButtonText(getString(R.string.save))
+                .setNegativeButtonText(getString(R.string.cancel))
+                .setTheme(R.style.MaterialCalendarTheme)
+                .setCalendarConstraints(calendarConstraints)
+                .setSelection(selectedDate).build()
 
         picker.addOnPositiveButtonClickListener {
             viewModel.setEndDate(Date(it))
@@ -189,13 +189,14 @@ class SlotRecurringBottomSheet(
         dismiss()
     }
 
-    private fun setEndsAtText(endsAt: Date?){
+    private fun setEndsAtText(endsAt: Date?) {
         binding?.apply {
             endsAt?.let {
                 makeSlotRecurringEndsAt.setTitle("Ends at ${DateUtils.parseDateToDayMonthDay(it)}")
             } ?: makeSlotRecurringEndsAt.setTitle("Ends at")
         }
     }
+
     private fun onSaveClick(recurringRule: String?) {
         setFragmentResult(
             SELECTED_RULE_KEY,

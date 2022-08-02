@@ -83,7 +83,7 @@ class CookingSlotReviewFragment : BaseFragment(R.layout.fragment_cooking_slot_re
             )
             createCookingSlotNewFragmentMakeRecurringView.setSubtitle(
                 state.recurringRule?.let {
-                    RRuleTextFormatter().formatRRule(it)
+                    RRuleTextFormatter().formatToHumanReadable(it)
                 })
 
             menuAdapter?.submitList(state.menuItems)
