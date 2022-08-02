@@ -3,6 +3,7 @@ package com.bupp.wood_spoon_chef.presentation.features.cooking_slot.fragments
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
+import androidx.core.view.isVisible
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
@@ -133,6 +134,7 @@ class CreateCookingSlotFragmentNew : BaseFragment(R.layout.fragment_create_cooki
                 )
             }
 
+            createCookingSlotNewFragmentMakeRecurringView.isVisible = state.recurringViewVisible
             createCookingSlotNewFragmentMakeRecurringView.setSubtitle(
                 state.recurringRule?.let {
                     RRuleTextFormatter().formatRRule(it)

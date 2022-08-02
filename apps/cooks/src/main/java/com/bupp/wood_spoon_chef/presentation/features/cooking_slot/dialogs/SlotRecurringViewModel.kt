@@ -87,7 +87,7 @@ class SlotRecurringViewModel : BaseViewModel() {
                 val recurringRule =
                     (_state.value.selectedFrequency as? RecurringFrequency.Custom)?.recurringRule
                 recurringRule?.let {
-                    rRuleTextFormatter.parseRRule(recurringRule, endsAt)
+                    rRuleTextFormatter.parseRRule(recurringRule)
                 }
             }
         }
