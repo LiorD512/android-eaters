@@ -95,6 +95,8 @@
     <string name="action_continue">Continue</string>
     <string name="update_cooking_slot_title">Update cooking slot</string>
     <string name="update_cooking_slot_subject">For which cooking slots would you like to save the changes you made?</string>
+    <string name="delete_cooking_slot_title">Delete cooking slot</string>
+    <string name="delete_cooking_slot_subject">Which cooking slots would you like to delete?</string>
     <string name="this_and_following">This and following</string>
     <string name="this_slot">This slot</string>
 

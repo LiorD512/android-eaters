@@ -36,28 +36,39 @@ class CookingSlotReviewFragment : BaseFragment(R.layout.fragment_cooking_slot_re
 
         initUi()
         observeState()
+        observeEvents()
     }
 
     private fun observeState() {
         lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.state.collect { state ->
+                    handleProgressBar(state is ReviewCookingSlotState.Loading)
                     when (state) {
                         ReviewCookingSlotState.Idle -> {
-                            handleProgressBar(false)
                         }
                         is ReviewCookingSlotState.Loading -> {
-                            handleProgressBar(isLoading = state.isLoading)
                         }
                         is ReviewCookingSlotState.ScreenDataState -> {
-                            handleProgressBar(false)
                             updateInputsWithState(state)
                         }
                         is ReviewCookingSlotState.Error -> {
-                            handleProgressBar(false)
+
                             handleErrorEvent(state.error, binding.root)
                         }
-                        ReviewCookingSlotState.SlotCreatedSuccess -> {
+                    }
+                }
+            }
+        }
+    }
+
+    private fun observeEvents() {
+        lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.events.collect { event ->
+                    when (event) {
+                        ReviewCookingSlotEvents.ShowUpdateDetachDialog -> showDetachDialog()
+                        ReviewCookingSlotEvents.SlotCreatedSuccess -> {
                             handleProgressBar(false)
                             activity?.finish()
                         }
@@ -126,7 +137,7 @@ class CookingSlotReviewFragment : BaseFragment(R.layout.fragment_cooking_slot_re
         }
     }
 
-    private fun showConfirmationDialog() {
+    private fun showDetachDialog() {
 
         val confirmationArgs = ConfirmationBottomSheet.ConfirmationArguments(
             getString(R.string.update_cooking_slot_title),
@@ -146,8 +157,10 @@ class CookingSlotReviewFragment : BaseFragment(R.layout.fragment_cooking_slot_re
         ) { action ->
             when (action.type) {
                 ConfirmationBottomSheet.ConfirmationAction.ConfirmationButtonType.PRIMARY -> {
+                    viewModel.onDetachDialogResult(false)
                 }
                 ConfirmationBottomSheet.ConfirmationAction.ConfirmationButtonType.SECONDARY -> {
+                    viewModel.onDetachDialogResult(true)
                 }
             }
         }

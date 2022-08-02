@@ -62,11 +62,11 @@ class CalendarFragment : BaseFragment(R.layout.fragment_calendar),
     private fun initObservers() {
         viewModel.calendarEventsLaveData.observe(viewLifecycleOwner) { events ->
             if (events.isNotEmpty()) {
-                events.values.map {
-                    binding?.calendarFragCalView?.addEvents(it)
-                    onDateSelected(selectedDate)
+                events.forEach {
+                    binding?.calendarFragCalView?.addEvents(it.value, it.key)
                 }
             }
+            onDateSelected(selectedDate)
         }
 
         viewModel.errorEvent.observe(viewLifecycleOwner) {
