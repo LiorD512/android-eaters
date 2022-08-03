@@ -66,7 +66,7 @@ class TimePickerBottomSheet(
         val calendar = Calendar.getInstance()
         val dateFormat =  SimpleDateFormat("hh:mm aa", Locale.ENGLISH)
         if (operatingHours?.startTime == null){
-            calendar.time = dateFormat.parse("12:00 AM") as Date
+            calendar.time = dateFormat.parse("12:00 PM") as Date
             binding?.timePickerStartTimePick?.hour = DateTime(calendar.timeInMillis).hourOfDay
             binding?.timePickerStartTimePick?.minute = DateTime(calendar.timeInMillis).minuteOfHour
         }else {

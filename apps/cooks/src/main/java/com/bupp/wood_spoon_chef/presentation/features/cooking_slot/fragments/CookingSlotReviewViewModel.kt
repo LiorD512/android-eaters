@@ -16,9 +16,10 @@ import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.data.models.M
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.data.repository.CookingSlotsDraftRepository
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.mapper.AdapterModelCategoriesListMapper
 import com.bupp.wood_spoon_chef.data.remote.model.request.CookingSlotRequestMapper
-import com.bupp.wood_spoon_chef.domain.GetFormattedSelectedHoursAndMinutesUseCase
+import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.CookingSlotReportEventUseCase
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.mapper.MenuDishItemToAdapterModelMapper
 import com.bupp.wood_spoon_chef.utils.extensions.getErrorMsgByType
+import com.eatwoodspoon.analytics.events.ChefsCookingSlotsEvent
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
@@ -49,10 +50,12 @@ class CookingSlotReviewViewModel(
     private val menuItemToAdapterModelMapper: MenuDishItemToAdapterModelMapper,
     private val adapterModelCategoriesListMapper: AdapterModelCategoriesListMapper,
     private val cookingSlotRepository: CookingSlotRepository,
-    private val stateMapper: CookingSlotRequestMapper
+    private val stateMapper: CookingSlotRequestMapper,
+    private val eventTracker: CookingSlotReportEventUseCase
 ) : BaseViewModel() {
 
     private var isEditing: Boolean = false
+    private var cookingSlotId: Long? = null
 
     private val _state = MutableStateFlow<ReviewCookingSlotState>(ReviewCookingSlotState.Idle)
     val state: StateFlow<ReviewCookingSlotState> = _state
@@ -62,17 +65,38 @@ class CookingSlotReviewViewModel(
 
     init {
         getDraftMenuItems()
+        reportEvent { mode, slotId -> ChefsCookingSlotsEvent.ReviewScreenOpenedEvent(mode, slotId) }
     }
 
     fun saveOrUpdateCookingSlot() = viewModelScope.launch {
+        reportEvent { mode, slotId ->
+            ChefsCookingSlotsEvent.ReviewScreenNextClickedEvent(
+                mode,
+                slotId
+            )
+        }
+
         if (isEditing) {
             _events.emit(ReviewCookingSlotEvents.ShowUpdateDetachDialog)
+            reportEvent { mode, slotId ->
+                ChefsCookingSlotsEvent.ReviewScreenUpdateDialogShownEvent(
+                    mode,
+                    slotId
+                )
+            }
             return@launch
         }
         saveCookingSlot(prepareAddSlotRequest())
     }
 
     fun onDetachDialogResult(singleEvent: Boolean) = viewModelScope.launch {
+        reportEvent { mode, slotId ->
+            ChefsCookingSlotsEvent.ReviewScreenUpdateDialogResultEvent(
+                singleEvent,
+                mode,
+                slotId
+            )
+        }
         updateCookingSlot(
             prepareAddSlotRequest().copy(
                 detach = singleEvent
@@ -96,6 +120,7 @@ class CookingSlotReviewViewModel(
                             )
                         )
                     )
+                    reportSaveResponseError(result)
                 }
             }
         } catch (e: Exception) {
@@ -121,6 +146,7 @@ class CookingSlotReviewViewModel(
                         }
                         is ResponseError -> {
                             _state.emit(ReviewCookingSlotState.Error(result.error))
+                            reportSaveResponseError(result)
                         }
                     }
                 }
@@ -159,6 +185,7 @@ class CookingSlotReviewViewModel(
         viewModelScope.launch {
             cookingSlotsDraftRepository.getDraftValue()?.let { draft ->
                 isEditing = draft.isEditing
+                cookingSlotId = draft.originalCookingSlot?.id
 
                 _state.emit(
                     ReviewCookingSlotState.ScreenDataState(
@@ -171,7 +198,6 @@ class CookingSlotReviewViewModel(
                         } else {
                             R.string.save_cooking_slot
                         }
-
                     )
                 )
             }
@@ -232,6 +258,26 @@ class CookingSlotReviewViewModel(
         _state.update {
             (_state.value as ReviewCookingSlotState.ScreenDataState)
                 .copy(menuItems = menuItems)
+        }
+    }
+
+    private fun reportEvent(factory: (mode: ChefsCookingSlotsEvent.ModeValues, slotId: Int?) -> ChefsCookingSlotsEvent) {
+        val mode = if (isEditing) {
+            ChefsCookingSlotsEvent.ModeValues.Edit
+        } else {
+            ChefsCookingSlotsEvent.ModeValues.New
+        }
+        eventTracker.reportEvent(factory.invoke(mode, cookingSlotId?.toInt()))
+    }
+
+    private fun reportSaveResponseError(result: ResponseError<*>) {
+        reportEvent { mode, slotId ->
+            ChefsCookingSlotsEvent.ReviewScreenSaveErrorEvent(
+                error_code = result.error.errorCode(),
+                error_description = result.error.getErrorMsgByType(),
+                mode = mode,
+                slot_id = slotId
+            )
         }
     }
 }

@@ -340,6 +340,13 @@
     </style>
 
 
+   <style name="LatoReg13DarkGreySpacingExtra">
+        <item name="android:fontFamily">@font/lato_reg</item>
+        <item name="android:textSize">13.4sp</item>
+        <item name="android:textColor">@color/dark_grey</item>
+       <item name="android:lineSpacingExtra">7.5sp</item>
+    </style>
+
     <style name="LatoReg13VeryLightGrey">
         <item name="android:fontFamily">@font/lato_reg</item>
         <item name="android:textSize">13.4sp</item>

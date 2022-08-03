@@ -90,7 +90,7 @@ class CookingSlotDetailsViewModelNew(
         _state.emit(CookingSlotDetailsState.Loading)
 
         try {
-            val params = CancelCookingSlotUseCase.Params(cookingSlotId = slotId)
+            val params = CancelCookingSlotUseCase.Params(cookingSlotId = slotId, detach = singleSlot)
             cancelCookingSlotUseCase.execute(params)
                 .collect { result ->
                     when (result) {

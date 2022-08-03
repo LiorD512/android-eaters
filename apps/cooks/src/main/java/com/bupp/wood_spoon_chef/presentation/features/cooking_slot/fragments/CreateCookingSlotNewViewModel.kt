@@ -1,6 +1,7 @@
 package com.bupp.wood_spoon_chef.presentation.features.cooking_slot.fragments
 
 import android.os.Parcelable
+import androidx.annotation.Keep
 import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.viewModelScope
 import com.bupp.wood_spoon_chef.data.local.model.CookingSlotDraftData
@@ -14,8 +15,10 @@ import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.data.reposito
 import com.bupp.wood_spoon_chef.utils.extensions.getErrorMsgByType
 import com.bupp.wood_spoon_chef.data.remote.model.request.CookingSlotRequestMapper
 import com.bupp.wood_spoon_chef.domain.GetFormattedSelectedHoursAndMinutesUseCase
+import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.CookingSlotReportEventUseCase
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.last_call.SelectedHoursAndMinutes
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.last_call.isZero
+import com.eatwoodspoon.analytics.events.ChefsCookingSlotsEvent
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
@@ -44,6 +47,7 @@ data class CreateCookingSlotNewState(
     val isInEditMode = cookingSlotId != null
 }
 
+@Keep
 enum class Errors {
     OperatingHours
 }
@@ -65,7 +69,8 @@ class CreateCookingSlotNewViewModel(
     private val cookingSlotRequestMapper: CookingSlotRequestMapper,
     private val cookingSlotRepository: CookingSlotRepository,
     private val cookingSlotsDraftRepository: CookingSlotsDraftRepository,
-    private val getFormattedSelectedHoursAndMinutesUseCase: GetFormattedSelectedHoursAndMinutesUseCase
+    private val getFormattedSelectedHoursAndMinutesUseCase: GetFormattedSelectedHoursAndMinutesUseCase,
+    private val eventTracker: CookingSlotReportEventUseCase
 ) : BaseViewModel() {
 
     private val _state = MutableStateFlow(CreateCookingSlotNewState())
@@ -78,11 +83,14 @@ class CreateCookingSlotNewViewModel(
         viewModelScope.launch {
             cookingSlotsDraftRepository.getDraft().filterNotNull().collect { draft ->
                 setSelectedDate(draft.selectedDate)
-                setOperatingHours(draft.operatingHours)
-                setRecurringRule(draft.recurringRule)
+                setOperatingHoursInternal(draft.operatingHours)
+                setRecurringRuleInternal(draft.recurringRule)
                 setRecurringViewVisible(draft)
                 setCookingSlotId(draft.originalCookingSlot?.id)
             }
+        }
+        reportEvent { mode, slotId ->
+            ChefsCookingSlotsEvent.DetailsScreenOpenedEvent(mode, slotId)
         }
     }
 
@@ -105,12 +113,31 @@ class CreateCookingSlotNewViewModel(
     }
 
     fun setOperatingHours(operatingHours: OperatingHours) {
+        setOperatingHoursInternal(operatingHours)
+        reportEvent { mode, slotId ->
+            ChefsCookingSlotsEvent.SetOperatingHoursSelectedEvent(
+                operatingHours.startTime?.toString(),
+                operatingHours.endTime?.toString(),
+                mode,
+                slotId
+            )
+        }
+    }
+
+    private fun setOperatingHoursInternal(operatingHours: OperatingHours) {
         _state.update {
             it.copy(operatingHours = operatingHours)
         }
     }
 
     fun setRecurringRule(recurringRule: String?) {
+        setRecurringRuleInternal(recurringRule)
+        reportEvent { mode, slotId ->
+            ChefsCookingSlotsEvent.MakeSlotReccuringSelectedEvent(recurringRule, mode, slotId)
+        }
+    }
+
+    private fun setRecurringRuleInternal(recurringRule: String?) {
         _state.update {
             it.copy(recurringRule = recurringRule)
         }
@@ -134,6 +161,9 @@ class CreateCookingSlotNewViewModel(
         )
 
     fun onNextClick() {
+        reportEvent { mode, slotId ->
+            ChefsCookingSlotsEvent.DetailsScreenNextClickedEvent(mode, slotId)
+        }
         setInProgress(true)
         if (validateInputs()) {
             validateIfPossibleCreateThisSlot()
@@ -150,8 +180,9 @@ class CreateCookingSlotNewViewModel(
                     recurringRule = _state.value.recurringRule
                 )
 
-                val result = if(_state.value.isInEditMode) {
-                    val slotId = _state.value.cookingSlotId ?: throw IllegalArgumentException("No slot id in eduit mode")
+                val result = if (_state.value.isInEditMode) {
+                    val slotId = _state.value.cookingSlotId
+                        ?: throw IllegalArgumentException("No slot id in eduit mode")
                     cookingSlotRepository.updateCookingSlot(slotId, request)
                 } else {
                     cookingSlotRepository.postCookingSlot(request)
@@ -165,6 +196,13 @@ class CreateCookingSlotNewViewModel(
                     is ResponseError -> {
                         setInProgress(false)
                         _events.emit(CreateCookingSlotEvents.Error(result.error.getErrorMsgByType()))
+                        reportEvent { mode, slotId ->
+                            ChefsCookingSlotsEvent.DetailsServerValidationFailedEvent(
+                                result.error.getErrorMsgByType(),
+                                mode,
+                                slotId
+                            )
+                        }
                     }
                 }
             } catch (ex: Exception) {
@@ -209,6 +247,9 @@ class CreateCookingSlotNewViewModel(
                 )
             )
         }
+        reportEvent { mode, slotId ->
+            ChefsCookingSlotsEvent.SetOperatingHoursClickedEvent(mode, slotId)
+        }
     }
 
     fun onMakeSlotRecurringClick() {
@@ -222,6 +263,9 @@ class CreateCookingSlotNewViewModel(
                 )
             }
         }
+        reportEvent { mode, slotId ->
+            ChefsCookingSlotsEvent.MakeSlotRecurringClickedEvent(mode, slotId)
+        }
     }
 
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
@@ -234,12 +278,31 @@ class CreateCookingSlotNewViewModel(
             }
         }
         _state.update { it.copy(errors = errors.toList()) }
-        return errors.isEmpty()
+        return errors.isEmpty().also { valid ->
+            if (!valid) {
+                reportEvent { mode, slotId ->
+                    ChefsCookingSlotsEvent.DetailsLocalValidationFailedEvent(
+                        errors.joinToString(",") { it.name },
+                        mode,
+                        slotId
+                    )
+                }
+            }
+        }
     }
 
     private fun setSelectedDate(selectedDate: Long?) {
         _state.update {
             it.copy(selectedDate = selectedDate)
         }
+    }
+
+    private fun reportEvent(factory: (mode: ChefsCookingSlotsEvent.ModeValues, slotId: Int?) -> ChefsCookingSlotsEvent) {
+        val mode = if (_state.value.isInEditMode) {
+            ChefsCookingSlotsEvent.ModeValues.Edit
+        } else {
+            ChefsCookingSlotsEvent.ModeValues.New
+        }
+        eventTracker.reportEvent(factory.invoke(mode, _state.value.cookingSlotId?.toInt()))
     }
 }

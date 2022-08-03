@@ -1,4 +1,5 @@
 package com.bupp.wood_spoon_chef.presentation.features.cooking_slot.data.network
+
 import com.bupp.wood_spoon_chef.data.remote.model.CookingSlot
 import com.bupp.wood_spoon_chef.data.remote.model.CookingSlotRequest
 import com.bupp.wood_spoon_chef.data.remote.model.CookingSlotSlim
@@ -29,7 +30,8 @@ interface CookingSlotApiService {
 
     @DELETE("cooks/me/cooking_slots/{slot_id}")
     suspend fun cancelCookingSlot(
-        @Path(value = "slot_id", encoded = true) slotId: Long
+        @Path(value = "slot_id", encoded = true) slotId: Long,
+        @Query(value = "detach") detach: Boolean?
     ): ServerResponse<Any>
 
     @GET("cooks/me/cooking_slots/trackable")

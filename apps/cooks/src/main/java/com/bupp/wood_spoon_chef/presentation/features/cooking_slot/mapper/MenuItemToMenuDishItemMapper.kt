@@ -9,6 +9,6 @@ class MenuItemToMenuDishItemMapper {
         menuItemId = menuItem.id,
         dish = menuItem.dish,
         quantity = menuItem.quantity,
-        unitsSold = menuItem.unitsSold
+        unitsSold = menuItem.unitsSold ?: 0
     )
 }

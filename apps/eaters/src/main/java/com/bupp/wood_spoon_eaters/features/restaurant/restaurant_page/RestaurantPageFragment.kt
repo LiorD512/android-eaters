@@ -113,6 +113,12 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
                 restaurantNoNetwork.visibility = View.GONE
                 viewModel.reloadPage(false)
             }
+            tipFragToolTip.setOnClickListener{
+                DeliveryInfoBottomSheet().show(
+                    childFragmentManager,
+                    DeliveryInfoBottomSheet::class.java.simpleName
+                )
+            }
         }
     }
 
@@ -283,7 +289,7 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
                         restaurantTimePickerViewIcon.visibility = View.GONE
                     }
                 }
-                handleTimePickerUi(uiChange.timePickerString)
+                 handleTimePickerUi(uiChange.timePickerString)
             }
         }
     }
