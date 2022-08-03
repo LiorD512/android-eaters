@@ -8,24 +8,27 @@ class GetFormattedSelectedHoursAndMinutesUseCase(
 ) : UseCase<String, GetFormattedSelectedHoursAndMinutesUseCase.Params> {
 
     data class Params(
-        val selectedHoursAndMinutes: SelectedHoursAndMinutes
+        val selectedHoursAndMinutes: SelectedHoursAndMinutes?
     )
 
     override fun execute(params: Params): String = setSelectedTime(params.selectedHoursAndMinutes)
 
-    private fun setSelectedTime(selectedHoursAndMinutes: SelectedHoursAndMinutes): String {
-        var formatSubtitle = String.format(
-            formattedStringForZeroHours,
-            "${selectedHoursAndMinutes.hours}"
-        )
-
-        if (selectedHoursAndMinutes.minutes != 0) {
-            formatSubtitle = String.format(
+    private fun setSelectedTime(selectedHoursAndMinutes: SelectedHoursAndMinutes?): String {
+        selectedHoursAndMinutes?.let {
+            var formatSubtitle = String.format(
                 formattedStringForZeroHours,
-                "${selectedHoursAndMinutes.hours} hr and ${selectedHoursAndMinutes.minutes} min"
-
+                "${selectedHoursAndMinutes.hours}"
             )
+
+            if (selectedHoursAndMinutes.minutes != 0) {
+                formatSubtitle = String.format(
+                    formattedStringForZeroHours,
+                    "${selectedHoursAndMinutes.hours} hr and ${selectedHoursAndMinutes.minutes} min"
+
+                )
+            }
+            return formatSubtitle
         }
-        return formatSubtitle
+        return ""
     }
 }

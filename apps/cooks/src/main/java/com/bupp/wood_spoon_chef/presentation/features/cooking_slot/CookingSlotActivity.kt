@@ -5,7 +5,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.bupp.wood_spoon_chef.R
-import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.fragments.base.CookingSlotParentFragment
+import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.base.CookingSlotParentFragment
 
 const val KEY_NAVIGATION_DESTINATION = "key_navigation_destination"
 const val KEY_SELECTED_DATE = "args_selected_date"

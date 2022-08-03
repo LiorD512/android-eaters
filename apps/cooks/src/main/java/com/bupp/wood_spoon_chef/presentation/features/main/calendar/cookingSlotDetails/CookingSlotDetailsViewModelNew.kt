@@ -9,7 +9,7 @@ import com.bupp.wood_spoon_chef.data.remote.network.base.ResponseSuccess
 import com.bupp.wood_spoon_chef.domain.CancelCookingSlotUseCase
 import com.bupp.wood_spoon_chef.domain.CookingSlotWithCategoriesInteractor
 import com.bupp.wood_spoon_chef.presentation.features.base.BaseViewModel
-import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.fragments.CookingSlotMenuAdapterItem
+import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.cooking_slot_menu.CookingSlotMenuAdapterItem
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.mapper.AdapterModelCategoriesListMapper
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.mapper.MenuDishItemToAdapterModelMapper
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.mapper.MenuItemToMenuDishItemMapper

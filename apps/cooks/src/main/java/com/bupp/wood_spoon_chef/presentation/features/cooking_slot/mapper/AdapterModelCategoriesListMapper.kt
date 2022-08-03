@@ -1,6 +1,6 @@
 package com.bupp.wood_spoon_chef.presentation.features.cooking_slot.mapper
 
-import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.fragments.CookingSlotMenuAdapterItem
+import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.cooking_slot_menu.CookingSlotMenuAdapterItem
 
 class AdapterModelCategoriesListMapper {
 
