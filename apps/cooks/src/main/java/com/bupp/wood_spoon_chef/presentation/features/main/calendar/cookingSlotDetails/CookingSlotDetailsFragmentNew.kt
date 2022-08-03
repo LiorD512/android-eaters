@@ -17,8 +17,9 @@ import com.bupp.wood_spoon_chef.databinding.FragmentDetailsCookingSlotNewBinding
 import com.bupp.wood_spoon_chef.presentation.custom_views.CreateCookingSlotTopBar
 import com.bupp.wood_spoon_chef.presentation.features.base.BaseFragment
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.CookingSlotActivity
-import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.dialogs.ConfirmationBottomSheet
-import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.fragments.CookingSlotMenuAdapter
+import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.common.ConfirmationBottomSheet
+import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.last_call.LastCallForOrderFormatter
+import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.cooking_slot_menu.CookingSlotMenuAdapter
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.rrules.RRuleTextFormatter
 import com.bupp.wood_spoon_chef.utils.extensions.prepareFormattedDate
 import com.eatwoodspoon.android_utils.binding.viewBinding
@@ -92,8 +93,11 @@ class CookingSlotDetailsFragmentNew : BaseFragment(R.layout.fragment_details_coo
                             setupToolBar(state.cookingSlot)
 
                             binding.createCookingSlotNewFragmentLastCallForOrderView.setSubtitle(
-                                DateTime(state.cookingSlot.lastCallAt).prepareFormattedDate()
-                            )
+                                LastCallForOrderFormatter.formatLastCallForOrder(
+                                    DateTime(state.cookingSlot.lastCallAt).millis,
+                                    DateTime(state.cookingSlot.endsAt).millis
+                            ))
+
                             binding.createCookingSlotNewFragmentMakeRecurringView.isVisible =
                                 !state.cookingSlot.recurringRule.isNullOrEmpty()
                             binding.createCookingSlotNewFragmentMakeRecurringView.setSubtitle(

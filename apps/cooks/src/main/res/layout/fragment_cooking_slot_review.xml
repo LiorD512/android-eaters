@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/wild_sand"
     android:orientation="vertical"
-    tools:context=".presentation.features.cooking_slot.fragments.CookingSlotReviewFragment">
+    tools:context=".presentation.features.cooking_slot._review_cooking_slot.CookingSlotReviewFragment">
 
     <com.bupp.wood_spoon_chef.presentation.custom_views.CreateCookingSlotTopBar
         android:id="@+id/reviewFragmentTopBar"

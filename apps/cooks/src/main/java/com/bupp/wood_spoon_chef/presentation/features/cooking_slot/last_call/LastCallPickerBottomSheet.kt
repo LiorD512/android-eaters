@@ -11,17 +11,20 @@ import androidx.fragment.app.setFragmentResult
 import com.bupp.wood_spoon_chef.R
 import com.bupp.wood_spoon_chef.common.TopCorneredBottomSheet
 import com.bupp.wood_spoon_chef.databinding.BottomSheetLastCallTimePickerBinding
-import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.dialogs.TimePickerBottomSheet
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.last_call.LastCallPickerBottomSheet.Companion.TIME_KEY
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.last_call.LastCallPickerBottomSheet.Companion.TIME_VALUE
+import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.operating_hours.TimePickerBottomSheet
 import kotlinx.parcelize.Parcelize
+import java.util.concurrent.TimeUnit
 
 
 @Parcelize
 data class SelectedHoursAndMinutes(
     var hours: Int,
     var minutes: Int
-) : Parcelable
+) : Parcelable {
+    fun toTimeSpan() = TimeUnit.HOURS.toMillis(hours.toLong()) + TimeUnit.MINUTES.toMillis(minutes.toLong())
+}
 
 fun SelectedHoursAndMinutes.isZero() = hours == 0 && minutes == 0
 

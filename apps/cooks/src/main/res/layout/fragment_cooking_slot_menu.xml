@@ -8,7 +8,7 @@
     android:background="@color/wild_sand"
     android:clipChildren="false"
     android:clipToPadding="false"
-    tools:context=".presentation.features.cooking_slot.fragments.CookingSlotMenuFragment">
+    tools:context=".presentation.features.cooking_slot.cooking_slot_menu.CookingSlotMenuFragment">
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
