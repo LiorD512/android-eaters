@@ -72,6 +72,7 @@
     </Transition>
 
     <ConstraintSet android:id="@+id/start">
+        <Constraint android:id="@+id/restHeaderChefThumbnail" />
     </ConstraintSet>
 
     <ConstraintSet android:id="@+id/end">

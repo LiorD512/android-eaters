@@ -118,7 +118,7 @@
             android:layout_marginEnd="15.4dp"
             android:elevation="5dp"
             android:src="@drawable/ic_share_grey"
-            app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintRight_toLeftOf="@+id/restHeaderFavorite"
             app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
@@ -129,50 +129,16 @@
             android:layout_marginEnd="15.4dp"
             android:src="@drawable/ic_menu_grey"
             android:visibility="gone"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintRight_toLeftOf="@+id/restHeaderFavorite"
             app:layout_constraintTop_toTopOf="parent" />
 
-    <FrameLayout
-            android:id="@+id/ratingMainLayout"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintBottom_toTopOf="@+id/restaurantHeader"
-            app:layout_constraintStart_toStartOf="parent">
-
-        <LinearLayout
-                android:id="@+id/ratingLayout"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="15.4dp"
-                android:layout_marginBottom="15.4dp"
-                android:animateLayoutChanges="true"
-                android:background="@drawable/background_cornered_rect_grey"
-                android:orientation="horizontal"
-                android:paddingVertical="5dp"
-                android:paddingStart="8dp"
-                android:visibility="gone"
-                android:paddingEnd="14dp">
-
-            <TextView
-                    android:id="@+id/rating"
-                    style="@style/LatoReg13White"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:drawablePadding="4dp"
-                    app:drawableStartCompat="@drawable/ic_review_star"
-                    tools:text="4.5" />
-
-            <TextView
-                    android:id="@+id/ratingCount"
-                    style="@style/LatoReg13White"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingStart="4dp"
-                    tools:text="(415 ratings)" />
-        </LinearLayout>
-
-    </FrameLayout>
-
+    <com.bupp.wood_spoon_eaters.views.FavoriteBtn
+        android:id="@+id/restHeaderFavorite"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
 
     <LinearLayout
             android:id="@+id/restaurantHeader"
@@ -184,11 +150,6 @@
             app:layout_constraintBottom_toTopOf="@id/mainList"
             app:layout_constraintStart_toStartOf="parent">
 
-        <com.bupp.wood_spoon_eaters.views.UserImageView
-                android:id="@+id/restHeaderChefThumbnail"
-                android:layout_width="46dp"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="5dp" />
 
         <LinearLayout
                 android:layout_width="0dp"
@@ -196,7 +157,7 @@
                 android:layout_marginBottom="2.5dp"
                 android:layout_weight="1"
                 android:orientation="vertical"
-                android:paddingStart="5dp"
+                android:paddingStart="120dp"
                 android:paddingTop="4dp">
 
             <TextView
@@ -216,14 +177,16 @@
 
         </LinearLayout>
 
-        <com.bupp.wood_spoon_eaters.views.FavoriteBtn
-                android:id="@+id/restHeaderFavorite"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-
-
     </LinearLayout>
 
+    <com.bupp.wood_spoon_eaters.views.UserImageView
+        android:id="@+id/restHeaderChefThumbnail"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginBottom="-60dp"
+        android:layout_marginLeft="16dp"
+        app:layout_constraintBottom_toTopOf="@+id/restaurantHeader"
+        app:layout_constraintLeft_toLeftOf="parent" />
 
     <androidx.core.widget.NestedScrollView
             android:id="@+id/mainList"
@@ -237,7 +200,49 @@
         <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+            android:background="@color/white"
                 android:orientation="vertical">
+
+            <FrameLayout
+                android:id="@+id/ratingMainLayout"
+                android:layout_width="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:id="@+id/ratingLayout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="15.4dp"
+                    android:layout_marginBottom="15.4dp"
+                    android:animateLayoutChanges="true"
+                    android:background="@drawable/background_cornered_rect_grey"
+                    android:orientation="horizontal"
+                    android:paddingVertical="5dp"
+                    android:paddingStart="8dp"
+                    android:visibility="gone"
+                    tools:visibility="visible"
+                    android:paddingEnd="14dp">
+
+                    <TextView
+                        android:id="@+id/rating"
+                        style="@style/LatoReg13Dark"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:drawablePadding="4dp"
+                        app:drawableStartCompat="@drawable/ic_review_star"
+                        tools:text="4.5" />
+
+                    <TextView
+                        android:id="@+id/ratingCount"
+                        style="@style/LatoReg13Dark"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingStart="4dp"
+                        tools:text="(415 ratings)" />
+                </LinearLayout>
+
+            </FrameLayout>
 
             <include
                     android:id="@+id/restaurantMainListLayout"

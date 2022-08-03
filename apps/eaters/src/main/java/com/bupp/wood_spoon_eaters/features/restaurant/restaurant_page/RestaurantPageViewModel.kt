@@ -239,7 +239,10 @@ class RestaurantPageViewModel(
 
     val onCookingSlotUiChange = MutableLiveData<CookingSlotUi>()
     private fun updateCookingSlotRelatedUi(cookingSlot: CookingSlot, forceTabChnage: Boolean) {
-        onCookingSlotUiChange.postValue(CookingSlotUi(cookingSlot.id, getTimerPickerStr(cookingSlot), forceTabChnage))
+        onCookingSlotUiChange.postValue(CookingSlotUi(
+            cookingSlotId = cookingSlot.id,
+            timePickerString = getTimerPickerStr(cookingSlot),
+            forceTabChange = forceTabChnage))
     }
 
     enum class UnavailableUiType {
@@ -268,12 +271,12 @@ class RestaurantPageViewModel(
     private fun getTimerPickerStr(selectedCookingSlot: CookingSlot?): String {
         selectedCookingSlot?.let {
             val isNow = DateUtils.isNowInRange(selectedCookingSlot.startsAt, selectedCookingSlot.endsAt)
-            val datesStr = "${DateUtils.parseDateToUsTime(selectedCookingSlot.startsAt)} - ${DateUtils.parseDateToUsTime(selectedCookingSlot.endsAt)}"
+            val datesStr = "from ${DateUtils.parseDateToUsTime(selectedCookingSlot.startsAt)} to ${DateUtils.parseDateToUsTime(selectedCookingSlot.endsAt)}"
             var uiStr: String
             if (isNow) {
-                uiStr = "Now ($datesStr)"
+                uiStr = "Available $datesStr"
             } else {
-                uiStr = "${selectedCookingSlot.name} ($datesStr)"
+                uiStr = "${selectedCookingSlot.name} $datesStr"
             }
             return uiStr
         }
