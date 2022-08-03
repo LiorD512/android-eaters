@@ -3,7 +3,9 @@ package com.bupp.wood_spoon_chef.presentation.features.cooking_slot.fragments
 import android.content.Context
 import androidx.lifecycle.viewModelScope
 import com.bupp.wood_spoon_chef.R
+import com.bupp.wood_spoon_chef.data.remote.model.CookingSlot
 import com.bupp.wood_spoon_chef.presentation.features.base.BaseViewModel
+import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.CookingSlotReportEventUseCase
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.coordinator.CookingSlotFlowCoordinator
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.coordinator.CookingSlotFlowStep
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.data.models.DishesMenuAdapterModel
@@ -11,6 +13,7 @@ import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.data.models.M
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.data.repository.DishesWithCategoryRepository
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.data.repository.CookingSlotsDraftRepository
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.dialogs.updateItem
+import com.eatwoodspoon.analytics.events.ChefsCookingSlotsEvent
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
@@ -18,7 +21,8 @@ data class CookingSlotMenuState(
     val operatingHours: OperatingHours = OperatingHours(null, null),
     val menuItems: List<MenuDishItem> = emptyList(),
     val menuItemsByCategory: List<DishesMenuAdapterModel> = emptyList(),
-    val isInEditMode: Boolean = false
+    val isInEditMode: Boolean = false,
+    val cookingSlotId: Long? = null
 )
 
 sealed class CookingSlotMenuEvents {
@@ -30,7 +34,8 @@ sealed class CookingSlotMenuEvents {
 class CookingSlotMenuViewModel(
     private val cookingSlotFlowNavigator: CookingSlotFlowCoordinator,
     private val dishesWithCategoryRepository: DishesWithCategoryRepository,
-    private val cookingSlotsDraftRepository: CookingSlotsDraftRepository
+    private val cookingSlotsDraftRepository: CookingSlotsDraftRepository,
+    private val eventTracker: CookingSlotReportEventUseCase
 ) : BaseViewModel() {
 
     private val _state = MutableStateFlow(CookingSlotMenuState())
@@ -45,19 +50,24 @@ class CookingSlotMenuViewModel(
                 draft?.let {
                     setMenuItems(draft.menuItems)
                     setOperatingHours(draft.operatingHours)
-                    setIsInEditMode(draft.originalCookingSlot != null)
+                    setMode(draft.originalCookingSlot)
                 }
             }
         }
+        reportEvent { mode, slotId -> ChefsCookingSlotsEvent.MenuScreenOpenedEvent(mode, slotId) }
     }
 
-    private fun setIsInEditMode(isInEditMode: Boolean) {
+    private fun setMode(originalCookingSlot: CookingSlot?) {
         _state.update {
-            it.copy(isInEditMode = isInEditMode)
+            it.copy(
+                isInEditMode = originalCookingSlot != null,
+                cookingSlotId = originalCookingSlot?.id
+            )
         }
     }
 
     fun onOpenReviewFragmentClicked(context: Context) {
+        reportEvent { mode, slotId -> ChefsCookingSlotsEvent.MenuScreenNextClickedEvent(mode, slotId) }
         viewModelScope.launch {
             validateInputs(context)
         }
@@ -67,8 +77,10 @@ class CookingSlotMenuViewModel(
         val currentDraft = cookingSlotsDraftRepository.getDraftValue() ?: return
         if (_state.value.menuItems.isEmpty()) {
             _events.emit(CookingSlotMenuEvents.Error(context.getString(R.string.menu_empty_error)))
+            reportEvent { mode, slotId -> ChefsCookingSlotsEvent.MenuLocalValidationFailedEvent(context.getString(R.string.menu_empty_error), mode, slotId) }
         } else if (_state.value.menuItems.any { it.quantity == 0 }) {
             _events.emit(CookingSlotMenuEvents.Error(context.getString(R.string.quantity_zero_error)))
+            reportEvent { mode, slotId -> ChefsCookingSlotsEvent.MenuLocalValidationFailedEvent(context.getString(R.string.quantity_zero_error), mode, slotId) }
         } else {
             val updatedDraft = currentDraft.copy(
                 menuItems = _state.value.menuItems
@@ -83,6 +95,7 @@ class CookingSlotMenuViewModel(
         viewModelScope.launch {
             _events.emit(CookingSlotMenuEvents.ShowMyDishesBottomSheet(_state.value.menuItems.mapNotNull { it.dish?.id }))
         }
+        reportEvent { mode, slotId -> ChefsCookingSlotsEvent.AddDishesClickedEvent(mode, slotId) }
     }
 
     fun addDishesByIds(newIds: List<Long>) {
@@ -102,6 +115,14 @@ class CookingSlotMenuViewModel(
             }.filterNotNull()
 
             setMenuItems(_state.value.menuItems + newMenuItems)
+        }
+        reportEvent { mode, slotId ->
+            ChefsCookingSlotsEvent.AddDishesAddedEvent(
+                newIds.joinToString(),
+                newIds.count(),
+                mode,
+                slotId
+            )
         }
     }
 
@@ -128,6 +149,11 @@ class CookingSlotMenuViewModel(
             val updatedMenuItems = _state.value.menuItems.filter { it.dish?.id != dishToRemoveId }
             setMenuItems(updatedMenuItems)
         }
+        reportEvent { mode, slotId ->
+            ChefsCookingSlotsEvent.DeleteDishClickedEvent(
+                dishToRemoveId?.toInt() ?: 0, mode, slotId
+            )
+        }
     }
 
     fun updateQuantity(dishId: Long, quantity: Int) {
@@ -135,6 +161,11 @@ class CookingSlotMenuViewModel(
             setMenuItems(_state.value.menuItems.updateItem(where = { it.dish?.id == dishId }) {
                 it.copy(quantity = quantity)
             })
+        }
+        reportEvent { mode, slotId ->
+            ChefsCookingSlotsEvent.DishQuantityChangedEvent(
+                dishId.toInt(), quantity, mode, slotId
+            )
         }
     }
 
@@ -152,5 +183,14 @@ class CookingSlotMenuViewModel(
                 dishes = menuItems.filter { section.dishIds?.contains(it.dish?.id) == true }
             )
         }?.filter { it.dishes.isNotEmpty() }?.toList() ?: emptyList()
+    }
+
+    private fun reportEvent(factory: (mode: ChefsCookingSlotsEvent.ModeValues, slotId: Int?) -> ChefsCookingSlotsEvent) {
+        val mode = if (_state.value.isInEditMode) {
+            ChefsCookingSlotsEvent.ModeValues.Edit
+        } else {
+            ChefsCookingSlotsEvent.ModeValues.New
+        }
+        eventTracker.reportEvent(factory.invoke(mode, _state.value.cookingSlotId?.toInt()))
     }
 }

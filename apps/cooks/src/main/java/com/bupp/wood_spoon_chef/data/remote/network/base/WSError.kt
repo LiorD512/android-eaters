@@ -13,7 +13,7 @@ class FormattedError(
     @Json(name = "message") override var message: String = "",
     @Json(name = "errors") var errors: List<WSError>? = null
 ) : MTError(message) {
-    fun hasWsError():Boolean{
+    fun hasWsError(): Boolean {
         return !errors.isNullOrEmpty()
     }
 }
@@ -38,7 +38,7 @@ data class HTTPError(
 
 data class CustomError(
     override val message: String
-): MTError(message)
+) : MTError(message)
 
 enum class HTTPErrorType {
     NOT_FOUND,
@@ -56,3 +56,6 @@ data class WSError(
     @Json(name = "code") val code: Int?,
     @Json(name = "message") val msg: String?
 )
+
+fun MTError.errorCode() = (this as? FormattedError)?.errors?.firstOrNull()?.code
+    ?: (this as? FormattedError)?.code ?: 0

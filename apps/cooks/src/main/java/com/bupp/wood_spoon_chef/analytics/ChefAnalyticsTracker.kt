@@ -6,6 +6,7 @@ import com.bupp.wood_spoon_chef.BuildConfig
 import com.bupp.wood_spoon_chef.data.remote.model.Address
 import com.bupp.wood_spoon_chef.data.remote.model.Cook
 import com.bupp.wood_spoon_chef.utils.DateUtils
+import com.eatwoodspoon.analytics.events.AnalyticsEvent
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.segment.analytics.Analytics
 import com.segment.analytics.Properties
@@ -103,3 +104,8 @@ class ChefAnalyticsTracker(
         ShipBook.logout()
     }
 }
+
+fun ChefAnalyticsTracker.trackEvent(event: AnalyticsEvent) {
+    this.trackEvent(event.name, event.params)
+}
+
