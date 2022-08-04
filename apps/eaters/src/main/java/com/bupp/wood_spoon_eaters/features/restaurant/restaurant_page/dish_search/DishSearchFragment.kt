@@ -24,14 +24,11 @@ import com.bupp.wood_spoon_eaters.utils.closeKeyboard
 import me.ibrahimsn.lib.util.clear
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
-class DishSearchFragment : Fragment(R.layout.fragment_dish_search), FeedMainAdapter.FeedMainAdapterListener {
+class DishSearchFragment : Fragment(R.layout.fragment_dish_search), FeedMainAdapter.OnSearchListener {
 
     private val mainViewModel by sharedViewModel<RestaurantMainViewModel>()
     private val viewModel by sharedViewModel<RestaurantPageViewModel>()
-//    private val mainViewModel by sharedViewModel<MainViewModel>()
-//    val viewModel by viewModel<SearchViewModel>()
     var binding: FragmentDishSearchBinding? = null
-//    var searchAdapter: FeedMainAdapter? = null
     var adapterDishes: DishesMainAdapter? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -89,12 +86,6 @@ class DishSearchFragment : Fragment(R.layout.fragment_dish_search), FeedMainAdap
                 dishSearchFragInput.clear()
             }
 
-//            dishSearchFragInput.setOnFocusChangeListener { view, b ->
-//                if(b){
-//                    viewModel.logEvent(Constants.EVENT_SEARCH_QUERY_CLICK)
-//                }
-//            }
-
             dishSearchFragInput.setOnEditorActionListener { _, actionId, _ ->
                 when(actionId){
                     IME_ACTION_DONE -> {
@@ -113,60 +104,30 @@ class DishSearchFragment : Fragment(R.layout.fragment_dish_search), FeedMainAdap
     private fun getDishesAdapterListener(): DishesMainAdapter.DishesMainAdapterListener =
         object : DishesMainAdapter.DishesMainAdapterListener {
             override fun onDishClick(menuItem: MenuItem) {
-//                val curCookingSlot = viewModel.currentCookingSlot
                 val curCookingSlot = viewModel.currentCookingSlot
                 mainViewModel.openDishPage(menuItem, curCookingSlot, true)
             }
 
             override fun onDishSwipedAdd(item: DishSectionSingleDish) {
-                //swipe disabled
-//                item.menuItem.dishId?.let {
-//                    viewModel.addDishToCart(1, it)
-//                    mainViewModel.logDishSwipeEvent(Constants.EVENT_SWIPED_ADD_DISH, item)
-//                }
             }
 
             override fun onDishSwipedRemove(item: DishSectionSingleDish) {
-                //swipe disabled
-//                viewModel.removeOrderItemsByDishId(item.menuItem.dishId)
-//                mainViewModel.logDishSwipeEvent(Constants.EVENT_SWIPED_REMOVE_DISH, item)
             }
 
         }
 
     private fun initObservers() {
-        viewModel.dishSearchListLiveData.observe(viewLifecycleOwner, {
+        viewModel.dishSearchListLiveData.observe(viewLifecycleOwner) {
             handleDishesList(it)
-        })
-//        viewModel.searchResultData.observe(viewLifecycleOwner, {
-//            it.feedData?.let { it1 -> searchAdapter?.setDataList(it1) }
-//        })
-//        mainViewModel.refreshSearchData.observe(viewLifecycleOwner, {
-//            viewModel.getSearchTags()
-//            viewModel.getRecentOrders()
-//        })
-//        viewModel.getFinalAddressParams().observe(viewLifecycleOwner, {
-//            viewModel.getSearchTags()
-//            viewModel.getRecentOrders()
-//        })
+        }
     }
 
     private fun handleDishesList(dishSections: RestaurantPageViewModel.DishListData?) {
         with(binding!!) {
             if (dishSections?.dishes.isNullOrEmpty()) {
-//                if (!restaurantNoNetwork.isVisible) {
-//                    detailsSkeleton.visibility = View.GONE
-//                    restaurantNoNetwork.visibility = View.VISIBLE
-//                } else {
-//                    //Do nothing
-//                }
+
             } else {
                 restaurantNoNetwork.visibility = View.GONE
-//                restaurantMainLayout.visibility = View.VISIBLE
-//
-//                if (dishSections?.animateList == true)
-//                    restaurantDishesList.scheduleLayoutAnimation()
-
                 adapterDishes?.submitList(dishSections?.dishes)
             }
         }
@@ -177,66 +138,7 @@ class DishSearchFragment : Fragment(R.layout.fragment_dish_search), FeedMainAdap
         binding = null
     }
 
-    override fun onRestaurantClick(restaurantInitParams: RestaurantInitParams) {
-//        val query = binding!!.searchFragInput.text.toString()
-//        restaurantInitParams.query = query
-//        mainViewModel.startRestaurantActivity(restaurantInitParams)
-//        viewModel.logRestaurantClick(restaurantInitParams)
-    }
-
-    override fun onChefClick(restaurantInitParams: RestaurantInitParams) {
-        //do nothing
-    }
-
-    override fun onDishClicked(restaurantInitParams: RestaurantInitParams) {
-        //do nothing
-    }
-
     override fun onTagClick(tag: String) {
-//        binding!!.searchFragInput.setText(tag)
-//        binding!!.searchFragInput.setSelection(tag.length)
-//        viewModel.logTagEvent(Constants.EVENT_SEARCH_TAG_CLICK, tag)
     }
-
-    override fun onShareBannerClick(campaign: Campaign) {
-        //do nothing
-    }
-
-    override fun onHeroBannerCampaignClick(hero: FeedHeroItemSection?) {
-        //do nothing
-    }
-
-    override fun onHeroBannerClick(hero: FeedHeroItemSection?) {
-        //do nothing
-    }
-
-    override fun onChangeAddressClick() {
-        //do nothing
-    }
-
-    override fun onDishSwiped() {
-        //do nothing
-    }
-
-    override fun onRefreshFeedClick() {
-//        val input = binding!!.searchFragInput.text.toString()
-//        if(input.isNullOrBlank()){
-//            viewModel.postDefaultData()
-//        }else{
-//            viewModel.searchInput(input)
-//        }
-    }
-
-    override fun onComingSoonBtnClick(comingSoonData: FeedComingSoonSection) {
-        //do nothing
-    }
-
-    override fun onResume() {
-        super.onResume()
-//        viewModel.showDefaultSearchData()
-
-    }
-
-
 
 }

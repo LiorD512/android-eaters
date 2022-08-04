@@ -12,8 +12,11 @@ import com.bupp.wood_spoon_eaters.model.*
 import com.bupp.wood_spoon_eaters.utils.AnimationUtil
 
 
-class FeedAdapterEmptyFeedViewHolder(val binding: FeedAdapterEmptyFeedItemBinding, val listener: FeedMainAdapter.FeedMainAdapterListener) :
-    RecyclerView.ViewHolder(binding.root) {
+class FeedAdapterEmptyFeedViewHolder(
+    val binding: FeedAdapterEmptyFeedItemBinding,
+    val listener: FeedMainAdapter.OnChangeAddressClickListener?
+) : RecyclerView.ViewHolder(binding.root) {
+
     fun bindItems(noChefSection: FeedAdapterEmptyFeed) {
         with(binding) {
             noChefSection.emptyFeedSection.let {
@@ -23,7 +26,7 @@ class FeedAdapterEmptyFeedViewHolder(val binding: FeedAdapterEmptyFeedItemBindin
                 if (noChefSection.shouldShowBtn) {
                     binding.emptyFeedChangeAddress.visibility = View.VISIBLE
                     binding.emptyFeedChangeAddress.setOnClickListener {
-                        listener.onChangeAddressClick()
+                        listener?.onChangeAddressClick()
                     }
                 } else {
                     binding.emptyFeedChangeAddress.visibility = View.INVISIBLE
@@ -33,7 +36,10 @@ class FeedAdapterEmptyFeedViewHolder(val binding: FeedAdapterEmptyFeedItemBindin
     }
 }
 
-class FeedAdapterEmptySectionViewHolder(val binding: FeedAdapterEmptySectionItemBinding) : RecyclerView.ViewHolder(binding.root) {
+class FeedAdapterEmptySectionViewHolder(
+    val binding: FeedAdapterEmptySectionItemBinding
+) : RecyclerView.ViewHolder(binding.root) {
+
     fun bindItems(noChefSection: FeedAdapterEmptySection) {
         with(binding) {
             noChefSection.emptySection.let {
@@ -44,18 +50,23 @@ class FeedAdapterEmptySectionViewHolder(val binding: FeedAdapterEmptySectionItem
     }
 }
 
-class FeedAdapterNoNetworkSectionViewHolder(val binding: FeedAdapterNoNetworkItemBinding, val listener: FeedMainAdapter.FeedMainAdapterListener) :
-    RecyclerView.ViewHolder(binding.root) {
+class FeedAdapterNoNetworkSectionViewHolder(
+    val binding: FeedAdapterNoNetworkItemBinding,
+    val listener: FeedMainAdapter.OnRefreshFeedClickListener?
+) : RecyclerView.ViewHolder(binding.root) {
+
     fun bindItems() {
         with(binding) {
             noNetworkSectionBtn.setOnClickListener {
-                AnimationUtil().alphaOut(binding.root, listener = object : SimpleAnimatorListener() {
-                    override fun onAnimationEnd(p0: Animator?) {
-                        super.onAnimationEnd(p0)
-                        AnimationUtil().alphaIn(binding.root, customStartDelay = 150)
-                        listener.onRefreshFeedClick()
-                    }
-                })
+                AnimationUtil().alphaOut(
+                    binding.root,
+                    listener = object : SimpleAnimatorListener() {
+                        override fun onAnimationEnd(p0: Animator?) {
+                            super.onAnimationEnd(p0)
+                            AnimationUtil().alphaIn(binding.root, customStartDelay = 150)
+                            listener?.onRefreshFeedClick()
+                        }
+                    })
             }
         }
     }

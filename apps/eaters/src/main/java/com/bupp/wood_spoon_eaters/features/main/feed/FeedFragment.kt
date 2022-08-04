@@ -1,9 +1,13 @@
 package com.bupp.wood_spoon_eaters.features.main.feed
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Toast
+import androidx.browser.customtabs.CustomTabColorSchemeParams
+import androidx.browser.customtabs.CustomTabsIntent
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bupp.wood_spoon_eaters.R
@@ -14,7 +18,7 @@ import com.bupp.wood_spoon_eaters.databinding.FragmentFeedBinding
 import com.bupp.wood_spoon_eaters.features.main.MainNavigationEvent
 import com.bupp.wood_spoon_eaters.features.main.MainViewModel
 import com.bupp.wood_spoon_eaters.features.main.feed.adapters.FeedMainAdapter
-import com.bupp.wood_spoon_eaters.model.RestaurantInitParams
+import com.bupp.wood_spoon_eaters.features.restaurant.RestaurantActivity
 import com.bupp.wood_spoon_eaters.model.*
 import com.bupp.wood_spoon_eaters.utils.Utils
 import com.bupp.wood_spoon_eaters.utils.showErrorToast
@@ -26,7 +30,15 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class FeedFragment : Fragment(R.layout.fragment_feed),
     FeedHeaderView.FeedHeaderViewListener,
-    FeedMainAdapter.FeedMainAdapterListener,
+    FeedMainAdapter.OnSearchListener,
+    FeedMainAdapter.FeedMainAdapterHeroListener,
+    FeedMainAdapter.OnRestaurantClickListener,
+    FeedMainAdapter.OnDishListener,
+    FeedMainAdapter.OnChefClickListener,
+    FeedMainAdapter.OnShareBannerClickListener,
+    FeedMainAdapter.OnChangeAddressClickListener,
+    FeedMainAdapter.OnComingSoonBtnClickListener,
+    FeedMainAdapter.OnRefreshFeedClickListener,
     SingleColumnTimePickerBottomSheet.TimePickerListener {
 
     companion object {
@@ -54,7 +66,16 @@ class FeedFragment : Fragment(R.layout.fragment_feed),
     private fun initUi() {
         with(binding!!) {
             feedFragHeader.setFeedHeaderViewListener(this@FeedFragment)
-            feedAdapter = FeedMainAdapter(this@FeedFragment)
+            feedAdapter = FeedMainAdapter(
+                listener = this@FeedFragment,
+                listenerRestaurant = this@FeedFragment,
+                listenerHero = this@FeedFragment,
+                listenerDish = this@FeedFragment,
+                listenerChef = this@FeedFragment,
+                listenerBanner = this@FeedFragment,
+                onComingSoonBtnClickListener = this@FeedFragment,
+                onRefreshFeedClickListener = this@FeedFragment,
+            )
             feedFragList.layoutManager = LinearLayoutManager(requireContext())
             feedFragList.adapter = feedAdapter
 
@@ -99,7 +120,7 @@ class FeedFragment : Fragment(R.layout.fragment_feed),
     }
 
     private fun handleFeedUi(isLargeItems: Boolean) {
-        if(!isLargeItems){
+        if (!isLargeItems) {
             binding!!.feedFragList.enableSnapping(isLargeItems)
         }
     }
@@ -124,7 +145,7 @@ class FeedFragment : Fragment(R.layout.fragment_feed),
             campaigns.forEach { campaign ->
                 campaign.viewTypes?.forEach { viewType ->
                     when (viewType) {
-                        CampaignViewType.FEED -> { }
+                        CampaignViewType.FEED -> {}
                     }
                 }
             }
@@ -167,7 +188,7 @@ class FeedFragment : Fragment(R.layout.fragment_feed),
     private fun handleBannerEvent(bannerType: Int) {
         bannerType.let {
             when (bannerType) {
-                Constants.NO_BANNER -> { }
+                Constants.NO_BANNER -> {}
                 Constants.BANNER_KNOWN_ADDRESS -> {
                     showBanner(getString(R.string.banner_known_address))
                 }
@@ -189,7 +210,7 @@ class FeedFragment : Fragment(R.layout.fragment_feed),
     private fun showBanner(text: String) {
         with(binding!!) {
             //.post call make sure the tool bar doesn't get called before the UI is ready to prevent crash
-            feedFragHeader.post{
+            feedFragHeader.post {
                 tooltip = Tooltip.Builder(requireContext())
                     .anchor(feedFragHeader, 0, -30, true)
                     .text(text)
@@ -212,7 +233,7 @@ class FeedFragment : Fragment(R.layout.fragment_feed),
 
     //Feed main adapter interface
     override fun onShareBannerClick(campaign: Campaign) {
-        mainViewModel.onShareCampaignClick(campaign.shareUrl,campaign.shareText)
+        mainViewModel.onShareCampaignClick(campaign.shareUrl, campaign.shareText)
     }
 
     override fun onHeroBannerCampaignClick(hero: FeedHeroItemSection?) {
@@ -224,6 +245,55 @@ class FeedFragment : Fragment(R.layout.fragment_feed),
             ?.let {
                 viewModel.logFeedHeroCampaignClickedEvent(it.toIntOrNull())
             }
+    }
+
+    override fun onHeroWebViewClick(hero: FeedHeroItemSection?) {
+        hero?.url?.let { heroUrl ->
+            Uri.parse(heroUrl)?.let { url ->
+                url.host?.contains("eatwoodspoon.com")?.let {
+                    CustomTabsIntent.Builder().apply {
+                        setDefaultColorSchemeParams(
+                            CustomTabColorSchemeParams.Builder().apply {
+                                setToolbarColor(resources.getColor(R.color.colorPrimary))
+                            }.build()
+                        )
+                    }
+                        .build()
+                        .launchUrl(requireContext(), url)
+                }
+            }
+        }
+    }
+
+    override fun onHeroChefClick(hero: FeedHeroItemSection?) {
+        hero?.url?.let { heroUrl ->
+            val uri = Uri.parse(heroUrl)
+            if (uri.queryParameterNames.contains("chef_id")) {
+                uri.getQueryParameters("chef_id").first().let { chefId ->
+                    openRestaurantScreen(chefId, hero)
+                }
+            }
+        }
+    }
+
+    private fun openRestaurantScreen(
+        chefId: String,
+        hero: FeedHeroItemSection?
+    ) {
+        startActivity(
+            Intent(activity, RestaurantActivity::class.java)
+                .putExtra(
+                    Constants.ARG_RESTAURANT, RestaurantInitParams(
+                        restaurantId = chefId.toLong(),
+                        restaurantName = hero?.title,
+                        chefName = hero?.text,
+                        coverPhoto = null,
+                        isFavorite = false,
+                        chefThumbnail = hero?.image,
+                        rating = ""
+                    )
+                )
+        )
     }
 
     override fun onHeroBannerClick(hero: FeedHeroItemSection?) {
@@ -259,7 +329,7 @@ class FeedFragment : Fragment(R.layout.fragment_feed),
     }
 
     override fun onComingSoonBtnClick(comingSoonData: FeedComingSoonSection) {
-        comingSoonData.successSubtitle?.let{
+        comingSoonData.successSubtitle?.let {
             showErrorToast(it, binding!!.root, Toast.LENGTH_LONG)
         }
     }

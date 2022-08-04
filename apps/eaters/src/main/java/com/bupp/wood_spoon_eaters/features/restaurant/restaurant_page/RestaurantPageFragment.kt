@@ -224,21 +224,22 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
     @SuppressLint("SetTextI18n")
     private fun handleInitialParamData(params: RestaurantInitParams) {
         with(binding!!) {
-            Glide.with(requireContext()).load(params.coverPhoto?.url).into(coverPhoto)
-            restHeaderRestName.text = params.restaurantName
-            restHeaderChefName.text = "By ${params.chefName}"
-            params.chefThumbnail?.url?.let { restHeaderChefThumbnail.setImage(it) }
             rating.text = "${params.rating}"
-
             topHeaderRestaurantName.text = params.restaurantName
             topHeaderChefName.text = "By ${params.chefName}"
         }
     }
 
     private fun handleRestaurantFullData(restaurant: Restaurant) {
-        with(binding!!) {
+        binding?.apply {
+            restHeaderRestName.text = restaurant.restaurantName
+            restHeaderChefName.text = "By ${restaurant.getFullName()}"
+            topHeaderRestaurantName.text = restaurant.restaurantName
+            topHeaderChefName.text = "By ${restaurant.firstName}"
+
             //Cover photo + video
             Glide.with(requireContext()).load(restaurant.cover?.url).into(coverPhoto)
+            restaurant.thumbnail?.url?.let { restHeaderChefThumbnail.setImage(it) }
             restaurant.flagUrl?.let { restHeaderChefThumbnail.setFlag(it) }
 
             restFragVideoBtn.isVisible = !restaurant.video.isNullOrEmpty()
@@ -257,12 +258,10 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
             restHeaderFavorite.setIsFavorite(restaurant.isFavorite)
             restHeaderFavorite.setClickListener(this@RestaurantPageFragment)
         }
-        with(binding!!.restaurantMainListLayout) {
 
-            //Description
+        binding?.restaurantMainListLayout?.apply {
             restaurantDescription.text = restaurant.about
 
-            //Cuisines
             adapterCuisines?.submitList(restaurant.tags)
             restaurantCuisinesList.isVisible = !restaurant.tags.isNullOrEmpty()
 

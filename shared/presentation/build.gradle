@@ -13,4 +13,5 @@ dependencies {
     implementation 'androidx.appcompat:appcompat'
     api 'it.sephiroth.android.library.targettooltip:target-tooltip-library:2.0.3'
     api 'com.jakewharton.timber:timber:4.7.1'
+    api 'androidx.browser:browser:1.4.0'
 }
