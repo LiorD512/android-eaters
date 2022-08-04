@@ -146,7 +146,7 @@ class MyDishesViewModel(
             ) { myPickerDish ->
                 myPickerDish.copy(isSelected = true)
             })
-        }
+        }?.filter { !it.dishes.isNullOrEmpty() }
     }
 
     private fun parseDataForAdapter(
