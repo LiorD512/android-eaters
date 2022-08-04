@@ -195,28 +195,33 @@ class CheckoutViewModel(
         viewModelScope.launch {
             progressData.startProgress()
 
-            val paymentMethodId = paymentManager.getStripeCurrentPaymentMethod()
-            val result = cartManager.finalizeOrder(paymentMethodId)
+            try {
+                val paymentMethodId = paymentManager.getStripeCurrentPaymentMethod()
+                val result = cartManager.finalizeOrder(paymentMethodId)
 
-            when (result?.type) {
-                OrderRepository.OrderRepoStatus.FINALIZE_ORDER_SUCCESS -> {
-                    cartManager.onCartCleared()
-                    onCheckoutDone.postRawValue(true)
-                }
-                OrderRepository.OrderRepoStatus.FINALIZE_ORDER_FAILED -> {
-                }
-                OrderRepository.OrderRepoStatus.WS_ERROR -> {
-                    var error = result.wsError?.getErrorsMsg()
-                    if (error.isNullOrEmpty()) {
-                        error = "Failed to create your order please try again later"
+                when (result?.type) {
+                    OrderRepository.OrderRepoStatus.FINALIZE_ORDER_SUCCESS -> {
+                        cartManager.onCartCleared()
+                        onCheckoutDone.postRawValue(true)
                     }
-                    wsErrorEvent.postRawValue(error)
+                    OrderRepository.OrderRepoStatus.FINALIZE_ORDER_FAILED -> {
+                        wsErrorEvent.postRawValue(result.wsError?.getErrorsMsg() ?: "Something went wrong")
+                    }
+                    OrderRepository.OrderRepoStatus.WS_ERROR -> {
+                        var error = result.wsError?.getErrorsMsg()
+                        if (error.isNullOrEmpty()) {
+                            error = "Failed to create your order please try again later"
+                        }
+                        wsErrorEvent.postRawValue(error)
+                    }
+                    else -> {
+                    }
                 }
-                else -> {
-                }
+            } catch (ex: Exception) {
+                wsErrorEvent.postRawValue(ex.message ?: "Something went wrong")
+            } finally {
+                progressData.endProgress()
             }
-
-            progressData.endProgress()
         }
     }
 

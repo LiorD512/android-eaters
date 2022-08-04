@@ -24,7 +24,7 @@ import com.bupp.wood_spoon_eaters.utils.closeKeyboard
 import me.ibrahimsn.lib.util.clear
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
-class DishSearchFragment : Fragment(R.layout.fragment_dish_search), FeedMainAdapter.OnSearchListener {
+class DishSearchFragment : Fragment(R.layout.fragment_dish_search) {
 
     private val mainViewModel by sharedViewModel<RestaurantMainViewModel>()
     private val viewModel by sharedViewModel<RestaurantPageViewModel>()
@@ -137,8 +137,4 @@ class DishSearchFragment : Fragment(R.layout.fragment_dish_search), FeedMainAdap
         super.onDestroy()
         binding = null
     }
-
-    override fun onTagClick(tag: String) {
-    }
-
 }

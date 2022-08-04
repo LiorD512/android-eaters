@@ -84,18 +84,18 @@ class TipFragment : Fragment(R.layout.fragment_tip), CustomTipBottomSheet.Custom
     }
 
     private fun initObservers() {
-        viewModel.orderLiveData.observe(viewLifecycleOwner, { orderData ->
+        viewModel.orderLiveData.observe(viewLifecycleOwner) { orderData ->
             handleOrderDetails(orderData)
-        })
-        viewModel.onCheckoutDone.observe(viewLifecycleOwner, {
+        }
+        viewModel.onCheckoutDone.observe(viewLifecycleOwner) {
             mainViewModel.handleMainNavigation(OrderCheckoutViewModel.NavigationEventType.FINISH_ACTIVITY_AFTER_PURCHASE)
-        })
-        viewModel.progressData.observe(viewLifecycleOwner, {
+        }
+        viewModel.progressData.observe(viewLifecycleOwner) {
             (activity as OrderCheckoutActivity).handleProgressBar(it)
-        })
-        viewModel.wsErrorEvent.observe(viewLifecycleOwner, {
+        }
+        viewModel.wsErrorEvent.observe(viewLifecycleOwner) {
             handleWSError(it.getContentIfNotHandled())
-        })
+        }
     }
 
     @SuppressLint("SetTextI18n")
