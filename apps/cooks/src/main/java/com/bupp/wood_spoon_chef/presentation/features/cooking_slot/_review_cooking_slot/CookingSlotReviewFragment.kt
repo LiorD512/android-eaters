@@ -22,6 +22,7 @@ import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.rrules.RRuleT
 import com.bupp.wood_spoon_chef.utils.DateUtils.prepareFormattedDateForHours
 import com.bupp.wood_spoon_chef.utils.extensions.prepareFormattedDate
 import com.bupp.wood_spoon_chef.utils.extensions.prepareFormattedDateForDateAndHour
+import com.bupp.wood_spoon_chef.utils.extensions.show
 import com.eatwoodspoon.android_utils.binding.viewBinding
 import com.eatwoodspoon.android_utils.views.setSafeOnClickListener
 import kotlinx.coroutines.flow.collect
@@ -84,6 +85,10 @@ class CookingSlotReviewFragment : BaseFragment(R.layout.fragment_cooking_slot_re
 
     private fun updateInputsWithState(state: ReviewCookingSlotState.ScreenDataState) {
         binding.apply {
+
+            createCookingSlotNewFragmentMakeRecurringView.show(state.recurringRule != null)
+            createCookingSlotNewFragmentLastCallForOrderView.show(state.lastCallForOrderShift != null)
+
             showTitle(state.selectedDate)
             showSubTitle(
                 startTime = state.operatingHours.startTime,

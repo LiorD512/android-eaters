@@ -16,12 +16,11 @@ import org.joda.time.DateTime
 import java.text.SimpleDateFormat
 import java.util.*
 
-class TimePickerBottomSheet(
-    private val selectedDate: Long,
-    private val operatingHours: OperatingHours?
-) : TopCorneredBottomSheet() {
+class TimePickerBottomSheet: TopCorneredBottomSheet() {
 
     private var binding: BottomSheetTimePickerBinding? = null
+    private var operatingHours: OperatingHours? = null
+    private var selectedDate: Long = 0
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -35,7 +34,8 @@ class TimePickerBottomSheet(
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        operatingHours = requireArguments().getParcelable(OPERATING_HOUR_ARGS_KEY)
+        selectedDate = requireArguments().getLong(SELECTED_DATE_ARGS_KEY)
         handleTimePickerStartTime()
     }
 
@@ -55,23 +55,29 @@ class TimePickerBottomSheet(
             timePickerEndTimePick.hour = DateTime(startTime).plusHours(2).hourOfDay
             timePickerEndTimePick.minute = DateTime(startTime).minuteOfHour
             timePickerActionSaveBtn.setOnClickListener {
-                setFragmentResult(TIME_KEY, bundleOf(TIME_VALUE to OperatingHours(
-                    startTime, getTimeInMillis(timePickerEndTimePick))))
+                setFragmentResult(
+                    TIME_KEY, bundleOf(
+                        TIME_VALUE to OperatingHours(
+                            startTime, getTimeInMillis(timePickerEndTimePick)
+                        )
+                    )
+                )
                 dismiss()
             }
         }
     }
 
-    private fun setStartTimeValue(){
+    private fun setStartTimeValue() {
         val calendar = Calendar.getInstance()
-        val dateFormat =  SimpleDateFormat("hh:mm aa", Locale.ENGLISH)
-        if (operatingHours?.startTime == null){
+        val dateFormat = SimpleDateFormat("hh:mm aa", Locale.ENGLISH)
+        if (operatingHours?.startTime == null) {
             calendar.time = dateFormat.parse("12:00 PM") as Date
             binding?.timePickerStartTimePick?.hour = DateTime(calendar.timeInMillis).hourOfDay
             binding?.timePickerStartTimePick?.minute = DateTime(calendar.timeInMillis).minuteOfHour
-        }else {
-            binding?.timePickerStartTimePick?.hour = DateTime(operatingHours.startTime).hourOfDay
-            binding?.timePickerStartTimePick?.minute = DateTime(operatingHours.startTime).minuteOfHour
+        } else {
+            binding?.timePickerStartTimePick?.hour = DateTime(operatingHours?.startTime).hourOfDay
+            binding?.timePickerStartTimePick?.minute =
+                DateTime(operatingHours?.startTime).minuteOfHour
         }
     }
 
@@ -84,8 +90,12 @@ class TimePickerBottomSheet(
         calendar.time = Date(selectedDate)
         binding?.apply {
             calendar.set(
-                calendar.get(Calendar.YEAR),  calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH),
-                timePicker.hour, timePicker.minute, Calendar.SECOND
+                calendar.get(Calendar.YEAR),
+                calendar.get(Calendar.MONTH),
+                calendar.get(Calendar.DAY_OF_MONTH),
+                timePicker.hour,
+                timePicker.minute,
+                Calendar.SECOND
             )
         }
 
@@ -95,9 +105,21 @@ class TimePickerBottomSheet(
     companion object {
         const val TIME_KEY = "timeKey"
         const val TIME_VALUE = "timeValue"
+        const val SELECTED_DATE_ARGS_KEY = "selectedDateArgsKey"
+        const val OPERATING_HOUR_ARGS_KEY = "operatingHoursArgsKey"
 
-        fun show(fragment: Fragment, selectedDate: Long, operatingHours: OperatingHours?, listener: ((OperatingHours) -> Unit)) {
-            TimePickerBottomSheet(selectedDate, operatingHours).show(
+        fun show(
+            fragment: Fragment,
+            selectedDate: Long,
+            operatingHours: OperatingHours?,
+            listener: ((OperatingHours) -> Unit)
+        ) {
+            TimePickerBottomSheet().apply {
+                arguments = bundleOf(
+                    SELECTED_DATE_ARGS_KEY to selectedDate,
+                    OPERATING_HOUR_ARGS_KEY to operatingHours
+                )
+            }.show(
                 fragment.childFragmentManager,
                 TimePickerBottomSheet::class.simpleName
             )

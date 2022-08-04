@@ -123,6 +123,14 @@ class CreateCookingSlotFragmentNew : BaseFragment(R.layout.fragment_create_cooki
             showTitle(state.selectedDate)
             handleProgressBar(state.inProgress)
 
+            createCookingSlotNewFragmentLastCallForOrderView.setTitle(
+                if (state.lastCallForOrderShift == null){
+                    getString(R.string.add_last_call_for_order)
+                }else{
+                    getString(R.string.last_call_for_order)
+                }
+            )
+
             createCookingSlotNewFragmentOperatingHoursView.setSubtitle(
                 formatOperatingHours(
                     state.operatingHours.startTime, state.operatingHours.endTime

@@ -4,12 +4,11 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
-import android.widget.FrameLayout
 import android.widget.LinearLayout
 import androidx.core.content.ContextCompat
 import com.bupp.wood_spoon_chef.R
-import com.bupp.wood_spoon_chef.data.remote.model.CookingSlot
 import com.bupp.wood_spoon_chef.databinding.CreateCookingSlotTopBarBinding
+import com.bupp.wood_spoon_chef.utils.extensions.show
 
 class CreateCookingSlotTopBar @JvmOverloads constructor(
     context: Context,
@@ -108,5 +107,9 @@ class CreateCookingSlotTopBar @JvmOverloads constructor(
                 icon
             )
         )
+    }
+
+    fun showIconMenu(show: Boolean){
+        binding.ivIconMenu.show(show)
     }
 }
