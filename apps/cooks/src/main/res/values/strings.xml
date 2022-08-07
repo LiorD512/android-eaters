@@ -117,6 +117,9 @@
     <string name="save">SAVE</string>
     <string name="cancel">CANCEL</string>
     <string name="ends_at">Ends at</string>
+    <string name="search_for_dishes">Search for dishes</string>
+    <string name="operating_hours_info_text">Please indicate the time you will actively be in your kitchen and available for a driver to pick up your food. We will try our best to make sure the pickup time of your first order is at least 30 minutes after your cooking start time.</string>
+    <string name="operating_hours">Operating hours</string>
 
     <plurals name="day_plurals">
         <item quantity="one">@string/day</item>
