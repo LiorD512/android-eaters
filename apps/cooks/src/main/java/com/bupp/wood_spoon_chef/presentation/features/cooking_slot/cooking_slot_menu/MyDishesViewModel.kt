@@ -16,7 +16,9 @@ data class MyDishesState(
     val sectionedList: List<MyDishesPickerAdapterModel>? = null,
     val selectedDishesIds: List<Long> = emptyList(),
     val selectedSections: List<String>? = emptyList(),
-    val isListFiltered: Boolean? = false
+    val isListFiltered: Boolean? = false,
+    val currentSectionWithDishes: SectionWithDishes? = null,
+    val showEmptyState: Boolean = false
 )
 
 sealed class MyDishesEvent {
@@ -25,8 +27,6 @@ sealed class MyDishesEvent {
         val selectedSections:
         List<String>? = emptyList()
     ) : MyDishesEvent()
-
-    data class ShowEmptyState(val show: Boolean = false) : MyDishesEvent()
     data class AddDishes(val selectedDishes: List<Long> = emptyList()) : MyDishesEvent()
 }
 
@@ -55,14 +55,22 @@ class MyDishesViewModel(
             }
             val filteredSectionsAndDishes = SectionWithDishes(dishesWithoutSelected, sections)
             updateSectionedList(parseDataForAdapter(filteredSectionsAndDishes))
+            setCurrentSectionsWithDishes(filteredSectionsAndDishes)
         } catch (e: Exception) {
             print(e.message)
 
         }
     }
 
+    private fun setCurrentSectionsWithDishes(currentSectionWithDishes: SectionWithDishes?) {
+        _state.update {
+            it.copy(currentSectionWithDishes = currentSectionWithDishes)
+        }
+    }
+
     fun filterList(input: String) {
-        //todo - Not yet implemented
+        val filteredList = filterByDishName(input)
+        updateSectionedList(parseDataForAdapter(filteredList))
     }
 
     private fun updateSectionedList(data: List<MyDishesPickerAdapterModel>?) {
@@ -91,8 +99,8 @@ class MyDishesViewModel(
     }
 
     fun filterBySectionName(sectionList: List<FilterAdapterSectionModel>) {
-        val filteredSections = dishesWithCategoryRepository.filterListByCategoryName(sectionList)
-        updateSectionedList(parseDataForAdapter(filteredSections))
+        val filteredList = filterBySections(sectionList)
+        updateSectionedList(parseDataForAdapter(filteredList))
     }
 
     fun onFilterClick() {
@@ -168,6 +176,25 @@ class MyDishesViewModel(
                 myDishesPickerAdapterDishes
             )
         }?.toList() ?: emptyList()
+    }
+
+    private fun filterBySections(sectionList: List<FilterAdapterSectionModel>): SectionWithDishes? {
+        val currentSectionWithDishes = _state.value.currentSectionWithDishes
+        val sectionName = sectionList.map { it.sectionName }
+        return if (sectionName.isNotEmpty()) {
+            val filteredSections = currentSectionWithDishes?.sections?.filter { section ->
+                sectionName.any { it.equals(section.title, true) }
+            }
+            SectionWithDishes(currentSectionWithDishes?.dishes, filteredSections)
+        } else {
+            currentSectionWithDishes
+        }
+    }
+
+    private fun filterByDishName(input: String): SectionWithDishes? {
+        val currentSectionWithDishes = _state.value.currentSectionWithDishes
+        val filteredDishes = currentSectionWithDishes?.dishes?.filter { it.name.contains(input) }
+        return SectionWithDishes(filteredDishes, currentSectionWithDishes?.sections)
     }
 }
 

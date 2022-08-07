@@ -99,7 +99,6 @@ class MyDishesBottomSheet : TopCorneredBottomSheet(),
                 viewModel.events.collect { event ->
                     when (event) {
                         is MyDishesEvent.ShowFilterMenu -> openFilterMenuBottomSheet(event.selectedSections)
-                        is MyDishesEvent.ShowEmptyState -> showEmptyResultState(event.show)
                         is MyDishesEvent.Error -> {
                             binding?.apply {
                                 showErrorToast(
@@ -162,6 +161,7 @@ class MyDishesBottomSheet : TopCorneredBottomSheet(),
                 updateList(it)
             }
             setFilterImageResource(state.isListFiltered)
+            showEmptyResultState(state.sectionedList.isNullOrEmpty())
         }
     }
 
