@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="23dp"
         android:gravity="center"
-        android:text="Operating hours"
+        android:text="@string/operating_hours"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
@@ -24,7 +24,7 @@
         android:layout_marginTop="23.1dp"
         android:layout_marginEnd="14.9dp"
         android:gravity="center"
-        android:text="Please indicate the time you will actively be in your kitchen and available for a driver to pick up your food. We will try our best to make sure the pickup time of your fist order is at least 30 minutes after your cooking start time."
+        android:text="@string/operating_hours_info_text"
         app:layout_constraintTop_toBottomOf="@id/operatingHourBsTitle" />
 
     <com.bupp.wood_spoon_chef.presentation.custom_views.OrangeBtnCornered

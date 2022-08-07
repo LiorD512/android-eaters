@@ -30,10 +30,7 @@ import org.joda.time.DateTime
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.util.*
 
-class SlotRecurringBottomSheet(
-    private val recurringRule: String?,
-    private val selectedDate: Long
-) : TopCorneredBottomSheet(), HeaderView.HeaderViewListener, DatePickerDialog.OnDateSetListener {
+class SlotRecurringBottomSheet: TopCorneredBottomSheet(), HeaderView.HeaderViewListener, DatePickerDialog.OnDateSetListener {
 
     private var binding: BottomSheetSlotRecurringBinding? = null
     private val viewModel by viewModel<SlotRecurringViewModel>()
@@ -52,8 +49,10 @@ class SlotRecurringBottomSheet(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setFullScreenDialog()
-        initUi()
+        val recurringRule = requireArguments().getString(RRULE_ARGS_KEY)
+        val selectedDate = requireArguments().getLong(SELECTED_DATE_ARGS_KEY)
         viewModel.init(recurringRule, selectedDate)
+        initUi()
         observeViewModelState()
         observeViewModelEvents()
     }
@@ -215,6 +214,8 @@ class SlotRecurringBottomSheet(
     companion object {
         const val SELECTED_RULE_KEY = "selectedRuleKey"
         const val SELECTED_RULE_VALUE = "selectedRuleValue"
+        const val RRULE_ARGS_KEY = "rruleArgsKey"
+        const val SELECTED_DATE_ARGS_KEY = "selectedDateArgsKey"
 
         fun show(
             fragment: Fragment,
@@ -222,7 +223,9 @@ class SlotRecurringBottomSheet(
             selectedDate: Long,
             listener: ((String?) -> Unit)
         ) {
-            SlotRecurringBottomSheet(recurringRule, selectedDate).show(
+            SlotRecurringBottomSheet().apply {
+                arguments = bundleOf(RRULE_ARGS_KEY to recurringRule, SELECTED_DATE_ARGS_KEY to selectedDate)
+            }.show(
                 fragment.childFragmentManager,
                 SlotRecurringBottomSheet::class.simpleName
             )

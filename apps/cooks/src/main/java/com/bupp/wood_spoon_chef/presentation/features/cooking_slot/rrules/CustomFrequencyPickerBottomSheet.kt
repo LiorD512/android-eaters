@@ -11,13 +11,12 @@ import com.bupp.wood_spoon_chef.R
 import com.bupp.wood_spoon_chef.common.TopCorneredBottomSheet
 import com.bupp.wood_spoon_chef.databinding.BottomSheetCustomeFreqPickerBinding
 
-class CustomFrequencyPickerBottomSheet(
-    private val interval: Int,
-    private val frequency: String
-) : TopCorneredBottomSheet() {
+class CustomFrequencyPickerBottomSheet: TopCorneredBottomSheet() {
 
     private var binding: BottomSheetCustomeFreqPickerBinding? = null
     private var frequencyValues = listOf<String>()
+    private var interval: Int? = null
+    private var frequency: String? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -31,6 +30,8 @@ class CustomFrequencyPickerBottomSheet(
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        interval = requireArguments().getInt(INTERVAL_ARGS_KEY)
+        frequency = requireArguments().getString(FREQUENCY_ARGS_KEY)
         initUi()
 
     }
@@ -56,7 +57,9 @@ class CustomFrequencyPickerBottomSheet(
         binding?.apply {
             customFreqBsIntervalPicker.minValue = 1
             customFreqBsIntervalPicker.maxValue = 6
-            customFreqBsIntervalPicker.value = interval
+            interval?.let { currentInterval ->
+                customFreqBsIntervalPicker.value = currentInterval
+            }
             customFreqBsFrequencyPicker.setOnValueChangedListener { _, _, newVal ->
                 when (newVal) {
                     0 -> {
@@ -82,17 +85,19 @@ class CustomFrequencyPickerBottomSheet(
         initFrequencyPicker()
     }
 
-    private fun setFrequencyList(interval: Int) {
-        frequencyValues = if (interval == 1) {
-            listOf(
-                resources.getQuantityString(R.plurals.day_plurals, 1),
-                resources.getQuantityString(R.plurals.week_plurals, 1)
-            )
-        } else {
-            listOf(
-                resources.getQuantityString(R.plurals.day_plurals, interval),
-                resources.getQuantityString(R.plurals.week_plurals, interval)
-            )
+    private fun setFrequencyList(interval: Int?) {
+        interval?.let { currentInterval ->
+            frequencyValues = if (currentInterval == 1) {
+                listOf(
+                    resources.getQuantityString(R.plurals.day_plurals, 1),
+                    resources.getQuantityString(R.plurals.week_plurals, 1)
+                )
+            } else {
+                listOf(
+                    resources.getQuantityString(R.plurals.day_plurals, currentInterval),
+                    resources.getQuantityString(R.plurals.week_plurals, currentInterval)
+                )
+            }
         }
     }
 
@@ -102,13 +107,15 @@ class CustomFrequencyPickerBottomSheet(
             customFreqBsFrequencyPicker.maxValue = frequencyValues.size - 1
             customFreqBsFrequencyPicker.wrapSelectorWheel = true
             customFreqBsFrequencyPicker.displayedValues = frequencyValues.toTypedArray()
-            val index = frequencyValues.indices.find {
-                frequencyValues[it].contains(
-                    frequency.dropLast(frequency.length.minus(2)), true
-                )
-            } ?: 0
+            frequency?.let { currentFrequency ->
+                val index = frequencyValues.indices.find {
+                    frequencyValues[it].contains(
+                        currentFrequency.dropLast(currentFrequency.length.minus(2)), true
+                    )
+                } ?: 0
 
-            customFreqBsFrequencyPicker.value = index
+                customFreqBsFrequencyPicker.value = index
+            }
         }
     }
 
@@ -120,14 +127,18 @@ class CustomFrequencyPickerBottomSheet(
         const val CUSTOM_FREQUENCY_PICKER_KEY = "customPickerFreqKey"
         const val CUSTOM_FREQUENCY_VALUE = "customFrequencyValue"
         const val CUSTOM_INTERVAL_VALUE = "customIntervalValue"
+        const val INTERVAL_ARGS_KEY = "intervalArgsKey"
+        const val FREQUENCY_ARGS_KEY = "frequencyArgsKey"
 
         fun show(
             fragment: Fragment,
-            interval: Int,
-            frequency: String,
+            interval: Int?,
+            frequency: String?,
             listener: ((String, Int) -> Unit)
         ) {
-            CustomFrequencyPickerBottomSheet(interval, frequency).show(
+            CustomFrequencyPickerBottomSheet().apply {
+                arguments = bundleOf(INTERVAL_ARGS_KEY to interval, FREQUENCY_ARGS_KEY to frequency)
+            }.show(
                 fragment.childFragmentManager,
                 CustomFrequencyPickerBottomSheet::class.simpleName
             )

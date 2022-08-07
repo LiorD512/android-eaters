@@ -32,8 +32,11 @@ class FeedAdapterSkeletonSearchViewHolder(val binding: SearchItemSkeletonBinding
     }
 }
 
-class FeedAdapterComingSoonViewHolder(val binding: FeedAdapterComingSoonItemBinding,
-                                      val listener: FeedMainAdapter.FeedMainAdapterListener) : RecyclerView.ViewHolder(binding.root) {
+class FeedAdapterComingSoonViewHolder(
+    val binding: FeedAdapterComingSoonItemBinding,
+    val listener: FeedMainAdapter.OnComingSoonBtnClickListener?
+    ) : RecyclerView.ViewHolder(binding.root) {
+
     fun bindItems(data: FeedAdapterComingSoonSection) {
         val item = data.comingSoonSection
         binding.comingSoonTitle.text = item.title
@@ -44,7 +47,7 @@ class FeedAdapterComingSoonViewHolder(val binding: FeedAdapterComingSoonItemBind
             .into(binding.comingSoonImg)
 
         binding.comingSoonBtn.setOnClickListener {
-            listener.onComingSoonBtnClick(item)
+            listener?.onComingSoonBtnClick(item)
         }
     }
 }

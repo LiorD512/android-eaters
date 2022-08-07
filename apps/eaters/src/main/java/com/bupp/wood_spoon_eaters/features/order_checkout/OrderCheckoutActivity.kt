@@ -49,14 +49,14 @@ class OrderCheckoutActivity : BaseActivity() {
     }
 
     private fun initObservers() {
-        viewModel.navigationEvent.observe(this, {
+        viewModel.navigationEvent.observe(this) {
             handleNavigation(it)
-        })
-        viewModel.deliveryAtChangeEvent.observe(this, {
+        }
+        viewModel.deliveryAtChangeEvent.observe(this) {
             it.getContentIfNotHandled()?.let { message ->
                 showErrorToast(message, binding.root, Toast.LENGTH_LONG)
             }
-        })
+        }
     }
 
     private fun handleNavigation(mainNavigationEvent: LiveEvent<OrderCheckoutViewModel.NavigationEvent>) {

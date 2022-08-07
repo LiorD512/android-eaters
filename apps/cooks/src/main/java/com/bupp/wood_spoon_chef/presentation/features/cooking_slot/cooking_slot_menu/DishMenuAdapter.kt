@@ -65,8 +65,10 @@ class DishMenuAdapter(
             holder.deleteBtn.setOnClickListener {
                 listener.onDeleteClick(menuDishItem.dish?.id)
             }
-            holder.reduceQuantityBtn.setOnClickListener {
-                listener.onQuantityChange(menuDishItem.dish?.id, menuDishItem.quantity.minus(1))
+            if (menuDishItem.quantity > 1 ) {
+                holder.reduceQuantityBtn.setOnClickListener {
+                    listener.onQuantityChange(menuDishItem.dish?.id, menuDishItem.quantity.minus(1))
+                }
             }
             holder.raiseQuantityBtn.setOnClickListener {
                 listener.onQuantityChange(menuDishItem.dish?.id, menuDishItem.quantity.plus(1))

@@ -16,7 +16,15 @@ import com.bupp.wood_spoon_eaters.views.abs.RecyclerHorizontalIndicatorDecoratio
 import com.github.rubensousa.gravitysnaphelper.GravitySnapHelper
 
 class FeedMainAdapter(
-    val listener: FeedMainAdapterListener
+    val listener: OnSearchListener,
+    val listenerRestaurant: OnRestaurantClickListener? = null,
+    val listenerHero: FeedMainAdapterHeroListener? = null,
+    val listenerChef: OnChefClickListener? = null,
+    val listenerDish: OnDishListener? = null,
+    val listenerBanner: OnShareBannerClickListener? = null,
+    val onChangeAddressClickListener: OnChangeAddressClickListener? = null,
+    val onComingSoonBtnClickListener: OnComingSoonBtnClickListener? = null,
+    val onRefreshFeedClickListener: OnRefreshFeedClickListener? = null,
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>(),
     FeedCouponSectionPagerAdapter.FeedCouponSectionListener,
     FeedAdapterRestaurantViewHolder.FeedAdapterRestaurantViewHolderListener,
@@ -36,18 +44,43 @@ class FeedMainAdapter(
         notifyDataSetChanged()
     }
 
-    interface FeedMainAdapterListener {
-        fun onShareBannerClick(campaign: Campaign)
+    interface FeedMainAdapterHeroListener {
         fun onHeroBannerClick(hero: FeedHeroItemSection?)
         fun onHeroBannerCampaignClick(hero: FeedHeroItemSection?)
-        fun onRestaurantClick(restaurantInitParams: RestaurantInitParams)
-        fun onChefClick(restaurantInitParams: RestaurantInitParams)
-        fun onDishClicked(restaurantInitParams: RestaurantInitParams)
-        fun onChangeAddressClick()
-        fun onDishSwiped()
-        fun onRefreshFeedClick()
-        fun onComingSoonBtnClick(comingSoonData: FeedComingSoonSection)
+        fun onHeroChefClick(hero: FeedHeroItemSection?)
+        fun onHeroWebViewClick(hero: FeedHeroItemSection?)
+    }
 
+    interface OnRestaurantClickListener{
+        fun onRestaurantClick(restaurantInitParams: RestaurantInitParams)
+    }
+
+    interface OnChefClickListener{
+        fun onChefClick(restaurantInitParams: RestaurantInitParams)
+    }
+
+    interface OnDishListener{
+        fun onDishClicked(restaurantInitParams: RestaurantInitParams)
+        fun onDishSwiped()
+    }
+
+    interface OnShareBannerClickListener {
+        fun onShareBannerClick(campaign: Campaign)
+    }
+
+    interface OnChangeAddressClickListener{
+        fun onChangeAddressClick()
+    }
+
+    interface OnComingSoonBtnClickListener{
+        fun onComingSoonBtnClick(comingSoonData: FeedComingSoonSection)
+    }
+
+    interface OnRefreshFeedClickListener{
+        fun onRefreshFeedClick()
+    }
+
+    interface OnSearchListener {
         //Search
         fun onTagClick(tag: String) {}
     }
@@ -102,7 +135,7 @@ class FeedMainAdapter(
             }
             FeedAdapterViewType.EMPTY_FEED.ordinal -> {
                 val binding = FeedAdapterEmptyFeedItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-                FeedAdapterEmptyFeedViewHolder(binding, listener)
+                FeedAdapterEmptyFeedViewHolder(binding, onChangeAddressClickListener)
             }
             FeedAdapterViewType.EMPTY_SECTION.ordinal -> {
                 val binding = FeedAdapterEmptySectionItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -110,7 +143,7 @@ class FeedMainAdapter(
             }
             FeedAdapterViewType.COMING_SOON.ordinal -> {
                 val binding = FeedAdapterComingSoonItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-                FeedAdapterComingSoonViewHolder(binding, listener)
+                FeedAdapterComingSoonViewHolder(binding, onComingSoonBtnClickListener)
             }
             FeedAdapterViewType.EMPTY_SEARCH.ordinal -> {
                 val binding = SearchItemEmptyBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -122,7 +155,7 @@ class FeedMainAdapter(
             }
             FeedAdapterViewType.NO_NETWORK_SECTION.ordinal -> {
                 val binding = FeedAdapterNoNetworkItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-                FeedAdapterNoNetworkSectionViewHolder(binding, listener)
+                FeedAdapterNoNetworkSectionViewHolder(binding, onRefreshFeedClickListener)
             }
             FeedAdapterViewType.SEARCH_TAGS.ordinal -> {
                 val binding = SearchItemTagsBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -235,16 +268,16 @@ class FeedMainAdapter(
 
     override fun onShareBannerClick(campaign: Campaign?) {
         campaign?.let {
-            listener.onShareBannerClick(campaign)
+            listenerBanner?.onShareBannerClick(campaign)
         }
     }
 
     override fun onRestaurantClick(restaurant: FeedRestaurantSection) {
-        listener.onRestaurantClick(restaurant.toRestaurantInitParams())
+        listenerRestaurant?.onRestaurantClick(restaurant.toRestaurantInitParams())
     }
 
     override fun onDishSwiped() {
-        listener.onDishSwiped()
+        listenerDish?.onDishSwiped()
     }
 
     override fun onPageClick(itemLocalId: Long?, position: Int) {
@@ -257,7 +290,7 @@ class FeedMainAdapter(
                         val sectionOrder = section.sectionOrder
                         val restaurantOrderInSection = section.restaurantOrderInSection
                         val dishIndexInRestaurant = position + 1
-                        listener.onRestaurantClick(
+                        listenerRestaurant?.onRestaurantClick(
                             section.restaurantSection.toRestaurantInitParams(
                                 sectionTitle,
                                 sectionOrder,
@@ -272,7 +305,7 @@ class FeedMainAdapter(
                         val sectionOrder = section.sectionOrder
                         val restaurantOrderInSection = section.restaurantOrderInSection
                         val dishIndexInRestaurant = position + 1
-                        listener.onRestaurantClick(
+                        listenerRestaurant?.onRestaurantClick(
                             section.restaurantSection.toRestaurantInitParams(
                                 sectionTitle,
                                 sectionOrder,
@@ -297,17 +330,25 @@ class FeedMainAdapter(
     }
 
     override fun onHeroBannerClick(hero: FeedHeroItemSection?) {
-        hero?.url?.contains("referral")?.let {
-            if (it) {
-                listener.onHeroBannerCampaignClick(hero)
-            } else {
-                listener.onHeroBannerClick(hero)
+        val isReferral = hero?.url?.contains("referral") ?: false
+        val isChef = hero?.url?.contains("chef_id") ?: false
+
+        when {
+            isReferral -> {
+                listenerHero?.onHeroBannerCampaignClick(hero)
+            }
+            isChef -> {
+                listenerHero?.onHeroChefClick(hero)
+            }
+            else -> {
+                listenerHero?.onHeroWebViewClick(hero)
+//                listener.onHeroBannerClick(hero)
             }
         }
     }
 
     override fun onChefClick(chef: FeedChefItemSection?) {
-        listener.onChefClick(RestaurantInitParams(
+        listenerChef?.onChefClick(RestaurantInitParams(
             restaurantId = chef?.cook?.id,
             chefThumbnail = chef?.cook?.thumbnail,
             coverPhoto = null,
@@ -320,7 +361,7 @@ class FeedMainAdapter(
     }
 
     override fun onDishClick(dish: FeedDishItemSection?) {
-        listener.onDishClicked(RestaurantInitParams(
+        listenerDish?.onDishClicked(RestaurantInitParams(
             cookingSlot = dish?.cookingSlot,
             restaurantId = dish?.cook?.id,
             chefThumbnail = dish?.cook?.thumbnail,

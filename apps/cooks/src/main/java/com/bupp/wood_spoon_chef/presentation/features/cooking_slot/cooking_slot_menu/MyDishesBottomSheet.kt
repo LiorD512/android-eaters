@@ -28,7 +28,7 @@ import kotlinx.coroutines.launch
 import me.ibrahimsn.lib.util.clear
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class MyDishesBottomSheet(private val selectedDishesIds: List<Long>) : TopCorneredBottomSheet(),
+class MyDishesBottomSheet : TopCorneredBottomSheet(),
     HeaderView.HeaderViewListener, MyDishesSectionAdapter.MyDishesSectionAdapterListener {
 
     private var binding: BottomSheetMyDishesBinding? = null
@@ -49,7 +49,8 @@ class MyDishesBottomSheet(private val selectedDishesIds: List<Long>) : TopCorner
         super.onViewCreated(view, savedInstanceState)
         setDialogAdjustPan()
         setFullScreenDialog()
-        setSelectedDishes()
+        val selectedDishesIds = requireArguments().get(SELECTED_DISHES_ARGS_KEY) as List<Long>
+        viewModel.setSelectedDishesIds(selectedDishesIds)
         initUi()
         setupList()
         observeViewModelState()
@@ -98,7 +99,6 @@ class MyDishesBottomSheet(private val selectedDishesIds: List<Long>) : TopCorner
                 viewModel.events.collect { event ->
                     when (event) {
                         is MyDishesEvent.ShowFilterMenu -> openFilterMenuBottomSheet(event.selectedSections)
-                        is MyDishesEvent.ShowEmptyState -> showEmptyResultState(event.show)
                         is MyDishesEvent.Error -> {
                             binding?.apply {
                                 showErrorToast(
@@ -108,7 +108,10 @@ class MyDishesBottomSheet(private val selectedDishesIds: List<Long>) : TopCorner
                             }
                         }
                         is MyDishesEvent.AddDishes -> {
-                            setFragmentResult(SELECTED_DISHES_KEY, bundleOf(SELECTED_DISHES_VALUE to event.selectedDishes))
+                            setFragmentResult(
+                                SELECTED_DISHES_KEY,
+                                bundleOf(SELECTED_DISHES_VALUE to event.selectedDishes)
+                            )
                             dismiss()
                         }
                     }
@@ -117,24 +120,20 @@ class MyDishesBottomSheet(private val selectedDishesIds: List<Long>) : TopCorner
         }
     }
 
-    private fun setSelectedDishes(){
-     viewModel.setSelectedDishesIds(selectedDishesIds)
-    }
-
     private fun setupList() {
         binding?.apply {
             myDishesBsDishesRv.apply {
                 layoutManager = LinearLayoutManager(requireContext())
                 myDishesSectionAdapter = MyDishesSectionAdapter(this@MyDishesBottomSheet)
                 adapter = myDishesSectionAdapter
-                itemAnimator = object: DefaultItemAnimator() {
+                itemAnimator = object : DefaultItemAnimator() {
                     override fun animateChange(
                         oldHolder: RecyclerView.ViewHolder,
                         newHolder: RecyclerView.ViewHolder,
                         preInfo: ItemHolderInfo,
                         postInfo: ItemHolderInfo
                     ): Boolean {
-                        if(preInfo.top == postInfo.top) {
+                        if (preInfo.top == postInfo.top) {
                             dispatchChangeFinished(oldHolder, true)
                             dispatchChangeFinished(newHolder, true)
                             return true
@@ -162,6 +161,7 @@ class MyDishesBottomSheet(private val selectedDishesIds: List<Long>) : TopCorner
                 updateList(it)
             }
             setFilterImageResource(state.isListFiltered)
+            showEmptyResultState(state.sectionedList.isNullOrEmpty())
         }
     }
 
@@ -207,13 +207,16 @@ class MyDishesBottomSheet(private val selectedDishesIds: List<Long>) : TopCorner
     companion object {
         const val SELECTED_DISHES_KEY = "selectedDishesKey"
         const val SELECTED_DISHES_VALUE = "selectedDishesValue"
+        const val SELECTED_DISHES_ARGS_KEY = "selectedDishesArgsKey"
 
         fun show(
             fragment: Fragment,
             selectedDishesIds: List<Long>,
             listener: ((List<Long>) -> Unit)
         ) {
-            MyDishesBottomSheet(selectedDishesIds).show(
+            MyDishesBottomSheet().apply {
+                arguments = bundleOf(SELECTED_DISHES_ARGS_KEY to selectedDishesIds)
+            }.show(
                 fragment.childFragmentManager,
                 MyDishesBottomSheet::class.simpleName
             )

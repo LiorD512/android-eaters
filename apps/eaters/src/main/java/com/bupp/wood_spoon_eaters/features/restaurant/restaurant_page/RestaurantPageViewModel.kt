@@ -96,7 +96,7 @@ class RestaurantPageViewModel(
 
             val lastFeedRequest = feedDataManager.getLastFeedRequest()
             lastFeedRequest.q = query
-            val result = restaurantRepository.getRestaurant(restaurantId, lastFeedRequest)
+             val result = restaurantRepository.getRestaurant(restaurantId, lastFeedRequest)
 
             if (result.type == SUCCESS) {
                 result.restaurant?.let { restaurant ->

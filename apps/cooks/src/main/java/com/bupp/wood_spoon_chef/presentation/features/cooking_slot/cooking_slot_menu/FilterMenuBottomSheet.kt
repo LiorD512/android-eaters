@@ -21,9 +21,7 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class FilterMenuBottomSheet(
-    private val selectedSections: List<String>?
-) : TopCorneredBottomSheet(), HeaderView.HeaderViewListener,
+class FilterMenuBottomSheet: TopCorneredBottomSheet(), HeaderView.HeaderViewListener,
     FilterMenuAdapter.FilterMenuAdapterListener {
 
     private var binding: BottomSheetFilterMenuBinding? = null
@@ -43,9 +41,10 @@ class FilterMenuBottomSheet(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setFullScreenDialog()
+        val selectedSections = requireArguments().getStringArrayList(SELECTED_SECTIONS_ARGS_KEY)
+        viewModel.setSelectedSections(selectedSections)
         initUi()
         setupList()
-        setSelectedSections()
         observeViewModelState()
         observeViewModelEvents()
     }
@@ -128,10 +127,6 @@ class FilterMenuBottomSheet(
         viewModel.onSectionSelected(sectionName, isSelected)
     }
 
-    private fun setSelectedSections() {
-        viewModel.setSelectedSections(selectedSections)
-    }
-
     private fun showClearAll(show: Boolean) {
         binding?.apply {
             filterMenuBsClearAll.show(show)
@@ -141,13 +136,16 @@ class FilterMenuBottomSheet(
     companion object {
         const val SELECTED_SECTIONS_KEY = "selectedSectionsKey"
         const val SELECTED_SECTIONS_VALUE = "selectedSectionsValue"
+        const val SELECTED_SECTIONS_ARGS_KEY = "selectedSectionsArgsKey"
 
         fun show(
             fragment: Fragment,
             selectedSections: List<String>?,
             listener: ((List<FilterAdapterSectionModel>) -> Unit)
         ) {
-            FilterMenuBottomSheet(selectedSections).show(
+            FilterMenuBottomSheet().apply {
+                arguments = bundleOf(SELECTED_SECTIONS_ARGS_KEY to selectedSections)
+            }.show(
                 fragment.childFragmentManager,
                 FilterMenuBottomSheet::class.simpleName
             )

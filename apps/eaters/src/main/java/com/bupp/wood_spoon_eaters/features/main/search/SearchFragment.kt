@@ -24,7 +24,9 @@ import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SearchFragment : Fragment(R.layout.fragment_search),
-    FeedMainAdapter.FeedMainAdapterListener {
+    FeedMainAdapter.OnSearchListener,
+    FeedMainAdapter.OnRestaurantClickListener,
+    FeedMainAdapter.OnRefreshFeedClickListener {
 
     private val mainViewModel by sharedViewModel<MainViewModel>()
     val viewModel by viewModel<SearchViewModel>()
@@ -42,7 +44,11 @@ class SearchFragment : Fragment(R.layout.fragment_search),
 
     private fun initUi() {
         with(binding!!) {
-            searchAdapter = FeedMainAdapter(this@SearchFragment)
+            searchAdapter = FeedMainAdapter(
+                listener = this@SearchFragment,
+                listenerRestaurant = this@SearchFragment,
+                onRefreshFeedClickListener = this@SearchFragment
+            )
             searchFragList.apply {
                 layoutManager = LinearLayoutManager(requireContext())
                 addItemDecoration(SpacesItemDecoration(Utils.toPx(14)))
@@ -125,38 +131,10 @@ class SearchFragment : Fragment(R.layout.fragment_search),
         viewModel.logRestaurantClick(restaurantInitParams)
     }
 
-    override fun onChefClick(restaurantInitParams: RestaurantInitParams) {
-        //do nothing
-    }
-
-    override fun onDishClicked(restaurantInitParams: RestaurantInitParams) {
-
-    }
-
     override fun onTagClick(tag: String) {
         binding!!.searchFragInput.setText(tag)
         binding!!.searchFragInput.setSelection(tag.length)
         viewModel.logTagEvent(Constants.EVENT_SEARCH_TAG_CLICK, tag)
-    }
-
-    override fun onShareBannerClick(campaign: Campaign) {
-        //do nothing
-    }
-
-    override fun onHeroBannerCampaignClick(hero: FeedHeroItemSection?) {
-        //do nothing
-    }
-
-    override fun onHeroBannerClick(hero: FeedHeroItemSection?) {
-        //do nothing
-    }
-
-    override fun onChangeAddressClick() {
-        //do nothing
-    }
-
-    override fun onDishSwiped() {
-        //do nothing
     }
 
     override fun onRefreshFeedClick() {
@@ -167,16 +145,5 @@ class SearchFragment : Fragment(R.layout.fragment_search),
             viewModel.searchInput(input)
         }
     }
-
-    override fun onComingSoonBtnClick(comingSoonData: FeedComingSoonSection) {
-        //do nothing
-    }
-
-    override fun onResume() {
-        super.onResume()
-//        viewModel.showDefaultSearchData()
-
-    }
-
 
 }

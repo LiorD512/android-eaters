@@ -22,6 +22,7 @@ import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.last_call.Las
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.cooking_slot_menu.CookingSlotMenuAdapter
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.rrules.RRuleTextFormatter
 import com.bupp.wood_spoon_chef.utils.extensions.prepareFormattedDate
+import com.bupp.wood_spoon_chef.utils.extensions.show
 import com.eatwoodspoon.android_utils.binding.viewBinding
 import com.shared.presentation.dialog.bottomsheet.ActionListBottomSheetFragment
 import kotlinx.coroutines.flow.collect
@@ -92,11 +93,17 @@ class CookingSlotDetailsFragmentNew : BaseFragment(R.layout.fragment_details_coo
                             handleProgressBar(false)
                             setupToolBar(state.cookingSlot)
 
+                            binding.createCookingSlotNewFragmentLastCallForOrderView.show(
+                                state.cookingSlot.lastCallAt != null &&
+                                        state.cookingSlot.lastCallAt != state.cookingSlot.endsAt
+                            )
+
                             binding.createCookingSlotNewFragmentLastCallForOrderView.setSubtitle(
                                 LastCallForOrderFormatter.formatLastCallForOrder(
                                     DateTime(state.cookingSlot.lastCallAt).millis,
                                     DateTime(state.cookingSlot.endsAt).millis
-                            ))
+                                )
+                            )
 
                             binding.createCookingSlotNewFragmentMakeRecurringView.isVisible =
                                 !state.cookingSlot.recurringRule.isNullOrEmpty()
@@ -121,6 +128,7 @@ class CookingSlotDetailsFragmentNew : BaseFragment(R.layout.fragment_details_coo
 
     private fun setupToolBar(slot: CookingSlot) {
         binding.toolbar.apply {
+            showIconMenu(slot.startsAt.time >= DateTime.now().millis)
             setTitle(DateTime(slot.startsAt).prepareFormattedDate())
 
             val dateTimeFormat: DateTimeFormatter = DateTimeFormat.forPattern("h:mm a")
@@ -185,9 +193,9 @@ class CookingSlotDetailsFragmentNew : BaseFragment(R.layout.fragment_details_coo
         val cookingSlotId = viewModel.selectedCookingSlot?.id ?: return
         val isRecurring = viewModel.selectedCookingSlot?.recurringRule?.isNotEmpty() == true
 
-        if(isRecurring) {
+        if (isRecurring) {
             showDetachDialog()
-        }else{
+        } else {
             viewModel.cancelCookingSlot(cookingSlotId, null)
         }
     }
