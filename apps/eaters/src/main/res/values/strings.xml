@@ -176,5 +176,6 @@
     <string name="gift_last_email_hint">Receiver’s email</string>
     <string name="gift_edit_details_action">Edit gift details</string>
     <string name="gift_delete_details_action">Delete gift details</string>
+    <string name="rate_app_link">market://details?id=com.bupp.wood_spoon_eaters</string>
 
 </resources>

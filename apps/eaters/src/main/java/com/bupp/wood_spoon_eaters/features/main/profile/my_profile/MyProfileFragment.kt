@@ -1,5 +1,7 @@
 package com.bupp.wood_spoon_eaters.features.main.profile.my_profile
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import androidx.core.view.isVisible
@@ -24,6 +26,7 @@ import com.bupp.wood_spoon_eaters.views.ShareBanner
 import com.bupp.wood_spoon_eaters.views.UserImageVideoView
 import com.bupp.wood_spoon_eaters.views.WSEditText
 import com.bupp.wood_spoon_eaters.views.horizontal_dietary_view.HorizontalDietaryView
+import com.google.android.play.core.review.ReviewManagerFactory
 import com.stripe.android.model.PaymentMethod
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -93,8 +96,14 @@ class MyProfileFragment : Fragment(R.layout.my_profile_fragment),
                     }
                 })
             }
-
-
+            btnRateApp.setOnClickListener {
+                startActivity(
+                    Intent(
+                        Intent.ACTION_VIEW,
+                        Uri.parse(getString(R.string.rate_app_link))
+                    )
+                )
+            }
         }
     }
 
@@ -147,7 +156,10 @@ class MyProfileFragment : Fragment(R.layout.my_profile_fragment),
             campaign.viewTypes?.forEach { viewType ->
                 when (viewType) {
                     CampaignViewType.PROFILE -> {
-                        binding!!.myProfileFragShareBanner.initCustomBannerByCampaign(campaign, this)
+                        binding!!.myProfileFragShareBanner.initCustomBannerByCampaign(
+                            campaign,
+                            this
+                        )
                     }
                 }
             }
@@ -234,7 +246,7 @@ class MyProfileFragment : Fragment(R.layout.my_profile_fragment),
     private fun updateCustomerPaymentMethod(paymentMethod: PaymentMethod) {
         val card = paymentMethod.card
         if (card != null) {
-            with(binding!!){
+            with(binding!!) {
                 myProfileFragPayment.updateSubTitle("Selected Card: (${card.brand} ${card.last4})")
                 myProfileFragPb.hide()
             }
