@@ -151,9 +151,7 @@ class CookingSlotReviewViewModel(
                     when (val result =
                         cookingSlotRepository.updateCookingSlot(draftSlotId, cookingSlotRequest)) {
                         is ResponseSuccess -> {
-                            result.data?.let {
-                                _events.emit(ReviewCookingSlotEvents.SlotCreatedSuccess)
-                            }
+                            _events.emit(ReviewCookingSlotEvents.SlotCreatedSuccess)
                         }
                         is ResponseError -> {
                             _state.emit(ReviewCookingSlotState.Error(result.error))
