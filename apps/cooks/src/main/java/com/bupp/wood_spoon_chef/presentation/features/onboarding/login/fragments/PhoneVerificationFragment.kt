@@ -17,6 +17,7 @@ import com.bupp.wood_spoon_chef.utils.CountryCodeUtils
 import com.bupp.wood_spoon_chef.utils.Utils
 import com.bupp.wood_spoon_chef.presentation.views.WSEditText
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
+import java.lang.Exception
 
 
 class PhoneVerificationFragment : BaseFragment(R.layout.fragment_phone_verification),
@@ -106,10 +107,14 @@ class PhoneVerificationFragment : BaseFragment(R.layout.fragment_phone_verificat
             val phoneStr = verificationFragmentInput.getTextOrNull()
             phoneStr?.let {
                 val phone = CountryCodeUtils.simplifyNumber(requireContext(), it)
-                if (CountryCodeUtils.isPhoneValid(phone, viewModel.getUserPhonePrefix())) {
-                    viewModel.setUserPhone(phone)
-                    viewModel.sendPhoneNumber()
-                } else {
+                try {
+                    if (CountryCodeUtils.isPhoneValid(phone, viewModel.getUserPhonePrefix())) {
+                        viewModel.setUserPhone(phone)
+                        viewModel.sendPhoneNumber()
+                    } else {
+                        verificationFragmentInput.showError()
+                    }
+                }catch (e: Exception){
                     verificationFragmentInput.showError()
                 }
             }
