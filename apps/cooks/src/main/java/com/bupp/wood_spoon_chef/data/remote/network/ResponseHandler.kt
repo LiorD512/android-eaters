@@ -133,7 +133,7 @@ class ResponseHandler(private val errorManger: ErrorManger) {
                 return ResponseError(NetworkError("NetworkError"))
             }
             is KotlinNullPointerException, is NullPointerException -> {
-                MTLogger.e(body = "SUCCESS - Empty Response", tag = tag, cacheLog = true)
+                MTLogger.i(body = "SUCCESS - Empty Response", tag = tag, cacheLog = true)
                 return ResponseSuccess(null)
             }
             is JsonDataException -> {
