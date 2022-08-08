@@ -155,7 +155,7 @@ val appModule = module {
     viewModel { CancelOrderViewModel(get()) }
 
     //Profile
-    viewModel { MyProfileViewModel(get(), get(), get(), get(), get(), get(), get()) }
+    viewModel { MyProfileViewModel(get(), get(), get(), get(), get(), get(), get(), get()) }
     viewModel { EditProfileViewModel(get(), get(), get()) }
     viewModel { SingleOrderDetailsViewModel(get(), get(), get()) }
     viewModel { OrdersHistoryViewModel(get(), get(), get()) }

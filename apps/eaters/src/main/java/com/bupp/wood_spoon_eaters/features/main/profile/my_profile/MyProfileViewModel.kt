@@ -9,14 +9,14 @@ import com.bupp.wood_spoon_eaters.common.FlavorConfigManager
 import com.bupp.wood_spoon_eaters.common.FlowEventsManager
 import com.bupp.wood_spoon_eaters.di.abs.ProgressData
 import com.bupp.wood_spoon_eaters.features.base.SingleLiveEvent
-import com.bupp.wood_spoon_eaters.managers.EphemeralKeyProvider
-import com.bupp.wood_spoon_eaters.managers.CampaignManager
-import com.bupp.wood_spoon_eaters.managers.PaymentManager
+import com.bupp.wood_spoon_eaters.managers.*
 import com.bupp.wood_spoon_eaters.model.Eater
 import com.bupp.wood_spoon_eaters.model.EaterRequest
 import com.bupp.wood_spoon_eaters.model.ErrorEventType
 import com.bupp.wood_spoon_eaters.model.SelectableIcon
 import com.bupp.wood_spoon_eaters.repositories.*
+import com.eatwoodspoon.analytics.events.AppReviewEvent
+import com.eatwoodspoon.analytics.events.EatersFeedEvent
 import kotlinx.coroutines.launch
 
 class MyProfileViewModel(
@@ -26,7 +26,8 @@ class MyProfileViewModel(
     private val flavorConfigManager: FlavorConfigManager,
     paymentManager: PaymentManager,
     campaignManager: CampaignManager,
-    private val appSettingsRepository: AppSettingsRepository
+    private val appSettingsRepository: AppSettingsRepository,
+    private val eatersAnalyticsTracker: EatersAnalyticsTracker
 ) :
     ViewModel(), EphemeralKeyProvider.EphemeralKeyProviderListener {
 
@@ -118,6 +119,11 @@ class MyProfileViewModel(
         }
     }
 
+    fun trackProfileScreenEaterRateAppClickedEvent() {
+        eatersAnalyticsTracker.logEvent(
+            event = AppReviewEvent.ProfileScreenEaterRateAppClickedEvent()
+        )
+    }
 
     companion object {
         const val TAG = "wowMyProfileVM"
