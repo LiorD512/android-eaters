@@ -17,7 +17,7 @@ class GetFormattedSelectedHoursAndMinutesUseCase(
         selectedHoursAndMinutes?.let {
             var formatSubtitle = String.format(
                 formattedStringForZeroHours,
-                "${selectedHoursAndMinutes.hours}"
+                "${selectedHoursAndMinutes.hours} hours"
             )
 
             if (selectedHoursAndMinutes.minutes != 0) {

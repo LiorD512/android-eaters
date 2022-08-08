@@ -13,6 +13,7 @@
         android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="parent"
         app:title="Filter Menu"
+        app:backIcon="@drawable/ic_back_grey"
         app:type="HEADER_VIEW_TYPE_TITLE_BACK" />
 
     <com.bupp.wood_spoon_chef.presentation.custom_views.PeachRoundedBtn

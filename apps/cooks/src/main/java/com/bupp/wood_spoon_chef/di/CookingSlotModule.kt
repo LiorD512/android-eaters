@@ -20,7 +20,7 @@ import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.data.network.
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.data.network.DishesWithCategoryApiService
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.data.repository.CookingSlotsDraftRepository
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.data.repository.DishesWithCategoryRepository
-import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.fragments.CookingSlotReviewViewModel
+import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.review_cooking_slot.CookingSlotReviewViewModel
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.last_call.LastCallBottomSheetViewModel
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.mapper.*
 import org.koin.android.ext.koin.androidContext

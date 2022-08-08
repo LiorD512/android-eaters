@@ -188,6 +188,13 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"/>
 
+            <com.bupp.wood_spoon_eaters.views.WSLongBtn
+                app:title="Rate app"
+                android:layout_marginHorizontal="15.4dp"
+                android:id="@+id/btn_rate_app"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
             <TextView
                     android:id="@+id/myProfileFragVersion"
                     style="@style/LatoReg13Black"

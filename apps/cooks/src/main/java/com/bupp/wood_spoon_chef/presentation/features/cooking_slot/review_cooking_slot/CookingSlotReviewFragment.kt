@@ -1,4 +1,4 @@
-package com.bupp.wood_spoon_chef.presentation.features.cooking_slot._review_cooking_slot
+package com.bupp.wood_spoon_chef.presentation.features.cooking_slot.review_cooking_slot
 
 import android.os.Bundle
 import android.view.View
@@ -14,9 +14,6 @@ import com.bupp.wood_spoon_chef.presentation.custom_views.CreateCookingSlotTopBa
 import com.bupp.wood_spoon_chef.presentation.features.base.BaseFragment
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.cooking_slot_menu.CookingSlotMenuAdapter
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.common.ConfirmationBottomSheet
-import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.fragments.CookingSlotReviewViewModel
-import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.fragments.ReviewCookingSlotEvents
-import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.fragments.ReviewCookingSlotState
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.last_call.LastCallForOrderFormatter
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.rrules.RRuleTextFormatter
 import com.bupp.wood_spoon_chef.utils.DateUtils.prepareFormattedDateForHours

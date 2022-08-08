@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/wild_sand"
     android:id="@+id/createCookingSlotNewFragmentMainLayout"
-    tools:context=".presentation.features.cooking_slot.fragments.CreateCookingSlotFragmentNew">
+    tools:context=".presentation.features.cooking_slot.create_cooking_slot.CreateCookingSlotFragmentNew">
 
     <com.bupp.wood_spoon_chef.presentation.custom_views.CreateCookingSlotTopBar
         android:id="@+id/createCookingSlotNewFragmentTopBar"

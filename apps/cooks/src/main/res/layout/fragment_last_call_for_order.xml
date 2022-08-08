@@ -7,13 +7,15 @@
     android:background="@drawable/top_cornered_bkg"
     android:paddingTop="8dp">
 
-    <com.bupp.wood_spoon_chef.presentation.custom_views.CreateCookingSlotTopBar
+    <com.bupp.wood_spoon_chef.presentation.custom_views.HeaderView
         android:id="@+id/toolbar_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        app:backIcon="@drawable/ic_back_grey"
         app:cooking_slot_bar_icon="@drawable/ic_back_grey"
         app:layout_constraintTop_toTopOf="parent"
-        app:title="@string/last_call_for_order" />
+        app:title="@string/last_call_for_order"
+        app:type="HEADER_VIEW_TYPE_TITLE_BACK" />
 
     <TextView
         android:id="@+id/tv_section_info"
