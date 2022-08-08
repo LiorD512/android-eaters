@@ -11,7 +11,7 @@ import androidx.lifecycle.lifecycleScope
 import com.bupp.wood_spoon_chef.R
 import com.bupp.wood_spoon_chef.common.TopCorneredBottomSheet
 import com.bupp.wood_spoon_chef.databinding.FragmentLastCallForOrderBinding
-import com.bupp.wood_spoon_chef.presentation.custom_views.CreateCookingSlotTopBar
+import com.bupp.wood_spoon_chef.presentation.custom_views.HeaderView
 import it.sephiroth.android.library.xtooltip.ClosePolicy
 import it.sephiroth.android.library.xtooltip.Tooltip
 import kotlinx.coroutines.flow.collect
@@ -20,7 +20,7 @@ import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class LastCallForOrdersBottomSheet : TopCorneredBottomSheet(),
-    CreateCookingSlotTopBar.CreateCookingSlotTopBarListener {
+    HeaderView.HeaderViewListener{
 
     private var binding: FragmentLastCallForOrderBinding? = null
     private val viewModel: LastCallBottomSheetViewModel by viewModel()
@@ -64,7 +64,7 @@ class LastCallForOrdersBottomSheet : TopCorneredBottomSheet(),
                     }
                 }
             }
-            toolbarView.setCookingSlotTopBarListener(this@LastCallForOrdersBottomSheet)
+            toolbarView.setHeaderViewListener(this@LastCallForOrdersBottomSheet)
 
             viewCallForOrder.apply {
                 setAddClickListener {
@@ -131,7 +131,7 @@ class LastCallForOrdersBottomSheet : TopCorneredBottomSheet(),
         }
     }
 
-    override fun onBackClick() {
+    override fun onHeaderBackClick() {
         dismiss()
     }
 

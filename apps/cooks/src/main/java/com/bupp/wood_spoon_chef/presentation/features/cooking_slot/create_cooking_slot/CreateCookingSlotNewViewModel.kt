@@ -31,7 +31,6 @@ data class OperatingHours(
     val endTime: Long?
 ) : Parcelable
 
-
 data class CreateCookingSlotNewState(
     val selectedDate: Long? = null,
     val operatingHours: OperatingHours = OperatingHours(null, null),
@@ -56,8 +55,6 @@ sealed class CreateCookingSlotEvents {
         val operatingHours: OperatingHours? = null, val selectedDate: Long? = null
     ) :
         CreateCookingSlotEvents()
-
-    data class ShowLastCallForOrder(val lastCallForOrder: Long? = null) : CreateCookingSlotEvents()
     data class ShowRecurringRule(val recurringRule: String? = null, val selectedDate: Long) :
         CreateCookingSlotEvents()
 }
@@ -154,11 +151,6 @@ class CreateCookingSlotNewViewModel(
             it.copy(lastCallForOrderShift = selectedHoursAndMinutes.toTimeSpan())
         }
     }
-
-    fun formatSelectedLastCall(selectedHoursAndMinutes: SelectedHoursAndMinutes?) =
-        getFormattedSelectedHoursAndMinutesUseCase.execute(
-            GetFormattedSelectedHoursAndMinutesUseCase.Params(selectedHoursAndMinutes)
-        )
 
     fun onNextClick() {
         reportEvent { mode, slotId ->

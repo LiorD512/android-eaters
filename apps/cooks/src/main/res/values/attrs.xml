@@ -61,6 +61,7 @@
         </attr>
         <attr name="title" />
         <attr name="isWithSep" format="boolean" />
+        <attr name="backIcon" format="reference" />
     </declare-styleable>
 
     <declare-styleable name="WSEditText">

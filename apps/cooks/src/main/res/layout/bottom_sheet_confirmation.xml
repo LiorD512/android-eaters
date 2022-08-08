@@ -37,6 +37,8 @@
         android:layout_marginTop="@dimen/big"
         android:layout_marginEnd="@dimen/small"
         app:isPinkOrangeishTitle="true"
+        app:title="This slot"
+        app:isBtnSmall="true"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toStartOf="@id/confirmationBsPrimaryBtn"
         app:layout_constraintTop_toBottomOf="@id/confirmationBsSubject" />
@@ -48,6 +50,8 @@
         android:layout_marginTop="@dimen/big"
         android:layout_marginEnd="@dimen/medium"
         android:layout_marginStart="@dimen/small"
+        app:title="This and following"
+        app:isBtnSmall="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/confirmationBsSecondaryBtn"
         app:layout_constraintTop_toBottomOf="@id/confirmationBsSubject" />

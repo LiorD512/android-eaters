@@ -14,6 +14,7 @@
         android:layout_marginTop="5dp"
         app:layout_constraintTop_toTopOf="parent"
         app:title="Make slot recurring"
+        app:backIcon="@drawable/ic_back_grey"
         app:type="HEADER_VIEW_TYPE_TITLE_BACK" />
 
     <LinearLayout

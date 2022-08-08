@@ -5,11 +5,11 @@ import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.FrameLayout
-import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.annotation.DrawableRes
+import androidx.core.content.ContextCompat
 import com.bupp.wood_spoon_chef.R
 import com.bupp.wood_spoon_chef.common.Constants
 import com.bupp.wood_spoon_chef.databinding.HeaderViewBinding
-import com.bupp.wood_spoon_chef.databinding.TitleBodyViewBinding
 import com.bupp.wood_spoon_chef.utils.AnimationUtil
 
 class HeaderView  @JvmOverloads
@@ -29,6 +29,14 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
                 val type = a.getInt(R.styleable.HeaderViewAttrs_type, Constants.HEADER_VIEW_TYPE_TITLE)
                 initUi(type)
             }
+            if (a.hasValue(R.styleable.HeaderViewAttrs_backIcon)) {
+                val icon = a.getResourceId(
+                    R.styleable.HeaderViewAttrs_backIcon,
+                    0
+                )
+                setBackButtonIcon(icon)
+            }
+
             val isWithSep = a.getBoolean(R.styleable.HeaderViewAttrs_isWithSep, true)
             if(!isWithSep){
                 binding.headerViewSep.visibility = View.GONE
@@ -145,6 +153,16 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
         binding.headerViewTitle.text = title
     }
 
+    fun setBackButtonIcon(@DrawableRes backIcon: Int){
+        binding.headerViewBackBtn.apply {
+            setImageDrawable(
+                ContextCompat.getDrawable(
+                    context,
+                    backIcon
+                )
+            )
+        }
+    }
 
 
 }

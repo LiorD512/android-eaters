@@ -47,7 +47,7 @@
     <fragment
         tools:layout="@layout/fragment_cooking_slot_review"
         android:id="@+id/cookingSlotReviewFragment"
-        android:name="com.bupp.wood_spoon_chef.presentation.features.cooking_slot._review_cooking_slot.CookingSlotReviewFragment"
+        android:name="com.bupp.wood_spoon_chef.presentation.features.cooking_slot.review_cooking_slot.CookingSlotReviewFragment"
         android:label="CookingSlotReviewFragment">
     </fragment>
 

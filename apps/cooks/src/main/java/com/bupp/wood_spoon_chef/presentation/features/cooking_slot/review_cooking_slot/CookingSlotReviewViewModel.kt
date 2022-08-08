@@ -1,4 +1,4 @@
-package com.bupp.wood_spoon_chef.presentation.features.cooking_slot.fragments
+package com.bupp.wood_spoon_chef.presentation.features.cooking_slot.review_cooking_slot
 
 import androidx.annotation.StringRes
 import androidx.lifecycle.viewModelScope
@@ -58,6 +58,7 @@ class CookingSlotReviewViewModel(
 
     private var isEditing: Boolean = false
     private var cookingSlotId: Long? = null
+    private var recurringRule: String? = null
 
     private val _state = MutableStateFlow<ReviewCookingSlotState>(ReviewCookingSlotState.Idle)
     val state: StateFlow<ReviewCookingSlotState> = _state
@@ -79,14 +80,22 @@ class CookingSlotReviewViewModel(
         }
 
         if (isEditing) {
-            _events.emit(ReviewCookingSlotEvents.ShowUpdateDetachDialog)
-            reportEvent { mode, slotId ->
-                ChefsCookingSlotsEvent.ReviewScreenUpdateDialogShownEvent(
-                    mode,
-                    slotId
+            if (recurringRule.isNullOrEmpty()){
+                updateCookingSlot(
+                    prepareAddSlotRequest().copy(
+                        detach = true
+                    )
                 )
+            }else{
+                _events.emit(ReviewCookingSlotEvents.ShowUpdateDetachDialog)
+                reportEvent { mode, slotId ->
+                    ChefsCookingSlotsEvent.ReviewScreenUpdateDialogShownEvent(
+                        mode,
+                        slotId
+                    )
+                }
+                return@launch
             }
-            return@launch
         }
         saveCookingSlot(prepareAddSlotRequest())
     }
@@ -188,6 +197,7 @@ class CookingSlotReviewViewModel(
             cookingSlotsDraftRepository.getDraftValue()?.let { draft ->
                 isEditing = draft.isEditing
                 cookingSlotId = draft.originalCookingSlot?.id
+                recurringRule = draft.recurringRule
 
                 _state.emit(
                     ReviewCookingSlotState.ScreenDataState(
