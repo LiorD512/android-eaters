@@ -137,6 +137,9 @@ class CookingSlotMenuViewModel(
                 menuItemsByCategory = currentSectionWithDishes
             )
         }
+        cookingSlotsDraftRepository.saveDraft(cookingSlotsDraftRepository.getDraftValue()?.copy(
+            menuItems = menuItems
+        ))
     }
 
     private fun setOperatingHours(operatingHours: OperatingHours) {
