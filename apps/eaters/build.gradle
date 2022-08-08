@@ -7,7 +7,7 @@ android {
     defaultConfig {
         minSdkVersion 26
         applicationId "com.bupp.wood_spoon_eaters"
-        versionName "2.6.2"
+        versionName "2.7.0"
     }
 
     buildTypes {
