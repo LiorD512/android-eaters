@@ -176,7 +176,7 @@ class SlotRecurringBottomSheet: TopCorneredBottomSheet(), HeaderView.HeaderViewL
                 .setNegativeButtonText(getString(R.string.cancel))
                 .setTheme(R.style.MaterialCalendarTheme)
                 .setCalendarConstraints(calendarConstraints)
-                .setSelection(selectedDate).build()
+                .setSelection(DateTime(selectedDate).plusMonths(3).millis).build()
 
         picker.addOnPositiveButtonClickListener {
             viewModel.setEndDate(Date(it))
