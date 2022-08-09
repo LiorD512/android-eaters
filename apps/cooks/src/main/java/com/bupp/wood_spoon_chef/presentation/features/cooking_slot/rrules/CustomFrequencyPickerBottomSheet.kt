@@ -115,6 +115,7 @@ class CustomFrequencyPickerBottomSheet: TopCorneredBottomSheet() {
                 } ?: 0
 
                 customFreqBsFrequencyPicker.value = index
+                frequency = null
             }
         }
     }

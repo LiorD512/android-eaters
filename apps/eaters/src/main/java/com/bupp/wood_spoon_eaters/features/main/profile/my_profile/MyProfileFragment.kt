@@ -97,6 +97,8 @@ class MyProfileFragment : Fragment(R.layout.my_profile_fragment),
                 })
             }
             btnRateApp.setOnClickListener {
+                viewModel.trackProfileScreenEaterRateAppClickedEvent()
+
                 startActivity(
                     Intent(
                         Intent.ACTION_VIEW,
