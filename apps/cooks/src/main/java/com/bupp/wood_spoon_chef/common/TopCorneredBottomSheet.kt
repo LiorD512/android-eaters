@@ -31,6 +31,7 @@ abstract class TopCorneredBottomSheet : BaseBottomSheetDialogFragment() {
                 val layoutParams = it.layoutParams as CoordinatorLayout.LayoutParams
                 it.layoutParams = layoutParams
                 behaviour.state = BottomSheetBehavior.STATE_EXPANDED
+                behaviour.skipCollapsed = true
                 it.setBackgroundColor(Color.TRANSPARENT)
             }
         }
