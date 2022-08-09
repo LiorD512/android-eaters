@@ -27,6 +27,7 @@ sealed class MyDishesEvent {
         val selectedSections:
         List<String>? = emptyList()
     ) : MyDishesEvent()
+
     data class AddDishes(val selectedDishes: List<Long> = emptyList()) : MyDishesEvent()
 }
 
@@ -70,7 +71,8 @@ class MyDishesViewModel(
 
     fun filterList(input: String) {
         val filteredList = filterByDishName(input)
-        updateSectionedList(parseDataForAdapter(filteredList))
+        val parsedList = parseDataForAdapter(filteredList)
+        updateSectionedList(parsedList)
     }
 
     private fun updateSectionedList(data: List<MyDishesPickerAdapterModel>?) {
@@ -116,10 +118,23 @@ class MyDishesViewModel(
     }
 
     fun onDishSelected(isChecked: Boolean, dishId: Long) {
+        setSelectedDishesIds(addOrRemoveSelectedDishId(isChecked, dishId))
         _state.update {
             it.copy(sectionedList = updateListWithSelected(it.sectionedList, dishId, isChecked))
         }
     }
+
+    private fun addOrRemoveSelectedDishId(isChecked: Boolean, dishId: Long): List<Long> {
+        val selectedDishesId = mutableListOf<Long>()
+        selectedDishesId.addAll(_state.value.selectedDishesIds)
+        if (isChecked) {
+            selectedDishesId.add(dishId)
+        } else {
+            selectedDishesId.remove(dishId)
+        }
+        return selectedDishesId
+    }
+
 
     fun onAddClick() {
         val selectedDishes = _state.value.sectionedList?.flatMap { it.dishes ?: emptyList() }
@@ -191,9 +206,10 @@ class MyDishesViewModel(
         }
     }
 
-    private fun filterByDishName(input: String): SectionWithDishes? {
+    private fun filterByDishName(input: String): SectionWithDishes {
         val currentSectionWithDishes = _state.value.currentSectionWithDishes
-        val filteredDishes = currentSectionWithDishes?.dishes?.filter { it.name.contains(input) }
+        val filteredDishes =
+            currentSectionWithDishes?.dishes?.filter { it.name.contains(input, true) }
         return SectionWithDishes(filteredDishes, currentSectionWithDishes?.sections)
     }
 }

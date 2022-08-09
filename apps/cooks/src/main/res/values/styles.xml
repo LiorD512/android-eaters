@@ -529,6 +529,10 @@
         <item name="colorPrimary">@color/orangeish</item>
         <item name="android:textColor">@color/purpley_grey</item>
         <item name="android:textColorPrimary">@color/black</item>
+        <item name="materialCalendarHeaderToggleButton">@style/MaterialCalendarHeaderToggleButton</item>
     </style>
 
+    <style name="MaterialCalendarHeaderToggleButton" parent="Widget.MaterialComponents.MaterialCalendar.HeaderToggleButton">
+        <item name="android:visibility">gone</item>
+    </style>
 </resources>
