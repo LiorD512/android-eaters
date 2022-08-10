@@ -15,7 +15,8 @@ import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.last_call.Las
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.operating_hours.OperatingHoursInfoBottomSheet
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.last_call.LastCallForOrderFormatter
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.base.CookingSlotParentFragment
-import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.last_call.SelectedHoursAndMinutes
+import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.last_call.HoursAndMinutes
+import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.last_call.LastCall
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.operating_hours.TimePickerBottomSheet
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.rrules.RRuleTextFormatter
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.rrules.SlotRecurringBottomSheet
@@ -63,13 +64,13 @@ class CreateCookingSlotFragmentNew : BaseFragment(R.layout.fragment_create_cooki
     }
 
     private fun showLastCallForOrdersBottomSheet() {
-        LastCallForOrdersBottomSheet.show(this) {
+        LastCallForOrdersBottomSheet.show(this, viewModel.state.value.lastCallForOrder) {
             onLastCallSelected(it)
         }
     }
 
-    private fun onLastCallSelected(it: SelectedHoursAndMinutes) {
-        viewModel.setSelectedHoursAndMinutes(it)
+    private fun onLastCallSelected(lastCall: LastCall) {
+        viewModel.setLastCallForOrder(lastCall)
 
     }
 
@@ -124,9 +125,9 @@ class CreateCookingSlotFragmentNew : BaseFragment(R.layout.fragment_create_cooki
             handleProgressBar(state.inProgress)
 
             createCookingSlotNewFragmentLastCallForOrderView.setTitle(
-                if (state.lastCallForOrderShift == null){
+                if (state.lastCallForOrder == null) {
                     getString(R.string.add_last_call_for_order)
-                }else{
+                } else {
                     getString(R.string.last_call_for_order)
                 }
             )
@@ -139,7 +140,7 @@ class CreateCookingSlotFragmentNew : BaseFragment(R.layout.fragment_create_cooki
 
 
             createCookingSlotNewFragmentLastCallForOrderView.setSubtitle(
-                LastCallForOrderFormatter.formatLastCallForOrder(state.lastCallForOrderShift)
+                LastCallForOrderFormatter.formatLastCallForOrder(state.lastCallForOrder, null)
             )
 
 

@@ -19,6 +19,7 @@ import com.bupp.wood_spoon_chef.data.remote.model.request.CookingSlotRequestMapp
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.CookingSlotReportEventUseCase
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.cooking_slot_menu.CookingSlotMenuAdapterItem
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.create_cooking_slot.OperatingHours
+import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.last_call.LastCall
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.mapper.MenuDishItemToAdapterModelMapper
 import com.bupp.wood_spoon_chef.utils.extensions.getErrorMsgByType
 import com.eatwoodspoon.analytics.events.ChefsCookingSlotsEvent
@@ -29,7 +30,7 @@ sealed class ReviewCookingSlotState {
     data class ScreenDataState(
         val selectedDate: Long? = null,
         val operatingHours: OperatingHours = OperatingHours(null, null),
-        val lastCallForOrderShift: Long? = null,
+        val lastCallForOrder: LastCall? = null,
         val recurringRule: String? = null,
         val menuItems: List<CookingSlotMenuAdapterItem> = emptyList(),
         @StringRes
@@ -181,7 +182,7 @@ class CookingSlotReviewViewModel(
             stateMapper.mapCookingSlotToRequest(
                 startsTime = it?.operatingHours?.startTime,
                 endTime = it?.operatingHours?.endTime,
-                lastCallForOrderShift = it?.lastCallForOrderShift,
+                lastCallForOrder = it?.lastCallForOrder,
                 recurringRule = it?.recurringRule,
             )
                 .copy(submit = true)
@@ -201,7 +202,7 @@ class CookingSlotReviewViewModel(
                     ReviewCookingSlotState.ScreenDataState(
                         selectedDate = draft.selectedDate,
                         operatingHours = draft.operatingHours,
-                        lastCallForOrderShift = draft.lastCallForOrderShift,
+                        lastCallForOrder = draft.lastCallForOrder,
                         recurringRule = draft.recurringRule,
                         btnActionStringRes = if (draft.isEditing) {
                             R.string.update_slot

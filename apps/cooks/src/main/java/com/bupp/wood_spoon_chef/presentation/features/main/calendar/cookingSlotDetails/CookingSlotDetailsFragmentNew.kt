@@ -20,6 +20,8 @@ import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.CookingSlotAc
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.common.ConfirmationBottomSheet
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.last_call.LastCallForOrderFormatter
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.cooking_slot_menu.CookingSlotMenuAdapter
+import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.last_call.LastCall
+import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.last_call.from
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.rrules.RRuleTextFormatter
 import com.bupp.wood_spoon_chef.utils.extensions.prepareFormattedDate
 import com.bupp.wood_spoon_chef.utils.extensions.show
@@ -100,8 +102,10 @@ class CookingSlotDetailsFragmentNew : BaseFragment(R.layout.fragment_details_coo
 
                             binding.createCookingSlotNewFragmentLastCallForOrderView.setSubtitle(
                                 LastCallForOrderFormatter.formatLastCallForOrder(
-                                    DateTime(state.cookingSlot.lastCallAt).millis,
-                                    DateTime(state.cookingSlot.endsAt).millis
+                                    LastCall.from(
+                                        state.cookingSlot.lastCallAt?.time,
+                                        state.cookingSlot.endsAt.time
+                                    )
                                 )
                             )
 

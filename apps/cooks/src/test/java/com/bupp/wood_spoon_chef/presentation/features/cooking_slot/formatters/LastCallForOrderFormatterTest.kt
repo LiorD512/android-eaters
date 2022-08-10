@@ -36,10 +36,4 @@ class LastCallForOrderFormatterTest {
         assert(string == "2 hr and 5 min$suffix")
     }
 
-    @Test
-    fun check_null() {
-
-        val string = LastCallForOrderFormatter.formatLastCallForOrder(null, null)
-        assert(string == null)
-    }
 }

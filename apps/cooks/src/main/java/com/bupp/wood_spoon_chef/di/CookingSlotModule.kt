@@ -62,8 +62,7 @@ val cookingSlotModule = module {
     viewModel { FilterMenuViewModel(get(),get(), get()) }
     viewModel { CookingSlotReviewViewModel(get(), get(), get(), get(), get(),get(), get()) }
     viewModel { SlotRecurringViewModel(get(), get()) }
-    viewModel { LastCallBottomSheetViewModel(get()) }
-    viewModel { CustomRecurringViewModel() }
+    viewModel { LastCallBottomSheetViewModel() }
 
 }
 
