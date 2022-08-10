@@ -50,7 +50,7 @@ class MyDishesBottomSheet : TopCorneredBottomSheet(),
         setDialogAdjustPan()
         setFullScreenDialog()
         val selectedDishesIds = requireArguments().get(SELECTED_DISHES_ARGS_KEY) as List<Long>
-        viewModel.setSelectedDishesIds(selectedDishesIds)
+        viewModel.setExcludedDishesIds(selectedDishesIds)
         initUi()
         setupList()
         observeViewModelState()
@@ -157,19 +157,15 @@ class MyDishesBottomSheet : TopCorneredBottomSheet(),
 
     private fun updateInputsWithState(state: MyDishesState) {
         binding.apply {
-            state.sectionedList?.let {
-                updateList(it)
-            }
+            updateList(state.visibleItems)
             setFilterImageResource(state.isListFiltered)
-            showEmptyResultState(state.sectionedList.isNullOrEmpty())
+            showEmptyResultState(state.visibleItems.isEmpty())
         }
     }
 
     private fun openFilterMenuBottomSheet(selectedSections: List<String>?) {
         FilterMenuBottomSheet.show(this, selectedSections) {
-            viewModel.setIsListFiltered(it.isNotEmpty())
             viewModel.filterBySectionName(it)
-            viewModel.updateSelectedSections(it.map { section -> section.sectionName })
         }
     }
 
