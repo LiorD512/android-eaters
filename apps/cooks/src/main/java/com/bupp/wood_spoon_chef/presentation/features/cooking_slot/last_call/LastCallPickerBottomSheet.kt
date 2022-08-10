@@ -1,7 +1,6 @@
 package com.bupp.wood_spoon_chef.presentation.features.cooking_slot.last_call
 
 import android.os.Bundle
-import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,19 +13,6 @@ import com.bupp.wood_spoon_chef.databinding.BottomSheetLastCallTimePickerBinding
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.last_call.LastCallPickerBottomSheet.Companion.TIME_KEY
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.last_call.LastCallPickerBottomSheet.Companion.TIME_VALUE
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.operating_hours.TimePickerBottomSheet
-import kotlinx.parcelize.Parcelize
-import java.util.concurrent.TimeUnit
-
-
-@Parcelize
-data class SelectedHoursAndMinutes(
-    var hours: Int,
-    var minutes: Int
-) : Parcelable {
-    fun toTimeSpan() = TimeUnit.HOURS.toMillis(hours.toLong()) + TimeUnit.MINUTES.toMillis(minutes.toLong())
-}
-
-fun SelectedHoursAndMinutes.isZero() = hours == 0 && minutes == 0
 
 class LastCallPickerBottomSheet : TopCorneredBottomSheet() {
 
@@ -43,17 +29,18 @@ class LastCallPickerBottomSheet : TopCorneredBottomSheet() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        val initialValue = arguments?.getParcelable<HoursAndMinutes>(ARG_INITIAL_TIME)
         binding?.apply {
             timePicker.apply {
-                setIs24HourView(true)
-                hour = 0
-                minute = 0
+                setIs24HourView(false)
+                hour = initialValue?.hours ?: 0
+                minute = initialValue?.minutes ?: 0
             }
 
             btnSetTime.setOnClickListener {
                 setFragmentResult(
                     TimePickerBottomSheet.TIME_KEY, bundleOf(
-                        TimePickerBottomSheet.TIME_VALUE to SelectedHoursAndMinutes(
+                        TimePickerBottomSheet.TIME_VALUE to HoursAndMinutes(
                             hours = timePicker.hour,
                             minutes = timePicker.minute
                         )
@@ -67,12 +54,16 @@ class LastCallPickerBottomSheet : TopCorneredBottomSheet() {
     companion object {
         const val TIME_KEY = "timeKey"
         const val TIME_VALUE = "timeValue"
+        const val ARG_INITIAL_TIME = "arg_initial_time"
 
         fun show(
             fragment: Fragment,
-            listener: ((SelectedHoursAndMinutes) -> Unit)
+            initialValue: HoursAndMinutes?,
+            listener: ((HoursAndMinutes) -> Unit)
         ) {
-            LastCallPickerBottomSheet().show(
+            LastCallPickerBottomSheet().apply {
+                arguments = bundleOf(ARG_INITIAL_TIME to initialValue)
+            }.show(
                 fragment.childFragmentManager,
                 LastCallPickerBottomSheet::class.simpleName
             )
@@ -83,12 +74,12 @@ class LastCallPickerBottomSheet : TopCorneredBottomSheet() {
     override fun clearClassVariables() {}
 }
 
-private fun Fragment.setStartTimeResultListener(listener: ((SelectedHoursAndMinutes) -> Unit)) {
+private fun Fragment.setStartTimeResultListener(listener: ((HoursAndMinutes) -> Unit)) {
     childFragmentManager.setFragmentResultListener(
         TIME_KEY,
         this
     ) { _, bundle ->
-        val result = bundle.getParcelable<SelectedHoursAndMinutes>(TIME_VALUE)
+        val result = bundle.getParcelable<HoursAndMinutes>(TIME_VALUE)
         result?.let {
             listener.invoke(it)
         }

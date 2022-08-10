@@ -84,7 +84,7 @@ class CookingSlotReviewFragment : BaseFragment(R.layout.fragment_cooking_slot_re
         binding.apply {
 
             createCookingSlotNewFragmentMakeRecurringView.show(state.recurringRule != null)
-            createCookingSlotNewFragmentLastCallForOrderView.show(state.lastCallForOrderShift != null)
+            createCookingSlotNewFragmentLastCallForOrderView.show(state.lastCallForOrder != null)
 
             showTitle(state.selectedDate)
             showSubTitle(
@@ -97,7 +97,7 @@ class CookingSlotReviewFragment : BaseFragment(R.layout.fragment_cooking_slot_re
             }
 
             createCookingSlotNewFragmentLastCallForOrderView.setSubtitle(
-                LastCallForOrderFormatter.formatLastCallForOrder(state.lastCallForOrderShift)
+                LastCallForOrderFormatter.formatLastCallForOrder(state.lastCallForOrder)
             )
             createCookingSlotNewFragmentMakeRecurringView.setSubtitle(
                 state.recurringRule?.let {

@@ -16,7 +16,8 @@ import com.bupp.wood_spoon_chef.utils.extensions.getErrorMsgByType
 import com.bupp.wood_spoon_chef.data.remote.model.request.CookingSlotRequestMapper
 import com.bupp.wood_spoon_chef.domain.GetFormattedSelectedHoursAndMinutesUseCase
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.CookingSlotReportEventUseCase
-import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.last_call.SelectedHoursAndMinutes
+import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.last_call.HoursAndMinutes
+import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.last_call.LastCall
 import com.eatwoodspoon.analytics.events.ChefsCookingSlotsEvent
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
@@ -39,7 +40,7 @@ data class CreateCookingSlotNewState(
     val errors: List<Errors> = emptyList(),
     val inProgress: Boolean = false,
     val recurringViewVisible: Boolean = true,
-    val lastCallForOrderShift: Long? = null
+    val lastCallForOrder: LastCall? = null
 ) {
     val isInEditMode = cookingSlotId != null
 }
@@ -55,6 +56,7 @@ sealed class CreateCookingSlotEvents {
         val operatingHours: OperatingHours? = null, val selectedDate: Long? = null
     ) :
         CreateCookingSlotEvents()
+
     data class ShowRecurringRule(val recurringRule: String? = null, val selectedDate: Long) :
         CreateCookingSlotEvents()
 }
@@ -82,7 +84,7 @@ class CreateCookingSlotNewViewModel(
                 setRecurringRuleInternal(draft.recurringRule)
                 setRecurringViewVisible(draft)
                 setCookingSlotId(draft.originalCookingSlot?.id)
-                setLastCallForOrderShift(draft.lastCallForOrderShift)
+                setLastCallForOrder(draft.lastCallForOrder)
             }
         }
         reportEvent { mode, slotId ->
@@ -139,16 +141,9 @@ class CreateCookingSlotNewViewModel(
         }
     }
 
-    private fun setLastCallForOrderShift(lastCallForOrderShift: Long?) {
+    fun setLastCallForOrder(lastCall: LastCall?) {
         _state.update {
-            it.copy(lastCallForOrderShift = lastCallForOrderShift)
-        }
-    }
-
-
-    fun setSelectedHoursAndMinutes(selectedHoursAndMinutes: SelectedHoursAndMinutes) {
-        _state.update {
-            it.copy(lastCallForOrderShift = selectedHoursAndMinutes.toTimeSpan())
+            it.copy(lastCallForOrder = lastCall?.takeIf { lastCall -> !lastCall.isNoLastCall() })
         }
     }
 
@@ -168,12 +163,13 @@ class CreateCookingSlotNewViewModel(
                 val request = cookingSlotRequestMapper.mapCookingSlotToRequest(
                     startsTime = _state.value.operatingHours.startTime,
                     endTime = _state.value.operatingHours.endTime,
-                    lastCallForOrderShift = _state.value.lastCallForOrderShift,
+                    lastCallForOrder = _state.value.lastCallForOrder,
                     recurringRule = _state.value.recurringRule
                 )
 
-                val result = if(_state.value.isInEditMode) {
-                    val slotId = _state.value.cookingSlotId ?: throw IllegalArgumentException("No slot id in eduit mode")
+                val result = if (_state.value.isInEditMode) {
+                    val slotId = _state.value.cookingSlotId
+                        ?: throw IllegalArgumentException("No slot id in eduit mode")
                     cookingSlotRepository.updateCookingSlot(slotId, request)
                 } else {
                     cookingSlotRepository.postCookingSlot(request)
@@ -208,7 +204,7 @@ class CreateCookingSlotNewViewModel(
         val updatedDraft = currentDraft.copy(
             selectedDate = state.value.selectedDate,
             operatingHours = state.value.operatingHours,
-            lastCallForOrderShift = _state.value.lastCallForOrderShift,
+            lastCallForOrder = _state.value.lastCallForOrder,
             recurringRule = state.value.recurringRule
         )
         cookingSlotsDraftRepository.saveDraft(updatedDraft)

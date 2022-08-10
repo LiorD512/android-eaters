@@ -1,32 +1,62 @@
 package com.bupp.wood_spoon_chef.presentation.features.cooking_slot.last_call
 
 import androidx.lifecycle.ViewModel
-import com.bupp.wood_spoon_chef.domain.GetFormattedSelectedHoursAndMinutesUseCase
+import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.launch
 
-class LastCallBottomSheetViewModel(
-    private val getFormattedSelectedHoursAndMinutesUseCase: GetFormattedSelectedHoursAndMinutesUseCase,
-) : ViewModel() {
+data class LastCallState(
+    val lastCall: LastCall
+) {
+    val timePickerVisible = lastCall.daysBefore != null
+}
 
-    private val _selectedHoursAndMinutes = MutableStateFlow(
-        SelectedHoursAndMinutes(0, 0)
-    )
+sealed class LastCallEvents {
+    object ShowDayPicker : LastCallEvents()
+    data class ShowTimePicker(val time: HoursAndMinutes?) : LastCallEvents()
+    object ShowWarningDialog : LastCallEvents()
+    data class SetResult(val result: LastCall) : LastCallEvents()
+}
 
-    val selectedHoursAndMinutes: StateFlow<SelectedHoursAndMinutes> =
-        _selectedHoursAndMinutes
+class LastCallBottomSheetViewModel : ViewModel() {
 
-    val formattedSelectedHoursAndMinutesFlow: Flow<String> =
-        _selectedHoursAndMinutes.map {
-            getFormattedSelectedHoursAndMinutesUseCase.execute(
-                GetFormattedSelectedHoursAndMinutesUseCase.Params(selectedHoursAndMinutes = it)
-            )
+    private val _state = MutableStateFlow(LastCallState(LastCall(null, null)))
+    val state: StateFlow<LastCallState> = _state
+
+    private val _events = MutableSharedFlow<LastCallEvents>()
+    val events: SharedFlow<LastCallEvents> = _events
+
+    fun onDaysBeforeSelected(daysBefore: Int?) = viewModelScope.launch {
+        _state.update {
+            it.copy(lastCall = it.lastCall.copy(daysBefore = daysBefore))
         }
-
-    val shouldShowWarningBottomSheetFlow: Flow<Boolean> =
-        _selectedHoursAndMinutes.map { !(it.hours == 0 && it.minutes == 0) }
-
-    fun setSelectedHoursAndMinutes(selectedHoursAndMinutes: SelectedHoursAndMinutes) {
-        _selectedHoursAndMinutes.value = selectedHoursAndMinutes
     }
 
+    fun onWarningAccepted() = viewModelScope.launch {
+        _events.emit(LastCallEvents.SetResult(state.value.lastCall))
+    }
+
+    fun onSaveClicked() = viewModelScope.launch {
+        _events.emit(LastCallEvents.ShowWarningDialog)
+    }
+
+    fun onSelectDayClicked() = viewModelScope.launch {
+        _events.emit(LastCallEvents.ShowDayPicker)
+    }
+
+    fun onSelectTimeClicked() = viewModelScope.launch {
+        _events.emit(LastCallEvents.ShowTimePicker(state.value.lastCall.time))
+    }
+
+    fun setSelectedTime(hoursAndMinutes: HoursAndMinutes) = viewModelScope.launch {
+        _state.update {
+            it.copy(lastCall = it.lastCall.copy(time = hoursAndMinutes))
+        }
+    }
+
+    fun setInitialValue(lastCall: LastCall) = viewModelScope.launch {
+        _state.update {
+            it.copy(lastCall = lastCall)
+        }
+    }
 }
