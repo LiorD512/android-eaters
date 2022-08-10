@@ -7,8 +7,8 @@ import com.bupp.wood_spoon_chef.data.repositories.CookingSlotRepository
 import com.bupp.wood_spoon_chef.domain.GetFormattedSelectedHoursAndMinutesUseCase
 import com.bupp.wood_spoon_chef.domain.GetIsCookingSlotNewFlowEnabledUseCase
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.base.CookingSlotParentViewModel
-import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.common.CustomRecurringViewModel
-import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.common.SlotRecurringViewModel
+import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.rrules.CustomRecurringViewModel
+import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.rrules.SlotRecurringViewModel
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.cooking_slot_menu.FilterMenuViewModel
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.cooking_slot_menu.MyDishesViewModel
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.CookingSlotReportEventUseCase
@@ -58,10 +58,10 @@ val cookingSlotModule = module {
     viewModel { params -> CookingSlotParentViewModel(params.get(), get(), get(), get(), get()) }
     viewModel { params -> CreateCookingSlotNewViewModel(params.get(), get(), get(), get(), get(), get()) }
     viewModel { params -> CookingSlotMenuViewModel(params.get(), get(), get(), get()) }
-    viewModel { MyDishesViewModel(get()) }
-    viewModel { FilterMenuViewModel(get()) }
+    viewModel { MyDishesViewModel(get(), get(), get()) }
+    viewModel { FilterMenuViewModel(get(),get(), get()) }
     viewModel { CookingSlotReviewViewModel(get(), get(), get(), get(), get(),get(), get()) }
-    viewModel { SlotRecurringViewModel() }
+    viewModel { SlotRecurringViewModel(get(), get()) }
     viewModel { LastCallBottomSheetViewModel(get()) }
     viewModel { CustomRecurringViewModel() }
 

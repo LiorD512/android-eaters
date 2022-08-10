@@ -1,4 +1,4 @@
-package com.bupp.wood_spoon_chef.presentation.features.cooking_slot.common
+package com.bupp.wood_spoon_chef.presentation.features.cooking_slot.rrules
 
 import android.content.Context
 import androidx.annotation.Keep
@@ -7,8 +7,6 @@ import biweekly.util.DayOfWeek
 import biweekly.util.Frequency
 import com.bupp.wood_spoon_chef.R
 import com.bupp.wood_spoon_chef.presentation.features.base.BaseViewModel
-import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.rrules.RRuleTextFormatter
-import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.rrules.SimpleRRule
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
@@ -170,5 +168,4 @@ class CustomRecurringViewModel : BaseViewModel() {
             }
         }
     }
-
 }
