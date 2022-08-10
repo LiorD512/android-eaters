@@ -42,7 +42,7 @@ class FilterMenuBottomSheet: TopCorneredBottomSheet(), HeaderView.HeaderViewList
         super.onViewCreated(view, savedInstanceState)
         setFullScreenDialog()
         val selectedSections = requireArguments().getStringArrayList(SELECTED_SECTIONS_ARGS_KEY)
-        viewModel.setSelectedSections(selectedSections)
+        viewModel.init(selectedSections)
         initUi()
         setupList()
         observeViewModelState()

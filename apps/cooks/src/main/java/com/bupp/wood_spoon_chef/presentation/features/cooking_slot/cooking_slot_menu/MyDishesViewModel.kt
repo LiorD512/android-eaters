@@ -1,12 +1,16 @@
 package com.bupp.wood_spoon_chef.presentation.features.cooking_slot.cooking_slot_menu
 
 import androidx.lifecycle.viewModelScope
+import com.bupp.wood_spoon_chef.data.remote.model.CookingSlot
 import com.bupp.wood_spoon_chef.data.remote.model.SectionWithDishes
 import com.bupp.wood_spoon_chef.presentation.features.base.BaseViewModel
+import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.CookingSlotReportEventUseCase
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.data.models.FilterAdapterSectionModel
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.data.models.MyDishesPickerAdapterDish
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.data.models.MyDishesPickerAdapterModel
+import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.data.repository.CookingSlotsDraftRepository
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.data.repository.DishesWithCategoryRepository
+import com.eatwoodspoon.analytics.events.ChefsCookingSlotsEvent
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
@@ -18,7 +22,8 @@ data class MyDishesState(
     val selectedSections: List<String>? = emptyList(),
     val isListFiltered: Boolean? = false,
     val currentSectionWithDishes: SectionWithDishes? = null,
-    val showEmptyState: Boolean = false
+    val showEmptyState: Boolean = false,
+    val cookingSlotId: Long? = null
 )
 
 sealed class MyDishesEvent {
@@ -32,7 +37,9 @@ sealed class MyDishesEvent {
 }
 
 class MyDishesViewModel(
-    private val dishesWithCategoryRepository: DishesWithCategoryRepository
+    private val dishesWithCategoryRepository: DishesWithCategoryRepository,
+    private val cookingSlotsDraftRepository: CookingSlotsDraftRepository,
+    private val eventTracker: CookingSlotReportEventUseCase
 ) : BaseViewModel() {
 
     private val _state = MutableStateFlow(MyDishesState())
@@ -42,11 +49,16 @@ class MyDishesViewModel(
     val events: SharedFlow<MyDishesEvent> = _events
 
     init {
-        getSectionsWithDishes()
+        viewModelScope.launch {
+            getSectionsWithDishes()
+            val originalCookingSlot =
+                cookingSlotsDraftRepository.getDraft().first()?.originalCookingSlot
+            setMode(originalCookingSlot)
+        }
+        reportEvent { mode, slotId -> ChefsCookingSlotsEvent.DishPickerShownEvent(mode, slotId) }
     }
 
-
-    private fun getSectionsWithDishes() = viewModelScope.launch(Dispatchers.IO) {
+    private suspend fun getSectionsWithDishes() {
         try {
             val result = dishesWithCategoryRepository.getSectionsAndDishes()
             val currentDishes = result.getOrThrow().dishes
@@ -211,6 +223,23 @@ class MyDishesViewModel(
         val filteredDishes =
             currentSectionWithDishes?.dishes?.filter { it.name.contains(input, true) }
         return SectionWithDishes(filteredDishes, currentSectionWithDishes?.sections)
+    }
+
+    private fun setMode(originalCookingSlot: CookingSlot?) {
+        _state.update {
+            it.copy(
+                cookingSlotId = originalCookingSlot?.id
+            )
+        }
+    }
+
+    private fun reportEvent(factory: (mode: ChefsCookingSlotsEvent.ModeValues, slotId: Int?) -> ChefsCookingSlotsEvent) {
+        val mode = if (_state.value.cookingSlotId != null) {
+            ChefsCookingSlotsEvent.ModeValues.Edit
+        } else {
+            ChefsCookingSlotsEvent.ModeValues.New
+        }
+        eventTracker.reportEvent(factory.invoke(mode, _state.value.cookingSlotId?.toInt()))
     }
 }
 

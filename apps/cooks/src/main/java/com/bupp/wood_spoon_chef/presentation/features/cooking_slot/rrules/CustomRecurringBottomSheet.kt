@@ -18,10 +18,6 @@ import com.bupp.wood_spoon_chef.common.TopCorneredBottomSheet
 import com.bupp.wood_spoon_chef.databinding.BottomSheetCustomRecurringBinding
 import com.bupp.wood_spoon_chef.presentation.custom_views.CreateCookingSlotOptionView
 import com.bupp.wood_spoon_chef.presentation.custom_views.HeaderView
-import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.common.CustomFrequency
-import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.common.CustomRecurringEvent
-import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.common.CustomRecurringState
-import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.common.CustomRecurringViewModel
 import com.bupp.wood_spoon_chef.utils.extensions.show
 import com.bupp.wood_spoon_chef.utils.extensions.showErrorToast
 import kotlinx.coroutines.flow.collect

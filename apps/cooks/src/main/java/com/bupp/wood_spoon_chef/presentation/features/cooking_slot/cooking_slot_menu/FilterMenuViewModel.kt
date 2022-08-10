@@ -1,10 +1,14 @@
 package com.bupp.wood_spoon_chef.presentation.features.cooking_slot.cooking_slot_menu
 
 import androidx.lifecycle.viewModelScope
+import com.bupp.wood_spoon_chef.data.remote.model.CookingSlot
 import com.bupp.wood_spoon_chef.data.remote.model.Section
 import com.bupp.wood_spoon_chef.presentation.features.base.BaseViewModel
+import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.CookingSlotReportEventUseCase
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.data.models.FilterAdapterSectionModel
+import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.data.repository.CookingSlotsDraftRepository
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.data.repository.DishesWithCategoryRepository
+import com.eatwoodspoon.analytics.events.ChefsCookingSlotsEvent
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
@@ -12,7 +16,8 @@ import kotlinx.coroutines.launch
 data class FilterMenuState(
     val sectionList: List<FilterAdapterSectionModel> = emptyList(),
     val selectedSections: List<String>? = emptyList(),
-    val showClearAll: Boolean = false
+    val showClearAll: Boolean = false,
+    val cookingSlotId: Long? = null
 )
 
 sealed class FilterMenuEvent {
@@ -21,7 +26,9 @@ sealed class FilterMenuEvent {
 }
 
 class FilterMenuViewModel(
-    private val dishesWithCategoryRepository: DishesWithCategoryRepository
+    private val dishesWithCategoryRepository: DishesWithCategoryRepository,
+    private val cookingSlotsDraftRepository: CookingSlotsDraftRepository,
+    private val eventTracker: CookingSlotReportEventUseCase
 ) : BaseViewModel() {
 
     private val _state = MutableStateFlow(FilterMenuState())
@@ -30,11 +37,17 @@ class FilterMenuViewModel(
     private val _events = MutableSharedFlow<FilterMenuEvent>()
     val events: SharedFlow<FilterMenuEvent> = _events
 
-    init {
-        getSectionsList()
+    fun init(selectedSections: List<String>?){
+        setSelectedSections(selectedSections)
+        viewModelScope.launch {
+            getSectionsList()
+            val originalCookingSlot = cookingSlotsDraftRepository.getDraft().first()?.originalCookingSlot
+            setMode(originalCookingSlot)
+        }
+        reportEvent { mode, slotId -> ChefsCookingSlotsEvent.CategoriesFilterShownEvent(mode, slotId) }
     }
 
-    private fun getSectionsList() = viewModelScope.launch(Dispatchers.IO) {
+    private suspend fun getSectionsList() {
         try {
             val result = dishesWithCategoryRepository.getSectionsAndDishes()
             val sections = result.getOrThrow().sections
@@ -43,6 +56,14 @@ class FilterMenuViewModel(
             }
         } catch (e: Exception) {
             e.message
+        }
+    }
+
+    private fun setMode(originalCookingSlot: CookingSlot?) {
+        _state.update {
+            it.copy(
+                cookingSlotId = originalCookingSlot?.id
+            )
         }
     }
 
@@ -68,7 +89,7 @@ class FilterMenuViewModel(
         }
     }
 
-    fun setSelectedSections(selectedSections: List<String>?) {
+    private fun setSelectedSections(selectedSections: List<String>?) {
         _state.update {
             it.copy(selectedSections = selectedSections)
         }
@@ -95,7 +116,9 @@ class FilterMenuViewModel(
 
     fun onClearAllClick() {
         setSelectedSections(null)
-        getSectionsList()
+        viewModelScope.launch {
+            getSectionsList()
+        }
     }
 
     private fun convertSectionsToFilterAdapterModelList(
@@ -106,5 +129,14 @@ class FilterMenuViewModel(
                 section.title ?: ""
             )
         }.toList()
+    }
+
+    private fun reportEvent(factory: (mode: ChefsCookingSlotsEvent.ModeValues, slotId: Int?) -> ChefsCookingSlotsEvent) {
+        val mode = if (_state.value.cookingSlotId != null) {
+            ChefsCookingSlotsEvent.ModeValues.Edit
+        } else {
+            ChefsCookingSlotsEvent.ModeValues.New
+        }
+        eventTracker.reportEvent(factory.invoke(mode, _state.value.cookingSlotId?.toInt()))
     }
 }

@@ -1,12 +1,15 @@
-package com.bupp.wood_spoon_chef.presentation.features.cooking_slot.common
+package com.bupp.wood_spoon_chef.presentation.features.cooking_slot.rrules
 
 
 import androidx.annotation.Keep
 import androidx.lifecycle.viewModelScope
 import biweekly.util.Frequency
+import com.bupp.wood_spoon_chef.data.remote.model.CookingSlot
 import com.bupp.wood_spoon_chef.presentation.features.base.BaseViewModel
-import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.rrules.RRuleTextFormatter
-import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.rrules.SimpleRRule
+import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.CookingSlotReportEventUseCase
+import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.data.repository.CookingSlotsDraftRepository
+import com.bupp.wood_spoon_chef.utils.DateUtils
+import com.eatwoodspoon.analytics.events.ChefsCookingSlotsEvent
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import java.util.*
@@ -31,7 +34,8 @@ data class SlotRecurringState(
     val selectedDate: Long? = null,
     val selectedFrequency: RecurringFrequency = RecurringFrequency.OneTime,
     val endsAt: Date? = null,
-    val humanReadableText: String? = null
+    val humanReadableText: String? = null,
+    val cookingSlotId: Long? = null
 )
 
 sealed class SlotRecurringEvent {
@@ -41,7 +45,10 @@ sealed class SlotRecurringEvent {
     data class ShowEndAtDatePicker(val selectedDate: Long?) : SlotRecurringEvent()
 }
 
-class SlotRecurringViewModel : BaseViewModel() {
+class SlotRecurringViewModel(
+    private val cookingSlotsDraftRepository: CookingSlotsDraftRepository,
+    private val eventTracker: CookingSlotReportEventUseCase
+) : BaseViewModel() {
 
     private val rRuleTextFormatter = RRuleTextFormatter()
 
@@ -61,6 +68,14 @@ class SlotRecurringViewModel : BaseViewModel() {
         when (_state.value.selectedFrequency) {
             RecurringFrequency.OneTime -> {
                 _events.emit(SlotRecurringEvent.OnSave(mapStateToRule()))
+                reportEvent { recurrence, _, rrule, mode, slotId ->
+                    ChefsCookingSlotsEvent.RruleValueSelectedEvent(
+                        recurrence,
+                        rrule,
+                        mode,
+                        slotId
+                    )
+                }
             }
             else -> {
                 with(_state.value) {
@@ -68,6 +83,14 @@ class SlotRecurringViewModel : BaseViewModel() {
                         _events.emit(SlotRecurringEvent.Error("Recurring slot must have Ends at date"))
                     } else {
                         _events.emit(SlotRecurringEvent.OnSave(mapStateToRule()))
+                        reportEvent { recurrence, _, rrule, mode, slotId ->
+                            ChefsCookingSlotsEvent.RruleValueSelectedEvent(
+                                recurrence,
+                                rrule,
+                                mode,
+                                slotId
+                            )
+                        }
                     }
                 }
             }
@@ -107,6 +130,17 @@ class SlotRecurringViewModel : BaseViewModel() {
             _state.collect {
                 _state.update { it.copy(humanReadableText = mapStateToHumanReadable()) }
             }
+        }
+        viewModelScope.launch {
+            val originalCookingSlot = cookingSlotsDraftRepository.getDraft().first()?.originalCookingSlot
+            setMode(rrule, originalCookingSlot)
+        }
+        reportEvent { _, _, rrule, mode, slotId ->
+            ChefsCookingSlotsEvent.RruleScreenShownEvent(
+                rrule,
+                mode,
+                slotId
+            )
         }
     }
 
@@ -194,6 +228,14 @@ class SlotRecurringViewModel : BaseViewModel() {
         _state.update {
             it.copy(endsAt = endsAt)
         }
+        reportEvent { _, until, rrule, mode, slotId ->
+            ChefsCookingSlotsEvent.RruleUntilSelectedEvent(
+                until,
+                rrule,
+                mode,
+                slotId
+            )
+        }
     }
 
     private fun setSelectedDate(selectedDate: Long?) {
@@ -206,5 +248,47 @@ class SlotRecurringViewModel : BaseViewModel() {
         viewModelScope.launch {
             _events.emit(SlotRecurringEvent.ShowCustomPicker(recurringRule))
         }
+    }
+
+    private fun setMode(recurringRule: String?, originalCookingSlot: CookingSlot?) {
+        _state.update {
+            it.copy(
+                cookingSlotId = originalCookingSlot?.id
+            )
+        }
+    }
+
+    private fun reportEvent(
+        factory: (
+            recurrence: ChefsCookingSlotsEvent.RruleValueSelectedEvent.RecurrencyValues,
+            until: String,
+            rrule: String?,
+            mode: ChefsCookingSlotsEvent.ModeValues,
+            slotId: Int?
+        ) -> ChefsCookingSlotsEvent
+    ) {
+        val mode = if (_state.value.cookingSlotId != null) {
+            ChefsCookingSlotsEvent.ModeValues.Edit
+        } else {
+            ChefsCookingSlotsEvent.ModeValues.New
+        }
+        val recurrence = when (_state.value.selectedFrequency) {
+            is RecurringFrequency.Custom -> ChefsCookingSlotsEvent.RruleValueSelectedEvent.RecurrencyValues.custom
+            RecurringFrequency.EveryDay -> ChefsCookingSlotsEvent.RruleValueSelectedEvent.RecurrencyValues.dayly
+            RecurringFrequency.EveryWeek -> ChefsCookingSlotsEvent.RruleValueSelectedEvent.RecurrencyValues.weekly
+            RecurringFrequency.OneTime -> ChefsCookingSlotsEvent.RruleValueSelectedEvent.RecurrencyValues.onetime
+        }
+        val until = _state.value.endsAt?.let {  DateUtils.parseDateToDayMonthDay(it) } ?: ""
+        val recurringRule = mapStateToRule()
+
+        eventTracker.reportEvent(
+            factory.invoke(
+                recurrence,
+                until,
+                recurringRule,
+                mode,
+                _state.value.cookingSlotId?.toInt()
+            )
+        )
     }
 }

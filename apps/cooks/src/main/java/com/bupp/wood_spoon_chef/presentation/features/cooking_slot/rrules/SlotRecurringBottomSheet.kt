@@ -16,10 +16,6 @@ import com.bupp.wood_spoon_chef.common.TopCorneredBottomSheet
 import com.bupp.wood_spoon_chef.databinding.BottomSheetSlotRecurringBinding
 import com.bupp.wood_spoon_chef.presentation.custom_views.CreateCookingSlotOptionView
 import com.bupp.wood_spoon_chef.presentation.custom_views.HeaderView
-import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.common.RecurringFrequency
-import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.common.RecurringFrequencyName
-import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.common.SlotRecurringEvent
-import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.common.SlotRecurringViewModel
 import com.bupp.wood_spoon_chef.utils.DateUtils
 import com.bupp.wood_spoon_chef.utils.extensions.showErrorToast
 import com.google.android.material.datepicker.*
