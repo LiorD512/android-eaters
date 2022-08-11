@@ -15,7 +15,7 @@ class OriginalCookingSlotToDraftCookingSlotMapper(
         operatingHours = OperatingHours(
             originalCookingSlot.startsAt.time, originalCookingSlot.endsAt.time
         ),
-        lastCallForOrder = LastCall.from(originalCookingSlot.lastCallAt?.time, originalCookingSlot.endsAt?.time),
+        lastCallForOrder = LastCall.from(originalCookingSlot.lastCallAt?.time, originalCookingSlot.endsAt?.time).takeIf { originalCookingSlot.lastCallAt?.time != originalCookingSlot.endsAt.time  },
         recurringRule = originalCookingSlot.recurringRule,
         menuItems = originalCookingSlot.menuItems
             .map { menuItemToMenuDishItemMapper.map(it) }

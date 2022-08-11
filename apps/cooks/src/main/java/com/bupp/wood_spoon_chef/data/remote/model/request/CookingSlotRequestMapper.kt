@@ -15,7 +15,7 @@ class CookingSlotRequestMapper {
         eventId = null,
         startsAt = startsTime?.div(1000),
         endsAt = endTime?.div(1000),
-        lastCallAt = lastCallForOrder?.toTimestampBasedOnEndDate(endTime)?.div(1000),
+        lastCallAt = lastCallForOrder?.toTimestampBasedOnEndDate(endTime)?.div(1000) ?: endTime?.div(1000),
         freeDelivery = false,
         worldwide = false,
         menuItems = mutableListOf(),
