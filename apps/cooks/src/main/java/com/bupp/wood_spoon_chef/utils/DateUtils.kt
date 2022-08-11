@@ -84,6 +84,12 @@ object DateUtils {
         }
     }
 
+    fun parseDateToDayMonthAndYear(date: Date): String {
+        //Monday, May 20, 2019
+        val sdf = SimpleDateFormat("EEEE, MMMM dd, yyyy", Locale.ENGLISH)
+        return sdf.format(date.time)
+    }
+
     private fun isDateInCurrentWeek(date: Date): Boolean {
         val currentCalendar = Calendar.getInstance()
         val week = currentCalendar.get(Calendar.WEEK_OF_YEAR)

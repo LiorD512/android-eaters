@@ -205,7 +205,7 @@ class CookingSlotMenuViewModel(
         menuItems: List<MenuDishItem>
     ): List<DishesMenuAdapterModel> {
         return when (val response =
-            getSectionsWithDishesUseCase.execute(GetSectionsWithDishesUseCase.Params()).first()) {
+            getSectionsWithDishesUseCase.execute(GetSectionsWithDishesUseCase.Params(true)).first()) {
             is ResponseError -> emptyList()
             is ResponseSuccess -> {
                 response.data?.sections?.map { section ->

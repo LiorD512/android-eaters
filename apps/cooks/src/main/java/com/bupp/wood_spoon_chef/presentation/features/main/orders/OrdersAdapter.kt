@@ -26,7 +26,7 @@ class OrdersAdapter(
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val curCookingSlot: CookingSlot? = cookingSlotList?.get(position)
         (holder as ItemViewHolder).date.text =
-            DateUtils.parseDateIfThisWeek(curCookingSlot?.startsAt!!)
+            DateUtils.parseDateToDayMonthAndYear(curCookingSlot?.startsAt!!)
         holder.hours.text = DateUtils.parseTwoSimpleDates(
             curCookingSlot.startsAt,
             curCookingSlot.endsAt
