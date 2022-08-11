@@ -26,7 +26,8 @@ import org.joda.time.DateTime
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.util.*
 
-class SlotRecurringBottomSheet: TopCorneredBottomSheet(), HeaderView.HeaderViewListener, DatePickerDialog.OnDateSetListener {
+class SlotRecurringBottomSheet : TopCorneredBottomSheet(), HeaderView.HeaderViewListener,
+    DatePickerDialog.OnDateSetListener {
 
     private var binding: BottomSheetSlotRecurringBinding? = null
     private val viewModel by viewModel<SlotRecurringViewModel>()
@@ -118,7 +119,7 @@ class SlotRecurringBottomSheet: TopCorneredBottomSheet(), HeaderView.HeaderViewL
                         }
                         is SlotRecurringEvent.ShowEndAtDatePicker -> {
                             event.selectedDate?.let {
-                                showEndsAtDatePicker(it)
+                                showEndsAtDatePicker(it, event.endAtSelectedDate)
                             }
                         }
                     }
@@ -157,7 +158,7 @@ class SlotRecurringBottomSheet: TopCorneredBottomSheet(), HeaderView.HeaderViewL
         binding?.makeSlotRecurringRuleTxt?.text = humanReadableText
     }
 
-    private fun showEndsAtDatePicker(selectedDate: Long) {
+    private fun showEndsAtDatePicker(selectedDate: Long, endsAtSelectedDate: Long?) {
         val validator = CompositeDateValidator.allOf(
             listOf(
                 DateValidatorPointForward.from(selectedDate),
@@ -172,7 +173,11 @@ class SlotRecurringBottomSheet: TopCorneredBottomSheet(), HeaderView.HeaderViewL
                 .setNegativeButtonText(getString(R.string.cancel))
                 .setTheme(R.style.MaterialCalendarTheme)
                 .setCalendarConstraints(calendarConstraints)
-                .setSelection(DateTime(selectedDate).plusMonths(3).millis).build()
+                .setSelection(
+                    endsAtSelectedDate?.let {
+                        DateTime(endsAtSelectedDate).millis
+                    }
+                        ?: DateTime(selectedDate).plusMonths(3).millis).build()
 
         picker.addOnPositiveButtonClickListener {
             viewModel.setEndDate(Date(it))
@@ -220,7 +225,10 @@ class SlotRecurringBottomSheet: TopCorneredBottomSheet(), HeaderView.HeaderViewL
             listener: ((String?) -> Unit)
         ) {
             SlotRecurringBottomSheet().apply {
-                arguments = bundleOf(RRULE_ARGS_KEY to recurringRule, SELECTED_DATE_ARGS_KEY to selectedDate)
+                arguments = bundleOf(
+                    RRULE_ARGS_KEY to recurringRule,
+                    SELECTED_DATE_ARGS_KEY to selectedDate
+                )
             }.show(
                 fragment.childFragmentManager,
                 SlotRecurringBottomSheet::class.simpleName
