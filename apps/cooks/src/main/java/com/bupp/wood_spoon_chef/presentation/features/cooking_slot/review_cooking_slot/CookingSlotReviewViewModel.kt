@@ -81,13 +81,13 @@ class CookingSlotReviewViewModel(
         }
 
         if (isEditing) {
-            if (recurringRule.isNullOrEmpty()){
+            if (recurringRule.isNullOrEmpty()) {
                 updateCookingSlot(
                     prepareAddSlotRequest().copy(
                         detach = true
                     )
                 )
-            }else{
+            } else {
                 _events.emit(ReviewCookingSlotEvents.ShowUpdateDetachDialog)
                 reportEvent { mode, slotId ->
                     ChefsCookingSlotsEvent.ReviewScreenUpdateDialogShownEvent(
@@ -170,8 +170,8 @@ class CookingSlotReviewViewModel(
     }
 
     private suspend fun prepareAddSlotRequest(): CookingSlotRequest =
-        cookingSlotsDraftRepository.getDraft().map {
-            val toList = it?.menuItems?.map { menuDishItem ->
+        cookingSlotsDraftRepository.getDraft().map { cookingSlotDraft ->
+            val existingMenuItems = cookingSlotDraft?.menuItems?.map { menuDishItem ->
                 MenuItemRequest(
                     id = menuDishItem.menuItemId,
                     dishId = menuDishItem.dish?.id,
@@ -179,14 +179,24 @@ class CookingSlotReviewViewModel(
                 )
             }?.toList() ?: emptyList()
 
+            val menuItemsToDelete =
+                cookingSlotDraft?.originalCookingSlot?.menuItems?.filter { menuItem ->
+                    !existingMenuItems.map { it.id }.contains(menuItem.id)
+                }?.map { menuItemToDelete ->
+                    MenuItemRequest(
+                        id = menuItemToDelete.id,
+                        _destroy = true
+                    )
+                }?.toList() ?: emptyList()
+
             stateMapper.mapCookingSlotToRequest(
-                startsTime = it?.operatingHours?.startTime,
-                endTime = it?.operatingHours?.endTime,
-                lastCallForOrder = it?.lastCallForOrder,
-                recurringRule = it?.recurringRule,
+                startsTime = cookingSlotDraft?.operatingHours?.startTime,
+                endTime = cookingSlotDraft?.operatingHours?.endTime,
+                lastCallForOrder = cookingSlotDraft?.lastCallForOrder,
+                recurringRule = cookingSlotDraft?.recurringRule,
             )
                 .copy(submit = true)
-                .copy(menuItems = toList)
+                .copy(menuItems = existingMenuItems + menuItemsToDelete)
 
         }.first()
 
