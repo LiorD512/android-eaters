@@ -3,13 +3,14 @@ package com.bupp.wood_spoon_chef.presentation.features.cooking_slot.cooking_slot
 import androidx.lifecycle.viewModelScope
 import com.bupp.wood_spoon_chef.data.remote.model.CookingSlot
 import com.bupp.wood_spoon_chef.data.remote.model.Section
+import com.bupp.wood_spoon_chef.data.remote.network.base.ResponseError
+import com.bupp.wood_spoon_chef.data.remote.network.base.ResponseSuccess
+import com.bupp.wood_spoon_chef.domain.GetSectionsWithDishesUseCase
 import com.bupp.wood_spoon_chef.presentation.features.base.BaseViewModel
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.CookingSlotReportEventUseCase
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.data.models.FilterAdapterSectionModel
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.data.repository.CookingSlotsDraftRepository
-import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.data.repository.DishesWithCategoryRepository
 import com.eatwoodspoon.analytics.events.ChefsCookingSlotsEvent
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
@@ -26,7 +27,7 @@ sealed class FilterMenuEvent {
 }
 
 class FilterMenuViewModel(
-    private val dishesWithCategoryRepository: DishesWithCategoryRepository,
+    private val getSectionsWithDishesUseCase: GetSectionsWithDishesUseCase,
     private val cookingSlotsDraftRepository: CookingSlotsDraftRepository,
     private val eventTracker: CookingSlotReportEventUseCase
 ) : BaseViewModel() {
@@ -37,23 +38,37 @@ class FilterMenuViewModel(
     private val _events = MutableSharedFlow<FilterMenuEvent>()
     val events: SharedFlow<FilterMenuEvent> = _events
 
-    fun init(selectedSections: List<String>?){
+    fun init(selectedSections: List<String>?) {
         setSelectedSections(selectedSections)
         viewModelScope.launch {
             getSectionsList()
-            val originalCookingSlot = cookingSlotsDraftRepository.getDraft().first()?.originalCookingSlot
+            val originalCookingSlot =
+                cookingSlotsDraftRepository.getDraft().first()?.originalCookingSlot
             setMode(originalCookingSlot)
         }
-        reportEvent { mode, slotId -> ChefsCookingSlotsEvent.CategoriesFilterShownEvent(mode, slotId) }
+        reportEvent { mode, slotId ->
+            ChefsCookingSlotsEvent.CategoriesFilterShownEvent(
+                mode,
+                slotId
+            )
+        }
     }
 
     private suspend fun getSectionsList() {
         try {
-            val result = dishesWithCategoryRepository.getSectionsAndDishes()
-            val sections = result.getOrThrow().sections
-            sections?.let {
-                updateSectionList(convertSectionsToFilterAdapterModelList(it))
+            when (val sectionWithDishesResult =
+                getSectionsWithDishesUseCase.execute
+                    (GetSectionsWithDishesUseCase.Params()).first()) {
+                is ResponseError -> {
+                    updateSectionList(emptyList())
+                }
+                is ResponseSuccess -> {
+                    sectionWithDishesResult.data?.sections?.let {
+                        updateSectionList(convertSectionsToFilterAdapterModelList(it))
+                    }
+                }
             }
+
         } catch (e: Exception) {
             e.message
         }

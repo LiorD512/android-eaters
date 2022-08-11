@@ -17,9 +17,6 @@ import com.bupp.wood_spoon_chef.presentation.custom_views.CreateCookingSlotTopBa
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.data.models.DishesMenuAdapterModel
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.create_cooking_slot.OperatingHours
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.base.CookingSlotParentFragment
-import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.fragments.CookingSlotMenuEvents
-import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.fragments.CookingSlotMenuState
-import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.fragments.CookingSlotMenuViewModel
 import com.bupp.wood_spoon_chef.utils.DateUtils.prepareFormattedDateForHours
 import com.bupp.wood_spoon_chef.utils.extensions.findParent
 import com.bupp.wood_spoon_chef.utils.extensions.prepareFormattedDate

@@ -1,18 +1,19 @@
-package com.bupp.wood_spoon_chef.presentation.features.cooking_slot.fragments
+package com.bupp.wood_spoon_chef.presentation.features.cooking_slot.cooking_slot_menu
 
 import android.content.Context
 import androidx.lifecycle.viewModelScope
 import com.bupp.wood_spoon_chef.R
 import com.bupp.wood_spoon_chef.data.remote.model.CookingSlot
+import com.bupp.wood_spoon_chef.data.remote.network.base.ResponseError
+import com.bupp.wood_spoon_chef.data.remote.network.base.ResponseSuccess
+import com.bupp.wood_spoon_chef.domain.GetSectionsWithDishesUseCase
 import com.bupp.wood_spoon_chef.presentation.features.base.BaseViewModel
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.CookingSlotReportEventUseCase
-import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.cooking_slot_menu.updateItem
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.coordinator.CookingSlotFlowCoordinator
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.coordinator.CookingSlotFlowStep
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.create_cooking_slot.OperatingHours
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.data.models.DishesMenuAdapterModel
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.data.models.MenuDishItem
-import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.data.repository.DishesWithCategoryRepository
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.data.repository.CookingSlotsDraftRepository
 import com.eatwoodspoon.analytics.events.ChefsCookingSlotsEvent
 import kotlinx.coroutines.flow.*
@@ -34,7 +35,7 @@ sealed class CookingSlotMenuEvents {
 
 class CookingSlotMenuViewModel(
     private val cookingSlotFlowNavigator: CookingSlotFlowCoordinator,
-    private val dishesWithCategoryRepository: DishesWithCategoryRepository,
+    private val getSectionsWithDishesUseCase: GetSectionsWithDishesUseCase,
     private val cookingSlotsDraftRepository: CookingSlotsDraftRepository,
     private val eventTracker: CookingSlotReportEventUseCase
 ) : BaseViewModel() {
@@ -68,7 +69,12 @@ class CookingSlotMenuViewModel(
     }
 
     fun onOpenReviewFragmentClicked(context: Context) {
-        reportEvent { mode, slotId -> ChefsCookingSlotsEvent.MenuScreenNextClickedEvent(mode, slotId) }
+        reportEvent { mode, slotId ->
+            ChefsCookingSlotsEvent.MenuScreenNextClickedEvent(
+                mode,
+                slotId
+            )
+        }
         viewModelScope.launch {
             validateInputs(context)
         }
@@ -78,10 +84,22 @@ class CookingSlotMenuViewModel(
         val currentDraft = cookingSlotsDraftRepository.getDraftValue() ?: return
         if (_state.value.menuItems.isEmpty()) {
             _events.emit(CookingSlotMenuEvents.Error(context.getString(R.string.menu_empty_error)))
-            reportEvent { mode, slotId -> ChefsCookingSlotsEvent.MenuLocalValidationFailedEvent(context.getString(R.string.menu_empty_error), mode, slotId) }
+            reportEvent { mode, slotId ->
+                ChefsCookingSlotsEvent.MenuLocalValidationFailedEvent(
+                    context.getString(R.string.menu_empty_error),
+                    mode,
+                    slotId
+                )
+            }
         } else if (_state.value.menuItems.any { it.quantity == 0 }) {
             _events.emit(CookingSlotMenuEvents.Error(context.getString(R.string.quantity_zero_error)))
-            reportEvent { mode, slotId -> ChefsCookingSlotsEvent.MenuLocalValidationFailedEvent(context.getString(R.string.quantity_zero_error), mode, slotId) }
+            reportEvent { mode, slotId ->
+                ChefsCookingSlotsEvent.MenuLocalValidationFailedEvent(
+                    context.getString(R.string.quantity_zero_error),
+                    mode,
+                    slotId
+                )
+            }
         } else {
             val updatedDraft = currentDraft.copy(
                 menuItems = _state.value.menuItems
@@ -105,17 +123,25 @@ class CookingSlotMenuViewModel(
             val newIdsActually = newIds.toMutableList().apply {
                 removeAll(currentlyAddedIds)
             }.toList()
-            val allUserDishes =
-                dishesWithCategoryRepository.getSectionsAndDishes().getOrNull()?.dishes
-                    ?: emptyList()
-            val newMenuItems = newIdsActually.map { dishId ->
-                val dish = allUserDishes.find { it.id == dishId }
-                dish?.let { dish ->
-                    MenuDishItem(dish = dish)
-                }
-            }.filterNotNull()
+            getSectionsWithDishesUseCase.execute(GetSectionsWithDishesUseCase.Params())
+                .collect { result ->
+                    when (result) {
+                        is ResponseSuccess -> {
+                            val allUserDishes = result.data?.dishes ?: emptyList()
+                            val newMenuItems = newIdsActually.mapNotNull { dishId ->
+                                val dish = allUserDishes.find { it.id == dishId }
+                                dish?.let { dish ->
+                                    MenuDishItem(dish = dish)
+                                }
+                            }
 
-            setMenuItems(_state.value.menuItems + newMenuItems)
+                            setMenuItems(_state.value.menuItems + newMenuItems)
+                        }
+                        is ResponseError -> {
+                            setMenuItems(emptyList())
+                        }
+                    }
+                }
         }
         reportEvent { mode, slotId ->
             ChefsCookingSlotsEvent.AddDishesAddedEvent(
@@ -137,9 +163,11 @@ class CookingSlotMenuViewModel(
                 menuItemsByCategory = currentSectionWithDishes
             )
         }
-        cookingSlotsDraftRepository.saveDraft(cookingSlotsDraftRepository.getDraftValue()?.copy(
-            menuItems = menuItems
-        ))
+        cookingSlotsDraftRepository.saveDraft(
+            cookingSlotsDraftRepository.getDraftValue()?.copy(
+                menuItems = menuItems
+            )
+        )
     }
 
     private fun setOperatingHours(operatingHours: OperatingHours) {
@@ -176,17 +204,18 @@ class CookingSlotMenuViewModel(
     private suspend fun combineMenuItemsBySections(
         menuItems: List<MenuDishItem>
     ): List<DishesMenuAdapterModel> {
-
-        val dishesWithCategories =
-            dishesWithCategoryRepository.getSectionsAndDishes().getOrNull() ?: return emptyList()
-
-        return dishesWithCategories.sections?.map { section ->
-
-            DishesMenuAdapterModel(
-                section = section,
-                dishes = menuItems.filter { section.dishIds?.contains(it.dish?.id) == true }
-            )
-        }?.filter { it.dishes.isNotEmpty() }?.toList() ?: emptyList()
+        return when (val response =
+            getSectionsWithDishesUseCase.execute(GetSectionsWithDishesUseCase.Params()).first()) {
+            is ResponseError -> emptyList()
+            is ResponseSuccess -> {
+                response.data?.sections?.map { section ->
+                    DishesMenuAdapterModel(
+                        section = section,
+                        dishes = menuItems.filter { section.dishIds?.contains(it.dish?.id) == true }
+                    )
+                }?.filter { it.dishes.isNotEmpty() }?.toList() ?: emptyList()
+            }
+        }
     }
 
     private fun reportEvent(factory: (mode: ChefsCookingSlotsEvent.ModeValues, slotId: Int?) -> ChefsCookingSlotsEvent) {

@@ -4,13 +4,15 @@ import androidx.lifecycle.viewModelScope
 import com.bupp.wood_spoon_chef.data.remote.model.CookingSlot
 import com.bupp.wood_spoon_chef.data.remote.model.Dish
 import com.bupp.wood_spoon_chef.data.remote.model.SectionWithDishes
+import com.bupp.wood_spoon_chef.data.remote.network.base.ResponseError
+import com.bupp.wood_spoon_chef.data.remote.network.base.ResponseSuccess
+import com.bupp.wood_spoon_chef.domain.GetSectionsWithDishesUseCase
 import com.bupp.wood_spoon_chef.presentation.features.base.BaseViewModel
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.CookingSlotReportEventUseCase
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.data.models.FilterAdapterSectionModel
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.data.models.MyDishesPickerAdapterDish
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.data.models.MyDishesPickerAdapterModel
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.data.repository.CookingSlotsDraftRepository
-import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.data.repository.DishesWithCategoryRepository
 import com.eatwoodspoon.analytics.events.ChefsCookingSlotsEvent
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
@@ -25,7 +27,7 @@ data class MyDishesState(
     val showEmptyState: Boolean = false,
     val cookingSlotId: Long? = null
 ) {
-    val isListFiltered = !searchCriteria.isNullOrEmpty()
+    val isListFiltered = !searchCriteria.isNullOrEmpty() || !filteredSections.isNullOrEmpty()
 }
 
 sealed class MyDishesEvent {
@@ -39,7 +41,7 @@ sealed class MyDishesEvent {
 }
 
 class MyDishesViewModel(
-    private val dishesWithCategoryRepository: DishesWithCategoryRepository,
+    private val getSectionsWithDishesUseCase: GetSectionsWithDishesUseCase,
     private val cookingSlotsDraftRepository: CookingSlotsDraftRepository,
     private val eventTracker: CookingSlotReportEventUseCase
 ) : BaseViewModel() {
@@ -60,12 +62,14 @@ class MyDishesViewModel(
         reportEvent { mode, slotId -> ChefsCookingSlotsEvent.DishPickerShownEvent(mode, slotId) }
         viewModelScope.launch {
             _state.collect {
-                _state.update { it.copy(
-                    visibleItems = it.initialList
-                        .filterExcluding(it.excludedDishesIds)
-                        .filterByDishName(it.searchCriteria)
-                        .filterBySections(it.filteredSections)
-                ) }
+                _state.update {
+                    it.copy(
+                        visibleItems = it.initialList
+                            .filterExcluding(it.excludedDishesIds)
+                            .filterByDishName(it.searchCriteria)
+                            .filterBySections(it.filteredSections)
+                    )
+                }
             }
         }
     }
@@ -73,9 +77,18 @@ class MyDishesViewModel(
 
     private suspend fun getSectionsWithDishes() {
         try {
-
-            val result = dishesWithCategoryRepository.getSectionsAndDishes().getOrThrow()
-            _state.update { it.copy(initialList = result.mapToAdapterModels()) }
+            when (val sectionWithDishesResult = getSectionsWithDishesUseCase.execute(GetSectionsWithDishesUseCase.Params()).first()) {
+                is ResponseError -> {
+                    viewModelScope.launch {
+                        _events.emit(MyDishesEvent.Error())
+                    }
+                }
+                is ResponseSuccess -> {
+                    sectionWithDishesResult.data?.let { sectionWithDishes ->
+                        _state.update { it.copy(initialList = sectionWithDishes.mapToAdapterModels()) }
+                    }
+                }
+            }
         } catch (e: Exception) {
             print(e.message)
 
@@ -96,7 +109,7 @@ class MyDishesViewModel(
 
     fun filterBySectionName(sectionList: List<FilterAdapterSectionModel>) {
         _state.update {
-            it.copy(filteredSections = sectionList.map { it.sectionName })
+            it.copy(filteredSections = sectionList.map { section -> section.sectionName })
         }
     }
 
@@ -168,7 +181,7 @@ fun <T> List<T>.updateItem(where: ((T) -> Boolean), transformation: ((T) -> T)):
 }
 
 private fun List<MyDishesPickerAdapterModel>.filterExcluding(dishIds: List<Long>?): List<MyDishesPickerAdapterModel> {
-    if(dishIds.isNullOrEmpty()) {
+    if (dishIds.isNullOrEmpty()) {
         return this
     }
     return this.filterByDish { dish ->
@@ -177,7 +190,7 @@ private fun List<MyDishesPickerAdapterModel>.filterExcluding(dishIds: List<Long>
 }
 
 private fun List<MyDishesPickerAdapterModel>.filterByDishName(input: String?): List<MyDishesPickerAdapterModel> {
-    if(input.isNullOrEmpty()) {
+    if (input.isNullOrEmpty()) {
         return this
     }
     return this.filterByDish { dish ->
@@ -194,7 +207,7 @@ private fun List<MyDishesPickerAdapterModel>.filterByDish(where: (dish: Dish) ->
 }
 
 private fun List<MyDishesPickerAdapterModel>.filterBySections(sectionList: List<String>?): List<MyDishesPickerAdapterModel> {
-    if (sectionList == null) {
+    if (sectionList.isNullOrEmpty()) {
         return this
     }
     return this.filter { section ->
