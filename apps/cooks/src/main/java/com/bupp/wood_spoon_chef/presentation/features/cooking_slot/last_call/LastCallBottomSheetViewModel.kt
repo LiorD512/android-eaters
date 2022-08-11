@@ -36,8 +36,12 @@ class LastCallBottomSheetViewModel : ViewModel() {
         _events.emit(LastCallEvents.SetResult(state.value.lastCall))
     }
 
-    fun onSaveClicked() = viewModelScope.launch {
-        _events.emit(LastCallEvents.ShowWarningDialog)
+    fun onSaveClicked() = if (_state.value.lastCall.isNoLastCall()){
+        onWarningAccepted()
+    }else{
+        viewModelScope.launch {
+            _events.emit(LastCallEvents.ShowWarningDialog)
+        }
     }
 
     fun onSelectDayClicked() = viewModelScope.launch {

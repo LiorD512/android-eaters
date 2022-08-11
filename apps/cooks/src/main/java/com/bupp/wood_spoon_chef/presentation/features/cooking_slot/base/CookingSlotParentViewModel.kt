@@ -6,6 +6,7 @@ import com.bupp.wood_spoon_chef.data.remote.network.base.ResponseError
 import com.bupp.wood_spoon_chef.data.remote.network.base.ResponseSuccess
 import com.bupp.wood_spoon_chef.data.remote.network.base.errorCode
 import com.bupp.wood_spoon_chef.domain.FetchCookingSlotByIdUseCase
+import com.bupp.wood_spoon_chef.domain.GetSectionsWithDishesUseCase
 import com.bupp.wood_spoon_chef.presentation.features.base.BaseViewModel
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.CookingSlotReportEventUseCase
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.coordinator.CookingSlotFlowCoordinator
@@ -20,6 +21,7 @@ class CookingSlotParentViewModel(
     private val fetchCookingSlotByIdUseCase: FetchCookingSlotByIdUseCase,
     private val cookingSlotsDraftRepository: CookingSlotsDraftRepository,
     private val originalCookingSlotToDraftCookingSlotMapper: OriginalCookingSlotToDraftCookingSlotMapper,
+    private val getSectionsWithDishesUseCase: GetSectionsWithDishesUseCase,
     private val eventTracker: CookingSlotReportEventUseCase
 ) : BaseViewModel() {
 
@@ -31,7 +33,7 @@ class CookingSlotParentViewModel(
         selectedDate: Long?
     ) {
         viewModelScope.launch {
-
+            getSectionsWithDishesUseCase.execute(GetSectionsWithDishesUseCase.Params(true))
             val analyticsMode = if (cookingSlotId != null) {
                 ChefsCookingSlotsEvent.ModeValues.Edit
             } else {

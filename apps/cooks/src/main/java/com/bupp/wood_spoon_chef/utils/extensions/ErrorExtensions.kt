@@ -59,7 +59,7 @@ fun Activity.showErrorToast(title: String, anchorView: ViewGroup, length: Int = 
     toast.show()
 }
 
-fun Fragment.showErrorToast(title: String, anchorView: ViewGroup, length: Int = Toast.LENGTH_SHORT) {
+fun Fragment.showErrorToast(title: String, anchorView: ViewGroup, length: Int = Toast.LENGTH_LONG) {
     val customLayout = layoutInflater.inflate(R.layout.error_toast, anchorView, false)
     val titleView = customLayout.findViewById<TextView>(R.id.errorTitle)
     titleView.text = title.trim()

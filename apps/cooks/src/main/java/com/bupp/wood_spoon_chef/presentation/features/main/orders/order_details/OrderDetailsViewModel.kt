@@ -164,7 +164,7 @@ class OrderDetailsViewModel(
         viewModelScope.launch {
             isCallSupportByCancelingOrderUseCase.execute()
                 .collectLatest { isEnabled ->
-                    if (isEnabled) {
+                    if (!isEnabled) {
                         val first = getSupportNumberUseCase.execute().first()
 
                         _orderCancellationActionFlow.emit(
