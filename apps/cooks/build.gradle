@@ -102,7 +102,7 @@ dependencies {
     implementation 'com.google.android.exoplayer:exoplayer:2.14.1'
 
     implementation 'com.github.florent37:inline-activity-result-kotlin:1.0.4'
-    implementation 'com.segment.analytics.android:analytics:4.9.4'
+    implementation 'com.segment.analytics.android:analytics:4.10.1'
     implementation 'com.segment.analytics.android.integrations:mixpanel:2.3.2'
     implementation 'com.appsflyer:segment-android-integration:6.3.0'
     implementation 'com.android.installreferrer:installreferrer:2.2'
