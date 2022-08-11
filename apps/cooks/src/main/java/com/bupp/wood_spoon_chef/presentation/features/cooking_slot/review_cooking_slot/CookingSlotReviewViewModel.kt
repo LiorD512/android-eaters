@@ -97,8 +97,9 @@ class CookingSlotReviewViewModel(
                 }
                 return@launch
             }
+        }else{
+            saveCookingSlot(prepareAddSlotRequest())
         }
-        saveCookingSlot(prepareAddSlotRequest())
     }
 
     fun onDetachDialogResult(singleEvent: Boolean) = viewModelScope.launch {
