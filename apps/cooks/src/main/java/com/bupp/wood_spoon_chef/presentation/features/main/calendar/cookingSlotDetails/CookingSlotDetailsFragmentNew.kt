@@ -200,7 +200,7 @@ class CookingSlotDetailsFragmentNew : BaseFragment(R.layout.fragment_details_coo
         if (isRecurring) {
             showDetachDialog()
         } else {
-            viewModel.cancelCookingSlot(cookingSlotId, null)
+            showDeleteCookingSlotDialog()
         }
     }
 
@@ -209,7 +209,7 @@ class CookingSlotDetailsFragmentNew : BaseFragment(R.layout.fragment_details_coo
 
         val confirmationArgs = ConfirmationBottomSheet.ConfirmationArguments(
             getString(R.string.delete_cooking_slot_title),
-            getString(R.string.delete_cooking_slot_subject),
+            getString(R.string.delete_recurring_cooking_slot_subject),
             ConfirmationBottomSheet.ConfirmationAction(
                 ConfirmationBottomSheet.ConfirmationAction.ConfirmationButtonType.PRIMARY,
                 getString(R.string.this_and_following)
@@ -229,6 +229,35 @@ class CookingSlotDetailsFragmentNew : BaseFragment(R.layout.fragment_details_coo
                 }
                 ConfirmationBottomSheet.ConfirmationAction.ConfirmationButtonType.SECONDARY -> {
                     viewModel.cancelCookingSlot(cookingSlotId, true)
+                }
+            }
+        }
+    }
+
+    private fun showDeleteCookingSlotDialog(){
+        val cookingSlotId = viewModel.selectedCookingSlot?.id ?: return
+
+        val confirmationArgs = ConfirmationBottomSheet.ConfirmationArguments(
+            getString(R.string.delete_cooking_slot_title),
+            getString(R.string.delete_cooking_slot_subject),
+            ConfirmationBottomSheet.ConfirmationAction(
+                ConfirmationBottomSheet.ConfirmationAction.ConfirmationButtonType.PRIMARY,
+                getString(R.string.delete)
+            ),
+            ConfirmationBottomSheet.ConfirmationAction(
+                ConfirmationBottomSheet.ConfirmationAction.ConfirmationButtonType.SECONDARY,
+                getString(R.string.cancel)
+            )
+        )
+
+        ConfirmationBottomSheet.newInstance(confirmationArgs).showWithResultListener(
+            parentFragmentManager, null, this
+        ) { action ->
+            when (action.type) {
+                ConfirmationBottomSheet.ConfirmationAction.ConfirmationButtonType.PRIMARY -> {
+                    viewModel.cancelCookingSlot(cookingSlotId, null)
+                }
+                ConfirmationBottomSheet.ConfirmationAction.ConfirmationButtonType.SECONDARY -> {
                 }
             }
         }
