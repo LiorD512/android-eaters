@@ -69,18 +69,19 @@
                 app:layout_constraintTop_toBottomOf="@+id/tv_header_subtitle">
 
                 <com.bupp.wood_spoon_chef.presentation.custom_views.CreateCookingSlotOptionView
+                    android:id="@+id/createCookingSlotNewFragmentMakeRecurringView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:mainIcon="@drawable/icon_reccuring"
+                    app:title="Make slot recurring" />
+
+                <com.bupp.wood_spoon_chef.presentation.custom_views.CreateCookingSlotOptionView
                     android:id="@+id/createCookingSlotNewFragmentLastCallForOrderView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:mainIcon="@drawable/icon_bell"
                     app:title="Last call for orders" />
 
-                <com.bupp.wood_spoon_chef.presentation.custom_views.CreateCookingSlotOptionView
-                    android:id="@+id/createCookingSlotNewFragmentMakeRecurringView"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:mainIcon="@drawable/icon_reccuring"
-                    app:title="Make slot recurring" />
 
             </com.bupp.wood_spoon_chef.presentation.custom_views.SectionView>
 

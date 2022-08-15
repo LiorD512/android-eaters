@@ -39,20 +39,20 @@
                 android:layout_marginTop="16dp">
 
                 <com.bupp.wood_spoon_chef.presentation.custom_views.CreateCookingSlotOptionView
-                    android:id="@+id/createCookingSlotNewFragmentLastCallForOrderView"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:mainIcon="@drawable/icon_bell"
-                    app:title="Last call for orders"
-                    tools:subtitle="@tools:sample/lorem"/>
-
-                <com.bupp.wood_spoon_chef.presentation.custom_views.CreateCookingSlotOptionView
                     android:id="@+id/createCookingSlotNewFragmentMakeRecurringView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:mainIcon="@drawable/icon_reccuring"
                     app:title="Slot is recurring"
                     tools:subtitle="@tools:sample/lorem/random"/>
+
+                <com.bupp.wood_spoon_chef.presentation.custom_views.CreateCookingSlotOptionView
+                    android:id="@+id/createCookingSlotNewFragmentLastCallForOrderView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:mainIcon="@drawable/icon_bell"
+                    app:title="Last call for orders"
+                    tools:subtitle="@tools:sample/lorem"/>
 
                 <com.bupp.wood_spoon_chef.presentation.custom_views.CreateCookingSlotOptionView
                     android:id="@+id/createCookingSlotNewFragmentShipNationwide"
