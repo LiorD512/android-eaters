@@ -71,6 +71,7 @@ class RRuleTextFormatter {
                 }"
             )
             if (!simpleRRule.days.isNullOrEmpty()) {
+                stringBuilder.append(" on")
                 simpleRRule.days.forEach {
                     stringBuilder.append(" ${formatDayOfWeek(it)}")
                 }

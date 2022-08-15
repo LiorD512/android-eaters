@@ -14,7 +14,7 @@ fun DateTime.prepareFormattedDateForDateAndHour(): String =
 
 fun DateTime.prepareRangeOneMonth(): Pair<Long, Long> {
     val startDate: DateTime = this.withDayOfMonth(1)
-    val endDate: DateTime = startDate.plusMonths(1).minusDays(1)
+    val endDate: DateTime = startDate.plusMonths(1)
     return Pair(startDate.millis / 1000, endDate.millis / 1000)
 }
 

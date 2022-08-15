@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:background="@color/white"
         android:orientation="horizontal"
-        android:weightSum="5">
+        android:weightSum="4">
 
         <com.bupp.wood_spoon_chef.presentation.custom_views.BottomBarButton
             android:id="@+id/bottomViewOrders"
@@ -43,6 +43,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:visibility="gone"
             app:icon="@drawable/bottom_view_earnings_selector"
             app:title="Earnings" />
 

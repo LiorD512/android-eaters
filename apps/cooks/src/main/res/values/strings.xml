@@ -87,7 +87,7 @@
     <string name="quantity_zero_error">Dish quantity cannot be 0</string>
     <string name="last_call_for_orders_explanation">Adding a last call for orders may impact your sales, as 50% of our order are placed on-demand. \n \nAfter this time, your cooking slot will no longer be visible to customers.\n \nThe last call time that you select will apply to the entire cooking slot for all recurring cooking slots, not just to a specific dish. Once you set it you will have to delete the cooking slot if you need to change it.</string>
     <string name="last_call_for_order">Last call for order</string>
-    <string name="add_last_call_for_order">Add last call for order</string>
+    <string name="add_last_call_for_order">Add an optional last call</string>
     <string name="format_last_call_subtitle">"%s before your cooking slot ends"</string>
     <string name="tool_tip_last_call">Last call is only recommended for baked goods or large meals, most chefs won’t need to use this</string>
     <string name="title_warning_dialog">Warning</string>
@@ -97,7 +97,8 @@
     <string name="update_cooking_slot_title">Update cooking slot</string>
     <string name="update_cooking_slot_subject">For which cooking slots would you like to save the changes you made?</string>
     <string name="delete_cooking_slot_title">Delete cooking slot</string>
-    <string name="delete_cooking_slot_subject">Which cooking slots would you like to delete?</string>
+    <string name="delete_recurring_cooking_slot_subject">Which cooking slots would you like to delete?</string>
+    <string name="delete_cooking_slot_subject">Are you sure you want to delete this cooking slot?</string>
     <string name="this_and_following">This and following</string>
     <string name="this_slot">This slot</string>
 
@@ -115,7 +116,8 @@
     <string name="days">Days</string>
     <string name="weeks">Weeks</string>
     <string name="save">SAVE</string>
-    <string name="cancel">CANCEL</string>
+    <string name="cancel">Cancel</string>
+    <string name="delete">Delete</string>
     <string name="ends_at">Ends at</string>
     <string name="search_for_dishes">Search for dishes</string>
     <string name="operating_hours_info_text">Please indicate the time you will actively be in your kitchen and available for a driver to pick up your food. We will try our best to make sure the pickup time of your first order is at least 30 minutes after your cooking start time.</string>
