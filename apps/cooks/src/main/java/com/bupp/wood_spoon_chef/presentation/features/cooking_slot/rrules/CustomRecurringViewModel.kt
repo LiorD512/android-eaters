@@ -18,7 +18,7 @@ enum class CustomFrequency {
 
 data class CustomRecurringState(
     val selectedDays: List<DayOfWeek> = emptyList(),
-    val customFrequency: CustomFrequency = CustomFrequency.DAY,
+    val customFrequency: CustomFrequency = CustomFrequency.WEEK,
     val customInterval: Int = 1,
     val recurringRule: String? = null
 )
