@@ -73,7 +73,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:mainIcon="@drawable/icon_reccuring"
-                    app:title="Make slot recurring" />
+                    app:title="@string/recurring_slot" />
 
                 <com.bupp.wood_spoon_chef.presentation.custom_views.CreateCookingSlotOptionView
                     android:id="@+id/createCookingSlotNewFragmentLastCallForOrderView"
