@@ -26,7 +26,6 @@ import com.bupp.wood_spoon_eaters.views.ShareBanner
 import com.bupp.wood_spoon_eaters.views.UserImageVideoView
 import com.bupp.wood_spoon_eaters.views.WSEditText
 import com.bupp.wood_spoon_eaters.views.horizontal_dietary_view.HorizontalDietaryView
-import com.google.android.play.core.review.ReviewManagerFactory
 import com.stripe.android.model.PaymentMethod
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel

@@ -4,6 +4,7 @@ import android.app.Application
 import com.bupp.wood_spoon_eaters.common.MTLogger
 import com.bupp.wood_spoon_eaters.di.appModule
 import com.bupp.wood_spoon_eaters.di.networkModule
+import com.bupp.wood_spoon_eaters.di.rateApp
 import com.eatwoodspoon.analytics.analyticsModule
 import com.facebook.FacebookSdk
 import com.facebook.LoggingBehavior
@@ -35,7 +36,7 @@ class WoodSpoonApplication : Application() {
         startKoin {
             androidLogger()
             androidContext(this@WoodSpoonApplication)
-            modules(appModule + networkModule + analyticsModule)
+            modules(appModule + networkModule + analyticsModule + rateApp)
         }
 
         initShipBook()

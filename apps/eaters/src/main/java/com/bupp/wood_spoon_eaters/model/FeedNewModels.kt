@@ -141,6 +141,13 @@ data class QuickLinkItem(
 
 @Parcelize
 @JsonClass(generateAdapter = true)
+data class ReviewItem(
+    override val items: List<FeedRestaurantSectionItem>? = null,
+    override val full_href: String? = null,
+): Parcelable, FeedSectionCollectionItem(FeedModelsViewType.REVIEW)
+
+@Parcelize
+@JsonClass(generateAdapter = true)
 data class FeedRestaurantSection(
     override var full_href: String?,
     override val items: List<FeedRestaurantSectionItem>?,
@@ -251,6 +258,8 @@ enum class FeedModelsViewType {
     HERO,
     @Json(name = "quick_link")
     QUICK_LINK,
+    @Json(name = "review")
+    REVIEW,
     @Json(name = "chef")
     CHEF,
     @Json(name = "dish")

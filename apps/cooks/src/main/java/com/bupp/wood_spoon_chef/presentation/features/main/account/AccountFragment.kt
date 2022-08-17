@@ -22,6 +22,7 @@ import com.bupp.wood_spoon_chef.presentation.features.main.account.sub_screen.pa
 import com.bupp.wood_spoon_chef.presentation.features.main.account.sub_screen.reviews.ReviewsBottomSheet
 import com.bupp.wood_spoon_chef.presentation.features.main.account.sub_screen.support_center.SupportBottomSheet
 import com.bupp.wood_spoon_chef.data.remote.model.Cook
+import com.bupp.wood_spoon_chef.presentation.features.main.account.sub_screen.order_packaging.OrderFoodPackagingBottomSheet
 import com.bupp.wood_spoon_chef.utils.DateUtils
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -71,6 +72,14 @@ class AccountFragment : BaseFragment(R.layout.fragment_account), LogoutDialog.Lo
                     Constants.EDIT_KITCHEN_DIALOG
                 )
             }
+
+            profileMenuOrderFoodPackaging.setOnClickListener {
+                OrderFoodPackagingBottomSheet().show(
+                    childFragmentManager,
+                    Constants.ORDER_PACKAGING_DIALOG
+                )
+            }
+
             profileMenuPayment.setOnClickListener {
                 PaymentBottomSheet().show(childFragmentManager, Constants.SUPPORT_BOTTOM_SHEET)
             }

@@ -132,6 +132,14 @@ class CreateCookingSlotFragmentNew : BaseFragment(R.layout.fragment_create_cooki
                 }
             )
 
+            createCookingSlotNewFragmentMakeRecurringView.setTitle(
+                if (state.recurringRule == null){
+                    getString(R.string.make_slot_recurring)
+                }else{
+                    getString(R.string.recurring_slot)
+                }
+            )
+
             createCookingSlotNewFragmentOperatingHoursView.setSubtitle(
                 formatOperatingHours(
                     state.operatingHours.startTime, state.operatingHours.endTime

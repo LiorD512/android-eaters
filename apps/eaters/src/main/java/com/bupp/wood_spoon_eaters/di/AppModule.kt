@@ -3,7 +3,6 @@ package com.bupp.wood_spoon_eaters.di
 import android.content.Context
 import com.bupp.wood_spoon_eaters.dialogs.super_user.SuperUserViewModel
 import com.bupp.wood_spoon_eaters.common.UserSettings
-import com.bupp.wood_spoon_eaters.dialogs.rate_last_order.RateLastOrderViewModel
 import com.bupp.wood_spoon_eaters.dialogs.cancel_order.CancelOrderViewModel
 import com.bupp.wood_spoon_eaters.dialogs.update_required.UpdateRequiredViewModel
 import com.bupp.wood_spoon_eaters.dialogs.web_docs.WebDocsViewModel
@@ -28,6 +27,7 @@ import com.bupp.wood_spoon_eaters.bottom_sheets.reviews.ReviewsBSViewModel
 import com.bupp.wood_spoon_eaters.features.main.settings.SettingsViewModel
 import com.bupp.wood_spoon_eaters.bottom_sheets.support_center.SupportViewModel
 import com.bupp.wood_spoon_eaters.custom_views.cuisine_chooser.CuisineChooserViewModel
+import com.bupp.wood_spoon_eaters.data.data_sorce.memory.MemoryAppReviewDataSource
 import com.bupp.wood_spoon_eaters.domain.*
 import com.bupp.wood_spoon_eaters.experiments.PricingExperimentUseCase
 import com.bupp.wood_spoon_eaters.features.main.search.SearchViewModel
@@ -60,6 +60,9 @@ import org.koin.dsl.module
 val appModule = module {
 
     factory { get<Context>().resources }
+
+    //dataSource
+    single { MemoryAppReviewDataSource() }
 
     //global
     single { FcmManager(get()) }
@@ -147,7 +150,6 @@ val appModule = module {
     viewModel { FeedViewModel(get(), get(), get(), get(), get(), get()) }
     viewModel { SearchViewModel(get(), get(), get()) }
     viewModel { ReportIssueViewModel(get(), get(), get()) }
-    viewModel { RateLastOrderViewModel(get()) }
 
     viewModel { UpdateRequiredViewModel(get()) }
 
@@ -177,6 +179,6 @@ val appModule = module {
     viewModel { ReviewsBSViewModel(get(), get()) }
 
     //Review Activity
-    viewModel { ReviewsViewModel(get(), get(), get()) }
+    viewModel { ReviewsViewModel(get(), get(), get(), get(), get()) }
 }
 
