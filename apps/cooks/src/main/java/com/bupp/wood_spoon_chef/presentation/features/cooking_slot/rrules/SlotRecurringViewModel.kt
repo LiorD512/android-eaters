@@ -16,14 +16,14 @@ import java.util.*
 
 @Keep
 enum class RecurringFrequencyName {
-    ONE_TIME,
+    DOES_NOT_RECUR,
     EVERY_DAY,
     EVERY_WEEK,
     CUSTOM
 }
 
 sealed class RecurringFrequency(open val name: RecurringFrequencyName) {
-    object OneTime : RecurringFrequency(RecurringFrequencyName.ONE_TIME)
+    object OneTime : RecurringFrequency(RecurringFrequencyName.DOES_NOT_RECUR)
     object EveryDay : RecurringFrequency(RecurringFrequencyName.EVERY_DAY)
     object EveryWeek : RecurringFrequency(RecurringFrequencyName.EVERY_WEEK)
     data class Custom(val recurringRule: SimpleRRule? = null) :
@@ -192,7 +192,7 @@ class SlotRecurringViewModel(
 
     fun onItemClicked(recurringFrequencyName: RecurringFrequencyName) {
         when (recurringFrequencyName) {
-            RecurringFrequencyName.ONE_TIME -> {
+            RecurringFrequencyName.DOES_NOT_RECUR -> {
                 _state.update {
                     it.copy(selectedFrequency = RecurringFrequency.OneTime)
                 }

@@ -85,7 +85,7 @@
     <string name="update_slot">Update cooking slot</string>
     <string name="menu_empty_error">Menu cannot be empty</string>
     <string name="quantity_zero_error">Dish quantity cannot be 0</string>
-    <string name="last_call_for_orders_explanation">Adding a last call for orders may impact your sales, as 50% of our order are placed on-demand. \n \nAfter this time, your cooking slot will no longer be visible to customers.\n \nThe last call time that you select will apply to the entire cooking slot for all recurring cooking slots, not just to a specific dish. Once you set it you will have to delete the cooking slot if you need to change it.</string>
+    <string name="last_call_for_orders_explanation">After the time selected, you\'ll no longer be able to collect new orders or be visible to customers.\n\nAdding the last call for orders may impact your sales, as 70% of our orders are on-demand.\n\nLast Call is optional and we recommend only using this feature sparingly.\n\nThe last call time you select will apply to the initial cooking slot and future recurring cooking slots, not just to a specific dish.</string>
     <string name="last_call_for_order">Last call for order</string>
     <string name="add_last_call_for_order">Add an optional last call</string>
     <string name="format_last_call_subtitle">"%s before your cooking slot ends"</string>

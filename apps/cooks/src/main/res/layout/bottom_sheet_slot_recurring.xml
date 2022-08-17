@@ -37,8 +37,8 @@
                 android:layout_height="wrap_content"
                 app:endIcon="@drawable/ic_check_v"
                 app:showMainIcon="false"
-                android:tag="ONE_TIME"
-                app:title="One time" />
+                android:tag="DOES_NOT_RECUR"
+                app:title="Does not recur" />
 
             <com.bupp.wood_spoon_chef.presentation.custom_views.CreateCookingSlotOptionView
                 android:id="@+id/makeSlotRecurringEveryDay"
