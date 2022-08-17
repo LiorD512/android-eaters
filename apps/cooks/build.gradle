@@ -156,6 +156,9 @@ dependencies {
     implementation 'io.shipbook:shipbooksdk:1.6.2'
 
     implementation 'net.sf.biweekly:biweekly:0.6.6'
+
+    //Chrome tab
+    implementation 'androidx.browser:browser:1.4.0'
 }
 
 

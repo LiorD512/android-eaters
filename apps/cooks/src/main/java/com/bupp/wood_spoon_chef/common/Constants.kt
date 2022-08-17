@@ -77,6 +77,7 @@ class Constants {
         const val DATE_PICKER_DIALOG = "date_picker_dialog"
         const val EDIT_ACCOUNT_DIALOG = "edit_account_dialog"
         const val EDIT_KITCHEN_DIALOG = "edit_kitchen_dialog"
+        const val ORDER_PACKAGING_DIALOG = "order_packaging_dialog"
         const val REVIEWS_DIALOG = "edit_kitchen_dialog"
         const val SATISFACTION_DIALOG = "satisfaction_dialog"
         const val COOKING_SLOT_DIALOG = "cooking_slot_dialog"

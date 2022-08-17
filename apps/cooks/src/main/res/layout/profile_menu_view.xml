@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
@@ -46,6 +47,20 @@
             android:drawableEnd="@drawable/ic_arrow_right"
             android:padding="15dp"
             android:text="Edit my home kitchen" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/white_three" />
+
+        <TextView
+            android:id="@+id/profileMenuOrderFoodPackaging"
+            style="@style/LatoBold13Black"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="15dp"
+            android:text="@string/order_food_packaging"
+            app:drawableEndCompat="@drawable/ic_arrow_right" />
 
         <View
             android:layout_width="match_parent"
