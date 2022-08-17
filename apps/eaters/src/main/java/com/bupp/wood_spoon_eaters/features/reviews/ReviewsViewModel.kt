@@ -5,24 +5,34 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.bupp.wood_spoon_eaters.bottom_sheets.reviews.ReviewRequest
 import com.bupp.wood_spoon_eaters.common.Constants
+import com.bupp.wood_spoon_eaters.data.data_sorce.memory.MemoryAppReviewDataSource
 import com.bupp.wood_spoon_eaters.di.abs.LiveEventData
 import com.bupp.wood_spoon_eaters.managers.EatersAnalyticsTracker
 import com.bupp.wood_spoon_eaters.di.abs.ProgressData
+import com.bupp.wood_spoon_eaters.features.appreview.checker.EatersAvailabilityChecker
 import com.bupp.wood_spoon_eaters.model.Order
 import com.bupp.wood_spoon_eaters.model.WSError
 import com.bupp.wood_spoon_eaters.repositories.OrderRepository
 import com.bupp.wood_spoon_eaters.repositories.UserRepository
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 
-class ReviewsViewModel(private val orderRepository: OrderRepository, private val userRepository: UserRepository, private val eatersAnalyticsTracker: EatersAnalyticsTracker) : ViewModel() {
+class ReviewsViewModel(
+    private val orderRepository: OrderRepository,
+    private val userRepository: UserRepository,
+    private val eatersAnalyticsTracker: EatersAnalyticsTracker,
+    private val memoryAppReviewDataSource: MemoryAppReviewDataSource,
+    private val eatersAvailabilityChecker: EatersAvailabilityChecker,
+    ) : ViewModel() {
 
     val progressData = ProgressData()
     val navigationEvent = LiveEventData<NavigationEvent>()
     val reviewSuccess = LiveEventData<Boolean>()
     val errorEvent = LiveEventData<List<WSError>?>()
     var order: Order? = null
-    val reviewRequest = ReviewRequest()
+
+    val showAppReviewFlow = MutableStateFlow(false)
 
     var rating: Int? = null
 
@@ -68,6 +78,7 @@ class ReviewsViewModel(private val orderRepository: OrderRepository, private val
     }
 
     fun setRating(rating: Int) {
+        memoryAppReviewDataSource.lastSelectedRatingFlow.value = rating
         this.rating = rating
     }
 
@@ -87,5 +98,9 @@ class ReviewsViewModel(private val orderRepository: OrderRepository, private val
         eatersAnalyticsTracker.logEvent(Constants.EVENT_REVIEW_SUBMIT, data)
     }
 
-
+    fun showAppReviewIfPossible() {
+        if (eatersAvailabilityChecker.checkAll()) {
+            showAppReviewFlow.value = true
+        }
+    }
 }

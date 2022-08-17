@@ -3,20 +3,25 @@ package com.bupp.wood_spoon_eaters.features.reviews.fragments
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.custom_views.RatingStarsViewReviews
-import com.bupp.wood_spoon_eaters.databinding.FragmentRestaurantPageBinding
 import com.bupp.wood_spoon_eaters.databinding.FragmentReviewExperienceBinding
 import com.bupp.wood_spoon_eaters.di.abs.LiveEvent
 import com.bupp.wood_spoon_eaters.features.reviews.ReviewsViewModel
-import com.bupp.wood_spoon_eaters.utils.showErrorToast
+import com.google.android.play.core.review.ReviewManagerFactory
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
-class ReviewExperienceFragment() : Fragment(R.layout.fragment_review_experience), RatingStarsViewReviews.RatingStarsViewListener {
+class ReviewExperienceFragment() : Fragment(R.layout.fragment_review_experience),
+    RatingStarsViewReviews.RatingStarsViewListener {
 
     var binding: FragmentReviewExperienceBinding? = null
     private val viewModel by sharedViewModel<ReviewsViewModel>()
@@ -41,7 +46,9 @@ class ReviewExperienceFragment() : Fragment(R.layout.fragment_review_experience)
                 activity?.onBackPressed()
             }
             viewModel.order?.let { order ->
-                Glide.with(requireContext()).load(order.restaurant?.thumbnail?.url).placeholder(R.drawable.grey_white_cornered_rect).circleCrop().into(reviewFragImage)
+                Glide.with(requireContext()).load(order.restaurant?.thumbnail?.url)
+                    .placeholder(R.drawable.grey_white_cornered_rect).circleCrop()
+                    .into(reviewFragImage)
                 reviewFragRestName.text = order.restaurant?.restaurantName
                 reviewFragCookName.text = " by ${order.restaurant?.getFullName()}"
             }
@@ -49,9 +56,32 @@ class ReviewExperienceFragment() : Fragment(R.layout.fragment_review_experience)
     }
 
     private fun initObservers() {
-        viewModel.navigationEvent.observe(viewLifecycleOwner, { navigationEvent ->
+        viewModel.navigationEvent.observe(viewLifecycleOwner) { navigationEvent ->
             handleNavigationEvent(navigationEvent)
-        })
+        }
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                launch {
+                    viewModel.showAppReviewFlow.collect {
+                        if (it) {
+                            showAppReview()
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private fun showAppReview() {
+        ReviewManagerFactory.create(requireContext()).apply {
+            requestReviewFlow().addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    val reviewInfo = task.result
+                    launchReviewFlow(requireActivity(), reviewInfo)
+                }
+            }
+        }
     }
 
     private fun handleNavigationEvent(navigationEvent: LiveEvent<ReviewsViewModel.NavigationEvent>?) {
@@ -65,7 +95,8 @@ class ReviewExperienceFragment() : Fragment(R.layout.fragment_review_experience)
 
             when (it) {
                 ReviewsViewModel.NavigationEvent.EXPERIENCE_TO_DETAILS -> {
-                    val action = ReviewExperienceFragmentDirections.actionReviewExperienceFragmentToReviewDetailsFragment()
+                    val action =
+                        ReviewExperienceFragmentDirections.actionReviewExperienceFragmentToReviewDetailsFragment()
                     findNavController().navigate(action, extras)
                 }
             }
@@ -74,8 +105,8 @@ class ReviewExperienceFragment() : Fragment(R.layout.fragment_review_experience)
 
     override fun onRatingClick(rating: Int) {
         viewModel.setRating(rating)
+        viewModel.showAppReviewIfPossible()
     }
-
 
 
 }
