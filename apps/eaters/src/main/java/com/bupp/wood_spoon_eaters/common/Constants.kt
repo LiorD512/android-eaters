@@ -3,19 +3,18 @@ package com.bupp.wood_spoon_eaters.common
 class Constants {
     companion object {
 
-        const val FEED_SECTION_TYPE_COUPONS = "available_coupons"
-        const val FEED_SECTION_TYPE_RESTAURANT = "restaurant_overview"
-        const val FEED_SECTION_TYPE_HERO = "hero"
-        const val FEED_SECTION_TYPE_CHEF = "chef"
-        const val FEED_SECTION_TYPE_DISH = "dish"
-        const val FEED_SECTION_TYPE_QUICK_LINK = "quick_link"
-        const val FEED_SECTION_TYPE_REVIEW = "review"
-        const val FEED_EMPTY_NO_CHEF = "feed_empty_no_chefs"
-        const val SECTION_EMPTY_NO_CHEF = "section_empty_no_chefs"
-        const val SECTION_EMPTY_SEARCH = "section_empty_no_matches"
-        const val SECTION_COMING_SOON = "coming_soon"
-        const val RESTAURANT_SECTION_TYPE_DISH = "dish"
-        const val RESTAURANT_SECTION_TYPE_SEE_MORE = "see_more"
+//        const val FEED_SECTION_TYPE_COUPONS = "available_coupons"
+//        const val FEED_SECTION_TYPE_RESTAURANT = "restaurant_overview"
+//        const val FEED_SECTION_TYPE_HERO = "hero"
+//        const val FEED_SECTION_TYPE_CHEF = "chef"
+//        const val FEED_SECTION_TYPE_DISH = "dish"
+//        const val FEED_SECTION_TYPE_QUICK_LINK = "quick_link"
+//        const val FEED_EMPTY_NO_CHEF = "feed_empty_no_chefs"
+//        const val SECTION_EMPTY_NO_CHEF = "section_empty_no_chefs"
+//        const val SECTION_EMPTY_SEARCH = "section_empty_no_matches"
+//        const val SECTION_COMING_SOON = "coming_soon"
+//        const val RESTAURANT_SECTION_TYPE_DISH = "dish"
+//        const val RESTAURANT_SECTION_TYPE_SEE_MORE = "see_more"
 
         //feed banners
         const val NO_BANNER = -1

@@ -1,8 +1,7 @@
 package com.bupp.wood_spoon_eaters.model
 
 import android.os.Parcelable
-import com.squareup.moshi.Json
-import com.squareup.moshi.JsonClass
+import com.squareup.moshi.*
 import kotlinx.parcelize.Parcelize
 
 @JsonClass(generateAdapter = true)
@@ -27,6 +26,14 @@ sealed class FeedSectionCollectionItem(
     abstract val items: List<Parcelable>?
     abstract val full_href: String?
 }
+
+@Parcelize
+//@JsonClass(generateAdapter = true)
+data class FeedUnknownSection(
+    override val full_href: String? = null,
+    override val items: List<Campaign>? = null,
+    val unknownTypeValue: String?
+): Parcelable, FeedSectionCollectionItem(FeedModelsViewType.UNKNOWN)
 
 @Parcelize
 @JsonClass(generateAdapter = true)
@@ -128,23 +135,23 @@ data class FeedDishItemSection(
     @Json(name = "tags") val tags: List<String>?
 ) : Parcelable, FeedSectionCollectionItem(FeedModelsViewType.DISH)
 
-@Parcelize
-@JsonClass(generateAdapter = true)
-data class QuickLinkItem(
-    override val items: List<FeedRestaurantSectionItem>? = null,
-    override val full_href: String? = null,
-    var title: String?,
-    var text: String?,
-    var url: String?,
-    var image: WSImage?,
-): Parcelable, FeedSectionCollectionItem(FeedModelsViewType.QUICK_LINK)
+//@Parcelize
+//@JsonClass(generateAdapter = true)
+//data class QuickLinkItem(
+//    override val items: List<FeedRestaurantSectionItem>? = null,
+//    override val full_href: String? = null,
+//    var title: String?,
+//    var text: String?,
+//    var url: String?,
+//    var image: WSImage?,
+//): Parcelable, FeedSectionCollectionItem(FeedModelsViewType.QUICK_LINK)
 
-@Parcelize
-@JsonClass(generateAdapter = true)
-data class ReviewItem(
-    override val items: List<FeedRestaurantSectionItem>? = null,
-    override val full_href: String? = null,
-): Parcelable, FeedSectionCollectionItem(FeedModelsViewType.REVIEW)
+//@Parcelize
+//@JsonClass(generateAdapter = true)
+//data class ReviewItem(
+//    override val items: List<FeedRestaurantSectionItem>? = null,
+//    override val full_href: String? = null,
+//): Parcelable, FeedSectionCollectionItem(FeedModelsViewType.REVIEW)
 
 @Parcelize
 @JsonClass(generateAdapter = true)
@@ -231,6 +238,13 @@ data class FeedRestaurantItemTypeSeeMore(
     override val data: FeedRestaurantItemSeeMore?
 ) : Parcelable, FeedRestaurantSectionItem(FeedRestaurantSectionItemViewType.SEE_MORE)
 
+@Parcelize
+data class FeedRestaurantUnknownSection(
+    val unknownTypeValue: String?,
+    override val data: Parcelable? = null
+) : Parcelable, FeedRestaurantSectionItem(FeedRestaurantSectionItemViewType.UNKNOWN)
+
+
 
 @Parcelize
 @JsonClass(generateAdapter = true)
@@ -241,34 +255,53 @@ data class FeedRestaurantItemSeeMore(
 ) : Parcelable
 
 
-enum class FeedModelsViewType {
-    @Json(name = "available_coupons")
-    COUPONS,
-    @Json(name = "restaurant_overview")
-    RESTAURANT,
-    @Json(name = "feed_empty_no_chefs")
-    EMPTY_FEED,
-    @Json(name = "section_empty_no_chefs")
-    EMPTY_SECTION,
-    @Json(name = "section_empty_no_matches")
-    EMPTY_SEARCH,
-    @Json(name = "coming_soon")
-    COMING_SONG,
-    @Json(name = "hero")
-    HERO,
-    @Json(name = "quick_link")
-    QUICK_LINK,
-    @Json(name = "review")
-    REVIEW,
-    @Json(name = "chef")
-    CHEF,
-    @Json(name = "dish")
-    DISH
+enum class FeedModelsViewType(val value: String) {
+    COUPONS(value = "available_coupons"),
+    RESTAURANT(value = "restaurant_overview"),
+    EMPTY_FEED(value = "feed_empty_no_chefs"),
+    EMPTY_SECTION(value = "section_empty_no_chefs"),
+    EMPTY_SEARCH(value = "section_empty_no_matches"),
+    COMING_SONG(value = "coming_soon"),
+    HERO(value = "hero"),
+//    QUICK_LINK(value = "quick_link"),
+//    REVIEW(value = "review"),
+    CHEF(value = "chef"),
+    DISH(value = "dish"),
+    UNKNOWN(value = "unknown");
+
+    companion object {
+        fun fromString(value: String): FeedModelsViewType {
+            return values().firstOrNull { it.value == value } ?: UNKNOWN
+        }
+    }
+ }
+
+class FeedModelsViewTypeAdapter {
+    @ToJson
+    fun toJson(type: FeedModelsViewType): String = type.value
+
+    @FromJson
+    fun fromJson(value: String): FeedModelsViewType = FeedModelsViewType.fromString(value)
 }
 
-enum class FeedRestaurantSectionItemViewType{
-    @Json(name = "dish") DISH,
-    @Json(name = "see_more") SEE_MORE,
+enum class FeedRestaurantSectionItemViewType(val value: String){
+    DISH(value = "dish"),
+    SEE_MORE(value = "see_more"),
+    UNKNOWN(value = "unknown");
+
+    companion object {
+        fun fromString(value: String): FeedRestaurantSectionItemViewType {
+            return values().firstOrNull { it.value == value } ?: UNKNOWN
+        }
+    }
+}
+
+class FeedRestaurantSectionItemViewTypeAdapter {
+    @ToJson
+    fun toJson(type: FeedRestaurantSectionItemViewType): String = type.value
+
+    @FromJson
+    fun fromJson(value: String): FeedRestaurantSectionItemViewType = FeedRestaurantSectionItemViewType.fromString(value)
 }
 
 sealed class FeedAdapterItem(

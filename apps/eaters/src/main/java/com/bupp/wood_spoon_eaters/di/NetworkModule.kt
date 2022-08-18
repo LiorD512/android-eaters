@@ -5,7 +5,6 @@ import `in`.co.ophio.secure.core.ObscuredPreferencesBuilder
 import android.app.Application
 import android.content.Context
 import android.content.SharedPreferences
-import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.common.FlavorConfigManager
 import com.bupp.wood_spoon_eaters.di.abs.AppSettingAdapter
 import com.bupp.wood_spoon_eaters.di.abs.SerializeNulls.Companion.JSON_ADAPTER_FACTORY
@@ -15,7 +14,7 @@ import com.bupp.wood_spoon_eaters.network.ApiService
 import com.bupp.wood_spoon_eaters.network.ApiSettings
 import com.bupp.wood_spoon_eaters.network.AuthInterceptor
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
-import com.squareup.moshi.Moshi
+import com.squareup.moshi.*
 import com.squareup.moshi.adapters.PolymorphicJsonAdapterFactory
 import com.squareup.moshi.adapters.Rfc3339DateJsonAdapter
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
@@ -70,26 +69,52 @@ fun provideDefaultOkhttpClient(apiSettings: ApiSettings): OkHttpClient {
 fun provideRetrofit(client: OkHttpClient, flavorConfig: FlavorConfigManager): Retrofit {
 
     val moshi = Moshi.Builder()
+        .add(FeedModelsViewTypeAdapter())
+        .add(FeedRestaurantSectionItemViewTypeAdapter())
         .add(
             PolymorphicJsonAdapterFactory.of(FeedRestaurantSectionItem::class.java, "type")
-                .withSubtype(FeedRestaurantItemTypeDish::class.java, Constants.RESTAURANT_SECTION_TYPE_DISH)
-                .withSubtype(FeedRestaurantItemTypeSeeMore::class.java, Constants.RESTAURANT_SECTION_TYPE_SEE_MORE)
-//                .withFallbackJsonAdapter(MoshiNullableSectionAdapter())
+                .let {
+                    var builder = it
+                    FeedRestaurantSectionItemViewType.values().forEach { type ->
+                        val sectionClazz = when (type) {
+                            FeedRestaurantSectionItemViewType.DISH -> FeedRestaurantItemTypeDish::class.java
+                            FeedRestaurantSectionItemViewType.SEE_MORE -> FeedRestaurantItemTypeSeeMore::class.java
+                            FeedRestaurantSectionItemViewType.UNKNOWN -> null
+                        }
+                        sectionClazz?.let {
+                            builder = builder.withSubtype(it, type.value)
+                        }
+                    }
+                    builder
+                }
+                .withFallbackJsonAdapter(FallbackFeedSectionAdapter { FeedRestaurantUnknownSection(unknownTypeValue = it) })
         )
         .add(
             PolymorphicJsonAdapterFactory.of(FeedSectionCollectionItem::class.java, "type")
-                .withSubtype(FeedCampaignSection::class.java, Constants.FEED_SECTION_TYPE_COUPONS)
-                .withSubtype(FeedRestaurantSection::class.java, Constants.FEED_SECTION_TYPE_RESTAURANT)
-                .withSubtype(FeedIsEmptySection::class.java, Constants.FEED_EMPTY_NO_CHEF)
-                .withSubtype(FeedSingleEmptySection::class.java, Constants.SECTION_EMPTY_NO_CHEF)
-                .withSubtype(FeedSearchEmptySection::class.java, Constants.SECTION_EMPTY_SEARCH)
-                .withSubtype(FeedComingSoonSection::class.java, Constants.SECTION_COMING_SOON)
-                .withSubtype(FeedHeroItemSection::class.java, Constants.FEED_SECTION_TYPE_HERO)
-                .withSubtype(FeedChefItemSection::class.java, Constants.FEED_SECTION_TYPE_CHEF)
-                .withSubtype(FeedDishItemSection::class.java, Constants.FEED_SECTION_TYPE_DISH)
-                .withSubtype(QuickLinkItem::class.java, Constants.FEED_SECTION_TYPE_QUICK_LINK)
-                .withSubtype(ReviewItem::class.java, Constants.FEED_SECTION_TYPE_REVIEW)
-//                .withFallbackJsonAdapter(MoshiNullableSectionAdapter())
+                .let {
+                    var builder = it
+                    FeedModelsViewType.values().forEach { type ->
+                        val sectionClazz = when (type) {
+                            FeedModelsViewType.COUPONS -> FeedCampaignSection::class.java
+                            FeedModelsViewType.RESTAURANT -> FeedRestaurantSection::class.java
+                            FeedModelsViewType.EMPTY_FEED -> FeedIsEmptySection::class.java
+                            FeedModelsViewType.EMPTY_SECTION -> FeedSingleEmptySection::class.java
+                            FeedModelsViewType.EMPTY_SEARCH -> FeedSearchEmptySection::class.java
+                            FeedModelsViewType.COMING_SONG -> FeedComingSoonSection::class.java
+                            FeedModelsViewType.HERO -> FeedHeroItemSection::class.java
+//                            FeedModelsViewType.QUICK_LINK -> null // QuickLinkItem::class.java // TODO - DO we support them??
+//                            FeedModelsViewType.REVIEW -> null // ReviewItem::class.java // TODO - DO we support them??
+                            FeedModelsViewType.CHEF -> FeedChefItemSection::class.java
+                            FeedModelsViewType.DISH -> FeedDishItemSection::class.java
+                            FeedModelsViewType.UNKNOWN -> null
+                        }
+                        sectionClazz?.let {
+                            builder = builder.withSubtype(it, type.value)
+                        }
+                    }
+                    builder
+                }
+                .withFallbackJsonAdapter(FallbackFeedSectionAdapter { FeedUnknownSection(unknownTypeValue = it) })
         )
         .add(Date::class.java, Rfc3339DateJsonAdapter().nullSafe())
         .add(JSON_ADAPTER_FACTORY)
@@ -97,7 +122,7 @@ fun provideRetrofit(client: OkHttpClient, flavorConfig: FlavorConfigManager): Re
         .add(AppSettingAdapter())
 //        .add(TestAdapter())
         .addLast(KotlinJsonAdapterFactory())
-    .build()
+        .build()
 
     return Retrofit.Builder()
         .baseUrl(flavorConfig.getBaseUrl())
@@ -109,5 +134,29 @@ fun provideRetrofit(client: OkHttpClient, flavorConfig: FlavorConfigManager): Re
 }
 
 fun provideApiService(retrofit: Retrofit): ApiService = retrofit.create(ApiService::class.java)
+
+private class FallbackFeedSectionAdapter<T>(private val factory: (type: String?) -> T) :
+    JsonAdapter<T>() {
+
+    override fun fromJson(reader: JsonReader): T? {
+        var type: String? = null
+
+        reader.beginObject()
+        while (reader.hasNext()) {
+            if (reader.nextName() == "type") {
+                type = reader.nextString()
+            } else
+                reader.skipValue()
+        }
+        reader.endObject()
+
+        return factory(null)
+    }
+
+    override fun toJson(writer: JsonWriter, value: T?) {
+        // Do nothing
+    }
+
+}
 
 
