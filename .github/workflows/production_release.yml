@@ -43,7 +43,7 @@ jobs:
         appName: Monkeytech/WoodSpoon-Android
         token: ${{ secrets.APP_CENTER_TOKEN }}
         group: WoodSpoon Android Testers
-        file: apps/eaters/build/outputs/apk/debug/eaters-debug.apk
+        file: apps/eaters/build/outputs/apk/staging/debug/eaters-staging-debug.apk
         releaseNotes: "Staging version.\nBuild number ${{env.VERSION_CODE}}\n ${{ github.event.head_commit.message }}"
         notifyTesters: false
         debug: true
@@ -55,7 +55,7 @@ jobs:
         appName: Monkeytech/WoodSpoon-Chef-Android
         token: ${{ secrets.APP_CENTER_TOKEN }}
         group: WoodSpoon Android Testers
-        file: apps/cooks/build/outputs/apk/debug/cooks-debug.apk
+        file: apps/cooks/build/outputs/apk/staging/debug/cooks-staging-debug.apk
         releaseNotes: "Staging version.\nBuild number ${{env.VERSION_CODE}}\n ${{ github.event.head_commit.message }}"
         notifyTesters: false
         debug: true
@@ -72,7 +72,7 @@ jobs:
       if: env.RELEASE_APP_NAME == 'eaters'
       uses: r0adkll/sign-android-release@v1
       with:
-        releaseDirectory: apps/eaters/build/outputs/bundle/release
+        releaseDirectory: apps/eaters/build/outputs/bundle/productionRelease
         signingKeyBase64: ${{ secrets.GOOGLE_PLAY_SIGNING_KEY }}
         alias: ${{ secrets.GOOGLE_PLAY_ALIAS }}
         keyStorePassword: ${{ secrets.GOOGLE_PLAY_PASSWORD }}
@@ -84,14 +84,14 @@ jobs:
       with:
         serviceAccountJsonPlainText: ${{secrets.GOOGLE_PLAY_PUBLISHING_ACCOUNT}}
         packageName: com.bupp.wood_spoon_eaters
-        releaseFiles: apps/eaters/build/outputs/bundle/release/eaters-release.aab
+        releaseFiles: apps/eaters/build/outputs/bundle/productionRelease/eaters-production-release.aab
         track: internal
 
     - name: Cooks – Sign AAB
       if: env.RELEASE_APP_NAME == 'cooks'
       uses: r0adkll/sign-android-release@v1
       with:
-        releaseDirectory: apps/cooks/build/outputs/bundle/release
+        releaseDirectory: apps/cooks/build/outputs/bundle/productionRelease
         signingKeyBase64: ${{ secrets.COOKS_GOOGLE_PLAY_SIGNING_KEY }}
         alias: ${{ secrets.COOKS_GOOGLE_PLAY_ALIAS }}
         keyStorePassword: ${{ secrets.COOKS_GOOGLE_PLAY_PASSWORD }}
@@ -103,5 +103,5 @@ jobs:
       with:
         serviceAccountJsonPlainText: ${{secrets.GOOGLE_PLAY_PUBLISHING_ACCOUNT}}
         packageName: com.bupp.wood_spoon_chef
-        releaseFiles: apps/cooks/build/outputs/bundle/release/cooks-release.aab
+        releaseFiles: apps/cooks/build/outputs/bundle/productionRelease/cooks-production-release.aab
         track: internal

@@ -9,11 +9,8 @@ android {
         versionName "1.10.0"
     }
 
-    buildTypes {
-        debug {
-            debuggable true
-
-            buildConfigField "String", "BASE_URL", '"https://api.staging.eatwoodspoon.com/api/VERSION/"'
+    productFlavors {
+        staging {
             buildConfigField "String", "DEFAULT_TOKEN", '"66004d627beeaa63a8c3e815f9f320562026d6a8f27bd4a6"'
             buildConfigField "String", "GOOGLE_API_KEY", '"AIzaSyCowuTI2_0q8rpGYlqueBX6nbk2kSjjitU"'
             buildConfigField "String", "UX_CAM_APP_KEY", '"zkzvezpn10tanyt"'
@@ -23,14 +20,11 @@ android {
             buildConfigField "String", "SHIPBOOK_APP_ID", '"62091ed349c4d63e480d8229"'
             buildConfigField "String", "SHIPBOOK_APP_KEY", '"0bcfcdd88b46283e4594888a34ac0203"'
 
-            resValue "string", "app_name", "Staging-WoodSpoon"
-        }
+            resValue "string", "app_name", "Staging-WoodSpoon"        }
 
-        release {
+        production {
             resValue "string", "app_name", "WoodSpoon Chef"
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
 
-            buildConfigField "String", "BASE_URL", '"https://api.production.eatwoodspoon.com/api/VERSION/"'
             buildConfigField "String", "DEFAULT_TOKEN", '"d49e1591d8d090222d4fdcf48ac1fff323c91c37fa52d704"'
             buildConfigField "String", "GOOGLE_API_KEY", '"AIzaSyCowuTI2_0q8rpGYlqueBX6nbk2kSjjitU"'
             buildConfigField "String", "UX_CAM_APP_KEY", '"dwo4w2ffq0b3wm9"'

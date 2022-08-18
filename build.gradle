@@ -4,6 +4,8 @@ buildscript {
         mavenCentral()
         google()
         jcenter()
+        gradlePluginPortal()
+        maven { url 'https://jitpack.io' }
     }
     dependencies {
         classpath 'com.google.gms:google-services:4.3.10'
@@ -11,6 +13,7 @@ buildscript {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath 'com.android.tools.build:gradle:7.0.4'
         classpath "androidx.navigation:navigation-safe-args-gradle-plugin:$nav_version"
+        classpath 'com.github.Innovattic:App-Badge:1.0.4'
     }
 }
 

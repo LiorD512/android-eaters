@@ -4,6 +4,7 @@ apply plugin: 'kotlin-kapt'
 apply plugin: 'kotlin-parcelize'
 apply plugin: 'com.google.gms.google-services'
 apply plugin: 'com.google.firebase.crashlytics'
+apply plugin: 'com.innovattic.badge'
 
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
@@ -17,7 +18,7 @@ android {
         debug {
             debuggable true
             manifestPlaceholders["isTestMode"] = "true"
-            applicationIdSuffix = ".staging"
+            getIsDefault().set(true)
         }
 
         release {
@@ -25,6 +26,22 @@ android {
             shrinkResources true
             minifyEnabled true
             manifestPlaceholders["isTestMode"] = "false"
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    flavorDimensions "environment"
+    productFlavors {
+        staging {
+            dimension = "environment"
+            applicationIdSuffix = ".staging"
+            buildConfigField "String", "BASE_URL", '"https://api.staging.eatwoodspoon.com/api/VERSION/"'
+            getIsDefault().set(true)
+        }
+
+        production {
+            dimension = "environment"
+            buildConfigField "String", "BASE_URL", '"https://api.production.eatwoodspoon.com/api/VERSION/"'
         }
     }
 
@@ -47,4 +64,14 @@ dependencies {
     androidTestImplementation platform (project(':platform'))
     testImplementation platform (project(':platform'))
     kapt platform (project(':platform'))
+}
+
+badge {
+    productFlavors {
+        staging {
+            enabled = true
+            text = "STAGING"
+            fontSize = 8
+        }
+    }
 }

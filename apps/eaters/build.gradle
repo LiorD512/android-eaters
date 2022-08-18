@@ -10,10 +10,9 @@ android {
         versionName "2.7.0"
     }
 
-    buildTypes {
-        debug {
+    productFlavors {
 
-            buildConfigField "String", "BASE_URL", '"https://api.staging.eatwoodspoon.com/api/VERSION/"'
+        staging {
             buildConfigField "String", "DEFAULT_TOKEN", '"37fb7781d13515de191c3d4749118705311b71c4a539d593"'
             buildConfigField "String", "TAG", '"HomeEaters_Staging"'
             buildConfigField "String", "SHIPBOOK_APP_ID", '"620bc0e8244a8956dfc02096"'
@@ -21,10 +20,8 @@ android {
 
             resValue "string", "app_name", "Staging-WoodSpoonEaters"
         }
-        release {
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
 
-            buildConfigField "String", "BASE_URL", '"https://api.production.eatwoodspoon.com/api/VERSION/"'
+        production {
             buildConfigField "String", "DEFAULT_TOKEN", '"9fa2df5e19ca2c5452f1a8361d463ac2c4297ad35bc5cdfd"'
             buildConfigField "String", "TAG", '"HomeEaters_Production"'
             buildConfigField "String", "SHIPBOOK_APP_ID", '"620bc0e04bdba41a60f3540c"'
@@ -33,6 +30,7 @@ android {
             resValue "string", "app_name", "WoodSpoon"
         }
     }
+
 }
 
 dependencies {
