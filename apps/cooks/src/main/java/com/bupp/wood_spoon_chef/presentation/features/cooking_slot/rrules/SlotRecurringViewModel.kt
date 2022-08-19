@@ -12,6 +12,7 @@ import com.bupp.wood_spoon_chef.utils.DateUtils
 import com.eatwoodspoon.analytics.events.ChefsCookingSlotsEvent
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
+import org.joda.time.DateTime
 import java.util.*
 
 @Keep
@@ -233,7 +234,7 @@ class SlotRecurringViewModel(
 
     fun setEndDate(endsAt: Date) {
         _state.update {
-            it.copy(endsAt = endsAt)
+            it.copy(endsAt = DateTime(endsAt.time).withTime(23, 59, 59, 999).toDate())
         }
         reportEvent { _, until, rrule, mode, slotId ->
             ChefsCookingSlotsEvent.RruleUntilSelectedEvent(
