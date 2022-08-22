@@ -8,20 +8,27 @@ import com.bupp.wood_spoon_eaters.di.abs.LiveEventData
 import com.bupp.wood_spoon_eaters.managers.CartManager
 import com.bupp.wood_spoon_eaters.managers.EaterDataManager
 import com.bupp.wood_spoon_eaters.managers.EatersAnalyticsTracker
+import com.bupp.wood_spoon_eaters.repositories.AppSettingsRepository
+import com.bupp.wood_spoon_eaters.repositories.EatersFeatureFlags
 import com.bupp.wood_spoon_eaters.repositories.OrderRepository
+import com.bupp.wood_spoon_eaters.repositories.featureFlag
 import kotlinx.coroutines.launch
 
 class UpSaleNCartViewModel(
     val cartManager: CartManager,
     val eaterDataManager: EaterDataManager,
     private val flowEventsManager: FlowEventsManager,
-    private val eatersAnalyticsTracker: EatersAnalyticsTracker
+    private val eatersAnalyticsTracker: EatersAnalyticsTracker,
+    appSettingsRepository: AppSettingsRepository
 ) : ViewModel() {
 
     var currentPageState = PageState.CART
     val currentOrderData = cartManager.getCurrentOrderData()
     val currentCookingSlot = cartManager.getCurrentCookingSlot()
     val onDishCartClick = LiveEventData<CustomOrderItem>()
+
+    private val shouldShowSubtotal = appSettingsRepository.featureFlag(EatersFeatureFlags.ShowCartSubtotal) ?: false
+
 
     enum class PageState {
         UPSALE,
@@ -85,9 +92,11 @@ class UpSaleNCartViewModel(
             list.add(CartAdapterItem(customOrderItem = customCartItem))
         }
 
-        val subTotal = currentOrderData.value?.subtotal?.formatedValue
-        subTotal?.let {
-            list.add(CartAdapterSubTotalItem(it))
+        if(shouldShowSubtotal) {
+            val subTotal = currentOrderData.value?.subtotal?.formatedValue
+            subTotal?.let {
+                list.add(CartAdapterSubTotalItem(it))
+            }
         }
 
         val restaurantName = currentOrderData.value?.restaurant?.restaurantName

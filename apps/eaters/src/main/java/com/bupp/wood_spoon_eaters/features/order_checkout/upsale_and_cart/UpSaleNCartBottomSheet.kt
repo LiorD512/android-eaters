@@ -131,6 +131,7 @@ class UpSaleNCartBottomSheet() : BottomSheetDialogFragment() {
             }
             behavior = BottomSheetBehavior.from(sheet!!)
             behavior!!.peekHeight = defaultPeekHeight
+            behavior!!.skipCollapsed = true
             behavior!!.addBottomSheetCallback(object : SimpleBottomSheetCallback() {
                 override fun onSlide(view: View, v: Float) {
                     val yPos = height - (buttonHeight).toFloat() - view.y //- 81
@@ -188,6 +189,9 @@ class UpSaleNCartBottomSheet() : BottomSheetDialogFragment() {
         with(binding!!) {
             val divider: Drawable? = ContextCompat.getDrawable(requireContext(), R.drawable.line_divider)
             cartFragList.addItemDecoration(DividerItemDecorator(divider))
+            cartAdapter = UpSaleNCartAdapter(getAdapterListener())
+            binding!!.cartFragList.initSwipeableRecycler(cartAdapter)
+
 
             upSaleCartBtn.setOnClickListener {
                 viewModel.onCartBtnClick()
@@ -206,7 +210,7 @@ class UpSaleNCartBottomSheet() : BottomSheetDialogFragment() {
 
 
     private fun initObservers() {
-        viewModel.navigationEvent.observe(viewLifecycleOwner, {
+        viewModel.navigationEvent.observe(viewLifecycleOwner) {
             when (it) {
                 UpSaleNCartViewModel.NavigationEvent.GO_TO_CHECKOUT -> {
                     viewModel.logEvent(Constants.EVENT_PROCEED_TO_CHECKOUT)
@@ -217,19 +221,24 @@ class UpSaleNCartBottomSheet() : BottomSheetDialogFragment() {
                     navToUpSale()
                 }
                 UpSaleNCartViewModel.NavigationEvent.GO_TO_SELECT_ADDRESS -> {
-                    addLocationResult.launch(Intent(requireContext(), LocationAndAddressActivity::class.java))
+                    addLocationResult.launch(
+                        Intent(
+                            requireContext(),
+                            LocationAndAddressActivity::class.java
+                        )
+                    )
                 }
             }
-        })
-        viewModel.upsaleNCartLiveData.observe(viewLifecycleOwner, {
+        }
+        viewModel.upsaleNCartLiveData.observe(viewLifecycleOwner) {
             handleCartData(it)
-        })
-        viewModel.currentOrderData.observe(viewLifecycleOwner, {
+        }
+        viewModel.currentOrderData.observe(viewLifecycleOwner) {
             viewModel.initData()
-        })
-        viewModel.onDishCartClick.observe(viewLifecycleOwner, {
+        }
+        viewModel.onDishCartClick.observe(viewLifecycleOwner) {
             handleOnCartDishClick(it)
-        })
+        }
     }
 
     private fun handleOnCartDishClick(cartDishData: LiveEvent<CustomOrderItem>?) {
@@ -246,8 +255,6 @@ class UpSaleNCartBottomSheet() : BottomSheetDialogFragment() {
                 binding!!.upsaleCartTitle.text = it
             }
 
-            cartAdapter = UpSaleNCartAdapter(getAdapterListener())
-            binding!!.cartFragList.initSwipeableRecycler(cartAdapter)
             cartAdapter.submitList(data.items)
             refreshButtonPosition()
         } else {
