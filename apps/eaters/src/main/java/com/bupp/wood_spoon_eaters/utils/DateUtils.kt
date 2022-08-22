@@ -153,7 +153,13 @@ object DateUtils {
     fun parseDateToUsTime(date: Date): String {
         //04:30 pm
         val sdf = SimpleDateFormat("hh:mm a")
-        return sdf.format(date.time).replace("AM", "am").replace("PM", "pm")
+        return sdf.format(date.time)
+    }
+
+    fun parseDateToUsTimeWithoutAmPm(date: Date): String {
+        //04:30 pm
+        val sdf = SimpleDateFormat("hh:mm")
+        return sdf.format(date.time)
     }
 
     fun parseDateToDayAndUsTime(date: Date): String {

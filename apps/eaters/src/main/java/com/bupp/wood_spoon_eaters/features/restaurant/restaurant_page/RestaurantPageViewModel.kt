@@ -20,6 +20,7 @@ import com.bupp.wood_spoon_eaters.utils.DateUtils
 import com.bupp.wood_spoon_eaters.utils.isSameDateAs
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import org.joda.time.DateTime
 
 class RestaurantPageViewModel(
     private val restaurantRepository: RestaurantRepository,
@@ -68,7 +69,7 @@ class RestaurantPageViewModel(
         if (initialParamData.value == null) {
             currentRestaurantId = params.restaurantId ?: -1
             initialParamData.postValue(params)
-            if(params.isFromSearch){
+            if (params.isFromSearch) {
                 searchedCookingSlotId = params.cookingSlot?.id
             }
             initRestaurantFullData(params.restaurantId, query = params.query)
@@ -96,7 +97,7 @@ class RestaurantPageViewModel(
 
             val lastFeedRequest = feedDataManager.getLastFeedRequest()
             lastFeedRequest.q = query
-             val result = restaurantRepository.getRestaurant(restaurantId, lastFeedRequest)
+            val result = restaurantRepository.getRestaurant(restaurantId, lastFeedRequest)
 
             if (result.type == SUCCESS) {
                 result.restaurant?.let { restaurant ->
@@ -140,7 +141,7 @@ class RestaurantPageViewModel(
 
     private fun checkIfUnavailableCookingSlot(restaurant: Restaurant): Boolean {
         val canDeliver = restaurant.canBeDelivered ?: false
-        if(restaurant.cookingSlots.isNotEmpty()){
+        if (restaurant.cookingSlots.isNotEmpty()) {
             if (restaurant.cookingSlots[0].isDummy()) {
                 if (canDeliver) {
                     unavailableEventData.postValue(
@@ -174,9 +175,15 @@ class RestaurantPageViewModel(
     private fun handleDeliveryTimingSection(restaurant: Restaurant) {
         val deliveryDates = mutableListOf<SortedCookingSlots>()
         restaurant.cookingSlots.forEach { cookingSlot ->
-            val relevantDeliveryDate = deliveryDates.find { it.date.isSameDateAs(cookingSlot.orderFrom) }
+            val relevantDeliveryDate =
+                deliveryDates.find { it.date.isSameDateAs(cookingSlot.orderFrom) }
             if (relevantDeliveryDate == null) {
-                deliveryDates.add(SortedCookingSlots(cookingSlot.orderFrom, mutableListOf(cookingSlot)))
+                deliveryDates.add(
+                    SortedCookingSlots(
+                        cookingSlot.orderFrom,
+                        mutableListOf(cookingSlot)
+                    )
+                )
             } else {
                 relevantDeliveryDate.cookingSlots.add(cookingSlot)
                 relevantDeliveryDate.cookingSlots.sortBy { it.orderFrom }
@@ -190,7 +197,10 @@ class RestaurantPageViewModel(
     /**
      * Checking which cooking slot should be selected when first entering restaurant page
      */
-    private fun chooseStartingCookingSlot(restaurant: Restaurant, sortedCookingSlots: List<SortedCookingSlots>) {
+    private fun chooseStartingCookingSlot(
+        restaurant: Restaurant,
+        sortedCookingSlots: List<SortedCookingSlots>
+    ) {
         if (searchedCookingSlotId != null) {
             /**  case1 : open restaurant from search page **/
             val currentCookingSlot = getCookingSlotById(searchedCookingSlotId!!)
@@ -239,10 +249,13 @@ class RestaurantPageViewModel(
 
     val onCookingSlotUiChange = MutableLiveData<CookingSlotUi>()
     private fun updateCookingSlotRelatedUi(cookingSlot: CookingSlot, forceTabChnage: Boolean) {
-        onCookingSlotUiChange.postValue(CookingSlotUi(
-            cookingSlotId = cookingSlot.id,
-            timePickerString = getTimerPickerStr(cookingSlot),
-            forceTabChange = forceTabChnage))
+        onCookingSlotUiChange.postValue(
+            CookingSlotUi(
+                cookingSlotId = cookingSlot.id,
+                timePickerString = getTimerPickerStr(cookingSlot),
+                forceTabChange = forceTabChnage
+            )
+        )
     }
 
     enum class UnavailableUiType {
@@ -270,13 +283,26 @@ class RestaurantPageViewModel(
      */
     private fun getTimerPickerStr(selectedCookingSlot: CookingSlot?): String {
         selectedCookingSlot?.let {
-            val isNow = DateUtils.isNowInRange(selectedCookingSlot.startsAt, selectedCookingSlot.endsAt)
-            val datesStr = "from ${DateUtils.parseDateToUsTime(selectedCookingSlot.startsAt)} to ${DateUtils.parseDateToUsTime(selectedCookingSlot.endsAt)}"
-            var uiStr: String
-            if (isNow) {
-                uiStr = "Available $datesStr"
+            val isNow =
+                DateUtils.isNowInRange(selectedCookingSlot.startsAt, selectedCookingSlot.endsAt)
+            val datesStr = "from ${DateUtils.parseDateToUsTime(selectedCookingSlot.startsAt)} to ${
+                DateUtils.parseDateToUsTime(selectedCookingSlot.endsAt)
+            }"
+            val uiStr: String = if (isNow) {
+                "Available now (until ${DateUtils.parseDateToUsTime(selectedCookingSlot.endsAt)})"
             } else {
-                uiStr = "${selectedCookingSlot.name} $datesStr"
+                if (DateTime(selectedCookingSlot.startsAt).hourOfDay > 12
+                    && DateTime(selectedCookingSlot.endsAt).hourOfDay > 12
+                    ||
+                    DateTime(selectedCookingSlot.startsAt).hourOfDay < 12
+                    && DateTime(selectedCookingSlot.endsAt).hourOfDay < 12
+                ) {
+                    "Available from ${DateUtils.parseDateToUsTimeWithoutAmPm(selectedCookingSlot.startsAt)} to ${
+                        DateUtils.parseDateToUsTime(selectedCookingSlot.endsAt)
+                    }"
+                } else {
+                    "Available $datesStr"
+                }
             }
             return uiStr
         }
@@ -340,7 +366,10 @@ class RestaurantPageViewModel(
                 cookingSlot.sections.forEach { section ->
                     val menuItem = section.menuItems.find { it.dishId == dish.id }?.copy()
                     if (menuItem != null) {
-                        menuItem.availableLater = AvailabilityDate(startsAt = cookingSlot.orderFrom, endsAt = cookingSlot.endsAt)
+                        menuItem.availableLater = AvailabilityDate(
+                            startsAt = cookingSlot.orderFrom,
+                            endsAt = cookingSlot.endsAt
+                        )
                         menuItem.cookingSlotId = cookingSlot.id
                         return menuItem
                     }
@@ -360,16 +389,31 @@ class RestaurantPageViewModel(
         val dishSectionsList = mutableListOf<DishSections>()
         cookingSlot.sections.forEach { section ->
             if (section.menuItems.isNotEmpty()) {
-                dishSectionsList.add(DishSectionAvailableHeader(section.title ?: "", section.subtitle ?: ""))
+                dishSectionsList.add(
+                    DishSectionAvailableHeader(
+                        section.title ?: "",
+                        section.subtitle ?: ""
+                    )
+                )
                 section.menuItems.forEach { menuItem ->
-                    dishSectionsList.add(DishSectionSingleDish(menuItem, isDummy = cookingSlot.isDummy()))
+                    dishSectionsList.add(
+                        DishSectionSingleDish(
+                            menuItem,
+                            isDummy = cookingSlot.isDummy()
+                        )
+                    )
                 }
             }
         }
         if (cookingSlot.unAvailableDishes.isNotEmpty()) {
             dishSectionsList.add(DishSectionUnavailableHeader())
             cookingSlot.unAvailableDishes.forEach { menuItem ->
-                dishSectionsList.add(DishSectionSingleDish(menuItem, isDummy = cookingSlot.isDummy()))
+                dishSectionsList.add(
+                    DishSectionSingleDish(
+                        menuItem,
+                        isDummy = cookingSlot.isDummy()
+                    )
+                )
             }
         }
         updateDishCountUi(dishSectionsList)
@@ -378,14 +422,18 @@ class RestaurantPageViewModel(
     /**
      * update the dishCount of every dish in the current presented menu
      */
-    private fun updateDishCountUi(dishSectionsList: List<DishSections>, animateList: Boolean = true) {
+    private fun updateDishCountUi(
+        dishSectionsList: List<DishSections>,
+        animateList: Boolean = true
+    ) {
         val orderItems = cartManager.getCurrentOrderItems()
         if (cartManager.currentCookingSlotId == currentCookingSlot?.id) {
             // we need to check matching cooking slots inorder to prevent count change of diffrent menus - with same dishes
             // we need to check current cart orderItems - to update relevent dishes count to mach current order.
             val updatedSectionList = resetSectionItemsCounter(dishSectionsList)
             orderItems?.forEach { orderItem ->
-                val dishSection = updatedSectionList.find { it.menuItem?.dishId == orderItem.dish.id }
+                val dishSection =
+                    updatedSectionList.find { it.menuItem?.dishId == orderItem.dish.id }
                 dishSection?.let {
                     dishSection.cartQuantity += orderItem.quantity
                 }
@@ -436,7 +484,13 @@ class RestaurantPageViewModel(
     fun addDishToCart(quantity: Int, dishId: Long, note: String? = null) {
         currentCookingSlot?.let { currentCookingSlot ->
             val currentRestaurant = restaurantFullData.value!!
-            if (cartManager.validateCartMatch(currentRestaurant, currentCookingSlot.id, currentCookingSlot.orderFrom, currentCookingSlot.endsAt)) {
+            if (cartManager.validateCartMatch(
+                    currentRestaurant,
+                    currentCookingSlot.id,
+                    currentCookingSlot.orderFrom,
+                    currentCookingSlot.endsAt
+                )
+            ) {
                 viewModelScope.launch {
                     cartManager.updateCurCookingSlotId(currentCookingSlot.id)
                     cartManager.addOrUpdateCart(quantity, dishId, note)
@@ -479,7 +533,8 @@ class RestaurantPageViewModel(
     }
 
     private fun getCookingSlotById(cookingSlotId: Long): CookingSlot? {
-        val result = sortedCookingSlots?.find { it.cookingSlots.find { it.id == cookingSlotId } != null }
+        val result =
+            sortedCookingSlots?.find { it.cookingSlots.find { it.id == cookingSlotId } != null }
         return result?.cookingSlots?.find { it.id == cookingSlotId }
     }
 
@@ -550,7 +605,9 @@ class RestaurantPageViewModel(
             if (dishSections.viewType == DishSectionsViewType.UNAVAILABLE_HEADER) {
                 unavailableHeaderIndex = index
             }
-            if (dishSections.menuItem?.dish?.name?.lowercase()?.contains(input.lowercase()) == true) {
+            if (dishSections.menuItem?.dish?.name?.lowercase()
+                    ?.contains(input.lowercase()) == true
+            ) {
                 if (unavailableHeaderIndex > -1 && index > unavailableHeaderIndex) {
                     unAvailableArr.add(dishSections)
                 } else {

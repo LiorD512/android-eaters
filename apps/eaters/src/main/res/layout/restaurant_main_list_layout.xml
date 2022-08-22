@@ -94,7 +94,7 @@
                             android:layout_marginTop="2dp"
                             android:paddingLeft="16dp"
                             android:paddingRight="8dp"
-                            android:text="Delivery Day" />
+                            android:text="@string/delivery_options" />
 
                         <ImageButton
                             android:id="@+id/tipFragToolTip"

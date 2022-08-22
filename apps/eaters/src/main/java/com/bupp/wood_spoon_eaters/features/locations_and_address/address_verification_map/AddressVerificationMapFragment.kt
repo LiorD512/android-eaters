@@ -6,7 +6,6 @@ import android.content.res.Resources
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -25,9 +24,11 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.*
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import timber.log.Timber
 
 
-class AddressVerificationMapFragment : Fragment(R.layout.fragment_address_verification_map), OnMapReadyCallback {
+class AddressVerificationMapFragment : Fragment(R.layout.fragment_address_verification_map),
+    OnMapReadyCallback {
 
     private var binding: FragmentAddressVerificationMapBinding? = null
     private val viewModel by viewModel<AddressMapVerificationViewModel>()
@@ -49,7 +50,7 @@ class AddressVerificationMapFragment : Fragment(R.layout.fragment_address_verifi
         val isCheckout = requireArguments().getBoolean("isCheckout", false)
         curOrder = requireArguments().getParcelable<Order>("order")
 
-        Log.d(TAG, "zoomLevel: $zoomLevel")
+        Timber.d("zoomLevel: $zoomLevel")
         initUi(shouldShowBtn)
         initObservers()
 
@@ -87,13 +88,14 @@ class AddressVerificationMapFragment : Fragment(R.layout.fragment_address_verifi
             googleMap?.isBuildingsEnabled = false
         }
 
-        mapFragment = childFragmentManager.findFragmentById(R.id.addressMapFragMap) as? SupportMapFragment
+        mapFragment =
+            childFragmentManager.findFragmentById(R.id.addressMapFragMap) as? SupportMapFragment
         mapFragment?.getMapAsync(this)
     }
 
     @SuppressLint("MissingPermission")
     override fun onMapReady(googleMap: GoogleMap) {
-        googleMap?.let {
+        googleMap.let {
             this.googleMap = it
 
             try {
@@ -104,33 +106,34 @@ class AddressVerificationMapFragment : Fragment(R.layout.fragment_address_verifi
                         requireContext(), R.raw.map_style
                     )
                 )
+
                 if (!success) {
-                    Log.e("MapsActivityRaw", "Style parsing failed.")
+                    Timber.tag("MapsActivityRaw").e("Style parsing failed.")
                 }
             } catch (e: Resources.NotFoundException) {
-                Log.e("MapsActivityRaw", "Can't find style.", e)
+                Timber.tag("MapsActivityRaw").e(e, "Can't find style.")
             }
 
             initObservers()
-            curOrder?.let {
-                updateCheckoutMap(it)
+            curOrder?.let { currentOrder ->
+                updateCheckoutMap(currentOrder)
             }
         }
     }
 
     private fun initObservers() {
-        checkoutViewModel.orderLiveData.observe(viewLifecycleOwner, { orderData ->
+        checkoutViewModel.orderLiveData.observe(viewLifecycleOwner) { orderData ->
             if (orderData != null) {
                 updateCheckoutMap(orderData)
             }
-        })
-        mainViewModel.newAddressLiveData.observe(viewLifecycleOwner, {
+        }
+        mainViewModel.newAddressLiveData.observe(viewLifecycleOwner) {
             it?.let { address ->
                 viewModel.setAnchorLocation(address)
                 updateMap(address)
             }
-        })
-        viewModel.addressMapVerificationStatus.observe(viewLifecycleOwner, {
+        }
+        viewModel.addressMapVerificationStatus.observe(viewLifecycleOwner) {
             with(binding!!) {
                 when (it) {
                     AddressMapVerificationViewModel.AddressMapVerificationStatus.CORRECT -> {
@@ -146,34 +149,34 @@ class AddressVerificationMapFragment : Fragment(R.layout.fragment_address_verifi
                     }
                 }
             }
-        })
-        viewModel.addressMapVerificationDoneEvent.observe(viewLifecycleOwner, {
-            val event = it.getContentIfNotHandled()
-            event?.let {
-                if (it) {
+        }
+        viewModel.addressMapVerificationDoneEvent.observe(viewLifecycleOwner) {
+            it.getContentIfNotHandled()?.let { event ->
+                if (event) {
                     mainViewModel.onAddressMapVerificationDone()
                 }
             }
-        })
-        viewModel.vibrateEvent.observe(viewLifecycleOwner, {
+        }
+
+        viewModel.vibrateEvent.observe(viewLifecycleOwner) {
             val event = it.getContentIfNotHandled()
             event?.let {
                 Utils.vibrate(requireContext())
             }
-        })
-        viewModel.redirectToMyLocation.observe(viewLifecycleOwner, {
+        }
+        viewModel.redirectToMyLocation.observe(viewLifecycleOwner) {
             it?.let {
                 val myLocation = LatLng(it.latitude, it.longitude)
                 val location = CameraUpdateFactory.newLatLngZoom(myLocation, zoomLevel)
                 googleMap?.animateCamera(location)
             }
-        })
+        }
     }
 
     fun updateMap(addressRequest: AddressRequest) {
 
         googleMap?.setOnMapLoadedCallback {
-            Log.d(TAG, "map loaded")
+            Timber.d("map loaded")
             googleMap?.clear()
             val locationLat = addressRequest.lat
             val locationLng = addressRequest.lng
@@ -192,14 +195,14 @@ class AddressVerificationMapFragment : Fragment(R.layout.fragment_address_verifi
         }
         googleMap?.setOnCameraMoveListener {
             val centerLatLng: LatLng? = googleMap?.cameraPosition?.target
-            Log.d(TAG, "onMove: $centerLatLng")
+            Timber.d("onMove: $centerLatLng")
             centerLatLng?.let {
                 viewModel.checkCenterLatLngPosition(it)
                 mainViewModel.updateUnsavedAddressLatLng(it)
             }
         }
         googleMap?.setOnCameraIdleListener {
-            Log.d(TAG, "camera idle")
+            Timber.d( "camera idle")
         }
 
     }
@@ -211,9 +214,10 @@ class AddressVerificationMapFragment : Fragment(R.layout.fragment_address_verifi
 
             googleMap?.clear()
             googleMap?.uiSettings?.setAllGesturesEnabled(false)
+            googleMap?.uiSettings?.isMapToolbarEnabled = false
 
             curOrderData.deliveryAddress?.lat?.let {
-                curOrderData.deliveryAddress?.lng?.let {
+                curOrderData.deliveryAddress.lng?.let {
 
                     val chefLat = curOrderData.restaurant?.pickupAddress?.lat
                     val chefLng = curOrderData.restaurant?.pickupAddress?.lng
@@ -221,18 +225,28 @@ class AddressVerificationMapFragment : Fragment(R.layout.fragment_address_verifi
                         chefLng?.let {
                             val chefLocation = LatLng(chefLat, chefLng)
                             googleMap?.addMarker(
-                                MarkerOptions().position(chefLocation).icon(bitmapDescriptorFromVector(requireContext(), R.drawable.ic_chef_marker))
+                                MarkerOptions().position(chefLocation).icon(
+                                    bitmapDescriptorFromVector(
+                                        requireContext(),
+                                        R.drawable.ic_chef_marker
+                                    )
+                                )
                             )
+
                             builder.include(chefLocation)
-                            Log.d("wowMapBinder", "chefLocation $chefLocation")
+                            Timber.d("chefLocation $chefLocation")
                         }
                     }
-                    val myLat = curOrderData.deliveryAddress?.lat ?: 0.0
-                    val myLng = curOrderData.deliveryAddress?.lng ?: 0.0
+                    val myLat = curOrderData.deliveryAddress.lat ?: 0.0
+                    val myLng = curOrderData.deliveryAddress.lng ?: 0.0
                     val myLocation = LatLng(myLat, myLng)
-                    googleMap?.addMarker(MarkerOptions().position(myLocation).icon(bitmapDescriptorFromVector(requireContext(), R.drawable.ic_pin)))
+                    googleMap?.addMarker(
+                        MarkerOptions().position(myLocation)
+                            .icon(bitmapDescriptorFromVector(requireContext(), R.drawable.ic_pin))
+                    )
+
                     builder.include(myLocation)
-                    Log.d("wowMapBinder", "myLocation $myLocation")
+                    Timber.d("myLocation $myLocation")
 
                     val bounds = builder.build()
 
@@ -247,15 +261,20 @@ class AddressVerificationMapFragment : Fragment(R.layout.fragment_address_verifi
     private fun animateCamera(bounds: LatLngBounds?) {
         bounds?.let {
             try {
-                googleMap?.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, currentBoundSize), 150, null)
-                Log.d("wowTrackOrder", "bound size: $currentBoundSize")
+                googleMap?.animateCamera(
+                    CameraUpdateFactory.newLatLngBounds(
+                        bounds,
+                        currentBoundSize
+                    ), 150, null
+                )
+                Timber.d("bound size: $currentBoundSize")
             } catch (ex: Exception) {
                 if (currentBoundSize > 100) {
                     currentBoundSize -= 50
-                    Log.d("wowTrackOrder", "changing bound size: $currentBoundSize")
+                    Timber.d( "changing bound size: $currentBoundSize")
                     animateCamera(bounds)
                 } else {
-                    Log.d("wowTrackOrder", "map ex: $ex")
+                    Timber.d( "map ex: $ex")
 
                 }
             }
@@ -267,7 +286,8 @@ class AddressVerificationMapFragment : Fragment(R.layout.fragment_address_verifi
     private fun bitmapDescriptorFromVector(context: Context, vectorResId: Int): BitmapDescriptor? {
         return ContextCompat.getDrawable(context, vectorResId)?.run {
             setBounds(0, 0, intrinsicWidth, intrinsicHeight)
-            val bitmap = Bitmap.createBitmap(intrinsicWidth, intrinsicHeight, Bitmap.Config.ARGB_8888)
+            val bitmap =
+                Bitmap.createBitmap(intrinsicWidth, intrinsicHeight, Bitmap.Config.ARGB_8888)
             draw(Canvas(bitmap))
             BitmapDescriptorFactory.fromBitmap(bitmap)
         }
@@ -288,7 +308,7 @@ class AddressVerificationMapFragment : Fragment(R.layout.fragment_address_verifi
     }
 
     companion object {
-        const val TAG = "wowAddressMapVerificton"
+        const val TAG = "AddressVerificationMapFragment"
 
         fun newInstance(bundle: Bundle): AddressVerificationMapFragment {
             val fragment = AddressVerificationMapFragment()

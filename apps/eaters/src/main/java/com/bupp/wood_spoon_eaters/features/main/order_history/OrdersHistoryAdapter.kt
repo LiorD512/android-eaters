@@ -19,20 +19,14 @@ import com.bupp.wood_spoon_eaters.databinding.OrdersHistoryTitleItemBinding
 import com.bupp.wood_spoon_eaters.utils.DateUtils
 import com.bupp.wood_spoon_eaters.views.OrderProgressBar
 import android.app.Activity
-import android.os.Bundle
-import android.widget.FrameLayout
 import android.widget.ImageView
 import androidx.core.app.ActivityOptionsCompat
 import androidx.core.util.Pair
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentContainerView
-import androidx.fragment.app.FragmentManager
 import com.bumptech.glide.Glide
-import com.bupp.wood_spoon_eaters.common.Constants
-import com.bupp.wood_spoon_eaters.features.locations_and_address.address_verification_map.AddressVerificationMapFragment
 import com.bupp.wood_spoon_eaters.model.Order
 import com.bupp.wood_spoon_eaters.utils.MapSyncUtil
 import com.bupp.wood_spoon_eaters.utils.Utils
+import java.util.*
 
 
 class OrdersHistoryAdapter(val context: Context, val listener: OrdersHistoryAdapterListener) :
@@ -115,10 +109,11 @@ class OrdersHistoryAdapter(val context: Context, val listener: OrdersHistoryAdap
 
         fun bindItem(data: OrderAdapterItemOrder) {
             val order = data.order
-            title.text = context.getString(R.string.order_history_item_by_cook) + " ${order.restaurant?.firstName}"
+            title.text = "${context.getString(R.string.order_history_item_by_cook)} ${order.restaurant?.firstName} ${order.restaurant?.lastName}"
             price.text = "Total: ${order.total?.formatedValue}"
             if (order.estDeliveryTime != null) {
                 date.text = DateUtils.parseDateToDateAndTime(order.estDeliveryTime)
+                    .uppercase(Locale.ROOT)
             } else {
                 date.text = "${order.estDeliveryTimeText}"
             }
