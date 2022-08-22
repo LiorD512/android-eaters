@@ -50,7 +50,6 @@ class AddressVerificationMapFragment : Fragment(R.layout.fragment_address_verifi
         val isCheckout = requireArguments().getBoolean("isCheckout", false)
         curOrder = requireArguments().getParcelable<Order>("order")
 
-        Timber.d("zoomLevel: $zoomLevel")
         initUi(shouldShowBtn)
         initObservers()
 
@@ -108,10 +107,10 @@ class AddressVerificationMapFragment : Fragment(R.layout.fragment_address_verifi
                 )
 
                 if (!success) {
-                    Timber.tag("MapsActivityRaw").e("Style parsing failed.")
+                    Timber.e("Style parsing failed.")
                 }
             } catch (e: Resources.NotFoundException) {
-                Timber.tag("MapsActivityRaw").e(e, "Can't find style.")
+                Timber.e(e, "Can't find style.")
             }
 
             initObservers()
@@ -176,7 +175,6 @@ class AddressVerificationMapFragment : Fragment(R.layout.fragment_address_verifi
     fun updateMap(addressRequest: AddressRequest) {
 
         googleMap?.setOnMapLoadedCallback {
-            Timber.d("map loaded")
             googleMap?.clear()
             val locationLat = addressRequest.lat
             val locationLng = addressRequest.lng
@@ -195,15 +193,12 @@ class AddressVerificationMapFragment : Fragment(R.layout.fragment_address_verifi
         }
         googleMap?.setOnCameraMoveListener {
             val centerLatLng: LatLng? = googleMap?.cameraPosition?.target
-            Timber.d("onMove: $centerLatLng")
             centerLatLng?.let {
                 viewModel.checkCenterLatLngPosition(it)
                 mainViewModel.updateUnsavedAddressLatLng(it)
             }
         }
-        googleMap?.setOnCameraIdleListener {
-            Timber.d( "camera idle")
-        }
+        googleMap?.setOnCameraIdleListener {}
 
     }
 
@@ -234,7 +229,6 @@ class AddressVerificationMapFragment : Fragment(R.layout.fragment_address_verifi
                             )
 
                             builder.include(chefLocation)
-                            Timber.d("chefLocation $chefLocation")
                         }
                     }
                     val myLat = curOrderData.deliveryAddress.lat ?: 0.0
@@ -246,7 +240,6 @@ class AddressVerificationMapFragment : Fragment(R.layout.fragment_address_verifi
                     )
 
                     builder.include(myLocation)
-                    Timber.d("myLocation $myLocation")
 
                     val bounds = builder.build()
 
@@ -267,14 +260,12 @@ class AddressVerificationMapFragment : Fragment(R.layout.fragment_address_verifi
                         currentBoundSize
                     ), 150, null
                 )
-                Timber.d("bound size: $currentBoundSize")
             } catch (ex: Exception) {
                 if (currentBoundSize > 100) {
                     currentBoundSize -= 50
-                    Timber.d( "changing bound size: $currentBoundSize")
                     animateCamera(bounds)
                 } else {
-                    Timber.d( "map ex: $ex")
+                    Timber.e( ex)
 
                 }
             }
