@@ -9,21 +9,18 @@ import com.bupp.wood_spoon_eaters.data.data_sorce.memory.MemoryAppReviewDataSour
 import com.bupp.wood_spoon_eaters.di.abs.LiveEventData
 import com.bupp.wood_spoon_eaters.managers.EatersAnalyticsTracker
 import com.bupp.wood_spoon_eaters.di.abs.ProgressData
-import com.bupp.wood_spoon_eaters.features.appreview.checker.EatersAvailabilityChecker
 import com.bupp.wood_spoon_eaters.model.Order
 import com.bupp.wood_spoon_eaters.model.WSError
 import com.bupp.wood_spoon_eaters.repositories.OrderRepository
 import com.bupp.wood_spoon_eaters.repositories.UserRepository
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 
 class ReviewsViewModel(
     private val orderRepository: OrderRepository,
     private val userRepository: UserRepository,
     private val eatersAnalyticsTracker: EatersAnalyticsTracker,
-    private val memoryAppReviewDataSource: MemoryAppReviewDataSource,
-    private val eatersAvailabilityChecker: EatersAvailabilityChecker,
+    private val memoryAppReviewDataSource: MemoryAppReviewDataSource
     ) : ViewModel() {
 
     val progressData = ProgressData()
@@ -31,8 +28,6 @@ class ReviewsViewModel(
     val reviewSuccess = LiveEventData<Boolean>()
     val errorEvent = LiveEventData<List<WSError>?>()
     var order: Order? = null
-
-    val showAppReviewFlow = MutableStateFlow(false)
 
     var rating: Int? = null
 
@@ -96,11 +91,5 @@ class ReviewsViewModel(
         data["review_comment"] = review
         data["note_for_woodspoon"] = comment
         eatersAnalyticsTracker.logEvent(Constants.EVENT_REVIEW_SUBMIT, data)
-    }
-
-    fun showAppReviewIfPossible() {
-        if (eatersAvailabilityChecker.checkAll()) {
-            showAppReviewFlow.value = true
-        }
     }
 }

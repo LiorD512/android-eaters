@@ -179,6 +179,6 @@ val appModule = module {
     viewModel { ReviewsBSViewModel(get(), get()) }
 
     //Review Activity
-    viewModel { ReviewsViewModel(get(), get(), get(), get(), get()) }
+    viewModel { ReviewsViewModel(get(), get(), get(), get()) }
 }
 

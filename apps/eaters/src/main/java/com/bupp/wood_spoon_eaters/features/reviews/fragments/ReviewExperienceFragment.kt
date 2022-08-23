@@ -3,9 +3,6 @@ package com.bupp.wood_spoon_eaters.features.reviews.fragments
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
@@ -16,8 +13,6 @@ import com.bupp.wood_spoon_eaters.databinding.FragmentReviewExperienceBinding
 import com.bupp.wood_spoon_eaters.di.abs.LiveEvent
 import com.bupp.wood_spoon_eaters.features.reviews.ReviewsViewModel
 import com.google.android.play.core.review.ReviewManagerFactory
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 class ReviewExperienceFragment() : Fragment(R.layout.fragment_review_experience),
@@ -59,18 +54,6 @@ class ReviewExperienceFragment() : Fragment(R.layout.fragment_review_experience)
         viewModel.navigationEvent.observe(viewLifecycleOwner) { navigationEvent ->
             handleNavigationEvent(navigationEvent)
         }
-
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                launch {
-                    viewModel.showAppReviewFlow.collect {
-                        if (it) {
-                            showAppReview()
-                        }
-                    }
-                }
-            }
-        }
     }
 
     private fun showAppReview() {
@@ -105,7 +88,6 @@ class ReviewExperienceFragment() : Fragment(R.layout.fragment_review_experience)
 
     override fun onRatingClick(rating: Int) {
         viewModel.setRating(rating)
-        viewModel.showAppReviewIfPossible()
     }
 
 
