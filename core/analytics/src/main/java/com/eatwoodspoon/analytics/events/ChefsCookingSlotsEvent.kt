@@ -344,6 +344,17 @@ public sealed class ChefsCookingSlotsEvent(
         )
   }
 
+  public class ReviewScreenSaveSuccessEvent(
+    public override val mode: ModeValues,
+    public override val slot_id: Int?
+  ) : ChefsCookingSlotsEvent(name = "rcs_review_screen_save_success", mode = mode, slot_id =
+      slot_id) {
+    public override val nullableParams: Map<String, Any?> = mapOf(
+        "mode" to mode,
+        "slot_id" to slot_id,
+        )
+  }
+
   public data class RruleScreenShownEvent(
     public val rrule: String?,
     public override val mode: ModeValues,

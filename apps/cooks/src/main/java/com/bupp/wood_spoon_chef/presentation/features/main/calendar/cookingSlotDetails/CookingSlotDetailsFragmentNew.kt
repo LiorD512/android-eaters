@@ -132,7 +132,7 @@ class CookingSlotDetailsFragmentNew : BaseFragment(R.layout.fragment_details_coo
 
     private fun setupToolBar(slot: CookingSlot) {
         binding.toolbar.apply {
-            showIconMenu(slot.startsAt.time >= DateTime.now().millis)
+            showIconMenu(slot.endsAt.time >= DateTime.now().millis)
             setTitle(DateTime(slot.startsAt).prepareFormattedDate())
 
             val dateTimeFormat: DateTimeFormatter = DateTimeFormat.forPattern("h:mm a")

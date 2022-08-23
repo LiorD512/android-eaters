@@ -10,11 +10,13 @@ public sealed class OrdersEvent(
 ) : AnalyticsEvent {
   public data class OrderAgainClickedEvent(
     public val source: SourceValues,
-    public val chef_id: Int
+    public val chef_id: Int,
+    public val chef_name: String
   ) : OrdersEvent(name = "order_again_clicked") {
     public override val nullableParams: Map<String, Any?> = mapOf(
         "source" to source,
         "chef_id" to chef_id,
+        "chef_name" to chef_name,
         )
 
     public enum class SourceValues(

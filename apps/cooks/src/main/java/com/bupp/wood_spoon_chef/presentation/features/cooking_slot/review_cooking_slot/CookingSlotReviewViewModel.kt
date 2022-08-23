@@ -124,6 +124,12 @@ class CookingSlotReviewViewModel(
             when (val result = cookingSlotRepository.postCookingSlot(request)) {
                 is ResponseSuccess -> {
                     _events.emit(ReviewCookingSlotEvents.SlotCreatedSuccess)
+                    reportEvent { mode, slotId ->
+                        ChefsCookingSlotsEvent.ReviewScreenSaveSuccessEvent(
+                            mode,
+                            slotId
+                        )
+                    }
                 }
                 is ResponseError -> {
                     _state.emit(
