@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.browser.customtabs.CustomTabColorSchemeParams
 import androidx.browser.customtabs.CustomTabsIntent
 import com.bupp.wood_spoon_chef.R
 import com.bupp.wood_spoon_chef.common.TopCorneredBottomSheet
@@ -45,11 +46,16 @@ class OrderFoodPackagingBottomSheet : TopCorneredBottomSheet() {
     private fun openChromeTabOrWebView() {
         val woodspoonCatalogUri = "https://woodspoon.four51storefront.com/store/catalog"
         val chromePackageName = "com.android.chrome"
-        val chromeTabBuilder = CustomTabsIntent.Builder()
-        chromeTabBuilder.setShowTitle(true)
-        val chromeTab = chromeTabBuilder.build()
-        if (!isPackageInstalled(chromePackageName)) {
-            chromeTab.intent.setPackage(chromePackageName)
+        if (isPackageInstalled(chromePackageName)) {
+            val chromeTabBuilder = CustomTabsIntent.Builder()
+                .setShowTitle(false)
+                .setDefaultColorSchemeParams(
+                    CustomTabColorSchemeParams.Builder().setToolbarColor(
+                        requireContext().getColor(R.color.orangeish)).build()
+                )
+                .setInstantAppsEnabled(false)
+                .setUrlBarHidingEnabled(true)
+            val chromeTab = chromeTabBuilder.build()
             chromeTab.launchUrl(requireContext(), Uri.parse(woodspoonCatalogUri))
         } else {
             val intent = Intent(Intent.ACTION_VIEW, Uri.parse(woodspoonCatalogUri))
