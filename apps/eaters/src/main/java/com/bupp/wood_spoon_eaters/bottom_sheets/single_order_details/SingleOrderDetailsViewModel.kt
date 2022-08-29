@@ -4,12 +4,14 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.di.abs.ProgressData
 import com.bupp.wood_spoon_eaters.experiments.PricingExperimentParams
 import com.bupp.wood_spoon_eaters.experiments.PricingExperimentUseCase
 import com.bupp.wood_spoon_eaters.features.base.SingleLiveEvent
 import com.bupp.wood_spoon_eaters.managers.EatersAnalyticsTracker
 import com.bupp.wood_spoon_eaters.model.Order
+import com.bupp.wood_spoon_eaters.model.RestaurantInitParams
 import com.bupp.wood_spoon_eaters.model.WSError
 import com.bupp.wood_spoon_eaters.repositories.OrderRepository
 import kotlinx.coroutines.launch
@@ -68,6 +70,25 @@ class SingleOrderDetailsViewModel(
             feeAndTaxDialogData.postValue(FeesAndTaxData(curOrder?.serviceFee?.formatedValue, curOrder?.tax?.formatedValue, minOrderFee))
         }
     }
+
+
+    val restaurantInitParamsLiveData = MutableLiveData<RestaurantInitParams>()
+    fun onOrderAgainClick() {
+        curOrder?.restaurant?.let {
+            val restaurantParam = RestaurantInitParams(
+                restaurantId = it.id,
+                chefThumbnail = it.thumbnail,
+                coverPhoto = it.cover,
+                rating = it.getAvgRating(),
+                restaurantName = it.restaurantName,
+                chefName = it.firstName,
+                isFavorite = it.isFavorite ?: false,
+            )
+            restaurantInitParamsLiveData.postValue(restaurantParam)
+        }
+        logEvent(Constants.EVENT_ORDER_AGAIN_CLICKED)
+    }
+
 
     fun logEvent(eventName: String, params: Map<String, String>? = null) {
         eatersAnalyticsTracker.logEvent(eventName, params)

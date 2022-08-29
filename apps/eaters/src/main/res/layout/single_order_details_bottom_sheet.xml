@@ -68,7 +68,6 @@
                         android:layout_height="wrap_content"
                         android:layout_marginHorizontal="15.4dp"
                         android:layout_marginTop="30dp"
-                        android:visibility="gone"
                         app:title="Order again" />
 
                 <com.bupp.wood_spoon_eaters.custom_views.BlueBtnCornered

@@ -1,6 +1,7 @@
 package com.bupp.wood_spoon_eaters.bottom_sheets.single_order_details
 
 import android.app.Dialog
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -16,6 +17,7 @@ import com.bupp.wood_spoon_eaters.custom_views.HeaderView
 import com.bupp.wood_spoon_eaters.databinding.SingleOrderDetailsBottomSheetBinding
 import com.bupp.wood_spoon_eaters.experiments.PricingExperimentParams
 import com.bupp.wood_spoon_eaters.features.main.MainActivity
+import com.bupp.wood_spoon_eaters.features.restaurant.RestaurantActivity
 import com.bupp.wood_spoon_eaters.model.Order
 import com.bupp.wood_spoon_eaters.model.OrderState
 import com.bupp.wood_spoon_eaters.views.WSTitleValueView
@@ -89,7 +91,7 @@ class SingleOrderDetailsBottomSheet : BottomSheetDialogFragment(), HeaderView.He
     private fun initUI() {
         with(binding!!) {
             singleOrderDetailsOrderAgain.setOnClickListener {
-                Toast.makeText(requireContext(), "Coming soon..", Toast.LENGTH_SHORT).show()
+                viewModel.onOrderAgainClick()
             }
             singleOrderDetailsRate.setOnClickListener {
                 viewModel.curOrder?.let {
@@ -120,6 +122,9 @@ class SingleOrderDetailsBottomSheet : BottomSheetDialogFragment(), HeaderView.He
         viewModel.pricingExperimentParamsLiveData.observe(viewLifecycleOwner) {
             handlePricingExperiment(it)
         }
+        viewModel.restaurantInitParamsLiveData.observe(viewLifecycleOwner){
+            startActivity(Intent(requireContext(), RestaurantActivity::class.java).putExtra(Constants.ARG_RESTAURANT, it))
+        }
     }
 
     private fun handleOrder(order: Order) {
@@ -128,6 +133,7 @@ class SingleOrderDetailsBottomSheet : BottomSheetDialogFragment(), HeaderView.He
                 restaurant?.apply {
                     singleOrderDetailsHeader.setTitle("Home chef $firstName")
                 }
+                singleOrderDetailsHeader.setSubtitle(orderNumber)
                 deliveryAddress?.apply {
                     singleOrderDetailsLocation.updateDeliveryAddressFullDetails(this)
                 }

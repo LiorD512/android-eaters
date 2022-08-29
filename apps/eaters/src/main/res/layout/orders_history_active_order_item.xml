@@ -73,15 +73,32 @@
 
             </LinearLayout>
 
-            <TextView
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:orientation="horizontal">
+
+                <TextView
                     android:transitionName="statusTitleTransition"
                     android:id="@+id/activeOrderTitle"
-                    android:layout_marginTop="7.9dp"
                     style="@style/LatoBlack19DarkThree"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
                     android:layout_height="wrap_content"
                     android:letterSpacing="0.03"
                     android:text="Your order"/>
+
+                <TextView
+                    android:transitionName="statusTitleTransition"
+                    android:id="@+id/activeOrderNumber"
+                    style="@style/LatoReg11Black"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:text="WF5G67F"/>
+
+            </LinearLayout>
 
             <TextView
                     android:transitionName="statusSubtitleTransition"

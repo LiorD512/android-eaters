@@ -16,11 +16,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.bottom_sheets.single_order_details.SingleOrderDetailsBottomSheet
 import com.bupp.wood_spoon_eaters.common.Constants
-import com.bupp.wood_spoon_eaters.common.FlowEventsManager
 import com.bupp.wood_spoon_eaters.custom_views.HeaderView
 import com.bupp.wood_spoon_eaters.databinding.FragmentOrdersHistoryBinding
 import com.bupp.wood_spoon_eaters.features.main.MainViewModel
-import com.bupp.wood_spoon_eaters.features.order_checkout.OrderCheckoutActivity
 import com.bupp.wood_spoon_eaters.features.restaurant.RestaurantActivity
 import com.bupp.wood_spoon_eaters.features.track_your_order.TrackYourOrderActivity
 import com.bupp.wood_spoon_eaters.model.Order
@@ -77,6 +75,9 @@ class OrdersHistoryFragment: Fragment(R.layout.fragment_orders_history), HeaderV
         viewModel.orderLiveData.observe(viewLifecycleOwner, { event ->
             initList(event)
         })
+        viewModel.restaurantInitParamsLiveData.observe(viewLifecycleOwner){
+            startActivity(Intent(requireContext(), RestaurantActivity::class.java).putExtra(Constants.ARG_RESTAURANT, it))
+        }
     }
 
     private fun initUi() {
@@ -139,6 +140,10 @@ class OrdersHistoryFragment: Fragment(R.layout.fragment_orders_history), HeaderV
         trackOrderForResult.launch(intent, transitionBundle)
         viewModel.logTrackOrderClick(order.id)
 //        TrackOrderBottomSheet.newInstance(orderId).show(childFragmentManager, Constants.TRACK_ORDER_DIALOG_TAG)
+    }
+
+    override fun onOrderAgainClick(order: Order) {
+        viewModel.onOrderAgainClick(order)
     }
 
     override fun onPause() {

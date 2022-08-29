@@ -276,7 +276,7 @@ class TrackYourOrderActivity : BaseActivity(), TrackOrderNewAdapter.TrackOrderNe
         with(binding) {
             trackOrderProgressPb.setState(order.status)
             trackOrderProgressName.text = order.restaurant?.restaurantName
-            trackOrderProgressStatusTitle.text = order.extendedStatus?.title
+            trackOrderProgressStatusTitle.text = "${order.extendedStatus?.title}  |  ${order.orderNumber}"
             trackOrderProgressStatusSubTitle.text = order.extendedStatus?.subtitle
 
             if (order.status.ordinal >= OrderState.RECEIVED.ordinal) {

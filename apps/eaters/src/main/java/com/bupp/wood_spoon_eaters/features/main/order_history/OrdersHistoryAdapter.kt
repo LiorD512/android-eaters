@@ -26,6 +26,7 @@ import com.bumptech.glide.Glide
 import com.bupp.wood_spoon_eaters.model.Order
 import com.bupp.wood_spoon_eaters.utils.MapSyncUtil
 import com.bupp.wood_spoon_eaters.utils.Utils
+import com.bupp.wood_spoon_eaters.views.WSSimpleBtn
 import java.util.*
 
 
@@ -35,6 +36,7 @@ class OrdersHistoryAdapter(val context: Context, val listener: OrdersHistoryAdap
     interface OrdersHistoryAdapterListener {
         fun onOrderClick(orderId: Long)
         fun onViewActiveOrderClicked(order: Order, transitionBundle: ActivityOptionsCompat, mapPreview: String)
+        fun onOrderAgainClick(order: Order)
     }
 
     override fun getItemViewType(position: Int): Int = getItem(position).type.ordinal
@@ -103,19 +105,22 @@ class OrdersHistoryAdapter(val context: Context, val listener: OrdersHistoryAdap
 
     inner class OrderItemViewHolder(val binding: OrdersHistoryOrderItemBinding) : RecyclerView.ViewHolder(binding.root) {
         private val title: TextView = binding.orderHistoryItemChef
-        private val price: TextView = binding.orderHistoryItemPrice
+        private val orderAgain: WSSimpleBtn = binding.orderHistoryOrderAgainBtn
         private val date: TextView = binding.orderHistoryItemDate
         private val mainLayout = binding.orderHistoryArchiveMainLayout
 
         fun bindItem(data: OrderAdapterItemOrder) {
             val order = data.order
             title.text = "${context.getString(R.string.order_history_item_by_cook)} ${order.restaurant?.firstName} ${order.restaurant?.lastName}"
-            price.text = "Total: ${order.total?.formatedValue}"
             if (order.estDeliveryTime != null) {
-                date.text = DateUtils.parseDateToDateAndTime(order.estDeliveryTime)
-                    .uppercase(Locale.ROOT)
+                date.text = "${DateUtils.parseDateToDateAndTime(order.estDeliveryTime)
+                    .uppercase(Locale.ROOT)} \u2022 ${order.total?.formatedValue}"
             } else {
-                date.text = "${order.estDeliveryTimeText}"
+                date.text = "${order.estDeliveryTimeText} • ${order.total?.formatedValue}"
+            }
+
+            orderAgain.setOnClickListener {
+                listener.onOrderAgainClick(order)
             }
 
             mainLayout.setOnClickListener {
@@ -128,6 +133,7 @@ class OrdersHistoryAdapter(val context: Context, val listener: OrdersHistoryAdap
         private val mainLayout: LinearLayout = binding.orderHistoryActiveMainLayout
         private val restaurantName: TextView = binding.activeOrderRestaurantName
         private val title: TextView = binding.activeOrderTitle
+        private val orderNumber: TextView = binding.activeOrderNumber
         private val subtitle: TextView = binding.activeOrderSubtitle
         private val orderPb: OrderProgressBar = binding.activeOrderPb
         private val mapContainer: ImageView = binding.activeOrderFragContainer
@@ -152,6 +158,7 @@ class OrdersHistoryAdapter(val context: Context, val listener: OrdersHistoryAdap
 
                 title.text = order.extendedStatus?.title
                 subtitle.text = order.extendedStatus?.subtitle
+                orderNumber.text = order.orderNumber
 
                 mainLayout.setOnClickListener {
                     order.let { order ->

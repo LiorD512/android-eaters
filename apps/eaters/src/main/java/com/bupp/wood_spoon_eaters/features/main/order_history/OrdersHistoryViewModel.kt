@@ -8,6 +8,7 @@ import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.managers.EaterDataManager
 import com.bupp.wood_spoon_eaters.managers.EatersAnalyticsTracker
 import com.bupp.wood_spoon_eaters.model.Order
+import com.bupp.wood_spoon_eaters.model.RestaurantInitParams
 import com.bupp.wood_spoon_eaters.repositories.OrderRepository
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -147,6 +148,23 @@ private val eatersAnalyticsTracker: EatersAnalyticsTracker) : ViewModel() {
     fun endUpdates() {
         refreshRepeatedJob?.cancel()
         refreshRepeatedJob = null
+    }
+
+    val restaurantInitParamsLiveData = MutableLiveData<RestaurantInitParams>()
+    fun onOrderAgainClick(order: Order) {
+        order.restaurant?.let {
+            val restaurantParam = RestaurantInitParams(
+                restaurantId = it.id,
+                chefThumbnail = it.thumbnail,
+                coverPhoto = it.cover,
+                rating = it.getAvgRating(),
+                restaurantName = it.restaurantName,
+                chefName = it.firstName,
+                isFavorite = it.isFavorite ?: false,
+            )
+            restaurantInitParamsLiveData.postValue(restaurantParam)
+        }
+        logEvent(Constants.EVENT_ORDER_AGAIN_CLICKED)
     }
 
     fun logTrackOrderClick(orderId: Long) {

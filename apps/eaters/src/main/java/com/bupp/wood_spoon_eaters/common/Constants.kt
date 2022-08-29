@@ -241,6 +241,7 @@ class Constants {
         const val EVENT_ORDERS_CANCEL = "cancel_order"
         const val EVENT_ORDERS_ORDER_HISTORY_CLICK = "click_on_past_order"
         const val EVENT_ORDER_REPORT_ISSUE_CLICK = "click_report_issue"
+        const val EVENT_ORDER_AGAIN_CLICKED = "order_again_click"
 
         const val EVENT_REVIEW_SUMMERY_CLICK = "click_on_rating"
         const val EVENT_REVIEW_TRIGGERED = "rating_prompt"

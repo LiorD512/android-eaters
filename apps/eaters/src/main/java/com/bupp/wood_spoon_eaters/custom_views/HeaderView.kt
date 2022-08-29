@@ -13,6 +13,7 @@ import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.custom_views.auto_complete_text_watcher.AutoCompleteTextWatcher
 import com.bupp.wood_spoon_eaters.databinding.HeaderViewBinding
 import com.bupp.wood_spoon_eaters.views.UserImageVideoView
+import me.ibrahimsn.lib.util.showIf
 
 
 class HeaderView @JvmOverloads
@@ -35,6 +36,7 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
                     var type = a.getInt(R.styleable.HeaderViewAttrs_type, Constants.HEADER_VIEW_TYPE_FEED)
                     initUi(type)
                 }
+
                 a.recycle()
             }
 
@@ -221,6 +223,10 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 
     fun setTitle(title: String) {
         binding.headerViewTitle.text = title
+    }
+
+    fun setSubtitle(subtitle: String?) {
+        binding.headerViewTitleSubtitle.text = subtitle
     }
 
 }
