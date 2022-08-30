@@ -27,6 +27,7 @@
         tools:replace="android:allowBackup,android:supportsRtl">
         <activity
             android:name=".presentation.features.cooking_slot.CookingSlotActivity"
+            android:screenOrientation="portrait"
             android:exported="false" />
         <activity
             android:name=".presentation.features.new_dish.NewDishActivity"

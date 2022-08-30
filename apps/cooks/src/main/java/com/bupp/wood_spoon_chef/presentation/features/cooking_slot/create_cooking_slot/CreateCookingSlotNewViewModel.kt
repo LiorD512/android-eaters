@@ -85,10 +85,10 @@ class CreateCookingSlotNewViewModel(
                 setRecurringViewVisible(draft)
                 setCookingSlotId(draft.originalCookingSlot?.id)
                 setLastCallForOrder(draft.lastCallForOrder)
+                reportEvent { mode, slotId ->
+                    ChefsCookingSlotsEvent.DetailsScreenOpenedEvent(mode, slotId)
+                }
             }
-        }
-        reportEvent { mode, slotId ->
-            ChefsCookingSlotsEvent.DetailsScreenOpenedEvent(mode, slotId)
         }
     }
 

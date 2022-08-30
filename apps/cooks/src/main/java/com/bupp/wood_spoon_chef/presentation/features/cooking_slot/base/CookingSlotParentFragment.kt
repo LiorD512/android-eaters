@@ -41,10 +41,8 @@ class CookingSlotParentFragment : Fragment(R.layout.fragment_cooking_slot_parent
 
     private lateinit var navController: NavController
     private val binding by viewBinding(FragmentCookingSlotParentBinding::bind)
-    override val cookingSlotCoordinator: CookingSlotFlowCoordinator by inject()
-    private val viewModel: CookingSlotParentViewModel by viewModel {
-        parametersOf(cookingSlotCoordinator)
-    }
+    private val viewModel: CookingSlotParentViewModel by viewModel()
+    override val cookingSlotCoordinator: CookingSlotFlowCoordinator by lazy { viewModel.cookingSlotFlowNavigator }
 
     companion object {
         private const val ARGUMENTS = "arguments"

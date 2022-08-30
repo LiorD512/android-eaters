@@ -178,23 +178,28 @@ class CookingSlotReviewViewModel(
 
     private suspend fun prepareAddSlotRequest(): CookingSlotRequest =
         cookingSlotsDraftRepository.getDraft().map { cookingSlotDraft ->
-            val existingMenuItems = cookingSlotDraft?.menuItems?.map { menuDishItem ->
+            val draftMenuItems = cookingSlotDraft?.menuItems ?: emptyList()
+            val originalMenuItems = cookingSlotDraft?.originalCookingSlot?.menuItems ?: emptyList()
+
+            fun findMenuItemIdForDish(dishId: Long?) = originalMenuItems.firstOrNull { it.dish.id == dishId }?.id
+
+            val existingMenuItems = draftMenuItems.map { menuDishItem ->
                 MenuItemRequest(
-                    id = menuDishItem.menuItemId,
+                    id = menuDishItem.menuItemId ?: findMenuItemIdForDish(menuDishItem.dish?.id),
                     dishId = menuDishItem.dish?.id,
                     quantity = menuDishItem.quantity
                 )
-            }?.toList() ?: emptyList()
+            }.toList()
 
             val menuItemsToDelete =
-                cookingSlotDraft?.originalCookingSlot?.menuItems?.filter { menuItem ->
-                    !existingMenuItems.map { it.id }.contains(menuItem.id)
-                }?.map { menuItemToDelete ->
+                originalMenuItems.filter { menuItem ->
+                    !existingMenuItems.map { it.dishId }.contains(menuItem.dish.id)
+                }.map { menuItemToDelete ->
                     MenuItemRequest(
                         id = menuItemToDelete.id,
                         _destroy = true
                     )
-                }?.toList() ?: emptyList()
+                }.toList()
 
             stateMapper.mapCookingSlotToRequest(
                 startsTime = cookingSlotDraft?.operatingHours?.startTime,

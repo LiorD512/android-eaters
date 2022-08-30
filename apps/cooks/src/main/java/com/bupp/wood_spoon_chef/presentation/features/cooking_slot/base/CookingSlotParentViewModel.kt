@@ -17,7 +17,7 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
 class CookingSlotParentViewModel(
-    private val cookingSlotFlowNavigator: CookingSlotFlowCoordinator,
+    val cookingSlotFlowNavigator: CookingSlotFlowCoordinator,
     private val fetchCookingSlotByIdUseCase: FetchCookingSlotByIdUseCase,
     private val cookingSlotsDraftRepository: CookingSlotsDraftRepository,
     private val originalCookingSlotToDraftCookingSlotMapper: OriginalCookingSlotToDraftCookingSlotMapper,
@@ -39,12 +39,6 @@ class CookingSlotParentViewModel(
             } else {
                 ChefsCookingSlotsEvent.ModeValues.New
             }
-            eventTracker.reportEvent(
-                ChefsCookingSlotsEvent.CookingSlotOpenedEvent(
-                    mode = analyticsMode,
-                    slot_id = cookingSlotId?.toInt()
-                )
-            )
 
             if (cookingSlotId != null) {
                 val cookingSlotResponse = fetchCookingSlotByIdUseCase.execute(
@@ -68,6 +62,13 @@ class CookingSlotParentViewModel(
                                     originalCookingSlot = slot
                                 )
                             cookingSlotsDraftRepository.saveDraft(editedSlot)
+
+                            eventTracker.reportEvent(
+                                ChefsCookingSlotsEvent.CookingSlotOpenedEvent(
+                                    mode =  ChefsCookingSlotsEvent.ModeValues.Edit,
+                                    slot_id = cookingSlotId.toInt()
+                                )
+                            )
                         }
                         cookingSlotFlowNavigator.startFlow()
                     }
