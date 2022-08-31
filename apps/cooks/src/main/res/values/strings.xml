@@ -74,7 +74,7 @@
     <string name="by_category">By category</string>
     <string name="no_search_resuls">Nothing came up. Please try searching\nfor something else.</string>
     <string name="quantity">Quantity</string>
-    <string name="selected_date_format">%s - %s</string>
+    <string name="selected_date_format" formatted="false">%s - %s</string>
     <string name="add_additional_dishes">Add additional dishes</string>
     <string name="slot_bottomsheet_action_edit">Edit</string>
     <string name="slot_bottomsheet_action_duplicate">Duplicate</string>

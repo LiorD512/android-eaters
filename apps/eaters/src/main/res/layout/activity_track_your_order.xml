@@ -1,262 +1,275 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.motion.widget.MotionLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:id="@+id/motionLayout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/white"
-        app:layoutDescription="@xml/track_your_order_page_scene">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/motionLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    app:layoutDescription="@xml/track_your_order_page_scene">
 
     <View
-            android:id="@+id/trackOrderSpace"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_marginBottom="320dp"
-            android:elevation="8dp"
-            android:visibility="gone"
-            app:layout_constraintBottom_toTopOf="@+id/trackOrderActMainList"
-            app:layout_constraintTop_toTopOf="parent" />
+        android:id="@+id/trackOrderSpace"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginBottom="320dp"
+        android:elevation="8dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@+id/trackOrderActMainList"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <FrameLayout
-            android:id="@+id/trackOrderMap"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_marginBottom="-25dp"
-            app:layout_constraintBottom_toTopOf="@+id/trackOrderActMainList"
-            app:layout_constraintTop_toTopOf="parent" />
+        android:id="@+id/trackOrderMap"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginBottom="-25dp"
+        app:layout_constraintBottom_toTopOf="@+id/trackOrderActMainList"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
-            android:id="@+id/trackOrderMapPreview"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:scaleType="centerCrop"
-            android:transitionName="mapTransition"
-            app:layout_constraintBottom_toTopOf="@+id/trackOrderActMainList"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+        android:id="@+id/trackOrderMapPreview"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:scaleType="centerCrop"
+        android:transitionName="mapTransition"
+        app:layout_constraintBottom_toTopOf="@+id/trackOrderActMainList"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 
     <androidx.core.widget.NestedScrollView
-            android:id="@+id/trackOrderActMainList"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:background="@drawable/top_cornered_30_bkg"
-            android:paddingTop="80dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/trackOrderSpace">
+        android:id="@+id/trackOrderActMainList"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:background="@drawable/top_cornered_30_bkg"
+        android:paddingTop="80dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/trackOrderSpace">
 
         <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
             <LinearLayout
-                    android:id="@+id/details"
-                    android:layout_width="match_parent"
+                android:id="@+id/details"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/top_cornered_30_bkg"
+                android:orientation="vertical"
+                android:paddingBottom="31dp">
+
+                <TextView
+                    android:id="@+id/trackOrderProgressName"
+                    style="@style/LatoReg11PurpleyGreyThree"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/top_cornered_30_bkg"
-                    android:orientation="vertical"
-                    android:paddingBottom="31dp">
+                    android:layout_gravity="center"
+                    android:letterSpacing="0.03"
+                    android:transitionName="nameTransition"
+                    tools:text="Israeli in the big apple" />
 
                 <TextView
-                        android:id="@+id/trackOrderProgressName"
-                        style="@style/LatoReg11PurpleyGreyThree"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:letterSpacing="0.03"
-                        android:transitionName="nameTransition"
-                        tools:text="Israeli in the big apple" />
+                    android:id="@+id/trackOrderProgressStatusTitle"
+                    style="@style/LatoBlack15DarkThree"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="15dp"
+                    android:gravity="center"
+                    android:letterSpacing="0.03"
+                    android:transitionName="statusTitleTransition"
+                    tools:text="Your order" />
 
                 <TextView
-                        android:id="@+id/trackOrderProgressStatusTitle"
-                        style="@style/LatoBlack15DarkThree"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_marginTop="15dp"
-                        android:letterSpacing="0.03"
-                        android:transitionName="statusTitleTransition"
-                        tools:text="Your order" />
+                    android:id="@+id/trackOrderProgressStatusSubTitle"
+                    style="@style/LatoReg13Black"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="4dp"
+                    android:letterSpacing="0.03"
+                    android:lineSpacingExtra="6.7sp"
+                    android:transitionName="statusSubtitleTransition"
+                    tools:text="Waiting for home chef confirmation" />
 
                 <TextView
-                        android:id="@+id/trackOrderProgressStatusSubTitle"
-                        style="@style/LatoReg13Black"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_marginTop="4dp"
-                        android:letterSpacing="0.03"
-                        android:lineSpacingExtra="6.7sp"
-                        android:transitionName="statusSubtitleTransition"
-                        tools:text="Waiting for home chef confirmation" />
+                    android:id="@+id/trackOrderEstimatedDeliveryTime"
+                    style="@style/LatoReg13LightGrey"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="8dp"
+                    android:letterSpacing="0.03"
+                    android:lineSpacingExtra="6.7sp"
+                    tools:text="ETA 12:00 - 18:00" />
 
                 <com.bupp.wood_spoon_eaters.views.OrderProgressBar
-                        android:id="@+id/trackOrderProgressPb"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginHorizontal="23dp"
-                        android:layout_marginTop="14.8dp"
-                        android:transitionName="pbTransition" />
+                    android:id="@+id/trackOrderProgressPb"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="23dp"
+                    android:layout_marginTop="14.8dp"
+                    android:transitionName="pbTransition" />
 
             </LinearLayout>
 
             <View
-                    android:layout_width="match_parent"
-                    android:layout_height="8dp"
-                    android:background="@color/grey_white" />
+                android:layout_width="match_parent"
+                android:layout_height="8dp"
+                android:background="@color/grey_white" />
 
             <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/trackOrderActList"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginTop="7.7dp"
-                    android:fitsSystemWindows="true" />
+                android:id="@+id/trackOrderActList"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="7.7dp"
+                android:fitsSystemWindows="true" />
 
         </LinearLayout>
 
     </androidx.core.widget.NestedScrollView>
 
     <androidx.cardview.widget.CardView
-            android:id="@+id/trackOrderActThumbnailLayout"
-            android:layout_width="144dp"
-            android:layout_height="144dp"
-            android:layout_gravity="center"
-            android:alpha="0"
-            android:background="@color/black_50"
-            app:cardCornerRadius="150dp"
-            app:cardElevation="4dp"
-            app:layout_constraintBottom_toTopOf="@+id/trackOrderActMainList"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/trackOrderActMainList">
+        android:id="@+id/trackOrderActThumbnailLayout"
+        android:layout_width="144dp"
+        android:layout_height="144dp"
+        android:layout_gravity="center"
+        android:alpha="0"
+        android:background="@color/black_50"
+        app:cardCornerRadius="150dp"
+        app:cardElevation="4dp"
+        app:layout_constraintBottom_toTopOf="@+id/trackOrderActMainList"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/trackOrderActMainList">
 
         <ImageView
-                android:id="@+id/trackOrderActThumbnail"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:padding="5dp"
-                tools:src="@drawable/tab_account_normal" />
+            android:id="@+id/trackOrderActThumbnail"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="5dp"
+            tools:src="@drawable/tab_account_normal" />
+
         <me.grantland.widget.AutofitTextView
-                android:alpha="0"
-                android:gravity="center"
-                android:id="@+id/trackOrderActEta"
-                style="@style/LatoBold19White"
-                android:lines="3"
-                android:padding="3dp"
-                app:minTextSize="7sp"
-                android:layout_margin="5dp"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@drawable/circle_teal_blue_55" />
+            android:id="@+id/trackOrderActEta"
+            style="@style/LatoBold19White"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="5dp"
+            android:alpha="0"
+            android:background="@drawable/circle_teal_blue_55"
+            android:gravity="center"
+            android:lines="3"
+            android:padding="3dp"
+            app:minTextSize="7sp" />
 
     </androidx.cardview.widget.CardView>
 
 
     <androidx.cardview.widget.CardView
-            android:id="@+id/trackOrderActTopHeader"
-            android:layout_width="match_parent"
-            android:layout_height="70dp"
-            android:alpha="0"
-            android:background="@color/white"
-            android:orientation="vertical"
-            app:cardElevation="5dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+        android:id="@+id/trackOrderActTopHeader"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:alpha="0"
+        android:background="@color/white"
+        android:orientation="vertical"
+        app:cardElevation="5dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 
     <TextView
-            android:id="@+id/trackOrderActTopHeaderRestaurantName"
-            style="@style/LatoBlack15DarkGrey"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="15.4dp"
-            android:alpha="0"
-            android:elevation="15dp"
-            android:text="Israeli in The Big Apple"
-            app:layout_constraintStart_toEndOf="@id/trackOrderActBackButton"
-            app:layout_constraintTop_toTopOf="parent" />
+        android:id="@+id/trackOrderActTopHeaderRestaurantName"
+        style="@style/LatoBlack15DarkGrey"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="15.4dp"
+        android:alpha="0"
+        android:elevation="15dp"
+        android:text="Israeli in The Big Apple"
+        app:layout_constraintStart_toEndOf="@id/trackOrderActBackButton"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-            android:id="@+id/trackOrderActTopHeaderDeliveryTime"
-            style="@style/LatoReg13Black"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="3dp"
-            android:alpha="0"
-            android:elevation="15.4dp"
-            android:paddingTop="3dp"
-            android:text="by Assaf Beer"
-            android:textColor="@color/very_light_grey"
-            app:layout_constraintStart_toEndOf="@id/trackOrderActBackButton"
-            app:layout_constraintTop_toBottomOf="@id/trackOrderActTopHeaderRestaurantName" />
+        android:id="@+id/trackOrderActTopHeaderDeliveryTime"
+        style="@style/LatoReg13Black"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="3dp"
+        android:alpha="0"
+        android:elevation="15.4dp"
+        android:paddingTop="3dp"
+        android:text="by Assaf Beer"
+        android:textColor="@color/very_light_grey"
+        app:layout_constraintStart_toEndOf="@id/trackOrderActBackButton"
+        app:layout_constraintTop_toBottomOf="@id/trackOrderActTopHeaderRestaurantName" />
 
     <ImageView
-            android:id="@+id/trackOrderActBackButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="15.4dp"
-            android:elevation="8dp"
-            android:src="@drawable/ic_back_grey"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+        android:id="@+id/trackOrderActBackButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="15.4dp"
+        android:elevation="8dp"
+        android:src="@drawable/ic_back_grey"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.cardview.widget.CardView
-            android:id="@+id/trackOrderActMyLocation"
-            android:layout_width="46dp"
-            android:layout_height="46dp"
-            android:layout_marginBottom="15dp"
-            android:alpha="0"
-            android:background="@color/white_90"
-            app:cardCornerRadius="150dp"
-            app:cardElevation="4dp"
-            app:layout_constraintBottom_toTopOf="@+id/trackOrderActCollapseLayout"
-            app:layout_constraintRight_toRightOf="@+id/trackOrderActHelp">
+        android:id="@+id/trackOrderActMyLocation"
+        android:layout_width="46dp"
+        android:layout_height="46dp"
+        android:layout_marginBottom="15dp"
+        android:alpha="0"
+        android:background="@color/white_90"
+        app:cardCornerRadius="150dp"
+        app:cardElevation="4dp"
+        app:layout_constraintBottom_toTopOf="@+id/trackOrderActCollapseLayout"
+        app:layout_constraintRight_toRightOf="@+id/trackOrderActHelp">
 
         <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:padding="12dp"
-                android:src="@drawable/icons_my_location" />
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="12dp"
+            android:src="@drawable/icons_my_location" />
 
     </androidx.cardview.widget.CardView>
 
 
     <FrameLayout
-            android:id="@+id/trackOrderActCollapseLayout"
-            android:layout_width="match_parent"
-            android:layout_height="88dp"
-            android:alpha="0"
-            android:background="@drawable/transparent_to_white_80_gradient"
-            app:layout_constraintBottom_toBottomOf="@+id/trackOrderMap"
-            app:layout_constraintStart_toStartOf="@+id/trackOrderActBackButton">
+        android:id="@+id/trackOrderActCollapseLayout"
+        android:layout_width="match_parent"
+        android:layout_height="88dp"
+        android:alpha="0"
+        android:background="@drawable/transparent_to_white_80_gradient"
+        app:layout_constraintBottom_toBottomOf="@+id/trackOrderMap"
+        app:layout_constraintStart_toStartOf="@+id/trackOrderActBackButton">
 
         <com.bupp.wood_spoon_eaters.custom_views.BlueBtnCornered
-                android:id="@+id/trackOrderActCollapse"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="15.4dp"
-                app:title="Back to order status" />
+            android:id="@+id/trackOrderActCollapse"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="15.4dp"
+            app:title="Back to order status" />
 
     </FrameLayout>
 
 
     <TextView
-            android:id="@+id/trackOrderActHelp"
-            style="@style/LatoBold15White"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="15.4dp"
-            android:background="@drawable/rectangle_dark_grey_60_cornered"
-            android:elevation="8dp"
-            android:letterSpacing="-0.01"
-            android:padding="9dp"
-            android:text="Help"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+        android:id="@+id/trackOrderActHelp"
+        style="@style/LatoBold15White"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="15.4dp"
+        android:background="@drawable/rectangle_dark_grey_60_cornered"
+        android:elevation="8dp"
+        android:letterSpacing="-0.01"
+        android:padding="9dp"
+        android:text="Help"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 
 </androidx.constraintlayout.motion.widget.MotionLayout>

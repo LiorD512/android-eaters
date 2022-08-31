@@ -134,6 +134,8 @@ class OrdersHistoryFragment: Fragment(R.layout.fragment_orders_history), HeaderV
             .putExtra("status_subtitle", statusSubTitle)
             .putExtra("pb_state", orderState.name)
             .putExtra("map_preview_url", mapPreview)
+            .putExtra("order_number", order.orderNumber)
+            .putExtra("order_eta", order.etaToDisplay)
 //        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
 //        activity?.window?.exitTransition = null
 //        startActivity(intent, transitionBundle.toBundle())

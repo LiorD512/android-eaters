@@ -87,11 +87,14 @@ class TrackYourOrderActivity : BaseActivity(), TrackOrderNewAdapter.TrackOrderNe
         val statusSubTitle = intent.getStringExtra("status_subtitle")
         val pbState = intent.getStringExtra("pb_state") ?: ""
         val thumbnail = intent.getStringExtra("thumbnail") ?: ""
+        val orderNumber = intent.getStringExtra("order_number") ?: ""
+        val orderEta = intent.getStringExtra("order_eta") ?: ""
 
         with(binding) {
             trackOrderProgressName.text = restaurantName
-            trackOrderProgressStatusTitle.text = statusTitle
+            trackOrderProgressStatusTitle.text = "$statusTitle  |  $orderNumber"
             trackOrderProgressStatusSubTitle.text = statusSubTitle
+            trackOrderEstimatedDeliveryTime.text = "Estimated delivery at $orderEta"
 
             if (OrderState.values().find { it.name == pbState } != null) {
                 trackOrderProgressPb.setState(OrderState.valueOf(pbState))
@@ -268,6 +271,7 @@ class TrackYourOrderActivity : BaseActivity(), TrackOrderNewAdapter.TrackOrderNe
 
         binding.trackOrderActTopHeaderRestaurantName.text = order.restaurant?.restaurantName
         binding.trackOrderActTopHeaderDeliveryTime.text = order.etaToDisplay
+        binding.trackOrderEstimatedDeliveryTime.text = "Estimated delivery at ${order.etaToDisplay}"
 
         val data = mutableListOf<TrackOrderData<Any>>(
             TrackOrderData(TrackOrderNewAdapter.VIEW_TYPE_DETAILS, adapterDetails),
