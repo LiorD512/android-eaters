@@ -188,7 +188,8 @@ data class FeedRestaurantSection(
         sectionOrder: Int? = null,
         restaurantOrderInSection: Int? = null,
         dishIndexInRestaurant: Int? = null,
-        isFromSearch: Boolean = false
+        isFromSearch: Boolean = false,
+        itemType: String? = null
     ) = RestaurantInitParams(
         chefId,
         chefThumbnail,
@@ -204,7 +205,8 @@ data class FeedRestaurantSection(
         sectionOrder,
         restaurantOrderInSection,
         dishIndexInRestaurant,
-        selectedDishId = null
+        selectedDishId = null,
+        itemType
     )
 }
 
@@ -233,10 +235,23 @@ data class FeedRestaurantItemDish(
 ) : Parcelable
 
 @Parcelize
+data class FeedRestaurantItemCover(
+    val thumbnail: WSImage?
+): Parcelable
+
+@Parcelize
 @JsonClass(generateAdapter = true)
 data class FeedRestaurantItemTypeSeeMore(
     override val data: FeedRestaurantItemSeeMore?
 ) : Parcelable, FeedRestaurantSectionItem(FeedRestaurantSectionItemViewType.SEE_MORE)
+
+@Parcelize
+//@JsonClass(generateAdapter = true)
+// This class is currently not network data object. We "inject" this object locally; See MB-829
+data class FeedRestaurantItemTypeCover(
+    override val data: FeedRestaurantItemCover?
+) : Parcelable, FeedRestaurantSectionItem(FeedRestaurantSectionItemViewType.COVER)
+
 
 @Parcelize
 data class FeedRestaurantUnknownSection(
@@ -287,6 +302,7 @@ class FeedModelsViewTypeAdapter {
 enum class FeedRestaurantSectionItemViewType(val value: String){
     DISH(value = "dish"),
     SEE_MORE(value = "see_more"),
+    COVER(value = "cover"), // We are not actually receive these from BE
     UNKNOWN(value = "unknown");
 
     companion object {

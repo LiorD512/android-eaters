@@ -217,6 +217,7 @@ class SearchViewModel(
         data["kitchen_name"] = restaurantInitParams.restaurantName.toString()
         data["home_chef_rating"] = restaurantInitParams.rating.toString()
         data["home_chef_availability"] = restaurantInitParams.cookingSlot?.getAvailabilityString().toString()
+        data["item_clicked"] = restaurantInitParams.itemClicked.toString()
         logEvent(Constants.EVENT_SEARCH_RESTAURANT_CLICK, data)
     }
 

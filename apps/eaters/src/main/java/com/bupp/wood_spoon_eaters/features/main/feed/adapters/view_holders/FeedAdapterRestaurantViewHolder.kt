@@ -151,6 +151,6 @@ class FeedAdapterRestaurantViewHolder(
 //
 //    }
 
-    override fun onPageClick(itemLocalId: Long?, position: Int) {
+    override fun onPageClick(itemLocalId: Long?, position: Int, itemType: String) {
     }
 }

@@ -24,7 +24,8 @@ data class RestaurantInitParams(
     val sectionOrder: Int? = null,
     val restaurantOrderInSection: Int? = null,
     val dishIndexInRestaurant: Int? = null,
-    var selectedDishId: String? = null
+    var selectedDishId: String? = null,
+    val itemClicked: String? = null
 ): Parcelable
 
 @Parcelize

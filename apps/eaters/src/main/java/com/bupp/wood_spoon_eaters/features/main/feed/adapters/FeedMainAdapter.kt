@@ -280,7 +280,7 @@ class FeedMainAdapter(
         listenerDish?.onDishSwiped()
     }
 
-    override fun onPageClick(itemLocalId: Long?, position: Int) {
+    override fun onPageClick(itemLocalId: Long?, position: Int, itemType: String) {
         dataList.forEachIndexed { index, feedAdapterItem ->
             if (feedAdapterItem.id == itemLocalId) {
                 val section = dataList[index]
@@ -295,7 +295,8 @@ class FeedMainAdapter(
                                 sectionTitle,
                                 sectionOrder,
                                 restaurantOrderInSection,
-                                dishIndexInRestaurant
+                                dishIndexInRestaurant,
+                                itemType = itemType
                             )
                         )
                         return@forEachIndexed
@@ -310,7 +311,8 @@ class FeedMainAdapter(
                                 sectionTitle,
                                 sectionOrder,
                                 restaurantOrderInSection,
-                                dishIndexInRestaurant
+                                dishIndexInRestaurant,
+                                itemType = itemType
                             )
                         )
                         return@forEachIndexed

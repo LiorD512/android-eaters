@@ -191,6 +191,7 @@ class MainViewModel(
         data["section_index"] = restaurantInitParams.sectionOrder.toString()
         data["home_chef_index"] = restaurantInitParams.restaurantOrderInSection.toString()
         data["dish_tapped_index"] = restaurantInitParams.dishIndexInRestaurant.toString()
+        data["item_clicked"] = restaurantInitParams.itemClicked.toString()
         eatersAnalyticsTracker.logEvent(Constants.EVENT_CLICK_RESTAURANT, data)
     }
 

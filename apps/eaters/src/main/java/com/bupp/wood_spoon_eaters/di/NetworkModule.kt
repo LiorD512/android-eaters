@@ -79,7 +79,9 @@ fun provideRetrofit(client: OkHttpClient, flavorConfig: FlavorConfigManager): Re
                         val sectionClazz = when (type) {
                             FeedRestaurantSectionItemViewType.DISH -> FeedRestaurantItemTypeDish::class.java
                             FeedRestaurantSectionItemViewType.SEE_MORE -> FeedRestaurantItemTypeSeeMore::class.java
+//                            FeedRestaurantSectionItemViewType.DISH_COVER -> FeedRestaurantItemTypeCover::class.java
                             FeedRestaurantSectionItemViewType.UNKNOWN -> null
+                            else -> null
                         }
                         sectionClazz?.let {
                             builder = builder.withSubtype(it, type.value)
