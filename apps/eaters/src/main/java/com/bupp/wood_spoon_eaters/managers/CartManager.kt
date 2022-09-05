@@ -549,7 +549,7 @@ class CartManager(
         val data = mutableMapOf<String, Any>(
             "currency" to "USD",
             "home_chef_name" to chefsName,
-            "success" to isSuccess.toString()
+            "success" to isSuccess.toString(),
         )
 
         paymentMethod?.let {
@@ -560,6 +560,7 @@ class CartManager(
 
         data["home_chef_id"] = chefsId
         data["dishes"] = dishesName
+        data["cooking_slot_id"] = currentCookingSlotId ?: -1
 
         if (cuisine.isNotEmpty()) {
             data["cuisine"] = cuisine
@@ -615,7 +616,6 @@ class CartManager(
                 }
             }
         }
-
 
         return data
     }

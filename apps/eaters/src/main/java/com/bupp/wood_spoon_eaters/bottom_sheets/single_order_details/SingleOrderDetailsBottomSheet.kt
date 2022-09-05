@@ -131,7 +131,7 @@ class SingleOrderDetailsBottomSheet : BottomSheetDialogFragment(), HeaderView.He
         with(binding!!) {
             order.apply {
                 restaurant?.apply {
-                    singleOrderDetailsHeader.setTitle("Home chef $firstName")
+                    singleOrderDetailsHeader.setTitle(restaurantName ?: "Home chef $firstName")
                 }
                 singleOrderDetailsHeader.setSubtitle(orderNumber)
                 deliveryAddress?.apply {

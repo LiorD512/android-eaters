@@ -205,7 +205,7 @@
 
             <FrameLayout
                 android:id="@+id/ratingMainLayout"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 app:layout_constraintStart_toStartOf="parent"
                 android:layout_height="wrap_content">
 
@@ -240,6 +240,35 @@
                         android:layout_height="wrap_content"
                         android:paddingStart="4dp"
                         tools:text="(415 ratings)" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/woodspoonVerifiedLayout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginBottom="15.4dp"
+                    android:animateLayoutChanges="true"
+                    android:layout_gravity="end"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:paddingVertical="2dp"
+                    android:paddingStart="8dp">
+
+                    <ImageView
+                        android:id="@+id/verifiedBadge"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_checkbox_checked"/>
+
+                    <TextView
+                        android:id="@+id/verifiedText"
+                        style="@style/LatoReg11Black"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingStart="4dp"
+                        android:text="WoodSpoon Verified"/>
+
                 </LinearLayout>
 
             </FrameLayout>

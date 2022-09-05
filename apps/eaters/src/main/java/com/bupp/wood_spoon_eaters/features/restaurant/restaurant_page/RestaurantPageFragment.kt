@@ -36,6 +36,8 @@ import com.bupp.wood_spoon_eaters.utils.showErrorToast
 import com.bupp.wood_spoon_eaters.views.DeliveryDateTabLayout
 import com.bupp.wood_spoon_eaters.views.FavoriteBtn
 import com.bupp.wood_spoon_eaters.views.floating_buttons.WSFloatingButton
+import it.sephiroth.android.library.xtooltip.ClosePolicy
+import it.sephiroth.android.library.xtooltip.Tooltip
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -88,6 +90,10 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
             }
             restaurantFragFloatingCartBtn.setWSFloatingBtnListener(this@RestaurantPageFragment)
             restaurantFragFloatingCartBtn.setOnClickListener { openCartNUpsaleDialog() }
+
+            woodspoonVerifiedLayout.setOnClickListener {
+                createVerifiedToolTip()
+            }
         }
 
         with(binding!!.restaurantMainListLayout) {
@@ -101,7 +107,8 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
 
 
             adapterDishes = DishesMainAdapter(getDishesAdapterListener())
-            val divider: Drawable? = ContextCompat.getDrawable(requireContext(), R.drawable.divider_white_three)
+            val divider: Drawable? =
+                ContextCompat.getDrawable(requireContext(), R.drawable.divider_white_three)
             dishDividerDecoration = DividerItemDecoratorDish(divider)
             dishDividerDecoration?.let {
                 restaurantDishesList.addItemDecoration(it)
@@ -113,7 +120,7 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
                 restaurantNoNetwork.visibility = View.GONE
                 viewModel.reloadPage(false)
             }
-            tipFragToolTip.setOnClickListener{
+            tipFragToolTip.setOnClickListener {
                 DeliveryInfoBottomSheet().show(
                     childFragmentManager,
                     DeliveryInfoBottomSheet::class.java.simpleName
@@ -132,6 +139,27 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
                     }
                 }
             }
+        }
+    }
+
+    private fun createVerifiedToolTip() {
+        binding?.apply {
+            val tooltip = Tooltip.Builder(requireContext())
+                .anchor(ratingMainLayout, 0, -30, true)
+                .text(getString(R.string.verified_tooltip_text))
+                .arrow(false)
+                .closePolicy(ClosePolicy.TOUCH_ANYWHERE_CONSUME)
+                .fadeDuration(250)
+                .showDuration(10000)
+                .overlay(false)
+                .maxWidth(ratingMainLayout.measuredWidth - 50)
+                .create()
+
+            tooltip
+                .doOnHidden { }
+                .doOnFailure { }
+                .doOnShown { }
+                .show(ratingMainLayout, Tooltip.Gravity.BOTTOM, false)
         }
     }
 
@@ -207,11 +235,17 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
                 showErrorToast(event.text!!, binding!!.root, Toast.LENGTH_LONG)
                 with(binding!!) {
                     restFragUnavailableGradient.visibility = View.VISIBLE
-                    restaurantMainListLayout.restaurantDishesList.initSwipeableRecycler(adapterDishes!!, false)
+                    restaurantMainListLayout.restaurantDishesList.initSwipeableRecycler(
+                        adapterDishes!!,
+                        false
+                    )
                     restaurantMainListLayout.restaurantCookingSlotLayout.visibility = View.GONE
                 }
             } else {
-                binding!!.restaurantMainListLayout.restaurantDishesList.initSwipeableRecycler(adapterDishes!!, true)
+                binding!!.restaurantMainListLayout.restaurantDishesList.initSwipeableRecycler(
+                    adapterDishes!!,
+                    true
+                )
             }
         }
     }
@@ -288,23 +322,31 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
                         restaurantTimePickerViewIcon.visibility = View.GONE
                     }
                 }
-                 handleTimePickerUi(uiChange.timePickerString)
+                handleTimePickerUi(uiChange.timePickerString)
             }
         }
     }
 
     private fun handleFloatingBtnEvent(event: FloatingCartEvent?) {
         event?.let {
-            binding!!.restaurantFragFloatingCartBtn.updateFloatingCartButton(it.restaurantName, it.allOrderItemsQuantity)
+            binding!!.restaurantFragFloatingCartBtn.updateFloatingCartButton(
+                it.restaurantName,
+                it.allOrderItemsQuantity
+            )
         }
     }
 
     private fun handleTimePickerClick(selectedCookingSlot: CookingSlot) {
-        binding!!.restaurantMainListLayout.restaurantDeliveryDates.getCurrentSelection()?.let { deliveryDate ->
-            val timePickerBottomSheet = SingleColumnTimePickerBottomSheet(this@RestaurantPageFragment)
-            timePickerBottomSheet.setCookingSlots(selectedCookingSlot, deliveryDate.cookingSlots)
-            timePickerBottomSheet.show(childFragmentManager, Constants.TIME_PICKER_BOTTOM_SHEET)
-        }
+        binding!!.restaurantMainListLayout.restaurantDeliveryDates.getCurrentSelection()
+            ?.let { deliveryDate ->
+                val timePickerBottomSheet =
+                    SingleColumnTimePickerBottomSheet(this@RestaurantPageFragment)
+                timePickerBottomSheet.setCookingSlots(
+                    selectedCookingSlot,
+                    deliveryDate.cookingSlots
+                )
+                timePickerBottomSheet.show(childFragmentManager, Constants.TIME_PICKER_BOTTOM_SHEET)
+            }
     }
 
     private fun handleClearCartEvent(event: LiveEvent<ClearCartEvent>) {
@@ -368,7 +410,8 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
         val restaurant = viewModel.restaurantFullData.value
         restaurant?.let { restaurant ->
             val header = "${restaurant.getAvgRating()} (${restaurant?.reviewCount ?: ""} reviews)"
-            ReviewsBottomSheet.newInstance(restaurant.id, restaurant.restaurantName ?: "", header).show(childFragmentManager, Constants.RATINGS_DIALOG_TAG)
+            ReviewsBottomSheet.newInstance(restaurant.id, restaurant.restaurantName ?: "", header)
+                .show(childFragmentManager, Constants.RATINGS_DIALOG_TAG)
         }
     }
 

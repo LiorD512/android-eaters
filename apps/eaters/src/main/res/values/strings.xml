@@ -178,5 +178,6 @@
     <string name="gift_delete_details_action">Delete gift details</string>
     <string name="rate_app_link">market://details?id=com.bupp.wood_spoon_eaters</string>
     <string name="delivery_options">Delivery options</string>
+    <string name="verified_tooltip_text">WoodSpoon chefs and their kitchens are each vetted to ensure they adhere to strict food safety regulations. Their food is also reviewed by our team for quality and consistency.</string>
 
 </resources>
