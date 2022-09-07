@@ -111,6 +111,7 @@ data class Order(
     @Json(name = "recipient_last_name") val recipientLastName: String?,
     @Json(name = "recipient_phone_number") val recipientPhoneNumber: String?,
     @Json(name = "recipient_email") val recipientEmail: String?,
+    @Json(name = "until_free_delivery") val untilFreeDelivery: Price?
 ) : Parcelable {
 //    fun getOrderState(): OrderState {
 //        Log.d("wowOrderState","orderNumber: $orderNumber")

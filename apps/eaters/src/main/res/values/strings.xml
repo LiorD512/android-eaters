@@ -180,4 +180,9 @@
     <string name="delivery_options">Delivery options</string>
     <string name="verified_tooltip_text">WoodSpoon chefs and their kitchens are each vetted to ensure they adhere to strict food safety regulations. Their food is also reviewed by our team for quality and consistency.</string>
 
+    //Free Delivery
+    <string name="free_delivery_add_items_btn">Add items</string>
+    <string name="free_delivery_getting_free_delivery_message">Congrats, you’re getting free delivery!</string>
+    <string name="free_delivery_amount_remain_message">Just %s more for free delivery</string>
+
 </resources>
