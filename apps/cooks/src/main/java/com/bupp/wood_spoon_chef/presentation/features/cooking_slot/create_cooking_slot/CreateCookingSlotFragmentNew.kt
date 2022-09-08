@@ -15,7 +15,6 @@ import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.last_call.Las
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.operating_hours.OperatingHoursInfoBottomSheet
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.last_call.LastCallForOrderFormatter
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.base.CookingSlotParentFragment
-import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.last_call.HoursAndMinutes
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.last_call.LastCall
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.operating_hours.TimePickerBottomSheet
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.rrules.RRuleTextFormatter
@@ -23,6 +22,7 @@ import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.rrules.SlotRe
 import com.bupp.wood_spoon_chef.utils.DateUtils.prepareFormattedDateForHours
 import com.bupp.wood_spoon_chef.utils.extensions.*
 import com.eatwoodspoon.android_utils.binding.viewBinding
+import com.eatwoodspoon.android_utils.fragments.findParent
 import com.eatwoodspoon.android_utils.views.setSafeOnClickListener
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.distinctUntilChanged

@@ -1,0 +1,15 @@
+apply from: "${rootProject.projectDir}/common-module.gradle"
+apply plugin: 'kotlin-parcelize'
+
+android {}
+
+dependencies {
+    api project(path: ':core:android-utils')
+    api 'org.jetbrains.kotlinx:kotlinx-coroutines-core'
+    api 'org.jetbrains.kotlinx:kotlinx-coroutines-android'
+    api 'androidx.fragment:fragment-ktx'
+    api 'com.jakewharton.timber:timber:4.7.1'
+    api 'com.squareup.okhttp3:okhttp'
+    api 'com.squareup.retrofit2:retrofit'
+
+}

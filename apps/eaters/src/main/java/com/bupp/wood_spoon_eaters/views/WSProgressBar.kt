@@ -24,7 +24,8 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
     private var hideAnimationSet: AnimatorSet? = null
     private var isBlue: Boolean = false
 
-    private var binding: WoodspoonProgressBarBinding = WoodspoonProgressBarBinding.inflate(LayoutInflater.from(context), this, true)
+    private var binding: WoodspoonProgressBarBinding =
+        WoodspoonProgressBarBinding.inflate(LayoutInflater.from(context), this, true)
 
     init {
         if (attrs != null) {
@@ -131,6 +132,14 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 //            pendingHide = true
 //
 //        }
+    }
+
+    fun setProgress(progress: Boolean) {
+        if (progress) {
+            show()
+        } else {
+            hide()
+        }
     }
 
     override fun onDetachedFromWindow() {

@@ -15,9 +15,7 @@ import com.bupp.wood_spoon_eaters.managers.PaymentManager
 import com.bupp.wood_spoon_eaters.model.CountriesISO
 import com.bupp.wood_spoon_eaters.model.EaterRequest
 import com.bupp.wood_spoon_eaters.model.ErrorEventType
-import com.bupp.wood_spoon_eaters.repositories.AppSettingsRepository
-import com.bupp.wood_spoon_eaters.repositories.MetaDataRepository
-import com.bupp.wood_spoon_eaters.repositories.UserRepository
+import com.bupp.wood_spoon_eaters.repositories.*
 import kotlinx.coroutines.launch
 
 class LoginViewModel(
@@ -29,6 +27,8 @@ class LoginViewModel(
     private val deviceDetailsManager: FcmManager,
     private val paymentManager: PaymentManager
 ) : ViewModel() {
+
+    private val isNewAuthFlowEnabled = appSettingsRepository.featureFlag(EatersFeatureFlags.NewAuth) ?: false
 
     var phone: String? = null
     var phonePrefix: String? = null
@@ -43,6 +43,7 @@ class LoginViewModel(
     val phoneFieldErrorEvent: MutableLiveData<ErrorEventType> = MutableLiveData()
 
     enum class NavigationEventType {
+        OPEN_WEB_FLOW,
         OPEN_PHONE_SCREEN,
         OPEN_CODE_SCREEN,
         OPEN_MAIN_ACT,
@@ -74,8 +75,20 @@ class LoginViewModel(
         return " "
     }
 
-    fun directToPhoneFrag() {
+    fun onStartLoginClicked() {
         eatersAnalyticsTracker.logEvent(Constants.EVENT_CLICK_GET_STARTED)
+        if(isNewAuthFlowEnabled) {
+            directToWebLogin()
+        }else{
+            directToPhoneFrag()
+        }
+    }
+
+    private fun directToWebLogin() {
+        navigationEvent.postRawValue(NavigationEventType.OPEN_WEB_FLOW)
+    }
+
+    private fun directToPhoneFrag() {
         navigationEvent.postRawValue(NavigationEventType.OPEN_PHONE_SCREEN)
     }
 

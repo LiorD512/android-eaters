@@ -19,7 +19,8 @@ enum class EatersFeatureFlags(override val key: String) : FeatureFlagKey {
     OnboardingDynamicScrollableContent(key = "android_eater_onboarding_dynamic_scrollable_content"),
     MobileEaterLongFeed(key = "mobile_eater_long_feed"),
     GiftIsEnabled(key = "mobile_order_is_gift_enabled"),
-    ShowCartSubtotal(key = "show_cart_subtotal")
+    ShowCartSubtotal(key = "show_cart_subtotal"),
+    NewAuth(key = "new_auth")
 }
 
 class StaticFeatureFlagsListProvider : FeatureFlagsListProvider {

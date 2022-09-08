@@ -81,6 +81,8 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
         with(binding!!) {
             checkoutFragDeliveryTime.setDeliveryDetailsViewListener(this@CheckoutFragment)
             checkoutFragDeliveryAddress.setDeliveryDetailsViewListener(this@CheckoutFragment)
+            checkoutFragDeliveryContactDetails.setDeliveryDetailsViewListener(this@CheckoutFragment)
+            checkoutFragDeliveryContactDetails.isVisible = viewModel.showContactDetailsSection
             checkoutFragChangePayment.setDeliveryDetailsViewListener(this@CheckoutFragment)
             checkoutFragDeliveryFee.setWSTitleValueListener(this@CheckoutFragment)
             checkoutFragPromoCode.setDeliveryDetailsViewListener(this@CheckoutFragment)
@@ -209,8 +211,11 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
                 CheckoutViewModel.OrderValidationErrorType.PAYMENT_METHOD_MISSING -> {
                     mainViewModel.startStripeOrReInit()
                 }
-                else -> {
+                CheckoutViewModel.OrderValidationErrorType.SHIPPING_ADDRESS_MISSING -> {
                     mainViewModel.handleMainNavigation(OrderCheckoutViewModel.NavigationEventType.START_LOCATION_AND_ADDRESS_ACTIVITY)
+                }
+                CheckoutViewModel.OrderValidationErrorType.USER_DETAILS_MISSING -> {
+                    mainViewModel.handleMainNavigation(OrderCheckoutViewModel.NavigationEventType.START_USER_DETAILS_ACTIVITY)
                 }
             }
         }
@@ -228,6 +233,9 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
         }
         viewModel.giftConfigData.observe(viewLifecycleOwner) {
             handleGiftConfig(it)
+        }
+        viewModel.userData.observe(viewLifecycleOwner) {
+            handleUserDetail(it)
         }
     }
 
@@ -347,6 +355,10 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
         }
     }
 
+    private fun handleUserDetail(user: Eater?) {
+        binding?.checkoutFragDeliveryContactDetails?.updateUserDetails(user)
+    }
+
     @SuppressLint("SetTextI18n")
     private fun updatePriceUi(curOrder: Order) {
         with(binding!!) {
@@ -399,6 +411,9 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
         when (type) {
             Constants.DELIVERY_DETAILS_LOCATION -> {
                 mainViewModel.handleMainNavigation(OrderCheckoutViewModel.NavigationEventType.START_LOCATION_AND_ADDRESS_ACTIVITY)
+            }
+            Constants.DELIVERY_DETAILS_CONTACT_DETAILS -> {
+                mainViewModel.handleMainNavigation(OrderCheckoutViewModel.NavigationEventType.START_USER_DETAILS_ACTIVITY)
             }
             Constants.DELIVERY_DETAILS_TIME -> {
                 viewModel.onTimeChangeClick()

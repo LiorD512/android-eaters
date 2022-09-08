@@ -36,8 +36,16 @@ class PhoneSelectorView @JvmOverloads constructor(
 
     var onCountryClickListener: OnCountryClickListener? = null
 
+    val phoneInput = binding.phoneNumberInput
+
     init {
         initUI()
+    }
+
+    override fun setEnabled(enabled: Boolean) {
+        super.setEnabled(enabled)
+        binding.phoneCountryButton.isEnabled = enabled
+        binding.phoneNumberInput.setIsEditable(enabled, null)
     }
 
     private fun initUI() {
@@ -74,8 +82,8 @@ class PhoneSelectorView @JvmOverloads constructor(
         }
     }
 
-    fun showError() {
-        binding.phoneNumberInput.showError()
+    fun showError(message: String? = null) {
+        binding.phoneNumberInput.showError(message)
     }
 }
 

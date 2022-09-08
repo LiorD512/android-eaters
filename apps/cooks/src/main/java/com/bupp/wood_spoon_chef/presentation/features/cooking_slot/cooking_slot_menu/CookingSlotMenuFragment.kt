@@ -18,11 +18,11 @@ import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.data.models.D
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.create_cooking_slot.OperatingHours
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.base.CookingSlotParentFragment
 import com.bupp.wood_spoon_chef.utils.DateUtils.prepareFormattedDateForHours
-import com.bupp.wood_spoon_chef.utils.extensions.findParent
 import com.bupp.wood_spoon_chef.utils.extensions.prepareFormattedDate
 import com.bupp.wood_spoon_chef.utils.extensions.show
 import com.bupp.wood_spoon_chef.utils.extensions.showErrorToast
 import com.eatwoodspoon.android_utils.binding.viewBinding
+import com.eatwoodspoon.android_utils.fragments.findParent
 import com.eatwoodspoon.android_utils.views.setSafeOnClickListener
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch

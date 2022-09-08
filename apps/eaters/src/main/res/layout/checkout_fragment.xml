@@ -77,6 +77,13 @@
                     app:detailsType="DELIVERY_DETAILS_LOCATION" />
 
             <com.bupp.wood_spoon_eaters.custom_views.CustomDetailsView
+                    android:id="@+id/checkoutFragDeliveryContactDetails"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:changeable="true"
+                    app:detailsType="DELIVERY_DETAILS_CONTACT_DETAILS" />
+
+            <com.bupp.wood_spoon_eaters.custom_views.CustomDetailsView
                     android:id="@+id/checkoutFragGift"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

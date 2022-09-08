@@ -23,7 +23,7 @@ class UserSettings(
     }
 
     var token: String?
-        get() = sharedPreferences.getString(TOKEN_KEY, defaultToken)
+        get() = sharedPreferences.getString(TOKEN_KEY, "").takeIf { !it.isNullOrBlank() } ?: defaultToken
         set(token) = sharedPreferences.edit().putString(TOKEN_KEY, token).apply()
 
     fun isRegistered(): Boolean {

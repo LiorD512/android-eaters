@@ -7,15 +7,12 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.bupp.wood_spoon_eaters.di.abs.LiveEventData
 import com.bupp.wood_spoon_eaters.fcm.FcmManager
-import com.bupp.wood_spoon_eaters.repositories.UserRepository
 import com.bupp.wood_spoon_eaters.features.base.SingleLiveEvent
 import com.bupp.wood_spoon_eaters.managers.EphemeralKeyProvider
 import com.bupp.wood_spoon_eaters.managers.CampaignManager
 import com.bupp.wood_spoon_eaters.managers.EaterDataManager
-import com.bupp.wood_spoon_eaters.repositories.MetaDataRepository
 import com.bupp.wood_spoon_eaters.managers.PaymentManager
-import com.bupp.wood_spoon_eaters.repositories.AppSettingsRepository
-import com.bupp.wood_spoon_eaters.repositories.checkMinVersionFail
+import com.bupp.wood_spoon_eaters.repositories.*
 import kotlinx.coroutines.launch
 
 
@@ -38,11 +35,6 @@ class SplashViewModel(
 
     val errorEvent: SingleLiveEvent<Boolean> = SingleLiveEvent()
 
-    private var isUserExist = false // true if this is the user's first time in the app
-    private var isUserSigned = false // true if users created his account
-    private var isUserRegistered = false // true if user had only phone verification
-    private var shouldUpdateVersion = false
-
     fun initAppSplashData() {
         viewModelScope.launch {
 
@@ -51,14 +43,21 @@ class SplashViewModel(
             appSettingsRepository.initAppSettings()
             paymentManager.initPaymentManager(getApplication())
 
-            isUserExist = userRepository.isUserValid()
-            isUserSigned = userRepository.isUserSignedUp()
-            isUserRegistered = userRepository.isUserRegistered()
-            shouldUpdateVersion = appSettingsRepository.checkMinVersionFail()
+            // true if this is the user's first time in the app
+            val isUserExist = userRepository.isUserValid()
+            // true if users created his account
+            val isUserSigned = userRepository.isUserSignedUp()
+            // true if user had only phone verification
+            val isUserRegistered = userRepository.isUserRegistered()
+            val shouldUpdateVersion = appSettingsRepository.checkMinVersionFail()
+            val isNewAuthFlowEnabled = appSettingsRepository.featureFlag(EatersFeatureFlags.NewAuth) ?: false
 
             if (shouldUpdateVersion) {
                 //go to update
                 splashEvent.postRawValue(SplashEventType.SHOULD_UPDATE_VERSION)
+            } else if(isNewAuthFlowEnabled && isUserExist) {
+                //go to main
+                splashEvent.postRawValue(SplashEventType.GOT_TO_MAIN)
             } else if (isUserExist && isUserRegistered && isUserSigned) {
                 //go to main
                 splashEvent.postRawValue(SplashEventType.GOT_TO_MAIN)

@@ -13,6 +13,7 @@ import com.bupp.wood_spoon_eaters.model.*
 import com.bupp.wood_spoon_eaters.network.ApiService
 import com.bupp.wood_spoon_eaters.network.ApiSettings
 import com.bupp.wood_spoon_eaters.network.AuthInterceptor
+import com.eatwoodspoon.auth.AuthTokenRepository
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import com.squareup.moshi.*
 import com.squareup.moshi.adapters.PolymorphicJsonAdapterFactory
@@ -21,6 +22,7 @@ import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.android.ext.koin.androidApplication
+import org.koin.dsl.bind
 import org.koin.dsl.module
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
@@ -32,7 +34,7 @@ val networkModule = module {
 
     single { FlavorConfigManager(get()) }
     single { provideEncryptedSharedPreferences(get(), androidApplication()) }
-    factory { ApiSettings(get()) }
+    factory { ApiSettings(get()) }.bind(AuthTokenRepository::class)
 
     single { provideDefaultOkhttpClient(get()) }
     single { provideRetrofit(get(), get()) }

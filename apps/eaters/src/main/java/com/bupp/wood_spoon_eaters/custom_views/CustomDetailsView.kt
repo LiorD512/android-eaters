@@ -13,6 +13,7 @@ import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.databinding.CustomDetailsViewBinding
 import com.bupp.wood_spoon_eaters.model.Address
+import com.bupp.wood_spoon_eaters.model.Eater
 import com.bupp.wood_spoon_eaters.model.Order
 
 @SuppressLint("CustomViewStyleable")
@@ -160,6 +161,10 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
                     customDetailsViewIcon.setImageResource(R.drawable.icons_gift)
                     customDetailsViewTitle.text = "This is a gift"
                 }
+                Constants.DELIVERY_DETAILS_CONTACT_DETAILS -> {
+                    customDetailsViewIcon.setImageResource(R.drawable.icons_user_contacts)
+                    customDetailsViewTitle.text = "Your account details"
+                }
             }
         }
     }
@@ -222,4 +227,27 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
         }
     }
 
+    fun updateUserDetails(user: Eater?) {
+        with(binding) {
+            if (user != null) {
+                customDetailsViewSubtitle.isVisible = true
+                customDetailsViewExtraText.isVisible = false
+
+                listOf(
+                    (user.firstName ?: "") + " " + (user.lastName ?: ""),
+                    user.phoneNumber,
+                    user.email
+                ).filterNot { it.isNullOrBlank() }.apply {
+                    customDetailsViewSubtitle.setLines(this.size)
+                    customDetailsViewSubtitle.text = joinToString("\n")
+                }
+
+            } else {
+                customDetailsViewSubtitle.isVisible = false
+                customDetailsViewExtraText.isVisible = false
+                customDetailsViewSubtitle.setLines(1)
+                setBtnText("Add details")
+            }
+        }
+    }
 }

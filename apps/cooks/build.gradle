@@ -105,19 +105,19 @@ dependencies {
     //network
     implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'
     implementation 'io.reactivex.rxjava2:rxjava:2.2.20'
-    implementation 'com.squareup.okhttp3:logging-interceptor:4.9.3'
+    implementation 'com.squareup.okhttp3:logging-interceptor'
     implementation 'me.jessyan:retrofit-url-manager:1.4.0'
     implementation 'com.squareup.retrofit2:adapter-rxjava2:2.9.0'
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'
-    implementation 'com.squareup.okhttp3:okhttp:4.9.3'
+    implementation 'com.squareup.okhttp3:okhttp'
 
     //moshi
-    implementation "com.squareup.moshi:moshi-kotlin:1.12.0"
+    implementation "com.squareup.moshi:moshi-kotlin"
     implementation "com.squareup.retrofit2:converter-moshi:2.9.0"
-    implementation 'com.squareup.moshi:moshi-adapters:1.11.0'
-    implementation "com.squareup.moshi:moshi:1.12.0"
+    implementation 'com.squareup.moshi:moshi-adapters'
+    implementation "com.squareup.moshi:moshi"
     implementation 'com.jakewharton.retrofit:retrofit2-kotlin-coroutines-adapter:0.9.2'
-    kapt 'com.squareup.moshi:moshi-kotlin-codegen:1.12.0'
+    kapt 'com.squareup.moshi:moshi-kotlin-codegen'
 
     implementation "io.insert-koin:koin-core"
     implementation "io.insert-koin:koin-android"
@@ -152,7 +152,7 @@ dependencies {
     implementation 'net.sf.biweekly:biweekly:0.6.6'
 
     //Chrome tab
-    implementation 'androidx.browser:browser:1.4.0'
+    implementation 'androidx.browser:browser'
 }
 
 

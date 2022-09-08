@@ -16,7 +16,6 @@ import com.bupp.wood_spoon_chef.utils.extensions.getErrorMsgByType
 import com.bupp.wood_spoon_chef.data.remote.model.request.CookingSlotRequestMapper
 import com.bupp.wood_spoon_chef.domain.GetFormattedSelectedHoursAndMinutesUseCase
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.CookingSlotReportEventUseCase
-import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.last_call.HoursAndMinutes
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.last_call.LastCall
 import com.eatwoodspoon.analytics.events.ChefsCookingSlotsEvent
 import kotlinx.coroutines.Dispatchers

@@ -114,7 +114,10 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 
     private var inputType: Int = 0
 
-    fun showError() {
+    fun showError(message: String? = null ) {
+        message?.let {
+            setError(message)
+        }
         with(binding) {
             Utils.vibrate(context)
             AnimationUtil().shakeView(wsEditTextInput)
@@ -296,7 +299,7 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
     }
 
     fun setIsEditable(editable: Boolean, listener: WSEditTextListener?) {
-        this.listener = listener
+        this.listener = listener ?: this.listener
         with(binding) {
             wsEditTextInput.isFocusable = editable
             wsEditTextInput.isClickable = editable

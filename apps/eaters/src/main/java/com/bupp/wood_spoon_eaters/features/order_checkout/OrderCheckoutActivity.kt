@@ -13,6 +13,7 @@ import com.bupp.wood_spoon_eaters.common.MTLogger
 import com.bupp.wood_spoon_eaters.databinding.ActivityOrderCheckoutActivityBinding
 import com.bupp.wood_spoon_eaters.di.abs.LiveEvent
 import com.bupp.wood_spoon_eaters.features.base.BaseActivity
+import com.bupp.wood_spoon_eaters.features.create_profile.EditProfileActivity
 import com.bupp.wood_spoon_eaters.features.locations_and_address.LocationAndAddressActivity
 import com.bupp.wood_spoon_eaters.features.main.MainActivity
 import com.bupp.wood_spoon_eaters.utils.showErrorToast
@@ -28,6 +29,14 @@ class OrderCheckoutActivity : BaseActivity() {
             Log.d(TAG, "Activity For Result - startAddressChooserForResult")
             if (result.resultCode == Activity.RESULT_OK) {
                 viewModel.onLocationChanged()
+            }
+        }
+
+    private val startUserDetailsForResult =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
+            Log.d(TAG, "Activity For Result - startUserDetailsForResult")
+            if (result.resultCode == Activity.RESULT_OK) {
+                viewModel.onUserDetailsUpdated()
             }
         }
 
@@ -67,6 +76,14 @@ class OrderCheckoutActivity : BaseActivity() {
                         Intent(
                             this,
                             LocationAndAddressActivity::class.java
+                        )
+                    )
+                }
+                OrderCheckoutViewModel.NavigationEventType.START_USER_DETAILS_ACTIVITY ->  {
+                    startUserDetailsForResult.launch(
+                        Intent(
+                            this,
+                            EditProfileActivity::class.java
                         )
                     )
                 }

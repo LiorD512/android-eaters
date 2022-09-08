@@ -6,6 +6,7 @@ import com.bupp.wood_spoon_eaters.di.appModule
 import com.bupp.wood_spoon_eaters.di.networkModule
 import com.bupp.wood_spoon_eaters.di.rateApp
 import com.eatwoodspoon.analytics.analyticsModule
+import com.eatwoodspoon.auth.authModule
 import com.facebook.FacebookSdk
 import com.facebook.LoggingBehavior
 import com.microsoft.appcenter.AppCenter
@@ -20,6 +21,7 @@ import io.shipbook.shipbooksdk.ShipBook
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin
+import timber.log.Timber
 
 
 class WoodSpoonApplication : Application() {
@@ -32,11 +34,16 @@ class WoodSpoonApplication : Application() {
     override fun onCreate() {
         super.onCreate()
 
+        if(BuildConfig.DEBUG) {
+            Timber.plant(Timber.DebugTree())
+        }
+
         // start Koin context
         startKoin {
+            allowOverride(true)
             androidLogger()
             androidContext(this@WoodSpoonApplication)
-            modules(appModule + networkModule + analyticsModule + rateApp)
+            modules(networkModule + analyticsModule + rateApp + authModule + appModule)
         }
 
         initShipBook()

@@ -31,7 +31,7 @@ class OnboardingFragment : Fragment(R.layout.fragment_onboarding) {
         observeViewModel()
 
         binding?.welcomeFragmentLogin?.setOnClickListener {
-            sharedLoginViewModel.directToPhoneFrag()
+            sharedLoginViewModel.onStartLoginClicked()
         }
     }
 

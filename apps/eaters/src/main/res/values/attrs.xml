@@ -168,6 +168,7 @@
             <enum name="DELIVERY_DETAILS_PROMO_CODE" value="6" />
             <enum name="DELIVERY_DETAILS_ORDER_HISTORY" value="7" />
             <enum name="DELIVERY_DETAILS_GIFT" value="8" />
+            <enum name="DELIVERY_DETAILS_CONTACT_DETAILS" value="9" />
         </attr>
         <attr name="changeable" format="boolean" />
         <attr name="isSelectionGray" format="boolean" />

@@ -1,6 +1,8 @@
 package com.bupp.wood_spoon_eaters.repositories
 
+import android.content.Context
 import android.util.Log
+import androidx.annotation.Keep
 import com.bupp.wood_spoon_eaters.managers.GlobalErrorManager
 import com.bupp.wood_spoon_eaters.managers.PaymentManager
 import com.bupp.wood_spoon_eaters.managers.location.LocationManager
@@ -8,9 +10,11 @@ import com.bupp.wood_spoon_eaters.model.*
 import com.bupp.wood_spoon_eaters.network.ApiSettings
 import com.bupp.wood_spoon_eaters.network.base_repos.UserRepositoryImpl
 import com.bupp.wood_spoon_eaters.network.result_handler.ResultHandler
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
-import java.lang.Exception
+import com.eatwoodspoon.android_utils.flows.toImmutable
+import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.*
+import timber.log.Timber
+import kotlin.Exception
 
 class UserRepository(
     private val apiService: UserRepositoryImpl,
@@ -18,11 +22,28 @@ class UserRepository(
     private val locationManager: LocationManager,
     private val paymentManager: PaymentManager,
     private val globalErrorManager: GlobalErrorManager,
+    private val context: Context
 ) {
 
-    private var currentUser: Eater? = null
+    private val userRepositoryJob: Job = Job()
+    private val userRepositoryScope: CoroutineScope = CoroutineScope(Dispatchers.Default + userRepositoryJob)
 
-    data class UserRepoResult(val type: UserRepoStatus, val eater: Eater? = null)
+    private val _currentEaterFlow = MutableStateFlow<Eater?>(null)
+    val currentEaterFlow = _currentEaterFlow.toImmutable()
+
+    private var currentUser: Eater?
+        set(value) {
+            _currentEaterFlow.value = value
+        }
+        get() = _currentEaterFlow.value
+
+    data class UserRepoResult(
+        val type: UserRepoStatus,
+        val eater: Eater? = null,
+        val errorMessage: String? = null
+    )
+
+    @Keep
     enum class UserRepoStatus {
         SUCCESS,
         LOGGED_OUT,
@@ -33,22 +54,30 @@ class UserRepository(
         WS_ERROR
     }
 
+    init {
+        userRepositoryScope.launch {
+            currentEaterFlow.map { it?.id }.distinctUntilChanged().collect {
+                onUserChanged()
+            }
+        }
+    }
+
     suspend fun initUserRepo() {
-        val result = withContext(Dispatchers.IO){
+        val result = withContext(Dispatchers.IO) {
             apiService.getMe()
         }
-        result.let{
+        result.let {
             when (result) {
                 is ResultHandler.NetworkError -> {
-                    Log.d(TAG,"initUserRepo - NetworkError")
+                    Log.d(TAG, "initUserRepo - NetworkError")
                     this.currentUser = null
                 }
                 is ResultHandler.GenericError -> {
-                    Log.d(TAG,"initUserRepo - GenericError")
+                    Log.d(TAG, "initUserRepo - GenericError")
                     this.currentUser = null
                 }
                 is ResultHandler.Success -> {
-                    Log.d(TAG,"initUserRepo - Success")
+                    Log.d(TAG, "initUserRepo - Success")
                     this.currentUser = result.value.data?.copy()
                 }
                 is ResultHandler.WSCustomError -> {
@@ -70,47 +99,50 @@ class UserRepository(
     }
 
     suspend fun sendPhoneVerification(phone: String): UserRepoResult {
-        val result = withContext(Dispatchers.IO){
+        val result = withContext(Dispatchers.IO) {
 //            baseApiService.makeParamCall<String>(BaseApiService.EndPoint.GET_CODE, [Pair("phone", phone)])
-                apiService.getCode(phone)
+            apiService.getCode(phone)
         }
-        result.let{
+        result.let {
             return when (result) {
                 is ResultHandler.NetworkError -> {
-                    Log.d(TAG,"sendPhoneVerification - NetworkError")
+                    Log.d(TAG, "sendPhoneVerification - NetworkError")
                     UserRepoResult(UserRepoStatus.SERVER_ERROR)
                 }
                 is ResultHandler.GenericError -> {
-                    Log.d(TAG,"sendPhoneVerification - GenericError")
-                    UserRepoResult(UserRepoStatus.INVALID_PHONE)
+                    Log.d(TAG, "sendPhoneVerification - GenericError")
+                    UserRepoResult(UserRepoStatus.SERVER_ERROR)
                 }
                 is ResultHandler.Success -> {
-                    Log.d(TAG,"sendPhoneVerification - Success")
+                    Log.d(TAG, "sendPhoneVerification - Success")
                     UserRepoResult(UserRepoStatus.SUCCESS)
                 }
                 is ResultHandler.WSCustomError -> {
-                    UserRepoResult(UserRepoStatus.INVALID_PHONE)
+                    UserRepoResult(
+                        UserRepoStatus.INVALID_PHONE,
+                        errorMessage = result.errors?.firstOrNull().toString()
+                    )
                 }
             }
         }
     }
 
     suspend fun sendCodeAndPhoneVerification(phone: String, code: String): UserRepoResult {
-        val result = withContext(Dispatchers.IO){
+        val result = withContext(Dispatchers.IO) {
             apiService.validateCode(phone, code)
         }
-        result.let{
+        result.let {
             return when (result) {
                 is ResultHandler.NetworkError -> {
-                    Log.d(TAG,"sendCodeAndPhoneVerification - NetworkError")
+                    Log.d(TAG, "sendCodeAndPhoneVerification - NetworkError")
                     UserRepoResult(UserRepoStatus.SERVER_ERROR)
                 }
                 is ResultHandler.GenericError -> {
-                    Log.d(TAG,"sendCodeAndPhoneVerification - GenericError")
+                    Log.d(TAG, "sendCodeAndPhoneVerification - GenericError")
                     UserRepoResult(UserRepoStatus.WRONG_PASSWORD)
                 }
                 is ResultHandler.Success -> {
-                    Log.d(TAG,"sendCodeAndPhoneVerification - Success")
+                    Log.d(TAG, "sendCodeAndPhoneVerification - Success")
                     val eater = result.value.data
                     this.currentUser = eater
                     UserRepoResult(UserRepoStatus.SUCCESS, this.currentUser)
@@ -123,21 +155,21 @@ class UserRepository(
     }
 
     suspend fun updateEater(eater: EaterRequest): UserRepoResult {
-        val result = withContext(Dispatchers.IO){
+        val result = withContext(Dispatchers.IO) {
             apiService.postMe(eater)
         }
-        result.let{
+        result.let {
             return when (result) {
                 is ResultHandler.NetworkError -> {
-                    Log.d(TAG,"updateEater - NetworkError")
+                    Log.d(TAG, "updateEater - NetworkError")
                     UserRepoResult(UserRepoStatus.SERVER_ERROR)
                 }
                 is ResultHandler.GenericError -> {
-                    Log.d(TAG,"updateEater - GenericError")
+                    Log.d(TAG, "updateEater - GenericError")
                     UserRepoResult(UserRepoStatus.SOMETHING_WENT_WRONG)
                 }
                 is ResultHandler.Success -> {
-                    Log.d(TAG,"updateEater - Success")
+                    Log.d(TAG, "updateEater - Success")
                     val eater = result.value.data
                     this.currentUser = eater
                     UserRepoResult(UserRepoStatus.SUCCESS, this.currentUser)
@@ -151,24 +183,24 @@ class UserRepository(
 
     suspend fun updateNotificationsGroup(notifications: List<Long>): UserRepoResult {
         var notificationsData: List<Long>? = notifications
-        if(notifications.isEmpty()){
+        if (notifications.isEmpty()) {
             notificationsData = null
         }
-        val result = withContext(Dispatchers.IO){
+        val result = withContext(Dispatchers.IO) {
             apiService.updateNotificationGroup(notificationsData)
         }
-        result.let{
+        result.let {
             return when (result) {
                 is ResultHandler.NetworkError -> {
-                    Log.d(TAG,"updateNotificationsGroup - NetworkError")
+                    Log.d(TAG, "updateNotificationsGroup - NetworkError")
                     UserRepoResult(UserRepoStatus.SERVER_ERROR)
                 }
                 is ResultHandler.GenericError -> {
-                    Log.d(TAG,"updateNotificationsGroup - GenericError")
+                    Log.d(TAG, "updateNotificationsGroup - GenericError")
                     UserRepoResult(UserRepoStatus.SOMETHING_WENT_WRONG)
                 }
                 is ResultHandler.Success -> {
-                    Log.d(TAG,"updateNotificationsGroup - Success")
+                    Log.d(TAG, "updateNotificationsGroup - Success")
                     val eater = result.value.data
                     this.currentUser = eater
                     UserRepoResult(UserRepoStatus.SUCCESS, this.currentUser)
@@ -183,29 +215,32 @@ class UserRepository(
 
     //Address
     suspend fun addNewAddress(addressRequest: AddressRequest): UserRepoResult? {
-        val result = withContext(Dispatchers.IO){
+        val result = withContext(Dispatchers.IO) {
             apiService.postNewAddress(addressRequest)
         }
-        result.let{
+        result.let {
             return when (result) {
                 is ResultHandler.NetworkError -> {
-                    Log.d(TAG,"addNewAddress - NetworkError")
+                    Log.d(TAG, "addNewAddress - NetworkError")
                     UserRepoResult(UserRepoStatus.SERVER_ERROR)
                 }
                 is ResultHandler.GenericError -> {
-                    Log.d(TAG,"addNewAddress - GenericError")
+                    Log.d(TAG, "addNewAddress - GenericError")
                     UserRepoResult(UserRepoStatus.SOMETHING_WENT_WRONG)
                 }
                 is ResultHandler.Success -> {
-                    Log.d(TAG,"addNewAddress - Success")
+                    Log.d(TAG, "addNewAddress - Success")
                     initUserRepo()
                     UserRepoResult(UserRepoStatus.SUCCESS, this.currentUser)
                 }
                 is ResultHandler.WSCustomError -> {
-                    result.errors?.let{
-                        if(it.isNotEmpty()){
+                    result.errors?.let {
+                        if (it.isNotEmpty()) {
                             val error = it[0]
-                            globalErrorManager.postError(GlobalErrorManager.GlobalErrorType.WS_ERROR, error)
+                            globalErrorManager.postError(
+                                GlobalErrorManager.GlobalErrorType.WS_ERROR,
+                                error
+                            )
 
                         }
                     }
@@ -244,35 +279,38 @@ class UserRepository(
                     }
                 }
             }
-        }catch (ex: Exception){
+        } catch (ex: Exception) {
             Log.d(TAG, "deleteAddress - addressId is null")
         }
         return UserRepoResult(UserRepoStatus.SOMETHING_WENT_WRONG)
     }
 
     suspend fun deleteAccount(): UserRepoResult {
-        val result = withContext(Dispatchers.IO){
+        val result = withContext(Dispatchers.IO) {
             apiService.deleteMe()
         }
-        result.let{
+        result.let {
             return when (result) {
                 is ResultHandler.NetworkError -> {
-                    Log.d(TAG,"deleteAccount - NetworkError")
+                    Log.d(TAG, "deleteAccount - NetworkError")
                     UserRepoResult(UserRepoStatus.SERVER_ERROR)
                 }
                 is ResultHandler.GenericError -> {
-                    Log.d(TAG,"deleteAccount - GenericError")
+                    Log.d(TAG, "deleteAccount - GenericError")
                     UserRepoResult(UserRepoStatus.SOMETHING_WENT_WRONG)
                 }
                 is ResultHandler.Success -> {
-                    Log.d(TAG,"deleteAccount - Success")
+                    Log.d(TAG, "deleteAccount - Success")
                     UserRepoResult(UserRepoStatus.SUCCESS)
                 }
                 is ResultHandler.WSCustomError -> {
-                    result.errors?.let{
-                        if(it.isNotEmpty()){
+                    result.errors?.let {
+                        if (it.isNotEmpty()) {
                             val error = it[0]
-                            globalErrorManager.postError(GlobalErrorManager.GlobalErrorType.WS_ERROR, error)
+                            globalErrorManager.postError(
+                                GlobalErrorManager.GlobalErrorType.WS_ERROR,
+                                error
+                            )
 
                         }
                     }
@@ -284,7 +322,15 @@ class UserRepository(
 
     //General
 
-    fun logout(): UserRepoResult{
+    private suspend fun onUserChanged() {
+        try {
+            paymentManager.initPaymentManager(context)
+        } catch (ex: Exception) {
+            Timber.e(ex)
+        }
+    }
+
+    fun logout(): UserRepoResult {
         locationManager.clearUserAddresses()
         apiSettings.clearSharedPrefs()
         paymentManager.clearPaymentMethods()
@@ -302,10 +348,9 @@ class UserRepository(
         return this.currentUser
     }
 
-    companion object{
+    companion object {
         const val TAG = "wowUserRepository"
     }
-
 
 
 }

@@ -115,8 +115,10 @@
 
     <string name="phone_verification_fragment_phone_error">Please enter a valid phone</string>
     <string name="login_error_wrong_code">Invalid or expired activation code, please try again</string>
+    <string name="login_error_empty_code">We still need the code we sent you</string>
     <string name="login_error_wrong_phone">Invalid phone number</string>
     <string name="default_server_error">Server error, Please try again later</string>
+    <string name="profile_change_photo_btn">Change photo</string>
     <string name="something_went_wrong_error">Something went wrong, Try again</string>
     <string name="term_of_use"><u>Term of use</u></string>
     <string name="triangle_string">▼</string>
@@ -179,6 +181,7 @@
     <string name="rate_app_link">market://details?id=com.bupp.wood_spoon_eaters</string>
     <string name="delivery_options">Delivery options</string>
     <string name="verified_tooltip_text">WoodSpoon chefs and their kitchens are each vetted to ensure they adhere to strict food safety regulations. Their food is also reviewed by our team for quality and consistency.</string>
+    <string name="default_input_error_message">Incorrect value</string>
 
     //Free Delivery
     <string name="free_delivery_add_items_btn">Add items</string>

@@ -1,6 +1,7 @@
 package com.bupp.wood_spoon_eaters.di
 
 import android.content.Context
+import com.bupp.wood_spoon_eaters.EatersAuthConfigurationProvider
 import com.bupp.wood_spoon_eaters.dialogs.super_user.SuperUserViewModel
 import com.bupp.wood_spoon_eaters.common.UserSettings
 import com.bupp.wood_spoon_eaters.dialogs.cancel_order.CancelOrderViewModel
@@ -30,6 +31,10 @@ import com.bupp.wood_spoon_eaters.custom_views.cuisine_chooser.CuisineChooserVie
 import com.bupp.wood_spoon_eaters.data.data_sorce.memory.MemoryAppReviewDataSource
 import com.bupp.wood_spoon_eaters.domain.*
 import com.bupp.wood_spoon_eaters.experiments.PricingExperimentUseCase
+import com.bupp.wood_spoon_eaters.features.create_profile.EditProfileActivity
+import com.bupp.wood_spoon_eaters.features.create_profile.PhoneNumberVerificationRequestCodeUseCase
+import com.bupp.wood_spoon_eaters.features.create_profile.SendPhoneVerificationUseCase
+import com.bupp.wood_spoon_eaters.features.create_profile.code.EditProfileCodeViewModel
 import com.bupp.wood_spoon_eaters.features.main.search.SearchViewModel
 import com.bupp.wood_spoon_eaters.features.onboarding.OnboardingViewModel
 import com.bupp.wood_spoon_eaters.features.order_checkout.checkout.CheckoutViewModel
@@ -51,15 +56,19 @@ import com.bupp.wood_spoon_eaters.network.base_repos.*
 import com.bupp.wood_spoon_eaters.network.result_handler.ErrorManger
 import com.bupp.wood_spoon_eaters.network.result_handler.ResultManager
 import com.bupp.wood_spoon_eaters.repositories.*
+import com.eatwoodspoon.analytics.AnalyticsEventReporter
+import com.eatwoodspoon.auth.WoodSpoonAuthConfigurationProvider
 import com.google.firebase.analytics.ktx.analytics
 import com.google.firebase.ktx.Firebase
 import org.koin.androidx.viewmodel.dsl.viewModel
+import org.koin.dsl.bind
 import org.koin.dsl.module
 
 
 val appModule = module {
 
     factory { get<Context>().resources }
+    single<WoodSpoonAuthConfigurationProvider> { EatersAuthConfigurationProvider(get()) }
 
     //dataSource
     single { MemoryAppReviewDataSource() }
@@ -74,13 +83,21 @@ val appModule = module {
     //repos
     single { MetaDataRepository(get()) }
     single { MetaDataRepositoryImpl(get(), get()) }
-    single<AppSettingsRepository> { AppSettingsRepositoryImpl(get(), get(), StaticFeatureFlagsListProvider(), get(), get()) }
+    single<AppSettingsRepository> {
+        AppSettingsRepositoryImpl(
+            get(),
+            get(),
+            StaticFeatureFlagsListProvider(),
+            get(),
+            get()
+        )
+    }
     single { FeedRepository(get(), get(), get(), get()) }
     single { FeedRepositoryImpl(get(), get()) }
     single { UserRepositoryImpl(get(), get()) }
     single { RestaurantRepository(get()) }
     single { RestaurantRepositoryImpl(get(), get()) }
-    single { UserRepository(get(), get(), get(), get(), get()) }
+    single { UserRepository(get(), get(), get(), get(), get(), get()) }
     single { OrderRepository(get(), get()) }
     single { OrderRepositoryImpl(get(), get()) }
     single { EaterDataRepository(get()) }
@@ -96,6 +113,8 @@ val appModule = module {
     single { GetOnboardingAppSettingsSlidesDelayUseCase(get()) }
     single { GiftConfigUseCase(get()) }
     single { FeatureFlagLongFeedUseCase(get()) }
+    factory { PhoneNumberVerificationRequestCodeUseCase(get(), get()) }
+    factory { SendPhoneVerificationUseCase(get(), get()) }
 
     //managers
     single { GlobalErrorManager() }
@@ -115,7 +134,7 @@ val appModule = module {
 
     // analytics
     single { Firebase.analytics }
-    single { EatersAnalyticsTracker(get(), get()) }
+    single { EatersAnalyticsTracker(get(), get()) }.bind(AnalyticsEventReporter::class)
 
     //bottom sheet
     viewModel { AddressMenuViewModel(get(), get(), get()) }
@@ -146,7 +165,21 @@ val appModule = module {
     viewModel { UpSaleNCartViewModel(get(), get(), get(), get(), get()) }
 
     //main
-    viewModel { MainViewModel(get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get()) }
+    viewModel {
+        MainViewModel(
+            get(),
+            get(),
+            get(),
+            get(),
+            get(),
+            get(),
+            get(),
+            get(),
+            get(),
+            get(),
+            get()
+        )
+    }
     viewModel { FeedViewModel(get(), get(), get(), get(), get(), get()) }
     viewModel { SearchViewModel(get(), get(), get()) }
     viewModel { ReportIssueViewModel(get(), get(), get()) }
@@ -159,9 +192,24 @@ val appModule = module {
     //Profile
     viewModel { MyProfileViewModel(get(), get(), get(), get(), get(), get(), get(), get()) }
     viewModel { EditProfileViewModel(get(), get(), get()) }
+
+    //New Edit Profile
+    scope<EditProfileActivity> {
+
+    }
+    viewModel {
+        com.bupp.wood_spoon_eaters.features.create_profile.details.EditProfileViewModel(
+            get(),
+            get(),
+            get(),
+            get()
+        )
+    }
+    viewModel { EditProfileCodeViewModel(get(), get(), get()) }
     viewModel { SingleOrderDetailsViewModel(get(), get(), get()) }
     viewModel { OrdersHistoryViewModel(get(), get(), get()) }
     viewModel { CuisineChooserViewModel(get(), get()) }
+
 
     //support
     viewModel { SupportViewModel(get(), get(), get()) }

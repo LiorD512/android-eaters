@@ -42,6 +42,7 @@ private val eatersAnalyticsTracker: EatersAnalyticsTracker) : ViewModel() {
 
     enum class NavigationEventType{
         START_LOCATION_AND_ADDRESS_ACTIVITY,
+        START_USER_DETAILS_ACTIVITY,
         FINISH_ACTIVITY_AFTER_PURCHASE,
         START_PAYMENT_METHOD_ACTIVITY,
         FINISH_CHECKOUT_ACTIVITY,
@@ -105,6 +106,10 @@ private val eatersAnalyticsTracker: EatersAnalyticsTracker) : ViewModel() {
                 }
             }
         }
+    }
+
+    fun onUserDetailsUpdated() {
+
     }
 
     fun logPageEvent(eventType: FlowEventsManager.FlowEvents) {

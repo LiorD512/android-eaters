@@ -1,6 +1,7 @@
 package com.bupp.wood_spoon_eaters.features.main
 
 import android.app.Activity
+import android.app.PendingIntent
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
@@ -32,11 +33,13 @@ import com.bupp.wood_spoon_eaters.utils.Utils
 import com.bupp.wood_spoon_eaters.views.CampaignBanner
 import com.bupp.wood_spoon_eaters.views.MainActivityTabLayout
 import com.bupp.wood_spoon_eaters.views.floating_buttons.WSFloatingButton
+import com.eatwoodspoon.auth.WoodSpoonAuth
 import com.mikhaellopez.ratebottomsheet.AskRateBottomSheet
 import com.mikhaellopez.ratebottomsheet.RateBottomSheet
 import com.mikhaellopez.ratebottomsheet.RateBottomSheetManager
 import com.stripe.android.view.PaymentMethodsActivityStarter
 import com.uxcam.UXCam
+import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.util.*
 
@@ -50,6 +53,8 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
     lateinit var binding: ActivityMainBinding
     private val mediaUtil = MediaUtils(this, this)
     val viewModel by viewModel<MainViewModel>()
+
+    private val woodSpoonAuth: WoodSpoonAuth by inject()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -241,7 +246,10 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
 //                    Toast.makeText(this, "Server Error", Toast.LENGTH_SHORT).show()
                 }
                 GlobalErrorManager.GlobalErrorType.WS_ERROR -> {
-                    WSErrorDialog(it.wsError?.msg, null).show(supportFragmentManager, Constants.WS_ERROR_DIALOG)
+                    WSErrorDialog(it.wsError?.msg, null).show(
+                        supportFragmentManager,
+                        Constants.WS_ERROR_DIALOG
+                    )
                 }
             }
         }
@@ -251,7 +259,10 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
         event?.let {
             with(binding) {
                 mainActFloatingCartBtn.setWSFloatingBtnListener(this@MainActivity)
-                mainActFloatingCartBtn.updateFloatingCartButton(it.restaurantName, it.allOrderItemsQuantity)
+                mainActFloatingCartBtn.updateFloatingCartButton(
+                    it.restaurantName,
+                    it.allOrderItemsQuantity
+                )
             }
         }
     }
@@ -326,7 +337,9 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
             }
             MainNavigationEvent.START_PAYMENT_METHOD_ACTIVITY -> {
                 UXCam.occludeSensitiveScreen(true)
-                PaymentMethodsActivityStarter(this).startForResult(PaymentMethodsActivityStarter.Args.Builder().build())
+                PaymentMethodsActivityStarter(this).startForResult(
+                    PaymentMethodsActivityStarter.Args.Builder().build()
+                )
             }
             MainNavigationEvent.INITIALIZE_STRIPE -> {
                 viewModel.reInitStripe(this)
@@ -335,6 +348,18 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
                 val intent = Intent(this, SplashActivity::class.java)
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                 startActivity(intent)
+                finish()
+            }
+            MainNavigationEvent.LOGOUT_WITH_NEW_AUTH -> {
+                val intent = Intent(this, SplashActivity::class.java)
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                val pendingIntent = PendingIntent.getActivity(this, 1, intent, 0)
+                woodSpoonAuth.startWebLogout(
+                    this,
+                    pendingIntent,
+                    "profile"
+                )
                 finish()
             }
             MainNavigationEvent.OPEN_CAMERA_UTIL_IMAGE -> {

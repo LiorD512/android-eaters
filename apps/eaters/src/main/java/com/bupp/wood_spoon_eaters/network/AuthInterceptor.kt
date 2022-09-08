@@ -59,6 +59,8 @@ class AuthInterceptor(private val settings: ApiSettings) : Interceptor {
         if (authToken != null) {
             Log.d(TAG, "addTokenToRequest: $authToken")
             val requestBuilder = request.newBuilder().addHeader("X-Auth-Token", authToken)
+                .removeHeader("Authorization")
+                .addHeader("Authorization", "Bearer $authToken")
             finalRequest = requestBuilder.build()
         }
         return finalRequest

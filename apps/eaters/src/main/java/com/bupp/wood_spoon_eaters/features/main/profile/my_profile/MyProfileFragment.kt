@@ -65,7 +65,7 @@ class MyProfileFragment : Fragment(R.layout.my_profile_fragment),
 
             profileData.eater?.let { eater ->
 
-                myProfileFragUserHey.text = "Hey, ${eater.firstName}"
+                myProfileFragUserHey.text = listOfNotNull("Hey", eater.firstName).joinToString(", ")
                 myProfileFragUserName.text = eater.getFullName()
 
                 if (eater.ordersCount > 0) {

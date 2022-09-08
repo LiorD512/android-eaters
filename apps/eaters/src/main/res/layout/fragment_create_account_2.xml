@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+        android:id="@+id/createAccountFragMainLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:animateLayoutChanges="true"
+        android:background="@color/white"
+        android:paddingHorizontal="15.4dp"
+        tools:context=".features.login.fragments.CreateAccountFragment">
+
+        <ImageButton
+            android:id="@+id/createAccountFragCloseBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="-15.4dp"
+            android:background="@null"
+            android:padding="15.4dp"
+            android:src="@drawable/icons_close"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/title"
+            style="@style/LatoBlack23Dark"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="17dp"
+            android:letterSpacing="0.03"
+            android:text="Your account details"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/createAccountFragCloseBtn" />
+
+        <TextView
+            android:id="@+id/subtitle"
+            style="@style/LatoReg13Black"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15.4dp"
+            android:letterSpacing="0.03"
+            android:lineSpacingExtra="6.7sp"
+            android:text="This information will be used\nfor updates about your orders"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/title" />
+
+        <LinearLayout
+            android:id="@+id/name_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="37.14dp"
+            android:orientation="horizontal"
+            android:weightSum="2"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/subtitle">
+
+            <com.bupp.wood_spoon_eaters.views.WSEditText
+                android:id="@+id/createAccountFragFirstName"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="15.4dp"
+                android:layout_weight="1"
+                app:error="Please enter your name"
+                app:hint="First name"
+                app:inputType="INPUT_TYPE_FULL_NAME" />
+
+            <com.bupp.wood_spoon_eaters.views.WSEditText
+                android:id="@+id/createAccountFragLastName"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                app:error="Please enter your last name"
+                app:hint="Last name"
+                app:inputType="INPUT_TYPE_FULL_NAME" />
+
+        </LinearLayout>
+
+
+        <com.bupp.wood_spoon_eaters.views.WSEditText
+            android:id="@+id/createAccountFragEmail"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="31dp"
+            android:layout_weight="1"
+            app:error="Please enter your email"
+            app:hint="Email address"
+            app:inputType="MAIL"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/name_layout" />
+
+
+        <com.bupp.wood_spoon_eaters.custom_views.phone_number.PhoneSelectorView
+            android:id="@+id/createAccountFragPhoneNumber"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/createAccountFragEmail"
+            tools:layout_height="30dp" />
+
+
+        <com.bupp.wood_spoon_eaters.custom_views.BlueBtnCornered
+            android:id="@+id/createAccountFragNext"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="14.8dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:title="Done" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <com.bupp.wood_spoon_eaters.views.WSProgressBar
+        android:id="@+id/progress"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+</FrameLayout>

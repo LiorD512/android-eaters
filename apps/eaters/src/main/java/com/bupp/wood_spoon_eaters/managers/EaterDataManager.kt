@@ -19,8 +19,9 @@ class EaterDataManager(
 ): LifecycleObserver {
 
     val currentEater: Eater?
-    get() = userRepository.getUser()
+        get() = userRepository.getUser()
 
+    val currentEaterFlow = userRepository.currentEaterFlow
 
     init {
         ProcessLifecycleOwner.get().lifecycle.addObserver(this)
@@ -48,6 +49,16 @@ class EaterDataManager(
 
     fun hasUserSetAnAddress(): Boolean {
         return getFinalAddressLiveDataParam().value?.id != null
+    }
+
+    fun hasUserSetDetails(): Boolean {
+        return currentEater?.let {
+            !it.firstName.isNullOrBlank()
+                    && !it.lastName.isNullOrBlank()
+                    && !it.email.isNullOrBlank()
+                    && !it.phoneNumber.isNullOrBlank()
+                    && it.phoneNumberVerified == true
+        } ?: false
     }
 
     fun stopLocationUpdates() {

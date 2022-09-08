@@ -16,6 +16,7 @@ enum class MainNavigationEvent {
     START_LOCATION_AND_ADDRESS_ACTIVITY,
     START_PAYMENT_METHOD_ACTIVITY,
     INITIALIZE_STRIPE,
+    LOGOUT_WITH_NEW_AUTH,
     LOGOUT,
     OPEN_CAMERA_UTIL_IMAGE
 }
@@ -159,7 +160,11 @@ class MainViewModel(
         val logoutResult = userRepository.logout()
         if (logoutResult.type == UserRepository.UserRepoStatus.LOGGED_OUT) {
             cartManager.onCartCleared()
-            mainNavigationEvent.postValue(MainNavigationEvent.LOGOUT)
+            if(appSettingsRepository.featureFlag(EatersFeatureFlags.NewAuth) == true) {
+                mainNavigationEvent.postValue(MainNavigationEvent.LOGOUT_WITH_NEW_AUTH)
+            }else{
+                mainNavigationEvent.postValue(MainNavigationEvent.LOGOUT)
+            }
         }
     }
 

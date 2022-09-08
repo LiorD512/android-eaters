@@ -1,4 +1,4 @@
-package com.bupp.wood_spoon_chef.utils.extensions
+package com.eatwoodspoon.android_utils.fragments
 
 import androidx.fragment.app.Fragment
 import kotlin.reflect.KClass

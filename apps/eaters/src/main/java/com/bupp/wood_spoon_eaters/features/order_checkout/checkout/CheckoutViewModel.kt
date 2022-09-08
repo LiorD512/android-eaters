@@ -1,10 +1,7 @@
 package com.bupp.wood_spoon_eaters.features.order_checkout.checkout
 
 import android.util.Log
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.bupp.wood_spoon_eaters.di.abs.LiveEventData
 import com.bupp.wood_spoon_eaters.di.abs.ProgressData
 import com.bupp.wood_spoon_eaters.domain.comon.execute
@@ -17,12 +14,15 @@ import com.bupp.wood_spoon_eaters.features.order_checkout.gift.GiftConfigUseCase
 import com.bupp.wood_spoon_eaters.features.order_checkout.upsale_and_cart.CustomOrderItem
 import com.bupp.wood_spoon_eaters.managers.CartManager
 import com.bupp.wood_spoon_eaters.managers.EaterDataManager
-import com.bupp.wood_spoon_eaters.managers.EatersAnalyticsTracker
 import com.bupp.wood_spoon_eaters.managers.PaymentManager
 import com.bupp.wood_spoon_eaters.model.*
+import com.bupp.wood_spoon_eaters.repositories.AppSettingsRepository
+import com.bupp.wood_spoon_eaters.repositories.EatersFeatureFlags
 import com.bupp.wood_spoon_eaters.repositories.OrderRepository
+import com.bupp.wood_spoon_eaters.repositories.featureFlag
 import com.bupp.wood_spoon_eaters.utils.DateUtils
 import com.bupp.wood_spoon_eaters.utils.Utils.getErrorsMsg
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.util.*
 
@@ -31,11 +31,13 @@ class CheckoutViewModel(
     private val cartManager: CartManager,
     private val paymentManager: PaymentManager,
     val eaterDataManager: EaterDataManager,
-    private val eatersAnalyticsTracker: EatersAnalyticsTracker,
-    private val pricingExperimentUseCase: PricingExperimentUseCase,
-    private val giftConfigUseCase: GiftConfigUseCase
+    pricingExperimentUseCase: PricingExperimentUseCase,
+    giftConfigUseCase: GiftConfigUseCase,
+    appSettingsRepository: AppSettingsRepository
 ) : ViewModel() {
 
+    private val isNewAuthFlowEnabled = appSettingsRepository.featureFlag(EatersFeatureFlags.NewAuth) ?: false
+    val showContactDetailsSection = isNewAuthFlowEnabled
 
     val progressData = ProgressData()
     val getStripeCustomerCards = paymentManager.getPaymentsLiveData()
@@ -53,10 +55,13 @@ class CheckoutViewModel(
     val pricingExperimentData: LiveData<PricingExperimentParams> = MutableLiveData(pricingExperimentUseCase.getExperimentParams())
     val giftConfigData: LiveData<GiftConfig> = MutableLiveData(giftConfigUseCase.execute())
 
+    val userData = eaterDataManager.currentEaterFlow.asLiveData(Dispatchers.Main)
+
     enum class OrderValidationErrorType {
         SHIPPING_METHOD_MISSING,
         PAYMENT_METHOD_MISSING,
-        SHIPPING_ADDRESS_MISSING
+        SHIPPING_ADDRESS_MISSING,
+        USER_DETAILS_MISSING
     }
 
     data class TimePickerData(val deliveryDates: List<DeliveryDates>, val selectedDate: Date? = null)
@@ -243,6 +248,10 @@ class CheckoutViewModel(
         }
         if (cartManager.checkShippingMethodValidation()) {
             validationError.postValue(OrderValidationErrorType.SHIPPING_METHOD_MISSING)
+            return false
+        }
+        if (isNewAuthFlowEnabled && !eaterDataManager.hasUserSetDetails()) {
+            validationError.postValue(OrderValidationErrorType.USER_DETAILS_MISSING)
             return false
         }
         return true

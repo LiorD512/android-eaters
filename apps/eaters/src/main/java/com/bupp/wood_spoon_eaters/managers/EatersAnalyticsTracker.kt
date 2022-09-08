@@ -9,6 +9,7 @@ import com.bupp.wood_spoon_eaters.common.FlowEventsManager
 import com.bupp.wood_spoon_eaters.model.Address
 import com.bupp.wood_spoon_eaters.model.Eater
 import com.bupp.wood_spoon_eaters.utils.DateUtils
+import com.eatwoodspoon.analytics.AnalyticsEventReporter
 import com.eatwoodspoon.analytics.events.AnalyticsEvent
 import com.facebook.appevents.AppEventsConstants
 import com.facebook.appevents.AppEventsLogger
@@ -24,7 +25,7 @@ import java.util.*
 class EatersAnalyticsTracker(
     val context: Context,
     private var firebaseAnalytics: FirebaseAnalytics
-) {
+): AnalyticsEventReporter {
 
     private var currentUserId: String? = null
     private val shouldFireEvent = true//FlavorClassThing.equals("release", true)
@@ -288,6 +289,10 @@ class EatersAnalyticsTracker(
         } else {
             firebaseAnalytics.logEvent("Error_Prod", bundle)
         }
+    }
+
+    override fun reportEvent(event: AnalyticsEvent) {
+        this.logEvent(event.name, event.params)
     }
 }
 

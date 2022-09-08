@@ -7,7 +7,7 @@ android {
     defaultConfig {
         minSdkVersion 26
         applicationId "com.bupp.wood_spoon_eaters"
-        versionName "2.7.3"
+        versionName "2.8.0"
     }
 
     productFlavors {
@@ -18,7 +18,11 @@ android {
             buildConfigField "String", "SHIPBOOK_APP_ID", '"620bc0e8244a8956dfc02096"'
             buildConfigField "String", "SHIPBOOK_APP_KEY", '"ed8fdb9f6cc94159fb1afe3a6140315b"'
 
-            resValue "string", "app_name", "Staging-WoodSpoonEaters"
+            resValue "string", "app_name", "[WoodSpoon]"
+
+            manifestPlaceholders["deeplink_schema"] = "woodspooneatersstg"
+            buildConfigField "String", "DEEPLINK_SCHEMA", "\"${manifestPlaceholders["deeplink_schema"]}\""
+            buildConfigField "String", "AUTH_DOMAIN", "\"auth-web.staging.eatwoodspoon.com\""
         }
 
         production {
@@ -28,6 +32,10 @@ android {
             buildConfigField "String", "SHIPBOOK_APP_KEY", '"3a270a6df019054845206ae471c89461"'
 
             resValue "string", "app_name", "WoodSpoon"
+
+            manifestPlaceholders["deeplink_schema"] = "woodspooneaters"
+            buildConfigField "String", "DEEPLINK_SCHEMA", "\"${manifestPlaceholders["deeplink_schema"]}\""
+            buildConfigField "String", "AUTH_DOMAIN", "\"auth-web.production.eatwoodspoon.com\""
         }
     }
 
@@ -37,6 +45,10 @@ dependencies {
     implementation project(path: ':core:analytics')
     implementation project(path: ':core:android-utils')
     implementation project(path: ':shared:presentation')
+    implementation project(path: ':shared:auth')
+
+//    implementation 'org.jetbrains.kotlinx:kotlinx-metadata-jvm:0.3.0'
+
 
     implementation 'androidx.appcompat:appcompat'
 
@@ -102,7 +114,7 @@ dependencies {
 
     //Branch.io
     // required for all Android apps
-    implementation 'androidx.browser:browser:1.4.0'
+    implementation 'androidx.browser:browser'
     implementation 'io.branch.sdk.android:library:5.0.9'
     // required if your app is in the Google Play Store (tip: avoid using bundled play services libs)
     implementation 'com.google.firebase:firebase-appindexing:20.0.0'
@@ -127,17 +139,17 @@ dependencies {
     implementation 'com.google.android.gms:play-services-location:18.0.0'
 
     //network
-    implementation 'com.squareup.okhttp3:okhttp:4.9.0'
+    implementation 'com.squareup.okhttp3:okhttp'
     implementation 'io.reactivex.rxjava2:rxjava:2.2.20'
     implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'
     implementation 'com.squareup.retrofit2:adapter-rxjava2:2.9.0'
-    implementation 'com.squareup.okhttp3:logging-interceptor:4.9.0'
+    implementation 'com.squareup.okhttp3:logging-interceptor'
 
-    implementation "com.squareup.moshi:moshi:1.12.0"
-    kapt 'com.squareup.moshi:moshi-kotlin-codegen:1.12.0'
-    implementation "com.squareup.moshi:moshi-kotlin:1.12.0"
-    implementation 'com.squareup.moshi:moshi-adapters:1.11.0'
+    implementation "com.squareup.moshi:moshi"
+    kapt 'com.squareup.moshi:moshi-kotlin-codegen'
+    implementation "com.squareup.moshi:moshi-kotlin"
+    implementation 'com.squareup.moshi:moshi-adapters'
     implementation "com.squareup.retrofit2:converter-moshi:2.9.0"
     implementation 'com.jakewharton.retrofit:retrofit2-kotlin-coroutines-adapter:0.9.2'
 
@@ -168,7 +180,7 @@ dependencies {
     //ship book
     implementation 'io.shipbook:shipbooksdk:1.6.2'
 
-    testImplementation "com.squareup.okhttp3:mockwebserver:4.9.3"
+    testImplementation "com.squareup.okhttp3:mockwebserver"
     testImplementation "org.mockito:mockito-core:4.0.0"
     testImplementation "org.mockito.kotlin:mockito-kotlin:4.0.0"
     testImplementation "androidx.arch.core:core-testing:2.1.0"

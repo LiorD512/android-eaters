@@ -1,25 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/white"
         android:orientation="vertical">
 
 
-    <ImageButton
+        <ImageButton
+            android:id="@+id/codeFragCloseBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:background="@null"
             android:padding="15.4dp"
-            android:id="@+id/codeFragCloseBtn"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
             android:src="@drawable/icons_close"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
 
-    <LinearLayout
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
@@ -28,14 +32,14 @@
             android:paddingTop="7.7dp"
             android:paddingBottom="7.4dp">
 
-        <TextView
+            <TextView
                 style="@style/LatoBlack23Dark"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:letterSpacing="0.03"
                 android:text="Enter the 4-digit code" />
 
-        <TextView
+            <TextView
                 style="@style/LatoReg13Black"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -44,29 +48,29 @@
                 android:lineSpacingExtra="6.7sp"
                 android:text="We just sent a verification code to" />
 
-        <TextView
-                android:layout_marginTop="2.5dp"
+            <TextView
                 android:id="@+id/codeFragNumber"
                 style="@style/LatoReg13Black"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="2.5dp"
                 android:letterSpacing="0.03"
                 android:lineSpacingExtra="6.7sp"
                 tools:text="+1 (xxx) xxx - 0123 " />
 
-        <FrameLayout
+            <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="27dp">
 
-            <EditText
+                <EditText
                     android:id="@+id/codeFragInput"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:background="@null"
                     android:cursorVisible="false" />
 
-            <LinearLayout
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="9dp"
@@ -78,13 +82,13 @@
                     android:gravity="start"
                     android:orientation="horizontal">
 
-                <LinearLayout
-                        android:layout_marginEnd="15.4dp"
+                    <LinearLayout
                         android:layout_width="53.8dp"
                         android:layout_height="wrap_content"
+                        android:layout_marginEnd="15.4dp"
                         android:orientation="vertical">
 
-                    <TextView
+                        <TextView
                             android:id="@+id/codeFragInput1"
                             style="@style/LatoReg15Dark"
                             android:layout_width="match_parent"
@@ -92,22 +96,22 @@
                             android:gravity="center"
                             tools:text="1" />
 
-                    <View
+                        <View
                             android:id="@+id/codeFragUnderline1"
                             android:layout_width="match_parent"
                             android:layout_height="1dp"
                             android:background="@color/light_periwinkle"
                             android:paddingTop="4.4dp" />
 
-                </LinearLayout>
+                    </LinearLayout>
 
-                <LinearLayout
-                        android:layout_marginEnd="15.4dp"
+                    <LinearLayout
                         android:layout_width="53.8dp"
                         android:layout_height="wrap_content"
+                        android:layout_marginEnd="15.4dp"
                         android:orientation="vertical">
 
-                    <TextView
+                        <TextView
                             android:id="@+id/codeFragInput2"
                             style="@style/LatoReg15Dark"
                             android:layout_width="match_parent"
@@ -115,22 +119,22 @@
                             android:gravity="center"
                             tools:text="2" />
 
-                    <View
+                        <View
                             android:id="@+id/codeFragUnderline2"
                             android:layout_width="match_parent"
                             android:layout_height="1dp"
                             android:background="@color/light_periwinkle"
                             android:paddingTop="4.4dp" />
 
-                </LinearLayout>
+                    </LinearLayout>
 
-                <LinearLayout
-                        android:layout_marginEnd="15.4dp"
+                    <LinearLayout
                         android:layout_width="53.8dp"
                         android:layout_height="wrap_content"
+                        android:layout_marginEnd="15.4dp"
                         android:orientation="vertical">
 
-                    <TextView
+                        <TextView
                             android:id="@+id/codeFragInput3"
                             style="@style/LatoReg15Dark"
                             android:layout_width="match_parent"
@@ -138,21 +142,21 @@
                             android:gravity="center"
                             tools:text="3" />
 
-                    <View
+                        <View
                             android:id="@+id/codeFragUnderline3"
                             android:layout_width="match_parent"
                             android:layout_height="1dp"
                             android:background="@color/light_periwinkle"
                             android:paddingTop="4.4dp" />
 
-                </LinearLayout>
+                    </LinearLayout>
 
-                <LinearLayout
+                    <LinearLayout
                         android:layout_width="53.8dp"
                         android:layout_height="wrap_content"
                         android:orientation="vertical">
 
-                    <TextView
+                        <TextView
                             android:id="@+id/codeFragInput4"
                             style="@style/LatoReg15Dark"
                             android:layout_width="match_parent"
@@ -160,50 +164,50 @@
                             android:gravity="center"
                             tools:text="4" />
 
-                    <View
+                        <View
                             android:id="@+id/codeFragUnderline4"
                             android:layout_width="match_parent"
                             android:layout_height="1dp"
                             android:background="@color/light_periwinkle"
                             android:paddingTop="4.4dp" />
 
+                    </LinearLayout>
+
                 </LinearLayout>
 
-            </LinearLayout>
+            </FrameLayout>
 
-        </FrameLayout>
-
-        <TextView
+            <TextView
                 android:id="@+id/codeFragInputError"
                 style="@style/LatoReg11Red"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
+                android:layout_gravity="start"
                 android:drawablePadding="5.4dp"
                 android:paddingTop="5.4dp"
-                android:text="We still need the code we sent you"
-                android:visibility="invisible"
-                app:drawableStartCompat="@drawable/ic_code_error" />
+                android:visibility="gone"
+                app:drawableStartCompat="@drawable/ic_code_error"
+                tools:text="We still need the code we sent you" />
 
-        <View
+            <View
                 android:layout_width="1dp"
                 android:layout_height="0dp"
                 android:layout_weight="1" />
 
-        <LinearLayout
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginBottom="22.8dp"
                 android:orientation="horizontal">
 
-            <TextView
+                <TextView
                     style="@style/LatoReg13Dark"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/code_fragment_help" />
 
-            <TextView
+                <TextView
                     android:id="@+id/codeFragResendCode"
                     style="@style/LatoBold11Teal"
                     android:layout_width="wrap_content"
@@ -218,21 +222,27 @@
                     android:text="Press here to resend" />
 
 
-        </LinearLayout>
+            </LinearLayout>
 
 
-        <com.bupp.wood_spoon_eaters.custom_views.BlueBtnCornered
+            <com.bupp.wood_spoon_eaters.custom_views.BlueBtnCornered
                 android:id="@+id/codeFragNext"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:title="@string/code_fragment_next_btn" />
 
 
-    </LinearLayout>
+        </LinearLayout>
 
-    <com.bupp.wood_spoon_eaters.custom_views.NumPadView
+        <com.bupp.wood_spoon_eaters.custom_views.NumPadView
             android:id="@+id/codeFragNumPad"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom" />
-</LinearLayout>
+    </LinearLayout>
+
+    <com.bupp.wood_spoon_eaters.views.WSProgressBar
+        android:id="@+id/progress"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+</FrameLayout>
