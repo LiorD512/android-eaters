@@ -21,6 +21,7 @@ import com.bupp.wood_spoon_eaters.custom_views.CustomDetailsView
 import com.bupp.wood_spoon_eaters.databinding.CheckoutFragmentBinding
 import com.bupp.wood_spoon_eaters.dialogs.*
 import com.bupp.wood_spoon_eaters.experiments.PricingExperimentParams
+import com.bupp.wood_spoon_eaters.features.free_delivery.FreeDeliveryState
 import com.bupp.wood_spoon_eaters.features.locations_and_address.address_verification_map.AddressVerificationMapFragment
 import com.bupp.wood_spoon_eaters.features.order_checkout.OrderCheckoutActivity
 import com.bupp.wood_spoon_eaters.features.order_checkout.OrderCheckoutViewModel
@@ -88,6 +89,7 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
             checkoutFragPromoCode.setDeliveryDetailsViewListener(this@CheckoutFragment)
             checkoutFragGift.setDeliveryDetailsViewListener(this@CheckoutFragment)
             checkoutFragFees.setWSTitleValueListener(this@CheckoutFragment)
+            checkoutFragFreeDeliveryView.setAddItemsClickListener { (activity as OrderCheckoutActivity).onEditOrderClick() }
 
             checkoutFragPromoCode.setOnClickListener {
                 mainViewModel.logEvent(Constants.EVENT_CLICK_ON_PROMO_CODE)
@@ -236,6 +238,15 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
         }
         viewModel.userData.observe(viewLifecycleOwner) {
             handleUserDetail(it)
+        }
+        viewModel.freeDeliveryData.observe(viewLifecycleOwner){
+            setFreeDeliveryViewState(it)
+        }
+    }
+
+    private fun setFreeDeliveryViewState(freeDeliveryState: FreeDeliveryState?){
+        binding?.apply {
+            checkoutFragFreeDeliveryView.setFreeDeliveryState(freeDeliveryState)
         }
     }
 

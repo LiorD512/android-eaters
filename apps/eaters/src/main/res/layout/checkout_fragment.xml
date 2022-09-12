@@ -229,6 +229,11 @@
 
     </androidx.core.widget.NestedScrollView>
 
+    <com.bupp.wood_spoon_eaters.features.free_delivery.FreeDeliveryProgressView
+        android:id="@+id/checkoutFragFreeDeliveryView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"/>
 
     <com.bupp.wood_spoon_eaters.views.floating_buttons.WSFloatingButton
             android:id="@+id/checkoutFragPlaceOrderBtn"

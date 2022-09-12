@@ -8,12 +8,14 @@ import com.bupp.wood_spoon_eaters.model.Price
 data class FreeDeliveryState(
     val subtotal: Price?,
     val untilFreeDelivery: Price?,
-    val currentThreshold: Price?
+    val currentThreshold: Price?,
+    val showAddMoreItemsBtn: Boolean
 )
 
 fun Order?.mapOrderToFreeDeliveryState(
     currentThreshold: Price?,
-    showFreeDelivery: Boolean
+    showFreeDelivery: Boolean,
+    showAddMoreItemsBtn: Boolean
 ): FreeDeliveryState? {
     return if (this == null) {
         null
@@ -22,7 +24,8 @@ fun Order?.mapOrderToFreeDeliveryState(
             FreeDeliveryState(
                 this.subtotal,
                 this.untilFreeDelivery,
-                currentThreshold
+                currentThreshold,
+                showAddMoreItemsBtn
             )
         } else {
             null

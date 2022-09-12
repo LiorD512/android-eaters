@@ -4,10 +4,12 @@ import android.util.Log
 import androidx.lifecycle.*
 import com.bupp.wood_spoon_eaters.di.abs.LiveEventData
 import com.bupp.wood_spoon_eaters.di.abs.ProgressData
+import com.bupp.wood_spoon_eaters.domain.FeatureFlagFreeDeliveryUseCase
 import com.bupp.wood_spoon_eaters.domain.comon.execute
 import com.bupp.wood_spoon_eaters.experiments.PricingExperimentParams
 import com.bupp.wood_spoon_eaters.experiments.PricingExperimentUseCase
 import com.bupp.wood_spoon_eaters.features.base.SingleLiveEvent
+import com.bupp.wood_spoon_eaters.features.free_delivery.mapOrderToFreeDeliveryState
 import com.bupp.wood_spoon_eaters.features.order_checkout.checkout.models.CheckoutAdapterItem
 import com.bupp.wood_spoon_eaters.features.order_checkout.gift.GiftConfig
 import com.bupp.wood_spoon_eaters.features.order_checkout.gift.GiftConfigUseCase
@@ -16,10 +18,7 @@ import com.bupp.wood_spoon_eaters.managers.CartManager
 import com.bupp.wood_spoon_eaters.managers.EaterDataManager
 import com.bupp.wood_spoon_eaters.managers.PaymentManager
 import com.bupp.wood_spoon_eaters.model.*
-import com.bupp.wood_spoon_eaters.repositories.AppSettingsRepository
-import com.bupp.wood_spoon_eaters.repositories.EatersFeatureFlags
-import com.bupp.wood_spoon_eaters.repositories.OrderRepository
-import com.bupp.wood_spoon_eaters.repositories.featureFlag
+import com.bupp.wood_spoon_eaters.repositories.*
 import com.bupp.wood_spoon_eaters.utils.DateUtils
 import com.bupp.wood_spoon_eaters.utils.Utils.getErrorsMsg
 import kotlinx.coroutines.Dispatchers
@@ -28,6 +27,7 @@ import java.util.*
 
 
 class CheckoutViewModel(
+    private val featureFlagFreeDeliveryUseCase: FeatureFlagFreeDeliveryUseCase,
     private val cartManager: CartManager,
     private val paymentManager: PaymentManager,
     val eaterDataManager: EaterDataManager,
@@ -43,6 +43,14 @@ class CheckoutViewModel(
     val getStripeCustomerCards = paymentManager.getPaymentsLiveData()
     val orderLiveData = cartManager.getCurrentOrderData()
     val deliveryDatesUi = cartManager.getDeliveryDatesUi()
+    val freeDeliveryData =
+        orderLiveData.map {
+            it.mapOrderToFreeDeliveryState(
+                appSettingsRepository.getCurrentFreeDeliveryThreshold(),
+                featureFlagFreeDeliveryUseCase.execute(),
+                true
+            )
+        }
 
     val deliveryDatesLiveData = MutableLiveData<List<DeliveryDates>>()
     val orderItemsData = MutableLiveData<List<CheckoutAdapterItem>>()

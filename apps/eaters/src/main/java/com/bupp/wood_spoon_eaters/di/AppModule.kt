@@ -158,7 +158,7 @@ val appModule = module {
     viewModel { TimePickerViewModel(get()) }
 
     //New Order
-    viewModel { CheckoutViewModel(get(), get(), get(), get(), get(), get()) }
+    viewModel { CheckoutViewModel(get(), get(), get(), get(), get(), get(), get()) }
     viewModel { PromoCodeViewModel(get(), get()) }
     viewModel { FeesAndTaxViewModel(get(), get()) }
     viewModel { GiftViewModel(get(), get(), get()) }

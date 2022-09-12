@@ -70,7 +70,8 @@ class RestaurantPageViewModel(
         orderLiveData.map {
             it.mapOrderToFreeDeliveryState(
                 appSettingsRepository.getCurrentFreeDeliveryThreshold(),
-                featureFlagFreeDeliveryUseCase.execute()
+                featureFlagFreeDeliveryUseCase.execute(),
+                false
             )
         }
 
