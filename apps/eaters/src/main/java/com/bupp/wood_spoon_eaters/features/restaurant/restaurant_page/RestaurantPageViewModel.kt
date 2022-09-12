@@ -2,20 +2,26 @@ package com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.map
 import androidx.lifecycle.viewModelScope
 import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.di.abs.LiveEventData
 import com.bupp.wood_spoon_eaters.di.abs.ProgressData
+import com.bupp.wood_spoon_eaters.domain.FeatureFlagFreeDeliveryUseCase
+import com.bupp.wood_spoon_eaters.domain.comon.execute
 import com.bupp.wood_spoon_eaters.features.base.SingleLiveEvent
+import com.bupp.wood_spoon_eaters.features.free_delivery.mapOrderToFreeDeliveryState
 import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.models.*
 import com.bupp.wood_spoon_eaters.managers.CartManager
 import com.bupp.wood_spoon_eaters.managers.EatersAnalyticsTracker
 import com.bupp.wood_spoon_eaters.managers.FeatureFlagManager
 import com.bupp.wood_spoon_eaters.managers.FeedDataManager
 import com.bupp.wood_spoon_eaters.model.*
+import com.bupp.wood_spoon_eaters.repositories.AppSettingsRepository
 import com.bupp.wood_spoon_eaters.repositories.MetaDataRepository
 import com.bupp.wood_spoon_eaters.repositories.RestaurantRepository
 import com.bupp.wood_spoon_eaters.repositories.RestaurantRepository.RestaurantRepoStatus.*
+import com.bupp.wood_spoon_eaters.repositories.getCurrentFreeDeliveryThreshold
 import com.bupp.wood_spoon_eaters.utils.DateUtils
 import com.bupp.wood_spoon_eaters.utils.isSameDateAs
 import kotlinx.coroutines.Dispatchers
@@ -23,12 +29,14 @@ import kotlinx.coroutines.launch
 import org.joda.time.DateTime
 
 class RestaurantPageViewModel(
+    private val featureFlagFreeDeliveryUseCase: FeatureFlagFreeDeliveryUseCase,
     private val restaurantRepository: RestaurantRepository,
     private val cartManager: CartManager,
     private val feedDataManager: FeedDataManager,
     private val eatersAnalyticsTracker: EatersAnalyticsTracker,
     private val metaDataManager: MetaDataRepository,
-    private val featureFlagManager: FeatureFlagManager
+    private val featureFlagManager: FeatureFlagManager,
+    private val appSettingsRepository: AppSettingsRepository
 ) : ViewModel() {
     private var selectedDishId: String? = null
 
@@ -58,6 +66,13 @@ class RestaurantPageViewModel(
     val networkErrorEvent = LiveEventData<Boolean>();
     val floatingBtnEvent = cartManager.getFloatingCartBtnEvent()
     val onCookingSlotForceChange = cartManager.getOnCookingSlotIdChange()
+    val freeDeliveryData =
+        orderLiveData.map {
+            it.mapOrderToFreeDeliveryState(
+                appSettingsRepository.getCurrentFreeDeliveryThreshold(),
+                featureFlagFreeDeliveryUseCase.execute()
+            )
+        }
 
     val progressData = ProgressData()
 
@@ -418,6 +433,7 @@ class RestaurantPageViewModel(
         }
         updateDishCountUi(dishSectionsList)
     }
+
 
     /**
      * update the dishCount of every dish in the current presented menu

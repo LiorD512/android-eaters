@@ -7,8 +7,8 @@ import android.widget.FrameLayout
 import androidx.core.view.isVisible
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.databinding.FreeDeliveryProgressViewBinding
-import com.bupp.wood_spoon_eaters.model.Order
 import com.bupp.wood_spoon_eaters.model.Price
+import com.bupp.wood_spoon_eaters.utils.AnimationUtil
 
 class FreeDeliveryProgressView @JvmOverloads
 constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) :
@@ -17,22 +17,32 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
     private val binding =
         FreeDeliveryProgressViewBinding.inflate(LayoutInflater.from(context), this, true)
 
-    private var currentThreshold: Price? = null
 
-
-    fun setFreeDeliveryThreshold(deliveryFeeThreshold: Price?) {
-        currentThreshold = deliveryFeeThreshold
-        with(binding) {
-            freeDeliveryProgressViewUntilFreeTxt.text = deliveryFeeThreshold?.formatedValue
-            freeDeliveryProgressViewPb.max = deliveryFeeThreshold?.value?.toInt() ?: 49
-        }
+    init {
+        hide()
     }
 
-    fun setOrder(order: Order?) {
+
+    fun setFreeDeliveryState(freeDeliveryState: FreeDeliveryState?) {
         with(binding) {
-            compareThresholdToSubtotal(order)
-            freeDeliveryProgressViewSubtotalTxt.text = order?.subtotal?.formatedValue
-            setFreeDeliveryProgress(order?.subtotal?.value?.toInt() ?: 0)
+            if (freeDeliveryState != null){
+                freeDeliveryProgressViewUntilFreeTxt.text =
+                    freeDeliveryState.currentThreshold?.formatedValue
+                freeDeliveryProgressViewPb.max =
+                    freeDeliveryState.currentThreshold?.value?.toInt() ?: 49
+                compareThresholdToSubtotal(
+                    freeDeliveryState.subtotal?.value ?: 0.0,
+                    freeDeliveryState.untilFreeDelivery,
+                    freeDeliveryState.currentThreshold
+                )
+                freeDeliveryProgressViewSubtotalTxt.text = freeDeliveryState.subtotal?.formatedValue
+                setFreeDeliveryProgress(freeDeliveryState.subtotal?.value?.toInt() ?: 0)
+                if ((!freeDeliveryProgressViewMainLayout.isVisible)){
+                    show()
+                }
+            }else{
+                hide()
+            }
         }
     }
 
@@ -42,9 +52,11 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
         }
     }
 
-    private fun compareThresholdToSubtotal(order: Order?){
-        with(binding){
-            val subtotal = order?.subtotal?.value ?: 0.0
+    private fun compareThresholdToSubtotal(
+        subtotal: Double, untilFreeDelivery: Price?,
+        currentThreshold: Price?
+    ) {
+        with(binding) {
             val deliveryFee = currentThreshold?.value ?: 0.0
             if (subtotal >= deliveryFee) {
                 freeDeliveryProgressViewTitle.text =
@@ -53,12 +65,21 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
             } else {
                 freeDeliveryProgressViewTitle.text = context.getString(
                     R.string.free_delivery_amount_remain_message,
-                    order?.untilFreeDelivery?.formatedValue
+                    untilFreeDelivery?.formatedValue
                 )
                 freeDeliveryProgressViewCheckImg.isVisible = false
             }
         }
     }
 
+    fun show() {
+        binding.freeDeliveryProgressViewMainLayout.isVisible = true
+        AnimationUtil().enterFromBottomWithAlpha(binding.freeDeliveryProgressViewMainLayout)
+    }
+
+    fun hide() {
+        binding.freeDeliveryProgressViewMainLayout.isVisible = false
+        AnimationUtil().exitToBottomWithAlpha(binding.freeDeliveryProgressViewMainLayout)
+    }
 
 }

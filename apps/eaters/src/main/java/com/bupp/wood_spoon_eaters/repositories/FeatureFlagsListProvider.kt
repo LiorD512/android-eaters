@@ -20,7 +20,8 @@ enum class EatersFeatureFlags(override val key: String) : FeatureFlagKey {
     MobileEaterLongFeed(key = "mobile_eater_long_feed"),
     GiftIsEnabled(key = "mobile_order_is_gift_enabled"),
     ShowCartSubtotal(key = "show_cart_subtotal"),
-    NewAuth(key = "new_auth")
+    NewAuth(key = "new_auth"),
+    FreeDeliveryEnabled(key = "waive_delivery_fee_based_on_subtotal")
 }
 
 class StaticFeatureFlagsListProvider : FeatureFlagsListProvider {

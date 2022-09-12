@@ -209,6 +209,7 @@ interface ApiService {
         @Query("timestamp") timestamp: String? = null
     ): ServerResponse<FullDish>
 
+    @VERSION("v2")
     @POST("eaters/me/orders")
     suspend fun postOrder(
         @Body orderRequest: OrderRequest

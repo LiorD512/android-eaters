@@ -20,6 +20,7 @@ import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.common.FlowEventsManager
 import com.bupp.wood_spoon_eaters.databinding.FragmentRestaurantPageBinding
 import com.bupp.wood_spoon_eaters.di.abs.LiveEvent
+import com.bupp.wood_spoon_eaters.features.free_delivery.FreeDeliveryState
 import com.bupp.wood_spoon_eaters.features.main.profile.video_view.VideoViewDialog
 import com.bupp.wood_spoon_eaters.features.order_checkout.upsale_and_cart.CustomOrderItem
 import com.bupp.wood_spoon_eaters.features.order_checkout.upsale_and_cart.UpSaleNCartBottomSheet
@@ -226,6 +227,15 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
         viewModel.selectedDishNavigationLifeData.observe(viewLifecycleOwner) { menuItem ->
             val curCookingSlot = viewModel.currentCookingSlot
             mainViewModel.openDishPage(menuItem, curCookingSlot)
+        }
+        viewModel.freeDeliveryData.observe(viewLifecycleOwner){ freeDeliveryState ->
+            setFreeDeliveryViewState(freeDeliveryState)
+        }
+    }
+
+    private fun setFreeDeliveryViewState(freeDeliveryState: FreeDeliveryState?){
+        binding?.apply {
+            restaurantPageFreeDeliveryView.setFreeDeliveryState(freeDeliveryState)
         }
     }
 

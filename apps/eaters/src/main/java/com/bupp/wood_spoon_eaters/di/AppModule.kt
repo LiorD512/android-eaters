@@ -113,8 +113,10 @@ val appModule = module {
     single { GetOnboardingAppSettingsSlidesDelayUseCase(get()) }
     single { GiftConfigUseCase(get()) }
     single { FeatureFlagLongFeedUseCase(get()) }
+    single { FeatureFlagFreeDeliveryUseCase(get()) }
     factory { PhoneNumberVerificationRequestCodeUseCase(get(), get()) }
     factory { SendPhoneVerificationUseCase(get(), get()) }
+
 
     //managers
     single { GlobalErrorManager() }
@@ -221,7 +223,7 @@ val appModule = module {
 
     //RestaurantPage
     viewModel { RestaurantMainViewModel(get(), get(), get(), get()) }
-    viewModel { RestaurantPageViewModel(get(), get(), get(), get(), get(), get()) }
+    viewModel { RestaurantPageViewModel(get(), get(), get(), get(), get(), get(), get(), get()) }
     viewModel { DishPageViewModel(get(), get(), get(), get()) }
     viewModel { OrderCheckoutViewModel(get(), get(), get(), get()) }
     viewModel { ReviewsBSViewModel(get(), get()) }

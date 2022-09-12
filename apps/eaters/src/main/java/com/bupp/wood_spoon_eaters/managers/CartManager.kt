@@ -674,4 +674,8 @@ class CartManager(
     fun isCartEmpty(): Boolean {
         return getCurrentOrderItems().isNullOrEmpty()
     }
+
+    fun getCurrentOrder(): Order? {
+        return currentOrderResponse
+    }
 }

@@ -29,6 +29,10 @@ fun AppSettingsRepository.getMinOrderFeeStr(nationwide: Boolean): String {
     return priceAppSetting(if (nationwide) "nationwide_min_order" else "min_order")?.formatedValue ?: ""
 }
 
+fun AppSettingsRepository.getCurrentFreeDeliveryThreshold(): Price?{
+    return priceAppSetting("free_delivery_order_subtotal")
+}
+
 fun AppSettingsRepository.getQaUrl() = stringAppSetting("qa_url") ?: ""
 
 fun AppSettingsRepository.getContactUsPhoneNumber() = stringAppSetting("contact_us_number") ?: ""
