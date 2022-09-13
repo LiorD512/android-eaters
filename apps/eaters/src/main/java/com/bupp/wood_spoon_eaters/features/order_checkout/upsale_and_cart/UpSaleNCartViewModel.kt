@@ -2,19 +2,21 @@ package com.bupp.wood_spoon_eaters.features.order_checkout.upsale_and_cart
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.map
 import androidx.lifecycle.viewModelScope
 import com.bupp.wood_spoon_eaters.common.FlowEventsManager
 import com.bupp.wood_spoon_eaters.di.abs.LiveEventData
+import com.bupp.wood_spoon_eaters.domain.FeatureFlagFreeDeliveryUseCase
+import com.bupp.wood_spoon_eaters.domain.comon.execute
+import com.bupp.wood_spoon_eaters.features.free_delivery.mapOrderToFreeDeliveryState
 import com.bupp.wood_spoon_eaters.managers.CartManager
 import com.bupp.wood_spoon_eaters.managers.EaterDataManager
 import com.bupp.wood_spoon_eaters.managers.EatersAnalyticsTracker
-import com.bupp.wood_spoon_eaters.repositories.AppSettingsRepository
-import com.bupp.wood_spoon_eaters.repositories.EatersFeatureFlags
-import com.bupp.wood_spoon_eaters.repositories.OrderRepository
-import com.bupp.wood_spoon_eaters.repositories.featureFlag
+import com.bupp.wood_spoon_eaters.repositories.*
 import kotlinx.coroutines.launch
 
 class UpSaleNCartViewModel(
+    private val featureFlagFreeDeliveryUseCase: FeatureFlagFreeDeliveryUseCase,
     val cartManager: CartManager,
     val eaterDataManager: EaterDataManager,
     private val flowEventsManager: FlowEventsManager,
@@ -26,6 +28,14 @@ class UpSaleNCartViewModel(
     val currentOrderData = cartManager.getCurrentOrderData()
     val currentCookingSlot = cartManager.getCurrentCookingSlot()
     val onDishCartClick = LiveEventData<CustomOrderItem>()
+    val freeDeliveryData =
+        currentOrderData.map {
+            it.mapOrderToFreeDeliveryState(
+                appSettingsRepository.getCurrentFreeDeliveryThreshold(),
+                featureFlagFreeDeliveryUseCase.execute(),
+                false
+            )
+        }
 
     private val shouldShowSubtotal = appSettingsRepository.featureFlag(EatersFeatureFlags.ShowCartSubtotal) ?: false
 

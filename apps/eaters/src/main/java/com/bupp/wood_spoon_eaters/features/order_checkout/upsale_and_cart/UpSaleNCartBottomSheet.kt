@@ -19,7 +19,6 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import androidx.interpolator.view.animation.FastOutSlowInInterpolator
 import com.bupp.wood_spoon_eaters.R
-import com.bupp.wood_spoon_eaters.bottom_sheets.campaign_bottom_sheet.CampaignBottomSheet
 import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.common.FlowEventsManager
 import com.bupp.wood_spoon_eaters.custom_views.adapters.DividerItemDecorator
@@ -27,6 +26,7 @@ import com.bupp.wood_spoon_eaters.custom_views.simpler_views.SimpleAnimatorListe
 import com.bupp.wood_spoon_eaters.custom_views.simpler_views.SimpleBottomSheetCallback
 import com.bupp.wood_spoon_eaters.databinding.UpSaleNCartBottomSheetBinding
 import com.bupp.wood_spoon_eaters.di.abs.LiveEvent
+import com.bupp.wood_spoon_eaters.features.free_delivery.FreeDeliveryState
 import com.bupp.wood_spoon_eaters.features.locations_and_address.LocationAndAddressActivity
 import com.bupp.wood_spoon_eaters.utils.AnimationUtil
 import com.bupp.wood_spoon_eaters.utils.Utils
@@ -239,7 +239,16 @@ class UpSaleNCartBottomSheet() : BottomSheetDialogFragment() {
         viewModel.onDishCartClick.observe(viewLifecycleOwner) {
             handleOnCartDishClick(it)
         }
+        viewModel.freeDeliveryData.observe(viewLifecycleOwner){
+            setFreeDeliveryViewState(it)
+        }
     }
+    private fun setFreeDeliveryViewState(freeDeliveryState: FreeDeliveryState?){
+        binding?.apply {
+            floatingCartFreeDeliveryView.setFreeDeliveryState(freeDeliveryState)
+        }
+    }
+
 
     private fun handleOnCartDishClick(cartDishData: LiveEvent<CustomOrderItem>?) {
         cartDishData?.getContentIfNotHandled()?.let {

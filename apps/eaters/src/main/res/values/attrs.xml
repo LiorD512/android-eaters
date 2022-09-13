@@ -310,4 +310,8 @@
         </attr>
     </declare-styleable>
 
+    <declare-styleable name="FreeDeliveryProgressView">
+        <attr name="freeDeliveryBkg" format="reference" />
+    </declare-styleable>
+
 </resources>

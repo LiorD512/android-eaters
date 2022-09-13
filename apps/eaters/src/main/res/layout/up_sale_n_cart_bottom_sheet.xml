@@ -80,6 +80,13 @@
 
     </LinearLayout>
 
+    <com.bupp.wood_spoon_eaters.features.free_delivery.FreeDeliveryProgressView
+        android:id="@+id/floatingCartFreeDeliveryView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:freeDeliveryBkg="@drawable/white_rect"
+        app:layout_constraintTop_toBottomOf="@id/upsaleCartMainLayout"/>
+
     <FrameLayout
         android:id="@+id/floatingCartBtnLayout"
         android:layout_width="match_parent"

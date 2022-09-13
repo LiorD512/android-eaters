@@ -233,6 +233,7 @@
         android:id="@+id/checkoutFragFreeDeliveryView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        app:freeDeliveryBkg="@drawable/background_white_top_cornered"
         app:layout_constraintBottom_toBottomOf="parent"/>
 
     <com.bupp.wood_spoon_eaters.views.floating_buttons.WSFloatingButton

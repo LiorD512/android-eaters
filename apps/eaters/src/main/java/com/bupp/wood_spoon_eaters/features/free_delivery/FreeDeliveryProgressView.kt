@@ -4,6 +4,7 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.widget.FrameLayout
+import androidx.annotation.DrawableRes
 import androidx.core.view.isVisible
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.databinding.FreeDeliveryProgressViewBinding
@@ -19,9 +20,29 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 
 
     init {
+        initAttrs(attrs)
         hide()
     }
 
+    private fun initAttrs(attrs: AttributeSet?){
+        if(attrs != null){
+            val attrSet =
+                context.obtainStyledAttributes(attrs, R.styleable.FreeDeliveryProgressView)
+
+            if (attrSet.hasValue(R.styleable.FreeDeliveryProgressView_freeDeliveryBkg)){
+                val background = attrSet.getResourceId(
+                    R.styleable.FreeDeliveryProgressView_freeDeliveryBkg,
+                    0
+                )
+
+                setBackground(background)
+
+            }
+
+            attrSet.recycle()
+
+        }
+    }
 
     fun setFreeDeliveryState(freeDeliveryState: FreeDeliveryState?) {
         with(binding) {
@@ -89,6 +110,10 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 
     fun setAddItemsClickListener(clickListener: () -> Unit) {
         binding.freeDeliveryProgressViewAddItemsBtn.setOnClickListener { clickListener()}
+    }
+
+    private fun setBackground(@DrawableRes background: Int){
+        binding.freeDeliveryProgressViewMainLayout.setBackgroundResource(background)
     }
 
 }

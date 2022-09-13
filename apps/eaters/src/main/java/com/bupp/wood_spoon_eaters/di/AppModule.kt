@@ -164,7 +164,7 @@ val appModule = module {
     viewModel { GiftViewModel(get(), get(), get()) }
     viewModel { GiftActionsViewModel(get(), get()) }
 
-    viewModel { UpSaleNCartViewModel(get(), get(), get(), get(), get()) }
+    viewModel { UpSaleNCartViewModel(get(), get(), get(), get(), get(), get()) }
 
     //main
     viewModel {
