@@ -33,6 +33,9 @@ class AuthInterceptor(private val settings: ApiSettings) : Interceptor {
         val finalRequest = addTokenToRequest(newRequest, authToken)
         val response = chain.proceed(finalRequest)
 
+        if(response.code == 401) {
+            updateToken(null)
+        }
         if (!response.header("X-Auth-Token").isNullOrEmpty()) {
             val newToken = response.header("X-Auth-Token") as String
             if (newToken.isNotEmpty()) {
@@ -44,7 +47,7 @@ class AuthInterceptor(private val settings: ApiSettings) : Interceptor {
         return response
     }
 
-    private fun updateToken(newToken: String) {
+    private fun updateToken(newToken: String?) {
 //        Log.d("wowAuth", "updateD Token: $newToken")
         storedAuthToken = newToken
         settings.token = newToken
@@ -58,7 +61,7 @@ class AuthInterceptor(private val settings: ApiSettings) : Interceptor {
         var finalRequest = request
         if (authToken != null) {
             Log.d(TAG, "addTokenToRequest: $authToken")
-            val requestBuilder = request.newBuilder().addHeader("X-Auth-Token", authToken)
+            val requestBuilder = request.newBuilder()//.addHeader("X-Auth-Token", authToken)
                 .removeHeader("Authorization")
                 .addHeader("Authorization", "Bearer $authToken")
             finalRequest = requestBuilder.build()

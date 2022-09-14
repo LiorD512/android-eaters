@@ -88,7 +88,7 @@ class LoginActivity : BaseActivity() {
                             ),
                             "onboarding"
                         )
-                        finish()
+//                        finish()
                     }
                 }
             }

@@ -5,21 +5,19 @@ import androidx.annotation.Keep
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.bupp.wood_spoon_eaters.managers.EaterDataManager
-import com.bupp.wood_spoon_eaters.managers.EatersAnalyticsTracker
 import com.bupp.wood_spoon_eaters.model.Eater
 import com.bupp.wood_spoon_eaters.model.EaterRequest
 import com.bupp.wood_spoon_eaters.managers.MediaUploadManager
 import com.bupp.wood_spoon_eaters.repositories.UserRepository
 import com.bupp.wood_spoon_eaters.utils.CountryCodeUtils
 import com.eatwoodspoon.analytics.AnalyticsEventReporter
-import com.eatwoodspoon.analytics.events.MobileAuthEvent
+import com.eatwoodspoon.analytics.events.MobileContactDetailsEvent
 import com.eatwoodspoon.android_utils.flows.toImmutable
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import java.lang.Exception
 
 data class EditProfileState(
     val user: User? = null,
@@ -75,7 +73,7 @@ class EditProfileViewModel(
             it.copy(user = originalUserData)
         }
         analytics.reportEvent(
-            MobileAuthEvent.EatersContactScreenOpenedEvent(
+            MobileContactDetailsEvent.ScreenOpenedEvent(
                 source = "checkout", //TODO provide from outside for future usage
                 has_email = !originalUserData?.email.isNullOrEmpty(),
                 email_verified = originalUserData?.canEditEmail != true,
@@ -139,7 +137,7 @@ class EditProfileViewModel(
         errors.firstOrNull()?.let {
             _events.emit(it)
             analytics.reportEvent(
-                MobileAuthEvent.EatersContactScreenLocalValidationErrorEvent(
+                MobileContactDetailsEvent.LocalValidationErrorEvent(
                     errors = it.message ?: it.field.name
                 )
             )
@@ -160,7 +158,7 @@ class EditProfileViewModel(
         email: String?,
         phoneNumber: String?
     ) {
-        analytics.reportEvent(MobileAuthEvent.EatersContactScreenSaveClickedEvent())
+        analytics.reportEvent(MobileContactDetailsEvent.SaveClickedEvent())
         viewModelScope.launch {
             if (!validateFields(firstName, lastName, email, phoneNumber)) {
                 return@launch
@@ -184,14 +182,14 @@ class EditProfileViewModel(
     private suspend fun navigateOnSuccess(phoneNumber: String?) {
         if (phoneNumber != null && phoneValidationRequired(phoneNumber)) {
             analytics.reportEvent(
-                MobileAuthEvent.EatersContactScreenSaveSuccessEvent(
+                MobileContactDetailsEvent.SaveSuccessEvent(
                     phone_verification_required = true
                 )
             )
             _events.emit(EditProfileEvents.NavigateToPhoneValidation(phoneNumber))
         } else {
             analytics.reportEvent(
-                MobileAuthEvent.EatersContactScreenSaveSuccessEvent(
+                MobileContactDetailsEvent.SaveSuccessEvent(
                     phone_verification_required = false
                 )
             )
@@ -237,7 +235,7 @@ class EditProfileViewModel(
             }
             else -> {
                 analytics.reportEvent(
-                    MobileAuthEvent.EatersContactScreenSaveErrorEvent(
+                    MobileContactDetailsEvent.SaveErrorEvent(
                         userRepoResult.type.ordinal,
                         userRepoResult.errorMessage
                     )

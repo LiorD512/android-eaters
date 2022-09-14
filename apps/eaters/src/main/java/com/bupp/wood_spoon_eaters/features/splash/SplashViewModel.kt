@@ -6,6 +6,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.bupp.wood_spoon_eaters.di.abs.LiveEventData
+import com.bupp.wood_spoon_eaters.domain.FeatureFlagNewAuthUseCase
 import com.bupp.wood_spoon_eaters.fcm.FcmManager
 import com.bupp.wood_spoon_eaters.features.base.SingleLiveEvent
 import com.bupp.wood_spoon_eaters.managers.EphemeralKeyProvider
@@ -20,7 +21,8 @@ class SplashViewModel(
     application: Application,
     val eaterDataManager: EaterDataManager, private val userRepository: UserRepository, val metaDataRepository: MetaDataRepository,
     private val appSettingsRepository: AppSettingsRepository, private val paymentManager: PaymentManager,
-    private val deviceDetailsManager: FcmManager, private val campaignManager: CampaignManager
+    private val deviceDetailsManager: FcmManager, private val campaignManager: CampaignManager,
+    private val featureFlagNewAuthUseCase: FeatureFlagNewAuthUseCase
 ) : AndroidViewModel(application), EphemeralKeyProvider.EphemeralKeyProviderListener {
 
     val splashEvent: LiveEventData<SplashEventType> = LiveEventData()
@@ -50,7 +52,7 @@ class SplashViewModel(
             // true if user had only phone verification
             val isUserRegistered = userRepository.isUserRegistered()
             val shouldUpdateVersion = appSettingsRepository.checkMinVersionFail()
-            val isNewAuthFlowEnabled = appSettingsRepository.featureFlag(EatersFeatureFlags.NewAuth) ?: false
+            val isNewAuthFlowEnabled = featureFlagNewAuthUseCase.execute(null)
 
             if (shouldUpdateVersion) {
                 //go to update

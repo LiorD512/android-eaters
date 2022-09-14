@@ -50,7 +50,7 @@ class WoodSpoonAuth(
             startBrowser(context, authUri)
         } catch (ex: Exception) {
             Timber.e(ex)
-            reportEvent(MobileAuthEvent.AuthErrorEvent(error_code = -1, error_description = ex.message))
+            reportEvent(MobileAuthEvent.ErrorEvent(error_code = -1, error_description = ex.message))
         }
         reportEvent(MobileAuthEvent.LoginStartedEvent(source = source, has_guest_token = false))
     }
@@ -70,7 +70,7 @@ class WoodSpoonAuth(
             startBrowser(context, authUri)
         } catch (ex: Exception) {
             Timber.e(ex)
-            reportEvent(MobileAuthEvent.AuthErrorEvent(error_code = -1, error_description = ex.message))
+            reportEvent(MobileAuthEvent.ErrorEvent(error_code = -1, error_description = ex.message))
         }
         reportEvent(MobileAuthEvent.LogoutStartedEvent(source = source))
     }
@@ -83,7 +83,7 @@ class WoodSpoonAuth(
             "logout" -> handleLogoutUri(uri, context)
             else -> {
                 reportEvent(
-                    MobileAuthEvent.AuthErrorEvent(
+                    MobileAuthEvent.ErrorEvent(
                         error_code = -1,
                         error_description = "Unsupported host received: ${uri.authority}"
                     )
@@ -97,7 +97,7 @@ class WoodSpoonAuth(
         val token = uri.getQueryParameter("token")
         if (token.isNullOrBlank() || listOf("null", "undefined").contains(token.lowercase())) {
             reportEvent(
-                MobileAuthEvent.AuthErrorEvent(
+                MobileAuthEvent.ErrorEvent(
                     error_code = -1,
                     error_description = "No or invalid token"
                 )
@@ -116,7 +116,7 @@ class WoodSpoonAuth(
             (loginSuccessPendingIntent ?: configuration.defaultSuccessIntent).send(context)
         } catch (ex: PendingIntent.CanceledException) {
             Timber.e(ex)
-            reportEvent(MobileAuthEvent.AuthErrorEvent(error_code = -1, error_description = ex.message))
+            reportEvent(MobileAuthEvent.ErrorEvent(error_code = -1, error_description = ex.message))
         }
         loginSuccessPendingIntent = null
         return true
@@ -132,7 +132,7 @@ class WoodSpoonAuth(
             (logoutSuccessPendingIntent ?: configuration.defaultSuccessIntent).send(context)
         } catch (ex: PendingIntent.CanceledException) {
             Timber.e(ex)
-            reportEvent(MobileAuthEvent.AuthErrorEvent(error_code = -1, error_description = ex.message))
+            reportEvent(MobileAuthEvent.ErrorEvent(error_code = -1, error_description = ex.message))
         }
         logoutSuccessPendingIntent = null
         return true
@@ -149,13 +149,13 @@ class WoodSpoonAuth(
                 .setInstantAppsEnabled(false)
                 .setUrlBarHidingEnabled(true)
             val chromeTab = chromeTabBuilder.build()
-            chromeTab.intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+//            chromeTab.intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             chromeTab.launchUrl(context, authUri)
         } catch (ex: ActivityNotFoundException) {
             val intent = Intent(Intent.ACTION_VIEW, authUri)
             context.startActivity(intent)
             reportEvent(
-                MobileAuthEvent.AuthErrorEvent(
+                MobileAuthEvent.ErrorEvent(
                     error_code = -2,
                     error_description = "Chrome not installed"
                 )

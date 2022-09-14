@@ -9,6 +9,7 @@ import com.bupp.wood_spoon_eaters.common.FlowEventsManager
 import com.bupp.wood_spoon_eaters.common.MTLogger
 import com.bupp.wood_spoon_eaters.di.abs.LiveEventData
 import com.bupp.wood_spoon_eaters.di.abs.ProgressData
+import com.bupp.wood_spoon_eaters.domain.FeatureFlagNewAuthUseCase
 import com.bupp.wood_spoon_eaters.fcm.FcmManager
 import com.bupp.wood_spoon_eaters.managers.EatersAnalyticsTracker
 import com.bupp.wood_spoon_eaters.managers.PaymentManager
@@ -25,10 +26,11 @@ class LoginViewModel(
     private val metaDataRepository: MetaDataRepository,
     private val appSettingsRepository: AppSettingsRepository,
     private val deviceDetailsManager: FcmManager,
-    private val paymentManager: PaymentManager
+    private val paymentManager: PaymentManager,
+    featureFlagNewAuthUseCase: FeatureFlagNewAuthUseCase
 ) : ViewModel() {
 
-    private val isNewAuthFlowEnabled = appSettingsRepository.featureFlag(EatersFeatureFlags.NewAuth) ?: false
+    private val isNewAuthFlowEnabled = featureFlagNewAuthUseCase.execute(null)
 
     var phone: String? = null
     var phonePrefix: String? = null

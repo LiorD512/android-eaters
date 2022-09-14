@@ -35,7 +35,7 @@ android {
 
             manifestPlaceholders["deeplink_schema"] = "woodspooneaters"
             buildConfigField "String", "DEEPLINK_SCHEMA", "\"${manifestPlaceholders["deeplink_schema"]}\""
-            buildConfigField "String", "AUTH_DOMAIN", "\"auth-web.production.eatwoodspoon.com\""
+            buildConfigField "String", "AUTH_DOMAIN", "\"auth.eatwoodspoon.com\""
         }
     }
 

@@ -113,6 +113,7 @@ val appModule = module {
     single { GetOnboardingAppSettingsSlidesDelayUseCase(get()) }
     single { GiftConfigUseCase(get()) }
     single { FeatureFlagLongFeedUseCase(get()) }
+    single { FeatureFlagNewAuthUseCase(get()) }
     single { FeatureFlagFreeDeliveryUseCase(get()) }
     factory { PhoneNumberVerificationRequestCodeUseCase(get(), get()) }
     factory { SendPhoneVerificationUseCase(get(), get()) }
@@ -142,11 +143,11 @@ val appModule = module {
     viewModel { AddressMenuViewModel(get(), get(), get()) }
 
     //splash
-    viewModel { SplashViewModel(get(), get(), get(), get(), get(), get(), get(), get()) }
+    viewModel { SplashViewModel(get(), get(), get(), get(), get(), get(), get(), get(), get()) }
     viewModel { SuperUserViewModel(get(), get()) }
 
     //login
-    viewModel { LoginViewModel(get(), get(), get(), get(), get(), get(), get()) }
+    viewModel { LoginViewModel(get(), get(), get(), get(), get(), get(), get(), get()) }
     viewModel { OnboardingViewModel(get(), get(), get(), get(), get()) }
 
     //location
@@ -158,7 +159,7 @@ val appModule = module {
     viewModel { TimePickerViewModel(get()) }
 
     //New Order
-    viewModel { CheckoutViewModel(get(), get(), get(), get(), get(), get(), get()) }
+    viewModel { CheckoutViewModel(get(), get(), get(), get(), get(), get(), get(), get()) }
     viewModel { PromoCodeViewModel(get(), get()) }
     viewModel { FeesAndTaxViewModel(get(), get()) }
     viewModel { GiftViewModel(get(), get(), get()) }
@@ -169,6 +170,7 @@ val appModule = module {
     //main
     viewModel {
         MainViewModel(
+            get(),
             get(),
             get(),
             get(),

@@ -5,6 +5,7 @@ import androidx.lifecycle.*
 import com.bupp.wood_spoon_eaters.di.abs.LiveEventData
 import com.bupp.wood_spoon_eaters.di.abs.ProgressData
 import com.bupp.wood_spoon_eaters.domain.FeatureFlagFreeDeliveryUseCase
+import com.bupp.wood_spoon_eaters.domain.FeatureFlagNewAuthUseCase
 import com.bupp.wood_spoon_eaters.domain.comon.execute
 import com.bupp.wood_spoon_eaters.experiments.PricingExperimentParams
 import com.bupp.wood_spoon_eaters.experiments.PricingExperimentUseCase
@@ -33,10 +34,11 @@ class CheckoutViewModel(
     val eaterDataManager: EaterDataManager,
     pricingExperimentUseCase: PricingExperimentUseCase,
     giftConfigUseCase: GiftConfigUseCase,
-    appSettingsRepository: AppSettingsRepository
+    appSettingsRepository: AppSettingsRepository,
+    featureFlagNewAuthUseCase: FeatureFlagNewAuthUseCase
 ) : ViewModel() {
 
-    private val isNewAuthFlowEnabled = appSettingsRepository.featureFlag(EatersFeatureFlags.NewAuth) ?: false
+    private val isNewAuthFlowEnabled = featureFlagNewAuthUseCase.execute(null)
     val showContactDetailsSection = isNewAuthFlowEnabled
 
     val progressData = ProgressData()

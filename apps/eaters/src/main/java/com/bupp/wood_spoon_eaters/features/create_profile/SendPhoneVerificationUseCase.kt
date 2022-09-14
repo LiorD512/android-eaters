@@ -26,7 +26,7 @@ class SendPhoneVerificationUseCase(
                 val onSuccessUserId = userRepository.currentEaterFlow.value?.id
                 if (onSuccessUserId != initialUserId) {
                     analytics.reportEvent(
-                        MobileAuthEvent.EatersAccountMergedEvent(
+                        MobileAuthEvent.AccountMergedEvent(
                             from_user_id = "$initialUserId",
                             to_user_id = "$onSuccessUserId",
                         )

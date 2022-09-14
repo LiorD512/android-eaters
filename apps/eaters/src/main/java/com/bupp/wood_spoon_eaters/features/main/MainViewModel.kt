@@ -3,6 +3,7 @@ package com.bupp.wood_spoon_eaters.features.main
 import android.content.Context
 import androidx.lifecycle.*
 import com.bupp.wood_spoon_eaters.common.*
+import com.bupp.wood_spoon_eaters.domain.FeatureFlagNewAuthUseCase
 import com.bupp.wood_spoon_eaters.model.RestaurantInitParams
 import com.bupp.wood_spoon_eaters.managers.*
 import com.bupp.wood_spoon_eaters.model.*
@@ -33,6 +34,7 @@ class MainViewModel(
     private val flowEventsManager: FlowEventsManager,
     private val cartManager: CartManager,
     private val restaurantRepository: RestaurantRepository,
+    featureFlagNewAuthUseCase: FeatureFlagNewAuthUseCase
 ) : ViewModel() {
 
     val shareEvent = MutableLiveData<String>()
@@ -51,6 +53,8 @@ class MainViewModel(
     val mediaUtilsResultLiveData = MutableLiveData<MediaUtils.MediaUtilResult>()
     val onFloatingBtnHeightChange = MutableLiveData<Boolean>()
     val refreshSearchData = MutableLiveData<Boolean>()
+
+    private val newAuthEnabled = featureFlagNewAuthUseCase.execute(null)
 
     init {
         eaterDataManager.refreshSegment()
@@ -160,7 +164,7 @@ class MainViewModel(
         val logoutResult = userRepository.logout()
         if (logoutResult.type == UserRepository.UserRepoStatus.LOGGED_OUT) {
             cartManager.onCartCleared()
-            if(appSettingsRepository.featureFlag(EatersFeatureFlags.NewAuth) == true) {
+            if(newAuthEnabled) {
                 mainNavigationEvent.postValue(MainNavigationEvent.LOGOUT_WITH_NEW_AUTH)
             }else{
                 mainNavigationEvent.postValue(MainNavigationEvent.LOGOUT)

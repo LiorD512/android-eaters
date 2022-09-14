@@ -360,7 +360,7 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
                     pendingIntent,
                     "profile"
                 )
-                finish()
+//                finish()
             }
             MainNavigationEvent.OPEN_CAMERA_UTIL_IMAGE -> {
                 mediaUtil.startPhotoFetcher()

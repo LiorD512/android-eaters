@@ -5,12 +5,12 @@ import com.bupp.wood_spoon_eaters.repositories.AppSettingsRepository
 import com.bupp.wood_spoon_eaters.repositories.EatersFeatureFlags
 import com.bupp.wood_spoon_eaters.repositories.featureFlag
 
-class FeatureFlagFreeDeliveryUseCase(
+class FeatureFlagNewAuthUseCase(
     private val appSettingsRepository: AppSettingsRepository
 ) : UseCase<Boolean, Nothing?> {
 
     override fun execute(params: Nothing?): Boolean = appSettingsRepository.featureFlag(
-        EatersFeatureFlags.FreeDeliveryEnabled
+        EatersFeatureFlags.NewAuth
     ) ?: false
 
 }

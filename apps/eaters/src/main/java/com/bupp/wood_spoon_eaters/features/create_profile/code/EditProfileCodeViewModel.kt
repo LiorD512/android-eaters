@@ -4,7 +4,7 @@ import androidx.lifecycle.viewModelScope
 import com.bupp.wood_spoon_eaters.features.create_profile.PhoneNumberVerificationRequestCodeUseCase
 import com.bupp.wood_spoon_eaters.features.create_profile.SendPhoneVerificationUseCase
 import com.eatwoodspoon.analytics.AnalyticsEventReporter
-import com.eatwoodspoon.analytics.events.MobileAuthEvent
+import com.eatwoodspoon.analytics.events.MobileContactDetailsEvent
 import com.eatwoodspoon.android_utils.flows.FlowViewModel
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -32,7 +32,7 @@ class EditProfileCodeViewModel(
     FlowViewModel<EditProfileCodeState, EditProfileCodeEvents>(initialState = EditProfileCodeState()) {
 
     init {
-        analytics.reportEvent(MobileAuthEvent.EatersPhoneVerificationScreenOpenedEvent())
+        analytics.reportEvent(MobileContactDetailsEvent.OtpScreenOpenedEvent())
     }
 
     fun setVerificationCode(codeString: String) {
@@ -53,18 +53,18 @@ class EditProfileCodeViewModel(
     }
 
     private fun sendRequestCode(isRetry: Boolean) {
-        analytics.reportEvent(MobileAuthEvent.EatersRequestVerificationCodeEvent(is_retry = isRetry))
+        analytics.reportEvent(MobileContactDetailsEvent.RequestVerificationCodeEvent(is_retry = isRetry))
         viewModelScope.launch {
             startProgress()
             try {
                 val phoneNumber = _state.value.phoneNumber ?: return@launch
                 when (val result = phoneNumberVerificationRequestCodeUseCase.execute(phoneNumber)) {
                     PhoneNumberVerificationRequestCodeUseCase.Result.Success -> {
-                        analytics.reportEvent(MobileAuthEvent.EatersRequestVerificationCodeSuccessEvent())
+                        analytics.reportEvent(MobileContactDetailsEvent.RequestVerificationCodeSuccessEvent())
                     }
                     is PhoneNumberVerificationRequestCodeUseCase.Result.InvalidPhone -> {
                         analytics.reportEvent(
-                            MobileAuthEvent.EatersRequestVerificationCodeErrorEvent(
+                            MobileContactDetailsEvent.RequestVerificationCodeErrorEvent(
                                 error_code = -1,
                                 error_description = "Invalid Phone"
                             )
@@ -73,7 +73,7 @@ class EditProfileCodeViewModel(
                     }
                     is PhoneNumberVerificationRequestCodeUseCase.Result.OtherError -> {
                         analytics.reportEvent(
-                            MobileAuthEvent.EatersRequestVerificationCodeErrorEvent(
+                            MobileContactDetailsEvent.RequestVerificationCodeErrorEvent(
                                 error_code = result.type.ordinal,
                                 error_description = result.errorMessage
                             )
@@ -88,7 +88,7 @@ class EditProfileCodeViewModel(
     }
 
     fun onSendValidateCodeClicked() {
-        analytics.reportEvent(MobileAuthEvent.EatersPhoneVerificationScreenValidateClickedEvent())
+        analytics.reportEvent(MobileContactDetailsEvent.OtpScreenValidateClickedEvent())
         viewModelScope.launch {
             val code = _state.value.verificationCode ?: run {
                 _events.emit(EditProfileCodeEvents.EmptyCodeError)
@@ -100,16 +100,16 @@ class EditProfileCodeViewModel(
             try {
                 when (val result = sendPhoneVerificationUseCase.execute(phoneNumber, code)) {
                     SendPhoneVerificationUseCase.Result.Success -> {
-                        analytics.reportEvent(MobileAuthEvent.EatersPhoneVerificationScreenValidateSuccessEvent())
+                        analytics.reportEvent(MobileContactDetailsEvent.OtpScreenValidateSuccessEvent())
                         _events.emit(EditProfileCodeEvents.CodeValidationSuccess)
                     }
                     SendPhoneVerificationUseCase.Result.WrongPassword -> {
-                        analytics.reportEvent(MobileAuthEvent.EatersPhoneVerificationScreenInvalidCodeEvent())
+                        analytics.reportEvent(MobileContactDetailsEvent.OtpScreenInvalidCodeEvent())
                         _events.emit(EditProfileCodeEvents.WrongPassword)
                     }
                     is SendPhoneVerificationUseCase.Result.OtherError -> {
                         analytics.reportEvent(
-                            MobileAuthEvent.EatersPhoneVerificationScreenValidateErrorEvent(
+                            MobileContactDetailsEvent.OtpScreenValidateErrorEvent(
                                 result.type.ordinal,
                                 result.errorMessage
                             )
