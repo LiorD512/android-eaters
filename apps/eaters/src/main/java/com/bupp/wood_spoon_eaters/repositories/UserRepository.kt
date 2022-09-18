@@ -119,8 +119,8 @@ class UserRepository(
                 }
                 is ResultHandler.WSCustomError -> {
                     UserRepoResult(
-                        UserRepoStatus.INVALID_PHONE,
-                        errorMessage = result.errors?.firstOrNull().toString()
+                        type = UserRepoStatus.INVALID_PHONE,
+                        errorMessage = result.errors?.firstOrNull()?.msg
                     )
                 }
             }

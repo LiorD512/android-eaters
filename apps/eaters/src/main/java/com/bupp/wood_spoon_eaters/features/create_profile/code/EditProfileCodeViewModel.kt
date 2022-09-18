@@ -16,7 +16,7 @@ data class EditProfileCodeState(
 )
 
 sealed class EditProfileCodeEvents {
-    object InvalidPhoneNumber : EditProfileCodeEvents()
+    data class InvalidPhoneNumber(val errorMessage: String?) : EditProfileCodeEvents()
     object SendPhoneNumberGeneralError : EditProfileCodeEvents()
     object ValidateCodeGeneralError : EditProfileCodeEvents()
     object EmptyCodeError : EditProfileCodeEvents()
@@ -66,10 +66,10 @@ class EditProfileCodeViewModel(
                         analytics.reportEvent(
                             MobileContactDetailsEvent.RequestVerificationCodeErrorEvent(
                                 error_code = -1,
-                                error_description = "Invalid Phone"
+                                error_description = result.errorMessage
                             )
                         )
-                        _events.emit(EditProfileCodeEvents.InvalidPhoneNumber)
+                        _events.emit(EditProfileCodeEvents.InvalidPhoneNumber(errorMessage = result.errorMessage))
                     }
                     is PhoneNumberVerificationRequestCodeUseCase.Result.OtherError -> {
                         analytics.reportEvent(

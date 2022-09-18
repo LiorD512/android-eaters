@@ -7,6 +7,7 @@ import android.os.CountDownTimer
 import android.os.Parcelable
 import android.text.Editable
 import android.view.View
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -99,8 +100,8 @@ class EditProfileCodeFragment : Fragment(R.layout.fragment_code) {
                 binding.codeFragInputError.text = getString(R.string.login_error_wrong_code)
                 binding.codeFragInputError.isVisible = true
             }
-            EditProfileCodeEvents.InvalidPhoneNumber -> {
-                showErrorToast(getString(R.string.login_error_wrong_phone))
+            is EditProfileCodeEvents.InvalidPhoneNumber -> {
+                showErrorToast(event.errorMessage ?: getString(R.string.login_error_wrong_phone), Toast.LENGTH_LONG)
                 findNavController().navigateUp()
             }
             EditProfileCodeEvents.ValidateCodeGeneralError -> showErrorToast("Can't validation code")

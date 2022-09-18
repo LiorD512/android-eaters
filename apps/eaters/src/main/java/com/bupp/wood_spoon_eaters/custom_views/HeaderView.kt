@@ -13,7 +13,6 @@ import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.custom_views.auto_complete_text_watcher.AutoCompleteTextWatcher
 import com.bupp.wood_spoon_eaters.databinding.HeaderViewBinding
 import com.bupp.wood_spoon_eaters.views.UserImageVideoView
-import me.ibrahimsn.lib.util.showIf
 
 
 class HeaderView @JvmOverloads

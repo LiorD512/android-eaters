@@ -12,7 +12,6 @@ import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.custom_views.auto_complete_text_watcher.AutoCompleteTextWatcher
 import com.bupp.wood_spoon_eaters.custom_views.simpler_views.SimpleTextWatcher
 import com.bupp.wood_spoon_eaters.databinding.FragmentDishSearchBinding
-import com.bupp.wood_spoon_eaters.features.main.feed.adapters.FeedMainAdapter
 import com.bupp.wood_spoon_eaters.features.restaurant.RestaurantMainViewModel
 import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.RestaurantPageViewModel
 import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.dish_sections.DishesMainAdapter
@@ -21,7 +20,6 @@ import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.models.Dis
 import com.bupp.wood_spoon_eaters.model.*
 import com.bupp.wood_spoon_eaters.utils.AnimationUtil
 import com.bupp.wood_spoon_eaters.utils.closeKeyboard
-import me.ibrahimsn.lib.util.clear
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 class DishSearchFragment : Fragment(R.layout.fragment_dish_search) {
@@ -83,7 +81,7 @@ class DishSearchFragment : Fragment(R.layout.fragment_dish_search) {
             })
 
             dishSearchFragClearInput.setOnClickListener {
-                dishSearchFragInput.clear()
+                dishSearchFragInput.setText("")
             }
 
             dishSearchFragInput.setOnEditorActionListener { _, actionId, _ ->

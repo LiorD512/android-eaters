@@ -1,12 +1,15 @@
 package com.bupp.wood_spoon_eaters.custom_views.phone_number
 
 import android.content.Context
+import android.os.Bundle
+import android.os.Parcelable
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.bupp.wood_spoon_eaters.databinding.PhoneSelectorViewBinding
 import com.bupp.wood_spoon_eaters.model.CountriesISO
 import com.bupp.wood_spoon_eaters.utils.CountryCodeUtils
+import kotlinx.parcelize.Parcelize
 import me.ibrahimsn.lib.Countries
 import me.ibrahimsn.lib.PhoneNumberKit
 import timber.log.Timber
@@ -17,11 +20,12 @@ class PhoneSelectorView @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null
 ) : ConstraintLayout(context, attrs) {
 
+    @Parcelize
     data class Phone(
         val prefix: String,
         val number: String,
         val flag: String
-    ) {
+    ) : Parcelable {
         override fun toString() = prefix + number
     }
 
@@ -57,6 +61,24 @@ class PhoneSelectorView @JvmOverloads constructor(
         }
     }
 
+    override fun onSaveInstanceState(): Parcelable {
+        val bundle = Bundle()
+        bundle.putParcelable("superState", super.onSaveInstanceState())
+        bundle.putParcelable("phone", phone)
+        return bundle
+    }
+
+    override fun onRestoreInstanceState(state: Parcelable?) {
+        if (state is Bundle) {
+            super.onRestoreInstanceState(state.getParcelable("superState"))
+            state.getParcelable<Phone?>("phone")?.let {
+                setPhone(it)
+            }
+        } else {
+            super.onRestoreInstanceState(state)
+        }
+    }
+
     private fun setPhone(phone: Phone) {
         this.phone = phone
         binding.phoneNumberInput.setPrefix(phone.prefix)
@@ -75,7 +97,8 @@ class PhoneSelectorView @JvmOverloads constructor(
     fun setPhoneString(phoneString: String?) {
         try {
             phoneNumberKit.parsePhoneNumber(phoneString, null)?.toSelectorViewPhone()?.let {
-                setPhone(it)
+                val updatedPhone = it.copy(flag = it.flag.replace("🇨🇦", "🇺🇸")) // We need to do this because the library shows Canadian flag for +1
+                setPhone(updatedPhone)
             }
         } catch (ex: Exception) {
             Timber.e(ex)

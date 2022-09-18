@@ -10,7 +10,7 @@ class PhoneNumberVerificationRequestCodeUseCase(
 
     sealed class Result {
         object Success : Result()
-        data class InvalidPhone(val phone: String) : Result()
+        data class InvalidPhone(val phone: String, val errorMessage: String?) : Result()
         data class OtherError(val type: UserRepository.UserRepoStatus, val errorMessage: String?) : Result()
     }
 
@@ -22,7 +22,7 @@ class PhoneNumberVerificationRequestCodeUseCase(
                 Result.Success
             }
             UserRepository.UserRepoStatus.INVALID_PHONE -> {
-                Result.InvalidPhone(phoneNumber)
+                Result.InvalidPhone(phoneNumber, result.errorMessage)
             }
             UserRepository.UserRepoStatus.SERVER_ERROR,
             UserRepository.UserRepoStatus.LOGGED_OUT,

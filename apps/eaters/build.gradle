@@ -97,7 +97,7 @@ dependencies {
     implementation "in.co.ophio:secure-preferences:0.1.3"
     implementation 'com.mikhaellopez:ratebottomsheet:1.1.0'
     implementation 'com.google.android.flexbox:flexbox:3.0.0'
-    implementation 'com.github.ibrahimsn98:PhoneNumberKit:1.6.2'
+    implementation 'com.github.ibrahimsn98:PhoneNumberKit:1.7.5'
     // TODO replace com.github.ibrahimsn98 with below, referenced by Google
     // implementation 'io.michaelrocks:libphonenumber-android:8.12.49'
     implementation 'com.github.rubensousa:gravitysnaphelper:2.2.1'

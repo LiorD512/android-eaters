@@ -19,7 +19,6 @@ import com.bupp.wood_spoon_eaters.utils.AnimationUtil
 import com.bupp.wood_spoon_eaters.utils.Utils
 import com.bupp.wood_spoon_eaters.utils.closeKeyboard
 import com.monkeytech.brenda.common.item_decorators.SpacesItemDecoration
-import me.ibrahimsn.lib.util.clear
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -85,7 +84,7 @@ class SearchFragment : Fragment(R.layout.fragment_search),
             })
 
             searchFragClearInput.setOnClickListener {
-                searchFragInput.clear()
+                searchFragInput.setText("")
             }
 
             searchFragInput.setOnFocusChangeListener { view, b ->

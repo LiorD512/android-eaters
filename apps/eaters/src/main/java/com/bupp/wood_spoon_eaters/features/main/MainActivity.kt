@@ -358,7 +358,7 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
                 woodSpoonAuth.startWebLogout(
                     this,
                     pendingIntent,
-                    "profile"
+                    "account_sign_out"
                 )
 //                finish()
             }
