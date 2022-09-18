@@ -203,18 +203,21 @@
             android:background="@color/white"
                 android:orientation="vertical">
 
-            <FrameLayout
+            <LinearLayout
+                android:orientation="horizontal"
                 android:id="@+id/ratingMainLayout"
                 android:layout_width="match_parent"
                 app:layout_constraintStart_toStartOf="parent"
-                android:layout_height="wrap_content">
+                android:gravity="center_vertical"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="15.4dp"
+                >
 
                 <LinearLayout
                     android:id="@+id/ratingLayout"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="15.4dp"
-                    android:layout_marginBottom="15.4dp"
                     android:animateLayoutChanges="true"
                     android:background="@drawable/background_cornered_rect_grey"
                     android:orientation="horizontal"
@@ -231,6 +234,7 @@
                         android:layout_height="wrap_content"
                         android:drawablePadding="4dp"
                         app:drawableStartCompat="@drawable/ic_review_star"
+                        android:textStyle="bold"
                         tools:text="4.5" />
 
                     <TextView
@@ -239,39 +243,25 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:paddingStart="4dp"
+                        android:textStyle="bold"
                         tools:text="(415 ratings)" />
                 </LinearLayout>
 
-                <LinearLayout
-                    android:id="@+id/woodspoonVerifiedLayout"
+                <TextView
+                    android:drawableStart="@drawable/ic_verified_chef"
+                    android:gravity="center_vertical"
+                    android:id="@+id/woodspoonVerifiedBadge"
+                    style="@style/LatoReg13TealBlue"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="16dp"
-                    android:layout_marginBottom="15.4dp"
-                    android:animateLayoutChanges="true"
-                    android:layout_gravity="end"
-                    android:orientation="horizontal"
-                    android:gravity="center_vertical"
-                    android:paddingVertical="2dp"
-                    android:paddingStart="8dp">
+                    android:layout_marginStart="24dp"
+                    android:paddingVertical="5dp"
+                    android:drawablePadding="4dp"
+                    android:textStyle="bold"
+                    android:text="WoodSpoon Verified"/>
 
-                    <ImageView
-                        android:id="@+id/verifiedBadge"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/ic_checkbox_checked"/>
-
-                    <TextView
-                        android:id="@+id/verifiedText"
-                        style="@style/LatoReg11Black"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingStart="4dp"
-                        android:text="WoodSpoon Verified"/>
-
-                </LinearLayout>
-
-            </FrameLayout>
+            </LinearLayout>
 
             <include
                     android:id="@+id/restaurantMainListLayout"

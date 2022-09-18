@@ -92,7 +92,7 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
             restaurantFragFloatingCartBtn.setWSFloatingBtnListener(this@RestaurantPageFragment)
             restaurantFragFloatingCartBtn.setOnClickListener { openCartNUpsaleDialog() }
 
-            woodspoonVerifiedLayout.setOnClickListener {
+            woodspoonVerifiedBadge.setOnClickListener {
                 createVerifiedToolTip()
             }
         }

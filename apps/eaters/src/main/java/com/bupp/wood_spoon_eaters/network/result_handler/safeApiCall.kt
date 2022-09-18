@@ -31,7 +31,7 @@ class ResultManager(private val errorManager: ErrorManger) {
                         return@withContext mapResponseToErrorResult(result)
                     }
                 }
-                ResultHandler.Success(apiCall.invoke())
+                ResultHandler.Success(result)
             } catch (throwable: Throwable) {
                 when (throwable) {
                     is IOException -> {
