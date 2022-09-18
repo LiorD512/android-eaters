@@ -41,8 +41,9 @@ class EditProfileViewModel(private val userRepository: UserRepository, val eater
             email = email
         )
 
+        progressData.startProgress()
+
         if(uploadedPhoto){
-            progressData.startProgress()
             uploadMediaData()
         }else{
             updateEater()

@@ -6,6 +6,7 @@ import com.bupp.wood_spoon_chef.BuildConfig
 import com.bupp.wood_spoon_chef.data.remote.model.Address
 import com.bupp.wood_spoon_chef.data.remote.model.Cook
 import com.bupp.wood_spoon_chef.utils.DateUtils
+import com.eatwoodspoon.analytics.SessionId
 import com.eatwoodspoon.analytics.events.AnalyticsEvent
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.segment.analytics.Analytics
@@ -21,18 +22,22 @@ class ChefAnalyticsTracker(
 ) {
 
     fun trackEvent(eventName: String, params: Map<String, Any?>? = null) {
-        if (params != null) {
-            UXCam.logEvent(eventName, params)
+
+        val effectiveParams = mutableMapOf<String, Any?>(
+            "session_id" to SessionId.value
+        ).apply {
+            params?.let { putAll(it) }
+        }
+
+        if (effectiveParams != null) {
+            UXCam.logEvent(eventName, effectiveParams)
         } else {
             UXCam.logEvent(eventName)
         }
 
-        val eventData = Properties()
-        params?.forEach {
-            eventData.putValue(it.key, it.value)
-        }
-
-        Analytics.with(context).track(eventName, eventData)
+        Analytics.with(context).track(eventName, Properties().apply {
+            putAll(effectiveParams)
+        })
     }
 
     fun trackErrorToFirebase(eventName: String, errorMsg: String) {
@@ -66,6 +71,7 @@ class ChefAnalyticsTracker(
                 identify(userIdString, traits, null)
                 alias(unifiedUserIdString)
                 identify(unifiedUserIdString, traits, null)
+
             }
 
             initUXCam(user)
@@ -79,16 +85,20 @@ class ChefAnalyticsTracker(
         UXCam.setUserProperty("name", user.getFullName())
         UXCam.setUserProperty("phone", user.phoneNumber ?: "N/A")
         UXCam.setUserProperty("created_at", DateUtils.parseDateToDate(user.joinDate))
+        UXCam.setUserProperty("session_id", SessionId.value)
     }
 
     private fun initShipBook(user: Cook) {
         ShipBook.registerUser(
-            user.id.toString(),
-            null,
-            user.getFullName(),
-            user.email,
-            user.phoneNumber,
-            mapOf(Pair("status", user.accountStatus ?: ""))
+            userId = user.id.toString(),
+            userName = null,
+            fullName = user.getFullName(),
+            email = user.email,
+            phoneNumber = user.phoneNumber,
+            additionalInfo = mapOf(
+                "status" to (user.accountStatus ?: ""),
+                "session_id" to SessionId.value
+            )
         )
     }
 

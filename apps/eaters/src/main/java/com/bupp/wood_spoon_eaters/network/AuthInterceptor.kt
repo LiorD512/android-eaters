@@ -2,6 +2,7 @@ package com.bupp.wood_spoon_eaters.network
 
 import android.util.Log
 import com.bupp.wood_spoon_eaters.common.FlavorConfigManager
+import com.eatwoodspoon.analytics.SessionId
 import com.eatwoodspoon.auth.AuthTokenRepository
 import okhttp3.Interceptor
 import okhttp3.Request
@@ -42,6 +43,8 @@ class AuthInterceptor(private val tokenRepository: AuthTokenRepository) : Interc
             val requestBuilder = request.newBuilder()//.addHeader("X-Auth-Token", authToken)
                 .removeHeader("Authorization")
                 .addHeader("Authorization", "Bearer $authToken")
+                .removeHeader("X-Session-Id")
+                .addHeader("X-Session-Id", SessionId.value)
             finalRequest = requestBuilder.build()
         }
         return finalRequest

@@ -10,6 +10,7 @@ import com.bupp.wood_spoon_eaters.model.Address
 import com.bupp.wood_spoon_eaters.model.Eater
 import com.bupp.wood_spoon_eaters.utils.DateUtils
 import com.eatwoodspoon.analytics.AnalyticsEventReporter
+import com.eatwoodspoon.analytics.SessionId
 import com.eatwoodspoon.analytics.events.AnalyticsEvent
 import com.facebook.appevents.AppEventsConstants
 import com.facebook.appevents.AppEventsLogger
@@ -180,6 +181,7 @@ class EatersAnalyticsTracker(
 
         val eventData = Properties()
         eventData.putValue("user_id", currentUserId)
+        eventData.putValue("session_id", SessionId.value)
 
         params?.forEach {
             eventData.putValue(it.key, it.value)

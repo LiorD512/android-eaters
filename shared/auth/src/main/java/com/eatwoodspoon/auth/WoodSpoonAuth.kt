@@ -9,6 +9,7 @@ import androidx.annotation.ColorInt
 import androidx.browser.customtabs.CustomTabColorSchemeParams
 import androidx.browser.customtabs.CustomTabsIntent
 import com.eatwoodspoon.analytics.AnalyticsEventReporter
+import com.eatwoodspoon.analytics.SessionId
 import com.eatwoodspoon.analytics.events.MobileAuthEvent
 import timber.log.Timber
 
@@ -46,7 +47,7 @@ class WoodSpoonAuth(
         val redirectUrl = "${configuration.appSchema}://login"
         try {
             val authUri =
-                Uri.parse("https://${configuration.authDomain}/auth?redirectToPath=success/mobile&redirectToUrl=${redirectUrl}")
+                Uri.parse("https://${configuration.authDomain}/auth?redirectToPath=success/mobile&redirectToUrl=${redirectUrl}&session=${SessionId.value}")
             startBrowser(context, authUri)
         } catch (ex: Exception) {
             Timber.e(ex)
@@ -66,7 +67,7 @@ class WoodSpoonAuth(
 
         try {
             val authUri =
-                Uri.parse("https://${configuration.authDomain}/logout/mobile?redirectToUrl=${redirectUrl}")
+                Uri.parse("https://${configuration.authDomain}/logout/mobile?redirectToUrl=${redirectUrl}&sessionId=${SessionId.value}")
             startBrowser(context, authUri)
         } catch (ex: Exception) {
             Timber.e(ex)
