@@ -17,11 +17,13 @@ import com.bupp.wood_spoon_eaters.features.order_checkout.gift.GiftConfigUseCase
 import com.bupp.wood_spoon_eaters.features.order_checkout.upsale_and_cart.CustomOrderItem
 import com.bupp.wood_spoon_eaters.managers.CartManager
 import com.bupp.wood_spoon_eaters.managers.EaterDataManager
+import com.bupp.wood_spoon_eaters.managers.EatersAnalyticsTracker
 import com.bupp.wood_spoon_eaters.managers.PaymentManager
 import com.bupp.wood_spoon_eaters.model.*
 import com.bupp.wood_spoon_eaters.repositories.*
 import com.bupp.wood_spoon_eaters.utils.DateUtils
 import com.bupp.wood_spoon_eaters.utils.Utils.getErrorsMsg
+import com.eatwoodspoon.analytics.events.FreeDeliveryEvent
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.util.*
@@ -32,6 +34,7 @@ class CheckoutViewModel(
     private val cartManager: CartManager,
     private val paymentManager: PaymentManager,
     val eaterDataManager: EaterDataManager,
+    private val eatersAnalyticsTracker: EatersAnalyticsTracker,
     pricingExperimentUseCase: PricingExperimentUseCase,
     giftConfigUseCase: GiftConfigUseCase,
     appSettingsRepository: AppSettingsRepository,
@@ -296,6 +299,24 @@ class CheckoutViewModel(
         viewModelScope.launch {
             cartManager.onCartCleared()
         }
+    }
+
+    fun reportAddMoreItemsClickedEvent(){
+        reportEvent { orderId, screen ->
+            FreeDeliveryEvent.AddMoreItemsClickedEvent(orderId, screen)
+        }
+    }
+
+    fun reportViewClickedEvent(){
+        reportEvent { orderId, screen ->
+            FreeDeliveryEvent.ViewClickedEvent(orderId, screen)
+        }
+    }
+
+    private fun reportEvent(factory: (orderId: Int, screen: String) -> FreeDeliveryEvent) {
+        val orderId = orderLiveData.value?.id?.toInt() ?: -1
+        val screen = "checkout_page"
+        eatersAnalyticsTracker.reportEvent(factory.invoke(orderId, screen))
     }
 
     companion object {

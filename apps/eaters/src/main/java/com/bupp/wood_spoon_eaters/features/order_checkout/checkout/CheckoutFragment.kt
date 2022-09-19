@@ -23,6 +23,7 @@ import com.bupp.wood_spoon_eaters.custom_views.CustomDetailsView
 import com.bupp.wood_spoon_eaters.databinding.CheckoutFragmentBinding
 import com.bupp.wood_spoon_eaters.dialogs.*
 import com.bupp.wood_spoon_eaters.experiments.PricingExperimentParams
+import com.bupp.wood_spoon_eaters.features.free_delivery.FreeDeliveryProgressView
 import com.bupp.wood_spoon_eaters.features.free_delivery.FreeDeliveryState
 import com.bupp.wood_spoon_eaters.features.locations_and_address.address_verification_map.AddressVerificationMapFragment
 import com.bupp.wood_spoon_eaters.features.order_checkout.OrderCheckoutActivity
@@ -46,7 +47,8 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
     NationwideShippingChooserDialog.NationwideShippingChooserListener,
     WSTitleValueView.WSTitleValueListener, WSErrorDialog.WSErrorListener,
     SingleColumnTimePickerBottomSheet.TimePickerListener,
-    ClearCartCheckoutBottomSheet.ClearCartListener, CheckoutHeaderView.CheckoutHeaderListener {
+    ClearCartCheckoutBottomSheet.ClearCartListener, CheckoutHeaderView.CheckoutHeaderListener,
+    FreeDeliveryProgressView.FreeDeliveryProgressViewListener{
 
     private var binding: CheckoutFragmentBinding? = null
 
@@ -91,7 +93,11 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
             checkoutFragPromoCode.setDeliveryDetailsViewListener(this@CheckoutFragment)
             checkoutFragGift.setDeliveryDetailsViewListener(this@CheckoutFragment)
             checkoutFragFees.setWSTitleValueListener(this@CheckoutFragment)
-            checkoutFragFreeDeliveryView.setAddItemsClickListener { (activity as OrderCheckoutActivity).onEditOrderClick() }
+            checkoutFragFreeDeliveryView.setAddItemsClickListener {
+                (activity as OrderCheckoutActivity).onEditOrderClick()
+                viewModel.reportAddMoreItemsClickedEvent()
+            }
+            checkoutFragFreeDeliveryView.setFreeDeliveryProgressViewListener(this@CheckoutFragment)
 
             checkoutFragPromoCode.setOnClickListener {
                 mainViewModel.logEvent(Constants.EVENT_CLICK_ON_PROMO_CODE)
@@ -497,5 +503,11 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
 
     override fun onCloseBtnClick() {
         activity?.finish()
+    }
+
+    override fun thresholdAchieved() {}
+
+    override fun viewClicked() {
+        viewModel.reportViewClickedEvent()
     }
 }

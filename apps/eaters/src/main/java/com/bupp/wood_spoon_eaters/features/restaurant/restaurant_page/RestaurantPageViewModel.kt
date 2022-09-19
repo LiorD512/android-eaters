@@ -24,6 +24,7 @@ import com.bupp.wood_spoon_eaters.repositories.RestaurantRepository.RestaurantRe
 import com.bupp.wood_spoon_eaters.repositories.getCurrentFreeDeliveryThreshold
 import com.bupp.wood_spoon_eaters.utils.DateUtils
 import com.bupp.wood_spoon_eaters.utils.isSameDateAs
+import com.eatwoodspoon.analytics.events.FreeDeliveryEvent
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.joda.time.DateTime
@@ -579,6 +580,24 @@ class RestaurantPageViewModel(
                 eatersAnalyticsTracker.logEvent(eventName)
             }
         }
+    }
+
+    fun reportThresholdAchievedEvent(){
+        reportEvent { orderId, screen ->
+            FreeDeliveryEvent.ThresholdAchievedEvent(orderId, screen)
+        }
+    }
+
+    fun reportViewClickedEvent(){
+        reportEvent { orderId, screen ->
+            FreeDeliveryEvent.ViewClickedEvent(orderId, screen)
+        }
+    }
+
+    private fun reportEvent(factory: (orderId: Int, screen: String) -> FreeDeliveryEvent) {
+        val orderId = orderLiveData.value?.id?.toInt() ?: -1
+        val screen = "restaurant_page"
+        eatersAnalyticsTracker.reportEvent(factory.invoke(orderId, screen))
     }
 
     private fun getLikeRestaurantData(): Map<String, String> {

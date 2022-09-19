@@ -13,6 +13,7 @@ import com.bupp.wood_spoon_eaters.managers.CartManager
 import com.bupp.wood_spoon_eaters.managers.EaterDataManager
 import com.bupp.wood_spoon_eaters.managers.EatersAnalyticsTracker
 import com.bupp.wood_spoon_eaters.repositories.*
+import com.eatwoodspoon.analytics.events.FreeDeliveryEvent
 import kotlinx.coroutines.launch
 
 class UpSaleNCartViewModel(
@@ -174,6 +175,24 @@ class UpSaleNCartViewModel(
         data["dish_price"] = item.orderItem.price.formatedValue.toString()
         data["dish_quantity"] = item.orderItem.quantity.toString()
         return data
+    }
+
+    fun reportThresholdAchievedEvent(){
+        reportEvent { orderId, screen ->
+            FreeDeliveryEvent.ThresholdAchievedEvent(orderId, screen)
+        }
+    }
+
+    fun reportViewClickedEvent(){
+        reportEvent { orderId, screen ->
+            FreeDeliveryEvent.ViewClickedEvent(orderId, screen)
+        }
+    }
+
+    private fun reportEvent(factory: (orderId: Int, screen: String) -> FreeDeliveryEvent) {
+        val orderId = currentOrderData.value?.id?.toInt() ?: -1
+        val screen = "cart_page"
+        eatersAnalyticsTracker.reportEvent(factory.invoke(orderId, screen))
     }
 
 //    /**

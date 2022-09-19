@@ -26,6 +26,7 @@ import com.bupp.wood_spoon_eaters.custom_views.simpler_views.SimpleAnimatorListe
 import com.bupp.wood_spoon_eaters.custom_views.simpler_views.SimpleBottomSheetCallback
 import com.bupp.wood_spoon_eaters.databinding.UpSaleNCartBottomSheetBinding
 import com.bupp.wood_spoon_eaters.di.abs.LiveEvent
+import com.bupp.wood_spoon_eaters.features.free_delivery.FreeDeliveryProgressView
 import com.bupp.wood_spoon_eaters.features.free_delivery.FreeDeliveryState
 import com.bupp.wood_spoon_eaters.features.locations_and_address.LocationAndAddressActivity
 import com.bupp.wood_spoon_eaters.utils.AnimationUtil
@@ -37,7 +38,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class UpSaleNCartBottomSheet() : BottomSheetDialogFragment() {
+class UpSaleNCartBottomSheet() : BottomSheetDialogFragment(), FreeDeliveryProgressView.FreeDeliveryProgressViewListener {
 
     lateinit var listener: UpsaleNCartBSListener
 
@@ -200,6 +201,9 @@ class UpSaleNCartBottomSheet() : BottomSheetDialogFragment() {
             upsaleCartCloseBtn.setOnClickListener {
                 onCloseBtnClick()
             }
+
+            floatingCartFreeDeliveryView.setFreeDeliveryProgressViewListener(this@UpSaleNCartBottomSheet)
+
             viewModel.initData()
         }
     }
@@ -411,4 +415,11 @@ class UpSaleNCartBottomSheet() : BottomSheetDialogFragment() {
         }
     }
 
+    override fun thresholdAchieved() {
+        viewModel.reportThresholdAchievedEvent()
+    }
+
+    override fun viewClicked() {
+        viewModel.reportViewClickedEvent()
+    }
 }

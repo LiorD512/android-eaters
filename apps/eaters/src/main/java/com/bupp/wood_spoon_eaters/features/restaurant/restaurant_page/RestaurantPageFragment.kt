@@ -20,6 +20,7 @@ import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.common.FlowEventsManager
 import com.bupp.wood_spoon_eaters.databinding.FragmentRestaurantPageBinding
 import com.bupp.wood_spoon_eaters.di.abs.LiveEvent
+import com.bupp.wood_spoon_eaters.features.free_delivery.FreeDeliveryProgressView
 import com.bupp.wood_spoon_eaters.features.free_delivery.FreeDeliveryState
 import com.bupp.wood_spoon_eaters.features.main.profile.video_view.VideoViewDialog
 import com.bupp.wood_spoon_eaters.features.order_checkout.upsale_and_cart.CustomOrderItem
@@ -50,7 +51,8 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
     SingleColumnTimePickerBottomSheet.TimePickerListener,
     WSFloatingButton.WSFloatingButtonListener,
     FavoriteBtn.FavoriteBtnListener,
-    UpSaleNCartBottomSheet.UpsaleNCartBSListener {
+    UpSaleNCartBottomSheet.UpsaleNCartBSListener,
+    FreeDeliveryProgressView.FreeDeliveryProgressViewListener {
 
     private var binding: FragmentRestaurantPageBinding? = null
 
@@ -91,6 +93,7 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
             }
             restaurantFragFloatingCartBtn.setWSFloatingBtnListener(this@RestaurantPageFragment)
             restaurantFragFloatingCartBtn.setOnClickListener { openCartNUpsaleDialog() }
+            restaurantPageFreeDeliveryView.setFreeDeliveryProgressViewListener(this@RestaurantPageFragment)
 
             woodspoonVerifiedBadge.setOnClickListener {
                 createVerifiedToolTip()
@@ -228,12 +231,12 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
             val curCookingSlot = viewModel.currentCookingSlot
             mainViewModel.openDishPage(menuItem, curCookingSlot)
         }
-        viewModel.freeDeliveryData.observe(viewLifecycleOwner){ freeDeliveryState ->
+        viewModel.freeDeliveryData.observe(viewLifecycleOwner) { freeDeliveryState ->
             setFreeDeliveryViewState(freeDeliveryState)
         }
     }
 
-    private fun setFreeDeliveryViewState(freeDeliveryState: FreeDeliveryState?){
+    private fun setFreeDeliveryViewState(freeDeliveryState: FreeDeliveryState?) {
         binding?.apply {
             restaurantPageFreeDeliveryView.setFreeDeliveryState(freeDeliveryState)
         }
@@ -527,6 +530,14 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
     companion object {
         private const val MOTION_TRANSITION_INITIAL = 0F
         private const val TAG = "RestaurantPageFragment"
+    }
+
+    override fun thresholdAchieved() {
+        viewModel.reportThresholdAchievedEvent()
+    }
+
+    override fun viewClicked() {
+        viewModel.reportViewClickedEvent()
     }
 
 }

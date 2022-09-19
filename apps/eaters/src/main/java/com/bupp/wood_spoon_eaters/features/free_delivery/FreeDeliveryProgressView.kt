@@ -20,10 +20,23 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
         FreeDeliveryProgressViewBinding.inflate(LayoutInflater.from(context), this, true)
 
     private var previousUntilFreeDelivery: Price? = null
+    private var listener: FreeDeliveryProgressViewListener? = null
+
+    interface FreeDeliveryProgressViewListener {
+        fun thresholdAchieved()
+        fun viewClicked()
+    }
 
     init {
         initAttrs(attrs)
         hide()
+    }
+
+    fun setFreeDeliveryProgressViewListener(listener: FreeDeliveryProgressViewListener){
+        this.listener = listener
+        binding.freeDeliveryProgressViewMainLayout.setOnClickListener {
+            listener.viewClicked()
+        }
     }
 
     private fun initAttrs(attrs: AttributeSet?) {
@@ -91,6 +104,7 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
                         freeDeliveryViewSwitcher,
                         "free_delivery_lottie.json"
                     )
+                    listener?.thresholdAchieved()
                 }
             } else {
                 if (freeDeliveryViewSwitcher.currentView != freeDeliveryNotCompletedLayout) {
