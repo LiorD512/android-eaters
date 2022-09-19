@@ -304,6 +304,8 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
             //favorite
             restHeaderFavorite.setIsFavorite(restaurant.isFavorite)
             restHeaderFavorite.setClickListener(this@RestaurantPageFragment)
+
+            woodspoonVerifiedBadge.isVisible = true
         }
 
         binding?.restaurantMainListLayout?.apply {
