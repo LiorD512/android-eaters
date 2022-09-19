@@ -1,5 +1,6 @@
 package com.bupp.wood_spoon_eaters.features.free_delivery
 
+import android.animation.ObjectAnimator
 import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
@@ -31,7 +32,7 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
         hide()
     }
 
-    fun setFreeDeliveryProgressViewListener(listener: FreeDeliveryProgressViewListener){
+    fun setFreeDeliveryProgressViewListener(listener: FreeDeliveryProgressViewListener) {
         this.listener = listener
         binding.freeDeliveryProgressViewMainLayout.setOnClickListener {
             listener.viewClicked()
@@ -65,7 +66,9 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 
     private fun setFreeDeliveryProgress(progress: Int) {
         with(binding) {
-            freeDeliveryProgressViewPb.progress = progress
+            ObjectAnimator.ofInt(freeDeliveryProgressViewPb, "progress", progress)
+                .setDuration(300)
+                .start()
         }
     }
 
@@ -112,10 +115,6 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 
     fun setAddItemsClickListener(clickListener: () -> Unit) {
         binding.freeDeliveryProgressViewAddItemsBtn.setOnClickListener { clickListener() }
-    }
-
-    private fun setBackground(@DrawableRes background: Int) {
-        binding.freeDeliveryProgressViewMainLayout.setBackgroundResource(background)
     }
 
 }
