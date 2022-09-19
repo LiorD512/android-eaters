@@ -1,9 +1,12 @@
 package com.bupp.wood_spoon_eaters.features.main
 
+import android.app.Application
 import android.content.Context
+import android.util.Log
 import androidx.lifecycle.*
 import com.bupp.wood_spoon_eaters.common.*
 import com.bupp.wood_spoon_eaters.domain.FeatureFlagNewAuthUseCase
+import com.bupp.wood_spoon_eaters.features.order_checkout.OrderCheckoutViewModel
 import com.bupp.wood_spoon_eaters.model.RestaurantInitParams
 import com.bupp.wood_spoon_eaters.managers.*
 import com.bupp.wood_spoon_eaters.model.*
@@ -16,7 +19,6 @@ import kotlinx.coroutines.launch
 enum class MainNavigationEvent {
     START_LOCATION_AND_ADDRESS_ACTIVITY,
     START_PAYMENT_METHOD_ACTIVITY,
-    INITIALIZE_STRIPE,
     LOGOUT_WITH_NEW_AUTH,
     LOGOUT,
     OPEN_CAMERA_UTIL_IMAGE,
@@ -24,6 +26,7 @@ enum class MainNavigationEvent {
 }
 
 class MainViewModel(
+    application: Application,
     private val appSettingsRepository: AppSettingsRepository,
     private val feedDataManager: FeedDataManager,
     val eaterDataManager: EaterDataManager,
@@ -36,7 +39,7 @@ class MainViewModel(
     private val cartManager: CartManager,
     private val restaurantRepository: RestaurantRepository,
     featureFlagNewAuthUseCase: FeatureFlagNewAuthUseCase
-) : ViewModel() {
+) : AndroidViewModel(application) {
 
     val shareEvent = MutableLiveData<String>()
     val mainNavigationEvent = MutableLiveData<MainNavigationEvent>()
@@ -78,16 +81,15 @@ class MainViewModel(
     fun startStripeOrReInit() {
         if(newAuthEnabled && !eaterDataManager.hasUserSetDetails()) {
             mainNavigationEvent.postValue(MainNavigationEvent.START_USER_DETAILS_ACTIVITY)
-        } else if (paymentManager.hasStripeInitialized) {
-            mainNavigationEvent.postValue(MainNavigationEvent.START_PAYMENT_METHOD_ACTIVITY)
         } else {
-            mainNavigationEvent.postValue(MainNavigationEvent.INITIALIZE_STRIPE)
-        }
-    }
-
-    fun reInitStripe(context: Context) {
-        viewModelScope.launch {
-            paymentManager.initPaymentManagerWithListener(context)
+            viewModelScope.launch {
+                if(!paymentManager.hasStripeInitialized) {
+                    MTLogger.c(MainViewModel.TAG, "re init stripe")
+                    paymentManager.initPaymentManagerWithListener(getApplication())
+                }
+                Log.d(MainViewModel.TAG, "start payment method")
+                mainNavigationEvent.postValue(MainNavigationEvent.START_PAYMENT_METHOD_ACTIVITY)
+            }
         }
     }
 
@@ -225,6 +227,10 @@ class MainViewModel(
 
     fun refreshSearchData() {
         refreshSearchData.postValue(true)
+    }
+
+    companion object {
+        const val TAG = "MainViewModel"
     }
 
 }

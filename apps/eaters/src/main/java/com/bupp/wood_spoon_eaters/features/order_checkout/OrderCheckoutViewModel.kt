@@ -1,18 +1,16 @@
 package com.bupp.wood_spoon_eaters.features.order_checkout
 
+import android.app.Application
 import android.content.Context
 import android.util.Log
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.navigation.NavDirections
 import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.common.FlowEventsManager
 import com.bupp.wood_spoon_eaters.common.MTLogger
 import com.bupp.wood_spoon_eaters.di.abs.LiveEventData
 import com.bupp.wood_spoon_eaters.di.abs.ProgressData
 import com.bupp.wood_spoon_eaters.domain.FeatureFlagNewAuthUseCase
-import com.bupp.wood_spoon_eaters.features.main.MainNavigationEvent
-import com.bupp.wood_spoon_eaters.features.order_checkout.checkout.CheckoutFragmentDirections
 import com.bupp.wood_spoon_eaters.features.order_checkout.upsale_and_cart.CustomOrderItem
 import com.bupp.wood_spoon_eaters.managers.*
 import com.bupp.wood_spoon_eaters.model.DishInitParams
@@ -24,13 +22,14 @@ import kotlinx.coroutines.launch
 import java.util.*
 
 class OrderCheckoutViewModel(
+    application: Application,
     private val paymentManager: PaymentManager,
     private val cartManager: CartManager,
     private val flowEventsManager: FlowEventsManager,
     private val eatersAnalyticsTracker: EatersAnalyticsTracker,
     private val eaterDataManager: EaterDataManager,
     featureFlagNewAuthUseCase: FeatureFlagNewAuthUseCase
-) : ViewModel() {
+) : AndroidViewModel(application) {
 
 
     val navigationEvent = LiveEventData<NavigationEvent>()
@@ -45,7 +44,6 @@ class OrderCheckoutViewModel(
         object FINISH_ACTIVITY_AFTER_PURCHASE: NavigationEvent()
         object START_PAYMENT_METHOD_ACTIVITY: NavigationEvent()
         object FINISH_CHECKOUT_ACTIVITY: NavigationEvent()
-        object INITIALIZE_STRIPE: NavigationEvent()
         object OPEN_PROMO_CODE_FRAGMENT: NavigationEvent()
         data class OPEN_DISH_PAGE(val dishInitParams: DishInitParams): NavigationEvent()
         object OPEN_TIP_FRAGMENT: NavigationEvent()
@@ -65,19 +63,16 @@ class OrderCheckoutViewModel(
     fun startStripeOrReInit(){
         MTLogger.c(TAG, "startStripeOrReInit")
         if(isNewAuthEnabled && !eaterDataManager.hasUserSetDetails()) {
-            navigationEvent.postRawValue(NavigationEvent.START_USER_DETAILS_ACTIVITY(alternativeReasonDescription = "Please finish setting up you account details before adding a payment method."))
-        } else if(paymentManager.hasStripeInitialized){
-            Log.d(TAG, "start payment method")
-            navigationEvent.postRawValue(NavigationEvent.START_PAYMENT_METHOD_ACTIVITY)
-        }else{
-            MTLogger.c(TAG, "re init stripe")
-            navigationEvent.postRawValue(NavigationEvent.INITIALIZE_STRIPE)
-        }
-    }
-
-    fun reInitStripe(context: Context) {
-        viewModelScope.launch {
-            paymentManager.initPaymentManagerWithListener(context)
+            navigationEvent.postRawValue(NavigationEvent.START_USER_DETAILS_ACTIVITY(alternativeReasonDescription = "Please finish setting up your account details before adding a payment method."))
+        } else {
+            viewModelScope.launch {
+                if(!paymentManager.hasStripeInitialized) {
+                    MTLogger.c(TAG, "re init stripe")
+                    paymentManager.initPaymentManagerWithListener(getApplication())
+                }
+                Log.d(TAG, "start payment method")
+                navigationEvent.postRawValue(NavigationEvent.START_PAYMENT_METHOD_ACTIVITY)
+            }
         }
     }
 

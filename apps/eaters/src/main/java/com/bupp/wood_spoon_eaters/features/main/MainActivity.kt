@@ -343,9 +343,6 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
                     PaymentMethodsActivityStarter.Args.Builder().build()
                 )
             }
-            MainNavigationEvent.INITIALIZE_STRIPE -> {
-                viewModel.reInitStripe(this)
-            }
             MainNavigationEvent.LOGOUT -> {
                 val intent = Intent(this, SplashActivity::class.java)
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
@@ -368,7 +365,7 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
                 mediaUtil.startPhotoFetcher()
             }
             MainNavigationEvent.START_USER_DETAILS_ACTIVITY -> {
-                startActivity(EditProfileActivity.createIntent(this,  "Please finish setting up you account details before adding a payment method" ))
+                startActivity(EditProfileActivity.createIntent(this,  "Please finish setting up your account details before adding a payment method" ))
             }
         }
     }

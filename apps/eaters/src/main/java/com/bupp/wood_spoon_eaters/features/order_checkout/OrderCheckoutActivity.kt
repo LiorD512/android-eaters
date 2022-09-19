@@ -94,9 +94,6 @@ class OrderCheckoutActivity : BaseActivity() {
                 OrderCheckoutViewModel.NavigationEvent.FINISH_CHECKOUT_ACTIVITY -> {
                     finish()
                 }
-                OrderCheckoutViewModel.NavigationEvent.INITIALIZE_STRIPE -> {
-                    viewModel.reInitStripe(this)
-                }
                 OrderCheckoutViewModel.NavigationEvent.FINISH_ACTIVITY_AFTER_PURCHASE -> {
                     intent.putExtra("isAfterPurchase", true)
                     setResult(RESULT_OK, intent)

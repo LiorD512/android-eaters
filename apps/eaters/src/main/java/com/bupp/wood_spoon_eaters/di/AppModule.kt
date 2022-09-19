@@ -181,6 +181,7 @@ val appModule = module {
             get(),
             get(),
             get(),
+            get(),
             get()
         )
     }
@@ -227,7 +228,7 @@ val appModule = module {
     viewModel { RestaurantMainViewModel(get(), get(), get(), get()) }
     viewModel { RestaurantPageViewModel(get(), get(), get(), get(), get(), get(), get(), get()) }
     viewModel { DishPageViewModel(get(), get(), get(), get()) }
-    viewModel { OrderCheckoutViewModel(get(), get(), get(), get(), get(), get()) }
+    viewModel { OrderCheckoutViewModel(get(), get(), get(), get(), get(), get(), get()) }
     viewModel { ReviewsBSViewModel(get(), get()) }
 
     //Review Activity

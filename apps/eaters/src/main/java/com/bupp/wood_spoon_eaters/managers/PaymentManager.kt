@@ -86,7 +86,7 @@ class PaymentManager(
         stripeInitializationEvent.postValue(StripeInitializationStatus.FAIL)
     }
 
-    val payments = MutableLiveData<PaymentMethod?>()
+    private val payments = MutableLiveData<PaymentMethod?>()
     fun getPaymentsLiveData() = payments
 
     private fun getStripeCustomerCards(context: Context) {
