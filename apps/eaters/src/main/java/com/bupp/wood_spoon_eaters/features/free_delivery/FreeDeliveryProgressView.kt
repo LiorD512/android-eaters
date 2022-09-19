@@ -82,22 +82,24 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
     ) {
         with(binding) {
             if (untilFreeDelivery?.value == 0.0) {
-                freeDeliveryProgressViewTitle.text =
-                    context.getString(R.string.free_delivery_getting_free_delivery_message)
-                freeDeliveryProgressViewCheckImg.isVisible = true
+                if (freeDeliveryViewSwitcher.currentView != freeDeliveryProgressViewCompletedTitle) {
+                    freeDeliveryViewSwitcher.showNext()
+                }
                 freeDeliveryProgressViewAddItemsBtn.isVisible = false
                 if (previousUntilFreeDelivery != untilFreeDelivery && previousUntilFreeDelivery != null) {
                     LottieOverlay(context).showLottieOverlay(
-                        freeDeliveryProgressViewTitle,
+                        freeDeliveryViewSwitcher,
                         "free_delivery_lottie.json"
                     )
                 }
             } else {
-                freeDeliveryProgressViewTitle.text = context.getString(
+                if (freeDeliveryViewSwitcher.currentView != freeDeliveryNotCompletedLayout) {
+                    freeDeliveryViewSwitcher.showPrevious()
+                }
+                freeDeliveryProgressViewNotCompletedTitle.text = context.getString(
                     R.string.free_delivery_amount_remain_message,
                     untilFreeDelivery?.formatedValue
                 )
-                freeDeliveryProgressViewCheckImg.isVisible = false
                 freeDeliveryProgressViewAddItemsBtn.isVisible = showAddMoreItemsBtn
             }
             previousUntilFreeDelivery = untilFreeDelivery

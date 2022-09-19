@@ -1,88 +1,95 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/freeDeliveryProgressViewMainLayout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:tools="http://schemas.android.com/tools"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/freeDeliveryProgressViewMainLayout"
-    android:paddingBottom="90dp"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:paddingBottom="90dp">
 
-    <LinearLayout
+    <ViewSwitcher
+        android:id="@+id/freeDeliveryViewSwitcher"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
         android:layout_marginHorizontal="16dp"
-        android:gravity="center"
-        android:orientation="horizontal">
+        android:layout_marginTop="16dp"
+        android:inAnimation="@anim/fade_in_longer"
+        android:outAnimation="@anim/fade_out_longer">
+
 
         <LinearLayout
-            android:layout_width="0dp"
-            android:layout_weight="1"
+            android:id="@+id/freeDeliveryNotCompletedLayout"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center">
+            android:gravity="center"
+            android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/freeDeliveryProgressViewTitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:id="@+id/freeDeliveryProgressViewNotCompletedTitle"
                 style="@style/LatoBlack13Black"
-                android:gravity="center"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
-                tools:text="Just $7.00 more for free delivery"/>
+                android:layout_weight="1"
+                android:gravity="center"
+                tools:text="Just $7.00 more for free delivery" />
 
-            <ImageView
-                android:id="@+id/freeDeliveryProgressViewCheckImg"
+
+            <com.bupp.wood_spoon_eaters.views.WSSimpleBtn
+                android:id="@+id/freeDeliveryProgressViewAddItemsBtn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                tools:visibility="visible"
-                android:src="@drawable/ic_check_with_circle" />
+                android:layout_marginStart="50dp"
+                app:title="@string/free_delivery_add_items_btn"
+                tools:visibility="visible" />
 
 
         </LinearLayout>
 
-
-        <com.bupp.wood_spoon_eaters.views.WSSimpleBtn
-            android:id="@+id/freeDeliveryProgressViewAddItemsBtn"
+        <TextView
+            android:id="@+id/freeDeliveryProgressViewCompletedTitle"
+            style="@style/LatoBlack13Black"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            tools:visibility="visible"
-            android:layout_marginStart="50dp"
-            app:title="@string/free_delivery_add_items_btn"/>
+            android:layout_gravity="center"
+            android:drawablePadding="8dp"
+            android:gravity="center"
+            android:text="@string/free_delivery_getting_free_delivery_message"
+            app:drawableEndCompat="@drawable/ic_check_with_circle" />
 
-    </LinearLayout>
+    </ViewSwitcher>
 
     <com.google.android.material.progressindicator.LinearProgressIndicator
         android:id="@+id/freeDeliveryProgressViewPb"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:indicatorColor="@color/teal_blue"
-        app:trackColor="@color/white_three"
         android:layout_marginHorizontal="16dp"
-        android:layout_marginTop="8dp"/>
+        android:layout_marginTop="8dp"
+        app:indicatorColor="@color/teal_blue"
+        app:trackColor="@color/white_three" />
 
     <LinearLayout
         android:id="@+id/freeDeliveryProgressViewAmountsLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
         android:layout_marginHorizontal="16dp"
+        android:layout_marginTop="8dp"
         android:orientation="horizontal">
 
         <TextView
             android:id="@+id/freeDeliveryProgressViewSubtotalTxt"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
             style="@style/LatoBold11Teal"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
             tools:text="7$" />
 
         <TextView
             android:id="@+id/freeDeliveryProgressViewUntilFreeTxt"
+            style="@style/LatoBold11Dark"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            style="@style/LatoBold11Dark"
             tools:text="35$" />
     </LinearLayout>
 
