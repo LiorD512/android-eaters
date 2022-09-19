@@ -3,8 +3,6 @@ package com.bupp.wood_spoon_eaters.features.create_profile.details
 import android.app.Activity
 import android.os.Bundle
 import android.view.View
-import android.view.inputmethod.EditorInfo
-import android.widget.TextView.OnEditorActionListener
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -15,7 +13,7 @@ import com.bupp.wood_spoon_eaters.bottom_sheets.country_code_chooser.CountryChoo
 import com.bupp.wood_spoon_eaters.custom_views.phone_number.PhoneSelectorView
 import com.bupp.wood_spoon_eaters.custom_views.phone_number.setCountryCode
 import com.bupp.wood_spoon_eaters.databinding.FragmentCreateAccount2Binding
-import com.bupp.wood_spoon_eaters.features.create_profile.EditProfileFragmentParent
+import com.bupp.wood_spoon_eaters.features.create_profile.EditProfileParent
 import com.bupp.wood_spoon_eaters.features.create_profile.code.EditProfileCodeFragmentParams
 import com.bupp.wood_spoon_eaters.model.CountriesISO
 import com.bupp.wood_spoon_eaters.utils.hideKeyboard
@@ -35,7 +33,7 @@ class EditProfileFragment : Fragment(R.layout.fragment_create_account_2) {
     val navigation by lazy { findNavController(this) }
 
     private val editProfileParent by lazy {
-        findParent(EditProfileFragmentParent::class.java)
+        findParent(EditProfileParent::class.java)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -52,6 +50,10 @@ class EditProfileFragment : Fragment(R.layout.fragment_create_account_2) {
 //                editMyProfileFragUserImageBtn.setOnClickListener {
 //                    mainViewModel.onUserImageClick()
 //                }
+            editProfileParent?.startArgs?.alternativeReasonDescription?.let {
+                subtitle.text = it
+            }
+
             createAccountFragNext.setOnClickListener {
                 saveEaterDetails()
             }

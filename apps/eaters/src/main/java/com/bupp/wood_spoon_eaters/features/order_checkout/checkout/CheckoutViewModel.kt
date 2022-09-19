@@ -248,6 +248,10 @@ class CheckoutViewModel(
 
     fun validateOrderData(): Boolean {
         val paymentMethod = paymentManager.getStripeCurrentPaymentMethod()?.id
+        if (isNewAuthFlowEnabled && !eaterDataManager.hasUserSetDetails()) {
+            validationError.postValue(OrderValidationErrorType.USER_DETAILS_MISSING)
+            return false
+        }
         if (paymentMethod == null) {
             validationError.postValue(OrderValidationErrorType.PAYMENT_METHOD_MISSING)
             return false
@@ -260,10 +264,7 @@ class CheckoutViewModel(
             validationError.postValue(OrderValidationErrorType.SHIPPING_METHOD_MISSING)
             return false
         }
-        if (isNewAuthFlowEnabled && !eaterDataManager.hasUserSetDetails()) {
-            validationError.postValue(OrderValidationErrorType.USER_DETAILS_MISSING)
-            return false
-        }
+
         return true
     }
 

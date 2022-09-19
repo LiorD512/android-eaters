@@ -50,7 +50,7 @@
                 android:layout_marginTop="15.4dp"
                 android:letterSpacing="0.03"
                 android:lineSpacingExtra="6.7sp"
-                android:text="This information will be used\nfor updates about your orders"
+                android:text="This information will be used for updates about your orders"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/title" />
 

@@ -17,6 +17,7 @@ import com.bupp.wood_spoon_eaters.custom_views.HeaderView
 import com.bupp.wood_spoon_eaters.databinding.ActivityMainBinding
 import com.bupp.wood_spoon_eaters.dialogs.*
 import com.bupp.wood_spoon_eaters.features.base.BaseActivity
+import com.bupp.wood_spoon_eaters.features.create_profile.EditProfileActivity
 import com.bupp.wood_spoon_eaters.features.locations_and_address.LocationAndAddressActivity
 import com.bupp.wood_spoon_eaters.features.main.abs.MainActPagerAdapter
 import com.bupp.wood_spoon_eaters.features.order_checkout.OrderCheckoutActivity
@@ -365,6 +366,9 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
             }
             MainNavigationEvent.OPEN_CAMERA_UTIL_IMAGE -> {
                 mediaUtil.startPhotoFetcher()
+            }
+            MainNavigationEvent.START_USER_DETAILS_ACTIVITY -> {
+                startActivity(EditProfileActivity.createIntent(this,  "Please finish setting up you account details before adding a payment method" ))
             }
         }
     }

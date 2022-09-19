@@ -10,12 +10,11 @@ import com.bupp.wood_spoon_eaters.common.FlowEventsManager
 import com.bupp.wood_spoon_eaters.common.MTLogger
 import com.bupp.wood_spoon_eaters.di.abs.LiveEventData
 import com.bupp.wood_spoon_eaters.di.abs.ProgressData
+import com.bupp.wood_spoon_eaters.domain.FeatureFlagNewAuthUseCase
+import com.bupp.wood_spoon_eaters.features.main.MainNavigationEvent
 import com.bupp.wood_spoon_eaters.features.order_checkout.checkout.CheckoutFragmentDirections
 import com.bupp.wood_spoon_eaters.features.order_checkout.upsale_and_cart.CustomOrderItem
-import com.bupp.wood_spoon_eaters.managers.CartManager
-import com.bupp.wood_spoon_eaters.managers.EatersAnalyticsTracker
-import com.bupp.wood_spoon_eaters.managers.PaymentManager
-import com.bupp.wood_spoon_eaters.managers.logEvent
+import com.bupp.wood_spoon_eaters.managers.*
 import com.bupp.wood_spoon_eaters.model.DishInitParams
 import com.bupp.wood_spoon_eaters.repositories.OrderRepository
 import com.bupp.wood_spoon_eaters.utils.DateUtils
@@ -28,50 +27,51 @@ class OrderCheckoutViewModel(
     private val paymentManager: PaymentManager,
     private val cartManager: CartManager,
     private val flowEventsManager: FlowEventsManager,
-private val eatersAnalyticsTracker: EatersAnalyticsTracker) : ViewModel() {
+    private val eatersAnalyticsTracker: EatersAnalyticsTracker,
+    private val eaterDataManager: EaterDataManager,
+    featureFlagNewAuthUseCase: FeatureFlagNewAuthUseCase
+) : ViewModel() {
 
 
     val navigationEvent = LiveEventData<NavigationEvent>()
     val deliveryAtChangeEvent = cartManager.getDeliveryAtChangeEvent()
     val progressData = ProgressData()
 
-    data class NavigationEvent(
-        val navigationType: NavigationEventType,
-        val navDirections: NavDirections? = null
-    )
+    private val isNewAuthEnabled = featureFlagNewAuthUseCase.execute(null)
 
-    enum class NavigationEventType{
-        START_LOCATION_AND_ADDRESS_ACTIVITY,
-        START_USER_DETAILS_ACTIVITY,
-        FINISH_ACTIVITY_AFTER_PURCHASE,
-        START_PAYMENT_METHOD_ACTIVITY,
-        FINISH_CHECKOUT_ACTIVITY,
-        INITIALIZE_STRIPE,
-        OPEN_PROMO_CODE_FRAGMENT,
-        OPEN_DISH_PAGE,
-        OPEN_TIP_FRAGMENT,
-        OPEN_GIFT_FRAGMENT
+    sealed class NavigationEvent {
+        object START_LOCATION_AND_ADDRESS_ACTIVITY: NavigationEvent()
+        data class START_USER_DETAILS_ACTIVITY(val alternativeReasonDescription: String?): NavigationEvent()
+        object FINISH_ACTIVITY_AFTER_PURCHASE: NavigationEvent()
+        object START_PAYMENT_METHOD_ACTIVITY: NavigationEvent()
+        object FINISH_CHECKOUT_ACTIVITY: NavigationEvent()
+        object INITIALIZE_STRIPE: NavigationEvent()
+        object OPEN_PROMO_CODE_FRAGMENT: NavigationEvent()
+        data class OPEN_DISH_PAGE(val dishInitParams: DishInitParams): NavigationEvent()
+        object OPEN_TIP_FRAGMENT: NavigationEvent()
+        object OPEN_GIFT_FRAGMENT: NavigationEvent()
     }
 
-    fun handleMainNavigation(type: NavigationEventType) {
-        navigationEvent.postRawValue(NavigationEvent(type))
+    fun handleMainNavigation(event: NavigationEvent) {
+        navigationEvent.postRawValue(event)
     }
 
     fun openDishPageWithOrderItem(customOrderItem: CustomOrderItem) {
-        val extras = DishInitParams(orderItem = customOrderItem.orderItem, cookingSlot = customOrderItem.cookingSlot, menuItem = null)
-        val action = CheckoutFragmentDirections.actionCheckoutFragmentToDishPageFragment(extras)
-        navigationEvent.postRawValue(NavigationEvent(NavigationEventType.OPEN_DISH_PAGE, action))
+        val dishInitParams = DishInitParams(orderItem = customOrderItem.orderItem, cookingSlot = customOrderItem.cookingSlot, menuItem = null)
+        navigationEvent.postRawValue(NavigationEvent.OPEN_DISH_PAGE(dishInitParams))
     }
 
     //stripe
     fun startStripeOrReInit(){
         MTLogger.c(TAG, "startStripeOrReInit")
-        if(paymentManager.hasStripeInitialized){
+        if(isNewAuthEnabled && !eaterDataManager.hasUserSetDetails()) {
+            navigationEvent.postRawValue(NavigationEvent.START_USER_DETAILS_ACTIVITY(alternativeReasonDescription = "Please finish setting up you account details before adding a payment method."))
+        } else if(paymentManager.hasStripeInitialized){
             Log.d(TAG, "start payment method")
-            navigationEvent.postRawValue(NavigationEvent(NavigationEventType.START_PAYMENT_METHOD_ACTIVITY))
+            navigationEvent.postRawValue(NavigationEvent.START_PAYMENT_METHOD_ACTIVITY)
         }else{
             MTLogger.c(TAG, "re init stripe")
-            navigationEvent.postRawValue(NavigationEvent(NavigationEventType.INITIALIZE_STRIPE))
+            navigationEvent.postRawValue(NavigationEvent.INITIALIZE_STRIPE)
         }
     }
 

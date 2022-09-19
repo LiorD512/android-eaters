@@ -95,11 +95,11 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
 
             checkoutFragPromoCode.setOnClickListener {
                 mainViewModel.logEvent(Constants.EVENT_CLICK_ON_PROMO_CODE)
-                mainViewModel.handleMainNavigation(OrderCheckoutViewModel.NavigationEventType.OPEN_PROMO_CODE_FRAGMENT)
+                mainViewModel.handleMainNavigation(OrderCheckoutViewModel.NavigationEvent.OPEN_PROMO_CODE_FRAGMENT)
             }
             checkoutFragPlaceOrderBtn.setOnClickListener {
                 if (viewModel.validateOrderData()) {
-                    mainViewModel.handleMainNavigation(OrderCheckoutViewModel.NavigationEventType.OPEN_TIP_FRAGMENT)
+                    mainViewModel.handleMainNavigation(OrderCheckoutViewModel.NavigationEvent.OPEN_TIP_FRAGMENT)
                 }
             }
             checkoutFragHeader.setCheckoutHeaderListener(this@CheckoutFragment)
@@ -216,10 +216,10 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
                     mainViewModel.startStripeOrReInit()
                 }
                 CheckoutViewModel.OrderValidationErrorType.SHIPPING_ADDRESS_MISSING -> {
-                    mainViewModel.handleMainNavigation(OrderCheckoutViewModel.NavigationEventType.START_LOCATION_AND_ADDRESS_ACTIVITY)
+                    mainViewModel.handleMainNavigation(OrderCheckoutViewModel.NavigationEvent.START_LOCATION_AND_ADDRESS_ACTIVITY)
                 }
                 CheckoutViewModel.OrderValidationErrorType.USER_DETAILS_MISSING -> {
-                    mainViewModel.handleMainNavigation(OrderCheckoutViewModel.NavigationEventType.START_USER_DETAILS_ACTIVITY)
+                    mainViewModel.handleMainNavigation(OrderCheckoutViewModel.NavigationEvent.START_USER_DETAILS_ACTIVITY(null))
                 }
             }
         }
@@ -364,7 +364,7 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
             }
             updatePriceUi(order)
         } else {
-            mainViewModel.handleMainNavigation(OrderCheckoutViewModel.NavigationEventType.FINISH_CHECKOUT_ACTIVITY)
+            mainViewModel.handleMainNavigation(OrderCheckoutViewModel.NavigationEvent.FINISH_CHECKOUT_ACTIVITY)
         }
     }
 
@@ -423,10 +423,10 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
     override fun onCustomDetailsClick(type: Int) {
         when (type) {
             Constants.DELIVERY_DETAILS_LOCATION -> {
-                mainViewModel.handleMainNavigation(OrderCheckoutViewModel.NavigationEventType.START_LOCATION_AND_ADDRESS_ACTIVITY)
+                mainViewModel.handleMainNavigation(OrderCheckoutViewModel.NavigationEvent.START_LOCATION_AND_ADDRESS_ACTIVITY)
             }
             Constants.DELIVERY_DETAILS_CONTACT_DETAILS -> {
-                mainViewModel.handleMainNavigation(OrderCheckoutViewModel.NavigationEventType.START_USER_DETAILS_ACTIVITY)
+                mainViewModel.handleMainNavigation(OrderCheckoutViewModel.NavigationEvent.START_USER_DETAILS_ACTIVITY(null))
             }
             Constants.DELIVERY_DETAILS_TIME -> {
                 viewModel.onTimeChangeClick()
@@ -440,11 +440,11 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
             }
             Constants.DELIVERY_DETAILS_PROMO_CODE -> {
                 mainViewModel.logEvent(Constants.EVENT_CLICK_ON_PROMO_CODE)
-                mainViewModel.handleMainNavigation(OrderCheckoutViewModel.NavigationEventType.OPEN_PROMO_CODE_FRAGMENT)
+                mainViewModel.handleMainNavigation(OrderCheckoutViewModel.NavigationEvent.OPEN_PROMO_CODE_FRAGMENT)
             }
             Constants.DELIVERY_DETAILS_GIFT -> {
                 mainViewModel.logEventGiftClicked()
-                mainViewModel.handleMainNavigation(OrderCheckoutViewModel.NavigationEventType.OPEN_GIFT_FRAGMENT)
+                mainViewModel.handleMainNavigation(OrderCheckoutViewModel.NavigationEvent.OPEN_GIFT_FRAGMENT)
             }
         }
     }

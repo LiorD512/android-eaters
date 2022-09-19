@@ -16,6 +16,7 @@ import com.bupp.wood_spoon_eaters.features.base.BaseActivity
 import com.bupp.wood_spoon_eaters.features.create_profile.EditProfileActivity
 import com.bupp.wood_spoon_eaters.features.locations_and_address.LocationAndAddressActivity
 import com.bupp.wood_spoon_eaters.features.main.MainActivity
+import com.bupp.wood_spoon_eaters.features.order_checkout.checkout.CheckoutFragmentDirections
 import com.bupp.wood_spoon_eaters.utils.showErrorToast
 import com.stripe.android.view.PaymentMethodsActivityStarter
 import com.uxcam.UXCam
@@ -69,9 +70,9 @@ class OrderCheckoutActivity : BaseActivity() {
     }
 
     private fun handleNavigation(mainNavigationEvent: LiveEvent<OrderCheckoutViewModel.NavigationEvent>) {
-        mainNavigationEvent.getContentIfNotHandled()?.let { navigation ->
-            when (navigation.navigationType) {
-                OrderCheckoutViewModel.NavigationEventType.START_LOCATION_AND_ADDRESS_ACTIVITY -> {
+        mainNavigationEvent.getContentIfNotHandled()?.let { event ->
+            when (event) {
+                OrderCheckoutViewModel.NavigationEvent.START_LOCATION_AND_ADDRESS_ACTIVITY -> {
                     startAddressChooserForResult.launch(
                         Intent(
                             this,
@@ -79,43 +80,39 @@ class OrderCheckoutActivity : BaseActivity() {
                         )
                     )
                 }
-                OrderCheckoutViewModel.NavigationEventType.START_USER_DETAILS_ACTIVITY ->  {
+                is OrderCheckoutViewModel.NavigationEvent.START_USER_DETAILS_ACTIVITY ->  {
                     startUserDetailsForResult.launch(
-                        Intent(
-                            this,
-                            EditProfileActivity::class.java
-                        )
+                        EditProfileActivity.createIntent(this, event.alternativeReasonDescription)
                     )
                 }
-                OrderCheckoutViewModel.NavigationEventType.START_PAYMENT_METHOD_ACTIVITY -> {
+                OrderCheckoutViewModel.NavigationEvent.START_PAYMENT_METHOD_ACTIVITY -> {
                     UXCam.occludeSensitiveScreen(true)
                     PaymentMethodsActivityStarter(this).startForResult(
                         PaymentMethodsActivityStarter.Args.Builder().build()
                     )
                 }
-                OrderCheckoutViewModel.NavigationEventType.FINISH_CHECKOUT_ACTIVITY -> {
+                OrderCheckoutViewModel.NavigationEvent.FINISH_CHECKOUT_ACTIVITY -> {
                     finish()
                 }
-                OrderCheckoutViewModel.NavigationEventType.INITIALIZE_STRIPE -> {
+                OrderCheckoutViewModel.NavigationEvent.INITIALIZE_STRIPE -> {
                     viewModel.reInitStripe(this)
                 }
-                OrderCheckoutViewModel.NavigationEventType.FINISH_ACTIVITY_AFTER_PURCHASE -> {
+                OrderCheckoutViewModel.NavigationEvent.FINISH_ACTIVITY_AFTER_PURCHASE -> {
                     intent.putExtra("isAfterPurchase", true)
                     setResult(RESULT_OK, intent)
                     finish()
                 }
-                OrderCheckoutViewModel.NavigationEventType.OPEN_PROMO_CODE_FRAGMENT -> {
+                OrderCheckoutViewModel.NavigationEvent.OPEN_PROMO_CODE_FRAGMENT -> {
                     findNavController(R.id.checkoutActContainer).navigate(R.id.action_checkoutFragment_to_promoCodeFragment)
                 }
-                OrderCheckoutViewModel.NavigationEventType.OPEN_GIFT_FRAGMENT -> {
+                OrderCheckoutViewModel.NavigationEvent.OPEN_GIFT_FRAGMENT -> {
                     findNavController(R.id.checkoutActContainer).navigate(R.id.action_checkoutFragment_to_giftActionsDialogFragment)
                 }
-                OrderCheckoutViewModel.NavigationEventType.OPEN_DISH_PAGE -> {
-                    navigation.navDirections?.let { it ->
-                        findNavController(R.id.checkoutActContainer).navigate(it)
-                    }
+                is OrderCheckoutViewModel.NavigationEvent.OPEN_DISH_PAGE -> {
+                    val action = CheckoutFragmentDirections.actionCheckoutFragmentToDishPageFragment(event.dishInitParams)
+                    findNavController(R.id.checkoutActContainer).navigate(action)
                 }
-                OrderCheckoutViewModel.NavigationEventType.OPEN_TIP_FRAGMENT -> {
+                OrderCheckoutViewModel.NavigationEvent.OPEN_TIP_FRAGMENT -> {
                     findNavController(R.id.checkoutActContainer).navigate(R.id.action_checkoutFragment_to_tipFragment)
                 }
             }

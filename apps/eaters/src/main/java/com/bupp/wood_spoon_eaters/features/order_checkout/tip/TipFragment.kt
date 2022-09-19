@@ -88,7 +88,7 @@ class TipFragment : Fragment(R.layout.fragment_tip), CustomTipBottomSheet.Custom
             handleOrderDetails(orderData)
         }
         viewModel.onCheckoutDone.observe(viewLifecycleOwner) {
-            mainViewModel.handleMainNavigation(OrderCheckoutViewModel.NavigationEventType.FINISH_ACTIVITY_AFTER_PURCHASE)
+            mainViewModel.handleMainNavigation(OrderCheckoutViewModel.NavigationEvent.FINISH_ACTIVITY_AFTER_PURCHASE)
         }
         viewModel.progressData.observe(viewLifecycleOwner) {
             (activity as OrderCheckoutActivity).handleProgressBar(it)

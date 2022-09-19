@@ -19,7 +19,8 @@ enum class MainNavigationEvent {
     INITIALIZE_STRIPE,
     LOGOUT_WITH_NEW_AUTH,
     LOGOUT,
-    OPEN_CAMERA_UTIL_IMAGE
+    OPEN_CAMERA_UTIL_IMAGE,
+    START_USER_DETAILS_ACTIVITY
 }
 
 class MainViewModel(
@@ -75,7 +76,9 @@ class MainViewModel(
     fun getFinalAddressParams() = eaterDataManager.getFinalAddressLiveDataParam()
 
     fun startStripeOrReInit() {
-        if (paymentManager.hasStripeInitialized) {
+        if(newAuthEnabled && !eaterDataManager.hasUserSetDetails()) {
+            mainNavigationEvent.postValue(MainNavigationEvent.START_USER_DETAILS_ACTIVITY)
+        } else if (paymentManager.hasStripeInitialized) {
             mainNavigationEvent.postValue(MainNavigationEvent.START_PAYMENT_METHOD_ACTIVITY)
         } else {
             mainNavigationEvent.postValue(MainNavigationEvent.INITIALIZE_STRIPE)
