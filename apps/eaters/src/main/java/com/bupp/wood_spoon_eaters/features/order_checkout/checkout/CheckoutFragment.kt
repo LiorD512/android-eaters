@@ -2,6 +2,8 @@ package com.bupp.wood_spoon_eaters.features.order_checkout.checkout
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.View
 import android.widget.Toast

@@ -21,7 +21,7 @@ enum class EatersFeatureFlags(override val key: String) : FeatureFlagKey {
     GiftIsEnabled(key = "mobile_order_is_gift_enabled"),
     ShowCartSubtotal(key = "show_cart_subtotal"),
     NewAuth(key = "new_auth"),
-    FreeDeliveryEnabled(key = "waive_delivery_fee_based_on_subtotal")
+    FreeDeliveryEnabled(key = "backend_waive_delivery_fee_based_on_subtotal")
 }
 
 class StaticFeatureFlagsListProvider : FeatureFlagsListProvider {

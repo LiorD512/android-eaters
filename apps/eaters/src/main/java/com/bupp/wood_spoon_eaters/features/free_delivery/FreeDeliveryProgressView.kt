@@ -10,6 +10,7 @@ import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.databinding.FreeDeliveryProgressViewBinding
 import com.bupp.wood_spoon_eaters.model.Price
 import com.bupp.wood_spoon_eaters.utils.AnimationUtil
+import com.bupp.wood_spoon_eaters.views.LottieOverlay
 
 class FreeDeliveryProgressView @JvmOverloads
 constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) :
@@ -18,31 +19,31 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
     private val binding =
         FreeDeliveryProgressViewBinding.inflate(LayoutInflater.from(context), this, true)
 
+    private var previousUntilFreeDelivery: Price? = null
 
     init {
         initAttrs(attrs)
         hide()
     }
 
-    private fun initAttrs(attrs: AttributeSet?){
-        if(attrs != null){
+    private fun initAttrs(attrs: AttributeSet?) {
+        if (attrs != null) {
             val attrSet =
                 context.obtainStyledAttributes(attrs, R.styleable.FreeDeliveryProgressView)
 
-            if (attrSet.hasValue(R.styleable.FreeDeliveryProgressView_freeDeliveryBkg)){
+            if (attrSet.hasValue(R.styleable.FreeDeliveryProgressView_freeDeliveryBkg)) {
                 val background = attrSet.getResourceId(
                     R.styleable.FreeDeliveryProgressView_freeDeliveryBkg,
                     0
                 )
-
                 setBackground(background)
-
             }
 
             attrSet.recycle()
 
         }
     }
+
 
     fun setFreeDeliveryState(freeDeliveryState: FreeDeliveryState?) {
         with(binding) {
@@ -51,14 +52,15 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
                     freeDeliveryState.currentThreshold?.formatedValue
                 freeDeliveryProgressViewPb.max =
                     freeDeliveryState.currentThreshold?.value?.toInt() ?: 49
-                compareThresholdToSubtotal(
-                    freeDeliveryState.subtotal?.value ?: 0.0,
+                checkUntilFreeDeliveryValue(
                     freeDeliveryState.untilFreeDelivery,
-                    freeDeliveryState.currentThreshold,
                     freeDeliveryState.showAddMoreItemsBtn
                 )
                 freeDeliveryProgressViewSubtotalTxt.text = freeDeliveryState.subtotal?.formatedValue
-                setFreeDeliveryProgress(freeDeliveryState.subtotal?.value?.toInt() ?: 0)
+                val progress = freeDeliveryState.currentThreshold?.value?.minus(
+                    freeDeliveryState.untilFreeDelivery?.value ?: 0.0
+                ) ?: 0
+                setFreeDeliveryProgress(progress.toInt())
                 if ((!freeDeliveryProgressViewMainLayout.isVisible)) {
                     show()
                 }
@@ -74,19 +76,22 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
         }
     }
 
-    private fun compareThresholdToSubtotal(
-        subtotal: Double,
+    private fun checkUntilFreeDeliveryValue(
         untilFreeDelivery: Price?,
-        currentThreshold: Price?,
         showAddMoreItemsBtn: Boolean
     ) {
         with(binding) {
-            val deliveryFee = currentThreshold?.value ?: 0.0
-            if (subtotal >= deliveryFee) {
+            if (untilFreeDelivery?.value == 0.0) {
                 freeDeliveryProgressViewTitle.text =
                     context.getString(R.string.free_delivery_getting_free_delivery_message)
                 freeDeliveryProgressViewCheckImg.isVisible = true
                 freeDeliveryProgressViewAddItemsBtn.isVisible = false
+                if (previousUntilFreeDelivery != untilFreeDelivery && previousUntilFreeDelivery != null) {
+                    LottieOverlay(context).showLottieOverlay(
+                        freeDeliveryProgressViewTitle,
+                        "free_delivery_lottie.json"
+                    )
+                }
             } else {
                 freeDeliveryProgressViewTitle.text = context.getString(
                     R.string.free_delivery_amount_remain_message,
@@ -95,6 +100,7 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
                 freeDeliveryProgressViewCheckImg.isVisible = false
                 freeDeliveryProgressViewAddItemsBtn.isVisible = showAddMoreItemsBtn
             }
+            previousUntilFreeDelivery = untilFreeDelivery
         }
     }
 
@@ -109,10 +115,10 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
     }
 
     fun setAddItemsClickListener(clickListener: () -> Unit) {
-        binding.freeDeliveryProgressViewAddItemsBtn.setOnClickListener { clickListener()}
+        binding.freeDeliveryProgressViewAddItemsBtn.setOnClickListener { clickListener() }
     }
 
-    private fun setBackground(@DrawableRes background: Int){
+    private fun setBackground(@DrawableRes background: Int) {
         binding.freeDeliveryProgressViewMainLayout.setBackgroundResource(background)
     }
 

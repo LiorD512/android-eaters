@@ -69,6 +69,7 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
 
         initUiRelatedProcesses()
 
+
         Log.d(TAG, "density: ${getResources().getDisplayMetrics().density}")
     }
 

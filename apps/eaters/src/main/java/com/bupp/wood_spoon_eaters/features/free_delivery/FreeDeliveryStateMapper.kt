@@ -20,7 +20,7 @@ fun Order?.mapOrderToFreeDeliveryState(
     return if (this == null) {
         null
     } else {
-        if (showFreeDelivery && untilFreeDelivery != null) {
+        if (showFreeDelivery && untilFreeDelivery != null && currentThreshold != null) {
             FreeDeliveryState(
                 this.subtotal,
                 this.untilFreeDelivery,
