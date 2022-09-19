@@ -194,6 +194,8 @@
             android:layout_height="wrap_content"
             android:animateLayoutChanges="true"
             android:overScrollMode="never"
+            android:paddingBottom="65dp"
+            android:clipToPadding="false"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/space">
 
@@ -280,12 +282,21 @@
     </androidx.core.widget.NestedScrollView>
 
 
-    <com.bupp.wood_spoon_eaters.features.free_delivery.FreeDeliveryProgressView
-        android:id="@+id/restaurantPageFreeDeliveryView"
+    <androidx.cardview.widget.CardView
+        android:id="@+id/restaurantPageFreeDeliveryContainer"
+        android:layout_marginBottom="-16dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:freeDeliveryBkg="@drawable/background_white_top_cornered"
-        app:layout_constraintBottom_toBottomOf="parent"/>
+        app:cardElevation="20dp"
+        app:cardCornerRadius="16dp"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <com.bupp.wood_spoon_eaters.features.free_delivery.FreeDeliveryProgressView
+            android:id="@+id/restaurantPageFreeDeliveryView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </androidx.cardview.widget.CardView>
 
     <com.bupp.wood_spoon_eaters.views.floating_buttons.WSFloatingButton
         android:id="@+id/restaurantFragFloatingCartBtn"
@@ -293,6 +304,7 @@
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        android:elevation="20dp"
         app:layout_constraintStart_toStartOf="parent"/>
 
 

@@ -7,7 +7,7 @@
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:importantForAccessibility="no"
-    android:paddingBottom="90dp">
+    android:paddingBottom="110dp">
 
     <ViewSwitcher
         android:id="@+id/freeDeliveryViewSwitcher"

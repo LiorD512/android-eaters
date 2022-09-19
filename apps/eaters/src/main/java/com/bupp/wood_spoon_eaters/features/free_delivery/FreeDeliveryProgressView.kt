@@ -28,7 +28,6 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
     }
 
     init {
-        initAttrs(attrs)
         hide()
     }
 
@@ -38,25 +37,6 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
             listener.viewClicked()
         }
     }
-
-    private fun initAttrs(attrs: AttributeSet?) {
-        if (attrs != null) {
-            val attrSet =
-                context.obtainStyledAttributes(attrs, R.styleable.FreeDeliveryProgressView)
-
-            if (attrSet.hasValue(R.styleable.FreeDeliveryProgressView_freeDeliveryBkg)) {
-                val background = attrSet.getResourceId(
-                    R.styleable.FreeDeliveryProgressView_freeDeliveryBkg,
-                    0
-                )
-                setBackground(background)
-            }
-
-            attrSet.recycle()
-
-        }
-    }
-
 
     fun setFreeDeliveryState(freeDeliveryState: FreeDeliveryState?) {
         with(binding) {
