@@ -38,7 +38,7 @@ fun LastCall.Companion.from(lastCallTimestamp: Long?, endsAtTimeStamp: Long?): L
     }
     val lastCallDateTime = DateTime(lastCallTimestamp)
     val endsAtDateTime = DateTime(endsAtTimeStamp)
-    val daysBefore = Days.daysBetween(lastCallDateTime, endsAtDateTime).days
+    val daysBefore = Days.daysBetween(lastCallDateTime.withTimeAtStartOfDay(), endsAtDateTime.withTimeAtStartOfDay()).days
     val hoursAndMinutes = HoursAndMinutes(
         hours = lastCallDateTime.hourOfDay,
         minutes = lastCallDateTime.minuteOfHour
