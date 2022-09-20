@@ -5,17 +5,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.bumptech.glide.request.RequestOptions
-import com.bupp.wood_spoon_eaters.R
-import com.bupp.wood_spoon_eaters.bottom_sheets.reviews.Comment
 import com.bupp.wood_spoon_eaters.databinding.DishPhotoItemBinding
-import com.bupp.wood_spoon_eaters.databinding.DishRatingItemViewBinding
-import com.bupp.wood_spoon_eaters.model.WSImage
 import com.bupp.wood_spoon_eaters.model.WSMedia
-import com.bupp.wood_spoon_eaters.model.WSMediaType
 import com.bupp.wood_spoon_eaters.model.WSMediaType.*
 
 class DishPhotosAdapter(val context: Context, val listener: DishPhotosListener) :RecyclerView.Adapter<DishPhotosAdapter.DishViewHolder>() {
@@ -54,7 +47,7 @@ class DishPhotosAdapter(val context: Context, val listener: DishPhotosListener) 
                 }
             }
             IMAGE -> {
-                Glide.with(context).load(media.url).into(holder.image)
+                Glide.with(context).load(media.url).fitCenter().into(holder.image)
             }
         }
     }

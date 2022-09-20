@@ -18,6 +18,6 @@
             android:visibility="gone"
             tools:visibility="visible"
             android:src="@drawable/ic_play_grey"
-            android:background="@drawable/transparent_to_black_60_gradient"/>
+            android:background="@drawable/photo_bottom_gradient_text_background_overlay"/>
 
 </FrameLayout>

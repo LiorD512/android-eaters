@@ -16,7 +16,7 @@
     <View
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@drawable/transparent_to_black_60_gradient"
+            android:background="@drawable/photo_bottom_gradient_overlay"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
