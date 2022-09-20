@@ -53,7 +53,7 @@ class CheckoutViewModel(
             it.mapOrderToFreeDeliveryState(
                 appSettingsRepository.getCurrentFreeDeliveryThreshold(),
                 featureFlagFreeDeliveryUseCase.execute(),
-                true
+                showAddMoreItemsBtn = true
             )
         }
 

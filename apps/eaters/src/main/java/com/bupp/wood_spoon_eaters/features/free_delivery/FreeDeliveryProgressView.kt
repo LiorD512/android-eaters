@@ -3,9 +3,9 @@ package com.bupp.wood_spoon_eaters.features.free_delivery
 import android.animation.ObjectAnimator
 import android.content.Context
 import android.util.AttributeSet
+import android.view.HapticFeedbackConstants
 import android.view.LayoutInflater
 import android.widget.FrameLayout
-import androidx.annotation.DrawableRes
 import androidx.core.view.isVisible
 import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.databinding.FreeDeliveryProgressViewBinding
@@ -87,6 +87,8 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
                         freeDeliveryViewSwitcher,
                         "free_delivery_lottie.json"
                     )
+                    freeDeliveryProgressViewMainLayout.isHapticFeedbackEnabled = true
+                    freeDeliveryProgressViewMainLayout.performHapticFeedback(HapticFeedbackConstants.CONFIRM)
                     listener?.thresholdAchieved()
                 }
             } else {

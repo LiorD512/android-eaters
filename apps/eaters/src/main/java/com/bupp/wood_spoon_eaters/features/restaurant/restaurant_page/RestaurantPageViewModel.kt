@@ -582,13 +582,13 @@ class RestaurantPageViewModel(
         }
     }
 
-    fun reportThresholdAchievedEvent(){
+    fun reportThresholdAchievedEvent() {
         reportEvent { orderId, screen ->
             FreeDeliveryEvent.ThresholdAchievedEvent(orderId, screen)
         }
     }
 
-    fun reportViewClickedEvent(){
+    fun reportViewClickedEvent() {
         reportEvent { orderId, screen ->
             FreeDeliveryEvent.ViewClickedEvent(orderId, screen)
         }

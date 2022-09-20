@@ -34,7 +34,7 @@ class UpSaleNCartViewModel(
             it.mapOrderToFreeDeliveryState(
                 appSettingsRepository.getCurrentFreeDeliveryThreshold(),
                 featureFlagFreeDeliveryUseCase.execute(),
-                false
+                showAddMoreItemsBtn = false
             )
         }
 
