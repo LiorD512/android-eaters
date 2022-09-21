@@ -199,6 +199,7 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
         }
         viewModel.orderLiveData.observe(viewLifecycleOwner) {
             viewModel.handleCartData()
+            viewModel.getUpSaleItems()
         }
         viewModel.clearCartEvent.observe(viewLifecycleOwner) {
             handleClearCartEvent(it)

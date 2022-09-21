@@ -29,6 +29,7 @@ import com.bupp.wood_spoon_eaters.features.main.settings.SettingsViewModel
 import com.bupp.wood_spoon_eaters.bottom_sheets.support_center.SupportViewModel
 import com.bupp.wood_spoon_eaters.custom_views.cuisine_chooser.CuisineChooserViewModel
 import com.bupp.wood_spoon_eaters.data.data_sorce.memory.MemoryAppReviewDataSource
+import com.bupp.wood_spoon_eaters.data.data_sorce.memory.MemoryUpSaleItemsDataSource
 import com.bupp.wood_spoon_eaters.domain.*
 import com.bupp.wood_spoon_eaters.experiments.PricingExperimentUseCase
 import com.bupp.wood_spoon_eaters.features.create_profile.EditProfileActivity
@@ -72,6 +73,7 @@ val appModule = module {
 
     //dataSource
     single { MemoryAppReviewDataSource() }
+    single { MemoryUpSaleItemsDataSource() }
 
     //global
     single { FcmManager(get()) }
@@ -104,6 +106,8 @@ val appModule = module {
     single { EaterDataRepositoryImpl(get(), get()) }
     single { CampaignRepository(get(), get()) }
     single { CampaignRepositoryImpl(get(), get()) }
+    single { UpSaleRepository(get(), get()) }
+    single { UpSaleRepositoryImpl(get(), get()) }
 
     //useCase
     single { PricingExperimentUseCase(get(), get()) }
@@ -115,6 +119,7 @@ val appModule = module {
     single { FeatureFlagLongFeedUseCase(get()) }
     single { FeatureFlagNewAuthUseCase(get()) }
     single { FeatureFlagFreeDeliveryUseCase(get()) }
+    single { GetUpSaleItemsUseCase(get()) }
     factory { PhoneNumberVerificationRequestCodeUseCase(get(), get()) }
     factory { SendPhoneVerificationUseCase(get(), get()) }
 
@@ -127,7 +132,7 @@ val appModule = module {
     single { FeatureFlagManager(get(), get()) }
     single { MediaUploadManager(get(), get()) }
     single { FeedDataManager(get(), get(), get()) }
-    single { CartManager(get(), get(), get()) }
+    single { CartManager(get(), get(), get(), get()) }
     single { EaterDataManager(get(), get(), get(), get(), get()) }
 
     //mappers

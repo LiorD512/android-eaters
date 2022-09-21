@@ -14,7 +14,6 @@ interface OrderRepositoryInterface{
     suspend fun updateOrderGift(orderId: Long, orderGiftRequest: OrderGiftRequest): ResultHandler<ServerResponse<Order>>
     suspend fun checkoutOrder(orderId: Long, paymentMethodId: String?): ResultHandler<ServerResponse<Any>>
     suspend fun getTraceableOrders(): ResultHandler<ServerResponse<List<Order>>>
-    suspend fun getUpsaleItems(orderId: Long): ResultHandler<ServerResponse<List<MenuItem>>>
     suspend fun getOrderDeliveryTimes(orderId: Long): ResultHandler<ServerResponse<List<DeliveryDates>>>
     suspend fun getUpsShippingRates(orderId: Long): ResultHandler<ServerResponse<List<ShippingMethod>>>
     suspend fun getOrderById(orderId: Long): ResultHandler<ServerResponse<Order>>
@@ -62,10 +61,6 @@ class OrderRepositoryImpl(private val service: ApiService, private val resultMan
 
     override suspend fun getTraceableOrders(): ResultHandler<ServerResponse<List<Order>>> {
         return resultManager.safeApiCall { service.getTraceableOrders() }
-    }
-
-    override suspend fun getUpsaleItems(orderId: Long): ResultHandler<ServerResponse<List<MenuItem>>> {
-        return resultManager.safeApiCall { service.getUpsaleItemsByOrderId(orderId)}
     }
 
     override suspend fun getOrderDeliveryTimes(orderId: Long): ResultHandler<ServerResponse<List<DeliveryDates>>>{

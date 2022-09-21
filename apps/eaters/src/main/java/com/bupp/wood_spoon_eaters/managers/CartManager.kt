@@ -3,10 +3,13 @@ package com.bupp.wood_spoon_eaters.managers
 import androidx.lifecycle.MutableLiveData
 import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.di.abs.LiveEventData
+import com.bupp.wood_spoon_eaters.domain.GetUpSaleItemsUseCase
 import com.bupp.wood_spoon_eaters.model.*
 import com.bupp.wood_spoon_eaters.repositories.OrderRepository
+import com.bupp.wood_spoon_eaters.repositories.UpSaleRepository
 import com.bupp.wood_spoon_eaters.utils.DateUtils
 import com.stripe.android.model.PaymentMethod
+import kotlinx.coroutines.flow.first
 import java.util.*
 
 data class ClearCartEvent(
@@ -29,11 +32,11 @@ enum class ClearCartDialogType {
 class CartManager(
     private val eaterDataManager: EaterDataManager,
     private val orderRepository: OrderRepository,
+    private val getUpSaleItemsUseCase: GetUpSaleItemsUseCase,
     private val eatersAnalyticsTracker: EatersAnalyticsTracker
 ) {
     private var currentOrderResponse: Order? = null
     private var currentOrderDeliveryDates: List<DeliveryDates?>? = null
-    private var currentUpsaleItems: List<MenuItem?>? = null
     var currentCookingSlotId: Long? = null
     var shippingService: String? = null
 
@@ -381,10 +384,9 @@ class CartManager(
         return null
     }
 
-    suspend fun fetchUpsaleItems(): List<MenuItem>? {
-        val result = orderRepository.getUpsaleItems(getCurOrderId())
-        if (result.type == OrderRepository.OrderRepoStatus.GET_UPSALE_ITEMS_SUCCES) {
-            this.currentUpsaleItems = result.data
+    suspend fun getUpSaleItems(isForceLoad: Boolean = false): List<MenuItem>? {
+        val result = getUpSaleItemsUseCase.execute(GetUpSaleItemsUseCase.Params(getCurOrderId(), isForceLoad)).first()
+        if (result.type == UpSaleRepository.UpSaleRepoStatus.GET_UPSALE_ITEMS_SUCCESS){
             return result.data
         }
         return null
