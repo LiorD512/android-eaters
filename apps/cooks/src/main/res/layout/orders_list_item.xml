@@ -93,7 +93,7 @@
                         android:id="@+id/ordersItemMenu"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginEnd="8dp"
+                        android:layout_marginEnd="16dp"
                         android:background="@null"
                         android:src="@drawable/ic_three_dot_orange" />
 

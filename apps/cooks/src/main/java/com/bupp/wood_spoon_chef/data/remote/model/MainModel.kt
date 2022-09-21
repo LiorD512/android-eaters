@@ -345,6 +345,10 @@ data class CookingSlotRequest(
     @Json(name = "detach") var detach: Boolean? = null
 ) : Parcelable
 
+data class CookingSlotAvailabilityRequest(
+    @Json(name = "is_available") var isAvailable: Boolean
+)
+
 @Parcelize
 @JsonClass(generateAdapter = true)
 data class CookingSlotSlim(

@@ -1,9 +1,6 @@
 package com.bupp.wood_spoon_chef.presentation.features.cooking_slot.data.network
 
-import com.bupp.wood_spoon_chef.data.remote.model.CookingSlot
-import com.bupp.wood_spoon_chef.data.remote.model.CookingSlotRequest
-import com.bupp.wood_spoon_chef.data.remote.model.CookingSlotSlim
-import com.bupp.wood_spoon_chef.data.remote.model.Order
+import com.bupp.wood_spoon_chef.data.remote.model.*
 import com.bupp.wood_spoon_chef.data.remote.network.V3
 import com.bupp.wood_spoon_chef.data.remote.network.base.ServerResponse
 import retrofit2.http.*
@@ -37,11 +34,10 @@ interface CookingSlotApiService {
     @GET("cooks/me/cooking_slots/trackable")
     suspend fun getTrackableCookingSlot(): ServerResponse<List<CookingSlot>>
 
-    @FormUrlEncoded
-    @POST("cooks/me/cooking_slots/{slot_id}")
+    @POST("cooks/me/cooking_slots/{slot_id}/available")
     suspend fun updateCookingSlotAvailability(
         @Path(value = "slot_id", encoded = true) cookingSlotId: Long,
-        @Field("is_active") isActive: Boolean
+        @Body availabilityRequest: CookingSlotAvailabilityRequest
     ): ServerResponse<CookingSlot>
 
     @GET("cooks/me/cooking_slots/active")
