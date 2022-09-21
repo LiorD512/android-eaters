@@ -33,6 +33,8 @@ class OrderRepository(val apiService: OrderRepositoryImpl, val eaterDataManager:
         GET_DELIVERY_DATES_SUCCESS,
         GET_SHIPPING_METHOD_FAILED,
         GET_SHIPPING_METHOD_SUCCESS,
+        GET_UPSALE_ITEMS_FAILED,
+        GET_UPSALE_ITEMS_SUCCES,
         REPORT_ISSUE_FAILED,
         REPORT_ISSUE_SUCCESS,
         POST_REVIEW_FAILED,
@@ -209,6 +211,32 @@ class OrderRepository(val apiService: OrderRepositoryImpl, val eaterDataManager:
                 }
                 is ResultHandler.WSCustomError -> {
                     MTLogger.c(TAG, "finalizeOrder - wsError")
+                    OrderRepoResult(OrderRepoStatus.WS_ERROR, wsError = result.errors)
+                }
+            }
+        }
+    }
+
+    suspend fun getUpsaleItems(orderId: Long): OrderRepoResult<List<MenuItem>> {
+        val result = withContext(Dispatchers.IO) {
+            apiService.getUpsaleItems(orderId)
+        }
+        result.let {
+            return when (result) {
+                is ResultHandler.NetworkError -> {
+                    MTLogger.c(TAG, "getUpsaleItems - NetworkError")
+                    OrderRepoResult(OrderRepoStatus.SERVER_ERROR)
+                }
+                is ResultHandler.GenericError -> {
+                    MTLogger.c(TAG, "getUpsaleItems - GenericError")
+                    OrderRepoResult(OrderRepoStatus.GET_UPSALE_ITEMS_FAILED)
+                }
+                is ResultHandler.Success -> {
+                    MTLogger.c(TAG, "getUpsaleItems - Success")
+                    OrderRepoResult(OrderRepoStatus.GET_UPSALE_ITEMS_SUCCES, result.value.data)
+                }
+                is ResultHandler.WSCustomError -> {
+                    MTLogger.c(TAG, "getUpsaleItems - wsError")
                     OrderRepoResult(OrderRepoStatus.WS_ERROR, wsError = result.errors)
                 }
             }

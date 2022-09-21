@@ -532,6 +532,13 @@ class RestaurantPageViewModel(
      */
     fun handleCartData() {
         updateDishCountUi(dishListData, false)
+        getUpsaleItems()
+    }
+
+    private fun getUpsaleItems() {
+        viewModelScope.launch {
+            cartManager.fetchUpsaleItems()
+        }
     }
 
     fun onPerformClearCart() {
