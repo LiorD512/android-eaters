@@ -534,12 +534,6 @@ class RestaurantPageViewModel(
         updateDishCountUi(dishListData, false)
     }
 
-     fun getUpSaleItems() {
-        viewModelScope.launch {
-            cartManager.getUpSaleItems(true)
-        }
-    }
-
     fun onPerformClearCart() {
         eatersAnalyticsTracker.logEvent(Constants.EVENT_CLEAR_CART)
         cartManager.onCartCleared()
