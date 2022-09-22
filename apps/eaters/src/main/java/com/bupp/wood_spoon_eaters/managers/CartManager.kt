@@ -59,6 +59,10 @@ class CartManager(
     fun getDeliveryDatesUi() = deliveryDateUi
 
     init {
+        observeOrderLiveDataAndUpdateUpSaleItems()
+    }
+
+    private fun observeOrderLiveDataAndUpdateUpSaleItems(){
         orderLiveData.observeForever(){
             if (it != null){
                 GlobalScope.launch {
