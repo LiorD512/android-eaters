@@ -74,18 +74,24 @@ class EatersAnalyticsTracker(
 
     fun sendPurchaseEvent(orderId: Long?, purchaseCost: Double) {
         if (shouldFireEvent) {
-            orderId?.let {
-                sendFirstPurchaseEvent(it, purchaseCost)
-            }
-        }
-    }
-
-    private fun sendFirstPurchaseEvent(orderId: Long?, purchaseCost: Double) {
-        if (shouldFireEvent) {
             val logger = AppEventsLogger.newLogger(context)
             val params = Bundle()
             params.putString(AppEventsConstants.EVENT_PARAM_CONTENT, "[{\"orderId\": $orderId]")
             logger.logPurchase(BigDecimal.valueOf(purchaseCost), Currency.getInstance("USD"), params)
+        }
+    }
+
+    fun sendFirstPurchaseEvent(orderId: Long?, purchaseCost: Double) {
+        if (shouldFireEvent) {
+            orderId?.let {
+                val logger = AppEventsLogger.newLogger(context)
+                val params = Bundle()
+                params.putString(AppEventsConstants.EVENT_PARAM_ORDER_ID, orderId.toString())
+                params.putString(AppEventsConstants.EVENT_PARAM_CURRENCY, Currency.getInstance("USD").currencyCode)
+                params.putDouble("PurchaseAmount", purchaseCost)
+                logger.logEvent("FirstOrderPlaced", params)
+
+            }
         }
     }
 
