@@ -478,10 +478,10 @@ class CartManager(
             val result = orderRepository.finalizeOrder(it, paymentMethod?.id)
             val isSuccess = result.type == OrderRepository.OrderRepoStatus.FINALIZE_ORDER_SUCCESS
             eatersAnalyticsTracker.sendPurchaseEvent(it, calcTotalDishesPrice())
-            eatersAnalyticsTracker.logEvent(
-                Constants.EVENT_ORDER_PLACED,
-                getOrderValue(paymentMethod, isSuccess, result.wsError)
-            )
+            if (eaterDataManager.currentEater?.ordersCount == 0){
+                eatersAnalyticsTracker.sendFirstPurchaseEvent(it, calcTotalDishesPrice())
+            }
+            eatersAnalyticsTracker.logEvent(Constants.EVENT_ORDER_PLACED, getOrderValue(paymentMethod, isSuccess, result.wsError))
             return result
         }
         return null
