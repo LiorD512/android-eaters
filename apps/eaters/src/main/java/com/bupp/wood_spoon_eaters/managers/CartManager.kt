@@ -72,8 +72,8 @@ class CartManager(
         }
     }
 
-    suspend fun getUpSaleItems(): UpSaleData?{
-        return upSaleRepository.getUpSaleItems(getCurOrderId())
+    fun getUpSaleItems(): UpSaleData?{
+        return upSaleRepository.getUpSaleItemsLocally(getCurOrderId())
     }
 
     fun getCurOrderId(): Long {

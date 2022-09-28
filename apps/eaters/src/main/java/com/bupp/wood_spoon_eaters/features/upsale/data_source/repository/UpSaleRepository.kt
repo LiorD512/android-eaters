@@ -19,16 +19,14 @@ class UpSaleRepository(
         orderId: Long,
         forceFetch: Boolean = false
     ): UpSaleData? {
-        val localSource = fetchUpSaleItemsLocally().value
-        return if (forceFetch) {
-            fetchUpSaleItemsRemote(orderId)
+
+        val localData = if (!forceFetch) {
+            getUpSaleItemsLocally(orderId)
         } else {
-            return if (localSource != null && localSource.orderId == orderId) {
-                localSource
-            } else {
-                fetchUpSaleItemsRemote(orderId)
-            }
+            null
         }
+
+        return localData ?: fetchUpSaleItemsRemote(orderId)
     }
 
     private suspend fun fetchUpSaleItemsRemote(orderId: Long): UpSaleData? {
@@ -40,7 +38,7 @@ class UpSaleRepository(
         return null
     }
 
-    private fun fetchUpSaleItemsLocally(): MutableStateFlow<UpSaleData?> =
-        memoryUpSaleItemsDataSource.upSaleItems
+    fun getUpSaleItemsLocally(orderId: Long): UpSaleData? =
+        memoryUpSaleItemsDataSource.upSaleItems.value.takeIf { it?.orderId == orderId }
 
 }
