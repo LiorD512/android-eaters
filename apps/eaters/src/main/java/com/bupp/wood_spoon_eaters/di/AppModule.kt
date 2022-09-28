@@ -29,6 +29,7 @@ import com.bupp.wood_spoon_eaters.features.main.settings.SettingsViewModel
 import com.bupp.wood_spoon_eaters.bottom_sheets.support_center.SupportViewModel
 import com.bupp.wood_spoon_eaters.custom_views.cuisine_chooser.CuisineChooserViewModel
 import com.bupp.wood_spoon_eaters.data.data_sorce.memory.MemoryAppReviewDataSource
+import com.bupp.wood_spoon_eaters.features.upsale.data_source.memory.MemoryUpSaleItemsDataSource
 import com.bupp.wood_spoon_eaters.domain.*
 import com.bupp.wood_spoon_eaters.experiments.PricingExperimentUseCase
 import com.bupp.wood_spoon_eaters.features.create_profile.EditProfileActivity
@@ -50,6 +51,7 @@ import com.bupp.wood_spoon_eaters.features.restaurant.dish_page.DishPageViewMode
 import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.RestaurantPageViewModel
 import com.bupp.wood_spoon_eaters.features.reviews.ReviewsViewModel
 import com.bupp.wood_spoon_eaters.features.splash.SplashViewModel
+import com.bupp.wood_spoon_eaters.features.upsale.data_source.repository.UpSaleRepository
 import com.bupp.wood_spoon_eaters.managers.*
 import com.bupp.wood_spoon_eaters.managers.location.LocationManager
 import com.bupp.wood_spoon_eaters.network.base_repos.*
@@ -72,6 +74,7 @@ val appModule = module {
 
     //dataSource
     single { MemoryAppReviewDataSource() }
+    single { MemoryUpSaleItemsDataSource() }
 
     //global
     single { FcmManager(get()) }
@@ -104,6 +107,7 @@ val appModule = module {
     single { EaterDataRepositoryImpl(get(), get()) }
     single { CampaignRepository(get(), get()) }
     single { CampaignRepositoryImpl(get(), get()) }
+    single { UpSaleRepository(get(), get()) }
 
     //useCase
     single { PricingExperimentUseCase(get(), get()) }
@@ -127,7 +131,7 @@ val appModule = module {
     single { FeatureFlagManager(get(), get()) }
     single { MediaUploadManager(get(), get()) }
     single { FeedDataManager(get(), get(), get()) }
-    single { CartManager(get(), get(), get()) }
+    single { CartManager(get(), get(), get(), get()) }
     single { EaterDataManager(get(), get(), get(), get(), get()) }
 
     //mappers

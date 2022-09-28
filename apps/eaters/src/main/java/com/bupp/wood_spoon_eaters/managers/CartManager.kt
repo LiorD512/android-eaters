@@ -3,10 +3,14 @@ package com.bupp.wood_spoon_eaters.managers
 import androidx.lifecycle.MutableLiveData
 import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.di.abs.LiveEventData
+import com.bupp.wood_spoon_eaters.features.upsale.data_source.repository.UpSaleData
 import com.bupp.wood_spoon_eaters.model.*
 import com.bupp.wood_spoon_eaters.repositories.OrderRepository
+import com.bupp.wood_spoon_eaters.features.upsale.data_source.repository.UpSaleRepository
 import com.bupp.wood_spoon_eaters.utils.DateUtils
 import com.stripe.android.model.PaymentMethod
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import java.util.*
 
 data class ClearCartEvent(
@@ -29,6 +33,7 @@ enum class ClearCartDialogType {
 class CartManager(
     private val eaterDataManager: EaterDataManager,
     private val orderRepository: OrderRepository,
+    private val upSaleRepository: UpSaleRepository,
     private val eatersAnalyticsTracker: EatersAnalyticsTracker
 ) {
     private var currentOrderResponse: Order? = null
@@ -53,6 +58,24 @@ class CartManager(
     fun getClearCartUiEvent() = clearCartUiEvent
     fun getDeliveryDatesUi() = deliveryDateUi
 
+    init {
+        observeOrderLiveDataAndUpdateUpSaleItems()
+    }
+
+    private fun observeOrderLiveDataAndUpdateUpSaleItems(){
+        orderLiveData.observeForever(){
+            if (it != null){
+                GlobalScope.launch {
+                    upSaleRepository.getUpSaleItems(it.id, true)
+                }
+            }
+        }
+    }
+
+    fun getUpSaleItems(): UpSaleData?{
+        return upSaleRepository.getUpSaleItemsLocally(getCurOrderId())
+    }
+
     fun getCurOrderId(): Long {
         currentOrderResponse?.id?.let {
             return it
@@ -69,20 +92,39 @@ class CartManager(
         )
     }
 
-    fun validateCartMatch(newRestaurant: Restaurant, newCookingSlotId: Long, newStartAtDate: Date, newEndsAtDate: Date): Boolean {
+    fun validateCartMatch(
+        newRestaurant: Restaurant,
+        newCookingSlotId: Long,
+        newStartAtDate: Date,
+        newEndsAtDate: Date
+    ): Boolean {
         currentOrderResponse?.let {
             if (it.restaurant!!.id != newRestaurant.id) {
                 val curRestaurantName = it.restaurant.restaurantName ?: ""
                 val newRestaurantName = newRestaurant.restaurantName ?: ""
-                clearCartUiEvent.postRawValue(ClearCartEvent(ClearCartDialogType.CLEAR_CART_DIFFERENT_RESTAURANT, curRestaurantName, newRestaurantName))
+                clearCartUiEvent.postRawValue(
+                    ClearCartEvent(
+                        ClearCartDialogType.CLEAR_CART_DIFFERENT_RESTAURANT,
+                        curRestaurantName,
+                        newRestaurantName
+                    )
+                )
                 return false
             }
             if (currentOrderResponse!!.cookingSlot!!.id != newCookingSlotId) {
                 val curStartsAtDate = currentOrderResponse!!.cookingSlot!!.orderFrom
                 val curEndsAtDate = currentOrderResponse!!.cookingSlot!!.endsAt
-                val curCookingSlotStr = DateUtils.parseDatesToNowOrDates(curStartsAtDate, curEndsAtDate)
-                val newCookingSlotStr = DateUtils.parseDatesToNowOrDates(newStartAtDate, newEndsAtDate)
-                clearCartUiEvent.postRawValue(ClearCartEvent(ClearCartDialogType.CLEAR_CART_DIFFERENT_COOKING_SLOT, curCookingSlotStr, newCookingSlotStr))
+                val curCookingSlotStr =
+                    DateUtils.parseDatesToNowOrDates(curStartsAtDate, curEndsAtDate)
+                val newCookingSlotStr =
+                    DateUtils.parseDatesToNowOrDates(newStartAtDate, newEndsAtDate)
+                clearCartUiEvent.postRawValue(
+                    ClearCartEvent(
+                        ClearCartDialogType.CLEAR_CART_DIFFERENT_COOKING_SLOT,
+                        curCookingSlotStr,
+                        newCookingSlotStr
+                    )
+                )
                 return false
             }
             return true
@@ -95,7 +137,11 @@ class CartManager(
      * this function checks if this is the first item is the cart - and post a new cart
      * or cart is allready existed and it just updates the cart with the new dish
      */
-    suspend fun addOrUpdateCart(quantity: Int, dishId: Long, note: String?): OrderRepository.OrderRepoStatus {
+    suspend fun addOrUpdateCart(
+        quantity: Int,
+        dishId: Long,
+        note: String?
+    ): OrderRepository.OrderRepoStatus {
         return if (currentOrderResponse == null) {
             //order response is null therefore post new order
             addDishToNewCart(quantity, dishId, note)
@@ -108,8 +154,20 @@ class CartManager(
     /**
      * this function simply crates new order and adds a new instance of a dish to the cart
      */
-    private suspend fun addDishToNewCart(quantity: Int, dishId: Long, note: String?): OrderRepository.OrderRepoStatus {
-        val orderRequest = buildOrderRequest(listOf(OrderItemRequest(dishId = dishId, quantity = quantity, notes = note)))
+    private suspend fun addDishToNewCart(
+        quantity: Int,
+        dishId: Long,
+        note: String?
+    ): OrderRepository.OrderRepoStatus {
+        val orderRequest = buildOrderRequest(
+            listOf(
+                OrderItemRequest(
+                    dishId = dishId,
+                    quantity = quantity,
+                    notes = note
+                )
+            )
+        )
         val result = orderRepository.addNewDish(orderRequest)
         if (result.type == OrderRepository.OrderRepoStatus.ADD_NEW_DISH_SUCCESS) {
             result.data?.let {
@@ -123,8 +181,20 @@ class CartManager(
         return result.type
     }
 
-    private suspend fun addDishToExistingCart(quantity: Int, dishId: Long, note: String?): OrderRepository.OrderRepoStatus {
-        val orderRequest = buildOrderRequest(listOf(OrderItemRequest(dishId = dishId, quantity = quantity, notes = note)))
+    private suspend fun addDishToExistingCart(
+        quantity: Int,
+        dishId: Long,
+        note: String?
+    ): OrderRepository.OrderRepoStatus {
+        val orderRequest = buildOrderRequest(
+            listOf(
+                OrderItemRequest(
+                    dishId = dishId,
+                    quantity = quantity,
+                    notes = note
+                )
+            )
+        )
         currentOrderResponse?.let {
             val result = orderRepository.updateOrder(it.id!!, orderRequest)
             if (result.type == OrderRepository.OrderRepoStatus.UPDATE_ORDER_SUCCESS) {
@@ -141,7 +211,12 @@ class CartManager(
         return OrderRepository.OrderRepoStatus.UPDATE_ORDER_FAILED
     }
 
-    suspend fun updateDishInExistingCart(quantity: Int, note: String?, dishId: Long, orderItemId: Long): OrderRepository.OrderRepoStatus {
+    suspend fun updateDishInExistingCart(
+        quantity: Int,
+        note: String?,
+        dishId: Long,
+        orderItemId: Long
+    ): OrderRepository.OrderRepoStatus {
         val updatedOrderItem = OrderItemRequest(
             id = orderItemId, dishId = dishId,
             quantity = quantity, notes = note
@@ -169,12 +244,16 @@ class CartManager(
      * @param eventType String?
      * @return OrderRepository.OrderRepoResult<Order>?
      */
-    suspend fun updateOrderParams(orderRequest: OrderRequest, eventType: String? = null): OrderRepository.OrderRepoResult<Order>? {
+    suspend fun updateOrderParams(
+        orderRequest: OrderRequest,
+        eventType: String? = null
+    ): OrderRepository.OrderRepoResult<Order>? {
         currentOrderResponse?.let {
             if (orderRequest.tipPercentage == -1f) {
                 orderRequest.tipPercentage = null
             } else {
-                orderRequest.tipPercentage = orderRequest.tipPercentage ?: getTipPercentage()?.toFloat()
+                orderRequest.tipPercentage =
+                    orderRequest.tipPercentage ?: getTipPercentage()?.toFloat()
             }
             val result = orderRepository.updateOrder(it.id!!, orderRequest)
             result.data?.let {
@@ -193,7 +272,10 @@ class CartManager(
      * @param eventType String?
      * @return OrderRepository.OrderRepoResult<Order>?
      */
-    suspend fun updateOrderGiftParams(orderGiftRequest: OrderGiftRequest, eventType: String? = null): OrderRepository.OrderRepoResult<Order>? {
+    suspend fun updateOrderGiftParams(
+        orderGiftRequest: OrderGiftRequest,
+        eventType: String? = null
+    ): OrderRepository.OrderRepoResult<Order>? {
         currentOrderResponse?.id?.let { orderId ->
             val result = orderRepository.updateOrderGift(orderId, orderGiftRequest)
             result.data?.let { resultOrder ->
@@ -211,7 +293,10 @@ class CartManager(
      * it updates the order with a "destroyed" orderItems list.
      * @param dishId = could be dish id or orderItem id
      */
-    suspend fun removeOrderItems(dishId: Long, removeSingle: Boolean = false): OrderRepository.OrderRepoStatus {
+    suspend fun removeOrderItems(
+        dishId: Long,
+        removeSingle: Boolean = false
+    ): OrderRepository.OrderRepoStatus {
         var orderRequest: OrderRequest?
         if (removeSingle) {
             orderRequest = buildOrderRequest(getDestroyedOrderItemRequestByOrderIdItem(dishId))
@@ -326,10 +411,24 @@ class CartManager(
                     /**
                      * when deliver_at is null - it means no change of delivery time made by user.
                      */
-                    if (DateUtils.isNowInRange(order.cookingSlot?.startsAt, order.cookingSlot?.endsAt) && DateUtils.isToday(firstDeliveryDate.from)) {
-                        deliveryDateUi.postValue("ASAP (${DateUtils.parseDateToDayDateAndTime(firstDeliveryDate.from)})")
+                    if (DateUtils.isNowInRange(
+                            order.cookingSlot?.startsAt,
+                            order.cookingSlot?.endsAt
+                        ) && DateUtils.isToday(firstDeliveryDate.from)
+                    ) {
+                        deliveryDateUi.postValue(
+                            "ASAP (${
+                                DateUtils.parseDateToDayDateAndTime(
+                                    firstDeliveryDate.from
+                                )
+                            })"
+                        )
                     } else {
-                        deliveryDateUi.postValue(DateUtils.parseDateToDayDateAndTime(firstDeliveryDate.from))
+                        deliveryDateUi.postValue(
+                            DateUtils.parseDateToDayDateAndTime(
+                                firstDeliveryDate.from
+                            )
+                        )
                     }
                 } else {
                     val matchedDate = deliveryDates.find {
@@ -337,11 +436,21 @@ class CartManager(
                     }
                     if (matchedDate == null) {
 
-                        deliveryDateUi.postValue(DateUtils.parseDateToDayDateAndTime(firstDeliveryDate.from))
+                        deliveryDateUi.postValue(
+                            DateUtils.parseDateToDayDateAndTime(
+                                firstDeliveryDate.from
+                            )
+                        )
                     } else {
                         val isFirst = DateUtils.isSameTime(deliveryDates[0]?.from, matchedDate.from)
                         if (DateUtils.isNowInRange(matchedDate.from, matchedDate.to) && isFirst) {
-                            deliveryDateUi.postValue("ASAP (${DateUtils.parseDateToDayDateAndTime(order.deliverAt)})")
+                            deliveryDateUi.postValue(
+                                "ASAP (${
+                                    DateUtils.parseDateToDayDateAndTime(
+                                        order.deliverAt
+                                    )
+                                })"
+                            )
                         } else {
                             deliveryDateUi.postValue(DateUtils.parseDateToDayDateAndTime(order.deliverAt))
                         }
@@ -512,7 +621,8 @@ class CartManager(
         this.shippingService = shippingService
         val deliveryTime = getCurrentCookingSlot()?.orderFrom
         val deliveryAtParam = DateUtils.parseUnixTimestamp(deliveryTime)
-        val orderRequest = OrderRequest(shippingService = shippingService, deliveryAt = deliveryAtParam)
+        val orderRequest =
+            OrderRequest(shippingService = shippingService, deliveryAt = deliveryAtParam)
         updateOrderParams(orderRequest)
     }
 

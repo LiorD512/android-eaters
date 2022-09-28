@@ -249,6 +249,12 @@ interface ApiService {
         @Path(value = "order_id", encoded = true) orderId: Long
     ): ServerResponse<List<DeliveryDates>>
 
+    @VERSION("v2")
+    @GET("eaters/me/orders/{order_id}/upsale")
+    suspend fun getUpsaleItemsByOrderId(
+        @Path(value = "order_id", encoded = true) orderId: Long
+    ):ServerResponse<List<MenuItem>>
+
     //Eater Data
     @GET("eaters/me/orders/trackable")
     suspend fun getTraceableOrders(): ServerResponse<List<Order>>
