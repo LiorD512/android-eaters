@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/upSaleFragmentMainLayout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/transparent">
+
+    <LinearLayout
+        android:id="@+id/upSaleCartLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/top_cornered_30_bkg"
+        android:orientation="vertical"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:id="@+id/upSaleFragmentTopLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <View
+                android:id="@+id/upSaleFragmentView"
+                android:layout_width="77dp"
+                android:layout_height="4.8dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="7.7dp"
+                android:background="@drawable/silver_two_rounded_rect" />
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="17.5dp"
+                android:layout_marginBottom="17.3dp">
+
+                <ImageButton
+                    android:id="@+id/upSaleFragmentBackBtn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="start|center"
+                    android:layout_marginStart="15.4dp"
+                    android:alpha="1"
+                    android:background="@null"
+                    android:src="@drawable/ic_arrow_left"/>
+
+                <TextView
+                    android:id="@+id/upSaleFragmentTitle"
+                    style="@style/LatoBlack15Dark"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:letterSpacing="0.03"
+                    android:text="Anything else?"/>
+
+
+            </FrameLayout>
+
+            <View
+                android:id="@+id/upSaleFragmentSep"
+                android:layout_width="match_parent"
+                android:layout_height="1.9dp"
+                android:background="@color/silver" />
+
+        </LinearLayout>
+
+        <com.bupp.wood_spoon_eaters.views.swipeable_dish_item.SwipeableRecycler
+            android:id="@+id/upSaleFragmentList"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clipChildren="false"
+            android:clipToPadding="false"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+
+    </LinearLayout>
+
+    <com.bupp.wood_spoon_eaters.features.free_delivery.FreeDeliveryProgressView
+        android:id="@+id/upSaleFragmentFreeDeliveryView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/upSaleCartLayout"/>
+
+    <FrameLayout
+        android:id="@+id/upSaleFragmentFloatingBtnLayout"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/floating_cart_btn_height"
+        android:layout_gravity="bottom"
+        android:background="@drawable/transparent_to_white_80_gradient"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/upSaleCartLayout">
+        <!--            android:background="@color/dark_40">-->
+
+        <com.bupp.wood_spoon_eaters.custom_views.BlueBtnCornered
+            android:id="@+id/upSaleFragmentBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginHorizontal="15.4dp"
+            app:title="No thanks" />
+
+    </FrameLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+
