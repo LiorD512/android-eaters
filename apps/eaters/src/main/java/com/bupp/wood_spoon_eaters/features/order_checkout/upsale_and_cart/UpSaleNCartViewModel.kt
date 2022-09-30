@@ -1,9 +1,6 @@
 package com.bupp.wood_spoon_eaters.features.order_checkout.upsale_and_cart
 
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.map
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.bupp.wood_spoon_eaters.common.FlowEventsManager
 import com.bupp.wood_spoon_eaters.di.abs.LiveEventData
 import com.bupp.wood_spoon_eaters.domain.FeatureFlagFreeDeliveryUseCase
@@ -29,6 +26,7 @@ class UpSaleNCartViewModel(
     val currentOrderData = cartManager.getCurrentOrderData()
     val currentCookingSlot = cartManager.getCurrentCookingSlot()
     val onDishCartClick = LiveEventData<CustomOrderItem>()
+    val onCheckOutClicked = MutableLiveData<Boolean>()
     val freeDeliveryData =
         currentOrderData.map {
             it.mapOrderToFreeDeliveryState(
@@ -67,6 +65,10 @@ class UpSaleNCartViewModel(
                 navigationEvent.postValue(NavigationEvent.GO_TO_SELECT_ADDRESS)
             }
         }
+    }
+
+    fun onCheckoutClick(){
+        onCheckOutClicked.postValue(true)
     }
 
     fun initData() {

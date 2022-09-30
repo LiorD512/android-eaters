@@ -30,6 +30,7 @@ import com.bupp.wood_spoon_eaters.features.free_delivery.FreeDeliveryProgressVie
 import com.bupp.wood_spoon_eaters.features.free_delivery.FreeDeliveryState
 import com.bupp.wood_spoon_eaters.features.locations_and_address.LocationAndAddressActivity
 import com.bupp.wood_spoon_eaters.features.upsale.CartFragment
+import com.bupp.wood_spoon_eaters.features.upsale.UpSaleFragment
 import com.bupp.wood_spoon_eaters.utils.AnimationUtil
 import com.bupp.wood_spoon_eaters.utils.Utils
 import com.bupp.wood_spoon_eaters.utils.waitForLayout
@@ -37,6 +38,7 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetBehavior.*
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class UpSaleNCartBottomSheet() : BottomSheetDialogFragment(){
@@ -52,7 +54,7 @@ class UpSaleNCartBottomSheet() : BottomSheetDialogFragment(){
     private var defaultPeekHeight = Utils.toPx(400)
 
     private var binding: UpSaleNCartBottomSheetBinding? = null
-//    private val viewModel by viewModel<UpSaleNCartViewModel>()
+    private val viewModel by sharedViewModel<UpSaleNCartViewModel>()
     private var currentParentHeight: Int = defaultPeekHeight
 //    private var behavior: BottomSheetBehavior<View>? = null
 //    private var currentSheetView: View? = null
@@ -190,6 +192,15 @@ class UpSaleNCartBottomSheet() : BottomSheetDialogFragment(){
 //        initUI()
 //        initObservers()
 
+        initObs()
+    }
+
+    private fun initObs(){
+        viewModel.onCheckOutClicked.observe(viewLifecycleOwner){
+            childFragmentManager.beginTransaction()
+                .replace(R.id.upSaleAndCartFragmentContainer, UpSaleFragment())
+                .commit()
+        }
     }
 
 

@@ -19,6 +19,7 @@ import com.bupp.wood_spoon_eaters.features.free_delivery.FreeDeliveryState
 import com.bupp.wood_spoon_eaters.features.locations_and_address.LocationAndAddressActivity
 import com.bupp.wood_spoon_eaters.features.order_checkout.upsale_and_cart.*
 import com.eatwoodspoon.android_utils.binding.viewBinding
+import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
@@ -26,6 +27,7 @@ class CartFragment : Fragment(), FreeDeliveryProgressView.FreeDeliveryProgressVi
 
     private val binding by viewBinding(FragmentCartBinding::bind)
     private val viewModel by viewModel<CartViewModel>()
+    private val parentViewModel by sharedViewModel<UpSaleNCartViewModel>()
     private lateinit var cartAdapter: UpSaleNCartAdapter
 
 
@@ -65,6 +67,10 @@ class CartFragment : Fragment(), FreeDeliveryProgressView.FreeDeliveryProgressVi
 //            }
 
             cartFreeDeliveryView.setFreeDeliveryProgressViewListener(this@CartFragment)
+
+            cartBtn.setOnClickListener {
+                parentViewModel.onCheckoutClick()
+            }
 
 //            viewModel.initData()
         }
