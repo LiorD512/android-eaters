@@ -1,11 +1,9 @@
 package com.bupp.wood_spoon_eaters.features.upsale
 
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.map
 import androidx.lifecycle.viewModelScope
 import com.bupp.wood_spoon_eaters.common.FlowEventsManager
-import com.bupp.wood_spoon_eaters.di.abs.LiveEventData
 import com.bupp.wood_spoon_eaters.domain.FeatureFlagFreeDeliveryUseCase
 import com.bupp.wood_spoon_eaters.domain.comon.execute
 import com.bupp.wood_spoon_eaters.features.free_delivery.mapOrderToFreeDeliveryState
@@ -18,7 +16,20 @@ import com.bupp.wood_spoon_eaters.repositories.EatersFeatureFlags
 import com.bupp.wood_spoon_eaters.repositories.featureFlag
 import com.bupp.wood_spoon_eaters.repositories.getCurrentFreeDeliveryThreshold
 import com.eatwoodspoon.analytics.events.FreeDeliveryEvent
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+
+
+data class CartData(
+    val restaurantName: String? = null,
+    val items: List<CartBaseAdapterItem>?
+)
+
+data class CartState(
+    val cartData: CartData? = null
+)
 
 class CartViewModel(
     private val featureFlagFreeDeliveryUseCase: FeatureFlagFreeDeliveryUseCase,
@@ -29,9 +40,11 @@ class CartViewModel(
     appSettingsRepository: AppSettingsRepository
 ) : ViewModel() {
 
+    private val _state = MutableStateFlow(CartState())
+    val state: SharedFlow<CartState> = _state
+
     val currentOrderData = cartManager.getCurrentOrderData()
     private val currentCookingSlot = cartManager.getCurrentCookingSlot()
-    val onDishCartClick = LiveEventData<CustomOrderItem>()
     val freeDeliveryData =
         currentOrderData.map {
             it.mapOrderToFreeDeliveryState(
@@ -44,23 +57,10 @@ class CartViewModel(
     private val shouldShowSubtotal =
         appSettingsRepository.featureFlag(EatersFeatureFlags.ShowCartSubtotal) ?: false
 
-   fun initData(){
-        fetchCartData()
-    }
 
-    val cartLiveData = MutableLiveData<CartData?>()
-
-    data class CartData(
-        val restaurantName: String? = null,
-        val items: List<CartBaseAdapterItem>?
-    )
-
-    private fun fetchCartData() {
+     fun fetchCartData() {
         val list = mutableListOf<CartBaseAdapterItem>()
         val orderItems = currentOrderData.value?.orderItems
-//        if(orderItems.isNullOrEmpty()){
-//            return null
-//        }
         orderItems?.forEach {
             val customCartItem = CustomOrderItem(
                 orderItem = it,
@@ -78,13 +78,19 @@ class CartViewModel(
 
         val restaurantName = currentOrderData.value?.restaurant?.restaurantName
 
-        cartLiveData.postValue(CartData(restaurantName, list))
+        _state.update {
+            it.copy(cartData = CartData(restaurantName, list))
+        }
     }
 
     fun updateDishInCart(quantity: Int, dishId: Long, note: String? = null, orderItemId: Long) {
         viewModelScope.launch {
             cartManager.updateDishInExistingCart(quantity, note, dishId, orderItemId)
         }
+    }
+
+    fun logPageEvent(eventType: FlowEventsManager.FlowEvents) {
+        flowEventsManager.trackPageEvent(eventType)
     }
 
     fun logSwipeDishInCart(eventName: String, item: CustomOrderItem) {
@@ -106,10 +112,6 @@ class CartViewModel(
         }
     }
 
-
-    fun onCartItemClicked(customOrderItem: CustomOrderItem) {
-        onDishCartClick.postRawValue(customOrderItem)
-    }
 
     fun reportThresholdAchievedEvent(){
         reportEvent { orderId, screen ->

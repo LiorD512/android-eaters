@@ -1,10 +1,8 @@
 package com.bupp.wood_spoon_eaters.features.order_checkout.upsale_and_cart
 
 import android.annotation.SuppressLint
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.ImageView
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.isVisible
@@ -12,36 +10,29 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bupp.wood_spoon_eaters.databinding.CartItemDishBinding
 import com.bupp.wood_spoon_eaters.databinding.CartItemSubtotalBinding
-import com.bupp.wood_spoon_eaters.databinding.UpSaleItemBinding
 import com.bupp.wood_spoon_eaters.views.swipeable_dish_item.SwipeableBaseItemViewHolder
 import com.bupp.wood_spoon_eaters.views.swipeable_dish_item.swipeableAdapter.SwipeableAdapter
-import com.google.android.material.imageview.ShapeableImageView
 
-class UpSaleNCartAdapter(val listener: UpSaleNCartAdapterListener) : SwipeableAdapter<CartBaseAdapterItem>(DiffCallback()) {
+class CartAdapter(val listener: CartAdapterListener) : SwipeableAdapter<CartBaseAdapterItem>(DiffCallback()) {
 
-
-    interface UpSaleNCartAdapterListener {
+    interface CartAdapterListener {
         fun onDishSwipedAdd(cartBaseAdapterItem: CartBaseAdapterItem)
         fun onDishSwipedRemove(cartBaseAdapterItem: CartBaseAdapterItem)
         fun onCartItemClicked(customCartItem: CustomOrderItem)
     }
 
-    override fun onDishSwipedAdd(cartBaseAdapterItem: CartBaseAdapterItem) {
-        listener.onDishSwipedAdd(cartBaseAdapterItem)
+    override fun onDishSwipedAdd(item: CartBaseAdapterItem) {
+        listener.onDishSwipedAdd(item)
     }
 
-    override fun onDishSwipedRemove(cartBaseAdapterItem: CartBaseAdapterItem) {
-        listener.onDishSwipedRemove(cartBaseAdapterItem)
+    override fun onDishSwipedRemove(item: CartBaseAdapterItem) {
+        listener.onDishSwipedRemove(item)
     }
 
     override fun getItemViewType(position: Int): Int = getItem(position).type!!.ordinal
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (viewType) {
-            CartAdapterViewType.UPSALE_DISH.ordinal -> {
-                val binding = UpSaleItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-                UpSaleItemViewHolder(binding)
-            }
             CartAdapterViewType.CART_DISH.ordinal -> {
                 val binding = CartItemDishBinding.inflate(LayoutInflater.from(parent.context), parent, false)
                 CartDishItemViewHolder(binding)
@@ -56,10 +47,6 @@ class UpSaleNCartAdapter(val listener: UpSaleNCartAdapterListener) : SwipeableAd
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val item = getItem(position)
         when (item) {
-            is UpsaleAdapterItem -> {
-                holder as UpSaleItemViewHolder
-                holder.bindItem(item)
-            }
             is CartAdapterItem -> {
                 holder as CartDishItemViewHolder
                 holder.bindItem(item, listener)
@@ -82,8 +69,7 @@ class UpSaleNCartAdapter(val listener: UpSaleNCartAdapterListener) : SwipeableAd
         private val description: TextView = binding.cartItemDescription
 
         @SuppressLint("SetTextI18n")
-        fun bindItem(dishItem: CartAdapterItem, listener: UpSaleNCartAdapterListener) {
-            Log.d(TAG, "bindItem - cart dish")
+        fun bindItem(dishItem: CartAdapterItem, listener: CartAdapterListener) {
             val customCartItem = dishItem.customOrderItem.orderItem
             customCartItem.let {
                 name.text = it.dish.name
@@ -102,49 +88,13 @@ class UpSaleNCartAdapter(val listener: UpSaleNCartAdapterListener) : SwipeableAd
 
     }
 
-    class UpSaleItemViewHolder(binding: UpSaleItemBinding) : SwipeableBaseItemViewHolder(binding.root) {
-
-        override val isSwipeable: Boolean = true
-
-        private val name: TextView = binding.upSaleItemName
-        private val description: TextView = binding.upSaleItemDescription
-        private val price: TextView = binding.upSaleItemPrice
-        private val img: ShapeableImageView = binding.upSaleItemImg
-
-        fun bindItem(dishItem: UpsaleAdapterItem) {
-            Log.d(TAG, "bindItem - upsale")
-            val dish = dishItem.menuItem?.dish
-            dish?.let {
-                name.text = dish.name
-                description.text = dish.description
-                price.text = "$${dish.price?.formatedValue} X${dishItem.cartQuantity}"
-
-
-            }
-        }
-
-    }
-
-
     class CartSubTotalItemViewHolder(binding: CartItemSubtotalBinding) : SwipeableBaseItemViewHolder(binding.root) {
-
         override val isSwipeable: Boolean = false
-
         private val subtotal: TextView = binding.cartSubTotalItemPrice
-
-        //        private val cartBtn: BlueBtnCornered = binding.cartSubTotalItemBtn
-        private val pb: ImageView = binding.cartSubTotalItemPb
-
         @SuppressLint("SetTextI18n")
         fun bindItem(dishItem: CartAdapterSubTotalItem) {
-            Log.d(TAG, "bindItem - subtotal")
             subtotal.text = dishItem.subTotal
-
-//            cartBtn.setOnClickListener {
-//                listener.onCartBtnClicked()
-//            }
         }
-
     }
 
     class DiffCallback : DiffUtil.ItemCallback<CartBaseAdapterItem>() {
@@ -157,10 +107,4 @@ class UpSaleNCartAdapter(val listener: UpSaleNCartAdapterListener) : SwipeableAd
             return oldItem.type == newItem.type
         }
     }
-
-    companion object {
-        const val TAG = "wowCartAdapter"
-    }
-
-
 }

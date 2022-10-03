@@ -282,6 +282,8 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
         afterOrderResult.launch(Intent(this, RestaurantActivity::class.java).putExtra(Constants.ARG_DISH, customOrderItem))
     }
 
+    override fun onCartDishCLick(menuItem: MenuItem) {}
+
     override fun onGoToCheckoutClicked() {
         startCheckoutForResult.launch(Intent(this, OrderCheckoutActivity::class.java))
     }

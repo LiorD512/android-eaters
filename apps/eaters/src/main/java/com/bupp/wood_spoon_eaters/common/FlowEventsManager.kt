@@ -35,6 +35,7 @@ class FlowEventsManager(
         PAGE_VISIT_HOME_CHEF,
         PAGE_VISIT_DISH,
         PAGE_VISIT_CART,
+        PAGE_VISIT_UPSALE,
     }
 
     fun trackPageEvent(curEvent: FlowEvents) {
