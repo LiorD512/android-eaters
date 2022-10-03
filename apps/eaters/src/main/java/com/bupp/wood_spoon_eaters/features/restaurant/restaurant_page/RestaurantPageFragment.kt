@@ -177,6 +177,10 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
         mainViewModel.openDishPageWithOrderItem(customOrderItem)
     }
 
+    override fun onCartDishCLick(menuItem: MenuItem) {
+        mainViewModel.openDishPage(menuItem, viewModel.currentCookingSlot)
+    }
+
     override fun onGoToCheckoutClicked() {
         mainViewModel.handleNavigation(RestaurantMainViewModel.NavigationType.START_ORDER_CHECKOUT_ACTIVITY)
     }
