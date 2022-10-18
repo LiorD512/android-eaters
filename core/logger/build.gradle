@@ -1,0 +1,30 @@
+apply from: "${rootProject.projectDir}/common-module.gradle"
+apply plugin: 'kotlin-parcelize'
+
+android {
+
+}
+
+dependencies {
+
+    api 'io.shipbook:shipbooksdk:1.6.2'
+
+    testImplementation 'junit:junit:4.13.2'
+    testImplementation 'org.json:json:20210307'
+    testImplementation "org.mockito:mockito-core:4.0.0"
+    testImplementation "org.mockito.kotlin:mockito-kotlin:4.0.0"
+    testImplementation "androidx.arch.core:core-testing:2.1.0"
+    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:1.4.2"
+
+    androidTestImplementation 'androidx.test.ext:junit'
+    androidTestImplementation 'androidx.test.espresso:espresso-core'
+
+    //Kotlin coroutines
+    api "org.jetbrains.kotlinx:kotlinx-coroutines-core"
+    api "org.jetbrains.kotlinx:kotlinx-coroutines-android"
+
+    implementation 'com.jakewharton.timber:timber:4.7.1'
+
+    def aws_sdk_version = "0.15.2-beta"
+    implementation("aws.sdk.kotlin:s3:$aws_sdk_version")
+}
