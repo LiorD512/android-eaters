@@ -17,6 +17,7 @@ data class RestaurantInitParams(
     var isFavorite: Boolean,
     var query: String? = null,
     var isFromSearch: Boolean = false,
+    val shouldOpenCart: Boolean = false,
 
     /** ANALYTICS PARAMS **/
     val cookingSlot: FeedDishCookingSlot? = null,

@@ -51,8 +51,8 @@ import com.bupp.wood_spoon_eaters.features.restaurant.dish_page.DishPageViewMode
 import com.bupp.wood_spoon_eaters.features.restaurant.restaurant_page.RestaurantPageViewModel
 import com.bupp.wood_spoon_eaters.features.reviews.ReviewsViewModel
 import com.bupp.wood_spoon_eaters.features.splash.SplashViewModel
-import com.bupp.wood_spoon_eaters.features.upsale.CartViewModel
-import com.bupp.wood_spoon_eaters.features.upsale.UpSaleViewModel
+import com.bupp.wood_spoon_eaters.features.upsale.cart.CartViewModel
+import com.bupp.wood_spoon_eaters.features.upsale.upsale.UpSaleViewModel
 import com.bupp.wood_spoon_eaters.features.upsale.data_source.repository.UpSaleRepository
 import com.bupp.wood_spoon_eaters.managers.*
 import com.bupp.wood_spoon_eaters.managers.location.LocationManager
@@ -171,9 +171,9 @@ val appModule = module {
     viewModel { GiftViewModel(get(), get(), get()) }
     viewModel { GiftActionsViewModel(get(), get()) }
 
-    viewModel { UpSaleNCartViewModel(get(), get()) }
-    viewModel { CartViewModel(get(), get(), get(), get(), get(), get())}
-    viewModel { UpSaleViewModel(get(), get(), get(), get(), get())}
+    viewModel { UpSaleNCartViewModel(get(), get(), get(), get(), get(), get()) }
+    viewModel { CartViewModel(get(), get(), get(), get(), get()) }
+    viewModel { UpSaleViewModel(get(), get(), get()) }
 
     //main
     viewModel {

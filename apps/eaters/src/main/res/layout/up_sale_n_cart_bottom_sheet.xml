@@ -1,26 +1,107 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/upsaleCartCoordinatorLayout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/transparent"
     app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
 
-        <View
-            android:id="@+id/view"
-            android:layout_width="77dp"
-            android:layout_height="4.8dp"
-            android:layout_gravity="center"
-            android:layout_marginTop="7.7dp"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:background="@drawable/silver_two_rounded_rect" />
+        <LinearLayout
+            android:id="@+id/upsaleCartMainLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/top_cornered_30_bkg"
+            android:orientation="vertical"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
-        <FrameLayout
-            android:id="@+id/upSaleAndCartFragmentContainer"
+                <LinearLayout
+                    android:id="@+id/upsaleCartTopLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                        <View
+                            android:id="@+id/view"
+                            android:layout_width="77dp"
+                            android:layout_height="4.8dp"
+                            android:layout_gravity="center"
+                            android:layout_marginTop="7.7dp"
+                            android:background="@drawable/silver_two_rounded_rect" />
+
+                        <FrameLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="17.5dp"
+                            android:layout_marginBottom="17.3dp">
+
+                                <ImageButton
+                                    android:id="@+id/upsaleCartCloseBtn"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="start|center"
+                                    android:layout_marginStart="15.4dp"
+                                    android:alpha="0"
+                                    android:background="@null"
+                                    android:src="@drawable/ic_arrow_left" />
+
+                                <TextView
+                                    android:id="@+id/upsaleCartTitle"
+                                    style="@style/LatoBlack15Dark"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center"
+                                    android:gravity="center"
+                                    android:letterSpacing="0.03"
+                                    android:text="cart page" />
+
+
+                        </FrameLayout>
+
+                        <View
+                            android:id="@+id/sep"
+                            android:layout_width="match_parent"
+                            android:layout_height="1.9dp"
+                            android:background="@color/silver" />
+
+                </LinearLayout>
+
+                <FrameLayout
+                    android:id="@+id/upSaleAndCartFragmentContainer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+        </LinearLayout>
+
+        <com.bupp.wood_spoon_eaters.features.free_delivery.FreeDeliveryProgressView
+            android:id="@+id/floatingCartFreeDeliveryView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@+id/view"/>
+            android:background="@color/white"
+            app:layout_constraintTop_toBottomOf="@id/upsaleCartMainLayout"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+        <FrameLayout
+            android:id="@+id/floatingCartBtnLayout"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/floating_cart_btn_height"
+            android:layout_gravity="bottom"
+            android:background="@drawable/transparent_to_white_80_gradient"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/upsaleCartMainLayout">
+
+                <com.bupp.wood_spoon_eaters.custom_views.BlueBtnCornered
+                    android:id="@+id/upSaleCartBtn"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginHorizontal="15.4dp"
+                    app:title="Go to checkout" />
+
+        </FrameLayout>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

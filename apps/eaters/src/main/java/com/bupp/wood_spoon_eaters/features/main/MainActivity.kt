@@ -34,6 +34,7 @@ import com.bupp.wood_spoon_eaters.utils.Utils
 import com.bupp.wood_spoon_eaters.views.CampaignBanner
 import com.bupp.wood_spoon_eaters.views.MainActivityTabLayout
 import com.bupp.wood_spoon_eaters.views.floating_buttons.WSFloatingButton
+import com.eatwoodspoon.android_utils.views.setSafeOnClickListener
 import com.eatwoodspoon.auth.WoodSpoonAuth
 import com.mikhaellopez.ratebottomsheet.AskRateBottomSheet
 import com.mikhaellopez.ratebottomsheet.RateBottomSheet
@@ -75,7 +76,9 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
     }
 
     fun initUi() {
-        binding.mainActFloatingCartBtn.setOnClickListener { openCartNUpsaleDialog() }
+        binding.mainActFloatingCartBtn.setSafeOnClickListener {
+            viewModel.openRestaurantFromViewCart()
+        }
     }
 
     private fun initMainViewPager() {
@@ -180,7 +183,7 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
             val menuItemId = intent.getLongExtra("menu_item_id", -1)
             Log.d("wowMain", "branch: cook $chefId, menuItem: $menuItemId")
             if (chefId > 0) {
-                viewModel.getRestaurant(chefId)
+                viewModel.getRestaurant(chefId, false)
                 viewModel.logDeepLinkEvent(chefId)
             }
         }
@@ -274,15 +277,9 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
         viewModel.onFloatingCartStateChanged(isShowing)
     }
 
-    private fun openCartNUpsaleDialog() {
-        UpSaleNCartBottomSheet().show(supportFragmentManager, Constants.UPSALE_AND_CART_BOTTOM_SHEET)
-    }
-
     override fun onCartDishCLick(customOrderItem: CustomOrderItem) {
         afterOrderResult.launch(Intent(this, RestaurantActivity::class.java).putExtra(Constants.ARG_DISH, customOrderItem))
     }
-
-    override fun onCartDishCLick(menuItem: MenuItem) {}
 
     override fun onGoToCheckoutClicked() {
         startCheckoutForResult.launch(Intent(this, OrderCheckoutActivity::class.java))

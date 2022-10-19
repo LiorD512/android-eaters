@@ -200,6 +200,7 @@ data class FeedRestaurantSection(
         false,
         null,
         isFromSearch,
+        false,
         cookingSlot,
         sectionTitle,
         sectionOrder,

@@ -177,7 +177,7 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
         mainViewModel.openDishPageWithOrderItem(customOrderItem)
     }
 
-    override fun onCartDishCLick(menuItem: MenuItem) {
+    override fun onUpSaleDishCLick(menuItem: MenuItem) {
         mainViewModel.openDishPage(menuItem, viewModel.currentCookingSlot)
     }
 
@@ -237,6 +237,11 @@ class RestaurantPageFragment : Fragment(R.layout.fragment_restaurant_page),
         }
         viewModel.freeDeliveryData.observe(viewLifecycleOwner) { freeDeliveryState ->
             setFreeDeliveryViewState(freeDeliveryState)
+        }
+        viewModel.shouldOpenCart.observe(viewLifecycleOwner){
+            if (it){
+                reOpenCart()
+            }
         }
     }
 

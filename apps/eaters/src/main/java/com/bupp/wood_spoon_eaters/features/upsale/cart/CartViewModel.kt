@@ -1,8 +1,9 @@
-package com.bupp.wood_spoon_eaters.features.upsale
+package com.bupp.wood_spoon_eaters.features.upsale.cart
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.map
 import androidx.lifecycle.viewModelScope
+import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.common.FlowEventsManager
 import com.bupp.wood_spoon_eaters.domain.FeatureFlagFreeDeliveryUseCase
 import com.bupp.wood_spoon_eaters.domain.comon.execute
@@ -32,7 +33,6 @@ data class CartState(
 )
 
 class CartViewModel(
-    private val featureFlagFreeDeliveryUseCase: FeatureFlagFreeDeliveryUseCase,
     val cartManager: CartManager,
     val eaterDataManager: EaterDataManager,
     private val flowEventsManager: FlowEventsManager,
@@ -45,18 +45,13 @@ class CartViewModel(
 
     val currentOrderData = cartManager.getCurrentOrderData()
     private val currentCookingSlot = cartManager.getCurrentCookingSlot()
-    val freeDeliveryData =
-        currentOrderData.map {
-            it.mapOrderToFreeDeliveryState(
-                appSettingsRepository.getCurrentFreeDeliveryThreshold(),
-                featureFlagFreeDeliveryUseCase.execute(),
-                showAddMoreItemsBtn = false
-            )
-        }
 
     private val shouldShowSubtotal =
         appSettingsRepository.featureFlag(EatersFeatureFlags.ShowCartSubtotal) ?: false
 
+    init {
+        logPageEvent()
+    }
 
      fun fetchCartData() {
         val list = mutableListOf<CartBaseAdapterItem>()
@@ -83,14 +78,19 @@ class CartViewModel(
         }
     }
 
-    fun updateDishInCart(quantity: Int, dishId: Long, note: String? = null, orderItemId: Long) {
+    fun updateDishInCart(customOrderItem: CustomOrderItem) {
+        val dishId = customOrderItem.orderItem.dish.id
+        val note = customOrderItem.orderItem.notes
+        val orderId = customOrderItem.orderItem.id
+        val currentQuantity = customOrderItem.orderItem.quantity
         viewModelScope.launch {
-            cartManager.updateDishInExistingCart(quantity, note, dishId, orderItemId)
+            cartManager.updateDishInExistingCart(currentQuantity.plus(1), note, dishId, orderId)
         }
+        logSwipeDishInCart(Constants.EVENT_SWIPE_ADD_DISH_IN_CART, customOrderItem)
     }
 
-    fun logPageEvent(eventType: FlowEventsManager.FlowEvents) {
-        flowEventsManager.trackPageEvent(eventType)
+    fun logPageEvent() {
+        flowEventsManager.trackPageEvent(FlowEventsManager.FlowEvents.PAGE_VISIT_CART)
     }
 
     fun logSwipeDishInCart(eventName: String, item: CustomOrderItem) {
@@ -106,28 +106,14 @@ class CartViewModel(
         return data
     }
 
-    fun removeSingleOrderItemId(orderItemId: Long) {
+    fun removeSingleOrderItemId(customOrderItem: CustomOrderItem) {
+        val orderItemId = customOrderItem.orderItem.id
         viewModelScope.launch {
             cartManager.removeOrderItems(orderItemId, true)
         }
-    }
-
-
-    fun reportThresholdAchievedEvent(){
-        reportEvent { orderId, screen ->
-            FreeDeliveryEvent.ThresholdAchievedEvent(orderId, screen)
-        }
-    }
-
-    fun reportViewClickedEvent(){
-        reportEvent { orderId, screen ->
-            FreeDeliveryEvent.ViewClickedEvent(orderId, screen)
-        }
-    }
-
-    private fun reportEvent(factory: (orderId: Int, screen: String) -> FreeDeliveryEvent) {
-        val orderId = currentOrderData.value?.id?.toInt() ?: -1
-        val screen = "cart_page"
-        eatersAnalyticsTracker.reportEvent(factory.invoke(orderId, screen))
+        logSwipeDishInCart(
+            Constants.EVENT_SWIPE_REMOVE_DISH_IN_CART,
+            customOrderItem
+        )
     }
 }

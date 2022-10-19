@@ -1,4 +1,4 @@
-package com.bupp.wood_spoon_eaters.features.upsale
+package com.bupp.wood_spoon_eaters.features.upsale.upsale
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -15,12 +15,14 @@ import com.bupp.wood_spoon_eaters.model.MenuItem
 import com.bupp.wood_spoon_eaters.views.swipeable_dish_item.SwipeableBaseItemViewHolder
 import com.bupp.wood_spoon_eaters.views.swipeable_dish_item.swipeableAdapter.SwipeableAdapter
 
-class UpSaleAdapter(val listener: UpSaleAdapterListener) : SwipeableAdapter<UpsaleAdapterItem>(DiffCallback()) {
+class UpSaleAdapter(val listener: UpSaleAdapterListener) : SwipeableAdapter<UpsaleAdapterItem>(
+    DiffCallback()
+) {
 
     interface UpSaleAdapterListener {
         fun onDishSwipedAdd(item: UpsaleAdapterItem)
         fun onDishSwipedRemove(item: UpsaleAdapterItem)
-        fun onCartItemClicked(item: MenuItem)
+        fun onUpsaleItemClicked(item: MenuItem)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -47,18 +49,16 @@ class UpSaleAdapter(val listener: UpSaleAdapterListener) : SwipeableAdapter<Upsa
 
         fun bindItem(dishItem: UpsaleAdapterItem, listener: UpSaleAdapterListener) {
             val dish = dishItem.menuItem?.dish
-            dish?.let {
-                name.text = dish.name
-                description.text = dish.description
-                price.text = dish.price?.formatedValue
-                Glide.with(itemView.context).load(dish.thumbnail?.url).into(img)
-                quantity.text = dishItem.cartQuantity.toString()
-                quantity.isVisible = dishItem.cartQuantity > 0
-            }
+            name.text = dish?.name
+            description.text = dish?.description
+            price.text = dish?.price?.formatedValue
+            Glide.with(itemView.context).load(dish?.thumbnail?.url).into(img)
+            quantity.text = dishItem.cartQuantity.toString()
+            quantity.isVisible = dishItem.cartQuantity > 0
 
             mainLayout.setOnClickListener {
                 dishItem.menuItem?.let {
-                    listener.onCartItemClicked(it)
+                    listener.onUpsaleItemClicked(it)
                 }
             }
         }

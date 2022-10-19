@@ -59,6 +59,8 @@ class RestaurantPageViewModel(
     val dishListLiveData = MutableLiveData<DishListData>()
     val dishSearchListLiveData = MutableLiveData<DishListData>()
 
+    val shouldOpenCart = MutableLiveData<Boolean>()
+
     data class DishListData(val dishes: List<DishSections>, val animateList: Boolean = true)
 
     val clearCartEvent = cartManager.getClearCartUiEvent()
@@ -95,6 +97,8 @@ class RestaurantPageViewModel(
             selectedDishId = it
             searchedCookingSlotId = params.cookingSlot?.id
         }
+
+        shouldOpenCart.postValue(params.shouldOpenCart)
     }
 
     fun reloadPage(showSkeleton: Boolean = true) {

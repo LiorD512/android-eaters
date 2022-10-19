@@ -105,7 +105,7 @@ class MainViewModel(
         }
     }
 
-    fun getRestaurant(id: Long) {
+    fun getRestaurant(id: Long, shouldOpenCart: Boolean) {
         viewModelScope.launch(Dispatchers.IO) {
             val lastFeedRequest = feedDataManager.getLastFeedRequest()
             val result = restaurantRepository.getRestaurant(id, lastFeedRequest)
@@ -118,7 +118,8 @@ class MainViewModel(
                         rating = restaurant.getAvgRating(),
                         restaurantName = restaurant.restaurantName,
                         chefName = restaurant.getFullName(),
-                        isFavorite = restaurant.isFavorite ?: false
+                        isFavorite = restaurant.isFavorite ?: false,
+                        shouldOpenCart = shouldOpenCart
                     )
                     startRestaurantActivity(param)
                 }
@@ -227,6 +228,10 @@ class MainViewModel(
 
     fun refreshSearchData() {
         refreshSearchData.postValue(true)
+    }
+
+    fun openRestaurantFromViewCart(){
+        getRestaurant(floatingCartBtnEvent.value?.restaurantId ?: -1, true)
     }
 
     companion object {

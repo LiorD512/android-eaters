@@ -66,7 +66,7 @@ class CartManager(
         orderLiveData.observeForever(){
             if (it != null){
                 GlobalScope.launch {
-                    upSaleRepository.getUpSaleItems(it.id, true)
+                    upSaleRepository.fetchUpSaleItemsRemote(it.id)
                 }
             }
         }

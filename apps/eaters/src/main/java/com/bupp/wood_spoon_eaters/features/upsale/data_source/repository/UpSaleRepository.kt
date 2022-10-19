@@ -15,21 +15,9 @@ class UpSaleRepository(
     private val memoryUpSaleItemsDataSource: MemoryUpSaleItemsDataSource
 ) {
 
-    suspend fun getUpSaleItems(
-        orderId: Long,
-        forceFetch: Boolean = false
-    ): UpSaleData? {
+    private val orderIdOfAlreadyShowedUpSaleScreen = mutableListOf<Long>()
 
-        val localData = if (!forceFetch) {
-            getUpSaleItemsLocally(orderId)
-        } else {
-            null
-        }
-
-        return localData ?: fetchUpSaleItemsRemote(orderId)
-    }
-
-    private suspend fun fetchUpSaleItemsRemote(orderId: Long): UpSaleData? {
+    suspend fun fetchUpSaleItemsRemote(orderId: Long): UpSaleData? {
         val remoteSource = apiService.getUpsaleItemsByOrderId(orderId)
         if (remoteSource.data != null) {
             memoryUpSaleItemsDataSource.upSaleItems.value = UpSaleData(orderId, remoteSource.data)
@@ -41,4 +29,11 @@ class UpSaleRepository(
     fun getUpSaleItemsLocally(orderId: Long): UpSaleData? =
         memoryUpSaleItemsDataSource.upSaleItems.value.takeIf { it?.orderId == orderId }
 
+    fun getOrderIdsOfShownUpSaleScreen():List<Long>{
+        return orderIdOfAlreadyShowedUpSaleScreen
+    }
+
+    fun setUpSaleItemShowedForThisOrder(orderId: Long){
+        orderIdOfAlreadyShowedUpSaleScreen.add(orderId)
+    }
 }

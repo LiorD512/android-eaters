@@ -188,4 +188,9 @@
     <string name="free_delivery_getting_free_delivery_message">Congrats, you’re getting free delivery!</string>
     <string name="free_delivery_amount_remain_message">Just %s more for free delivery</string>
 
+    //UpSale
+    <string name="upsale_button_no_items_added_title">No thanks</string>
+    <string name="upsale_button_items_added_title">Continue</string>
+    <string name="upsale_title">Anything else?</string>
+    <string name="go_to_checkout">Go to checkout</string>
 </resources>
