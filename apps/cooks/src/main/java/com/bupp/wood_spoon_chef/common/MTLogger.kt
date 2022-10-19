@@ -2,6 +2,7 @@ package com.bupp.wood_spoon_chef.common
 
 import android.util.Log
 import com.bupp.wood_spoon_chef.BuildConfig
+import timber.log.Timber
 import io.shipbook.shipbooksdk.Log as SBLog
 
 class MTLogger {
@@ -82,6 +83,9 @@ class MTLogger {
 
     private fun log(level: Int, tag: String?, msg: String, cacheLog: Boolean) {
         try {
+            // MTLogger should be removed in favor of Timber.
+            Timber.tag(tag).log(level, msg)
+
             val body = if (tag.isNullOrEmpty()) {
                 "${getLink()} --> $msg"
             } else {

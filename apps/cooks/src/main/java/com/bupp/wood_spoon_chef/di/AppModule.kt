@@ -35,12 +35,15 @@ import com.bupp.wood_spoon_chef.data.repositories.AppSettingsRepositoryImpl
 import com.bupp.wood_spoon_chef.domain.*
 import com.bupp.wood_spoon_chef.presentation.features.main.calendar.cookingSlotDetails.CookingSlotDetailsViewModelNew
 import com.bupp.wood_spoon_chef.utils.UserSettings
+import com.eatwoodspoon.logsender.Logger
 import com.google.firebase.analytics.ktx.analytics
 import com.google.firebase.ktx.Firebase
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
 val appModule = module {
+
+    single { Logger.instance }
 
     // DataSource
     single { MemoryCalendarDataSource() }
@@ -59,7 +62,7 @@ val appModule = module {
     //Repo
     single { UserRepository(get(), get(), get(), get(), get()) }
     single { MetaDataRepository(get(), get(), StaticFeatureFlagsListProvider(), get()) }
-    single<AppSettingsRepository> { AppSettingsRepositoryImpl(get(), get()) }
+    single<AppSettingsRepository> { AppSettingsRepositoryImpl(get(), get(), get()) }
     single { DishRepository(get(), get(), get(), get(), get()) }
     single { CookingSlotRepository(get(), get(), get(), get()) }
     single { OrderRepository(get(), get()) }
@@ -75,7 +78,7 @@ val appModule = module {
 
     // analytics
     single { Firebase.analytics }
-    single { ChefAnalyticsTracker(get(), get()) }
+    single { ChefAnalyticsTracker(get(), get(), get()) }
 
     //VIEW MODELS
     //splash and getCode

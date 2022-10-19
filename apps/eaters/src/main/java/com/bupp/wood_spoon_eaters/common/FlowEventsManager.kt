@@ -2,6 +2,7 @@ package com.bupp.wood_spoon_eaters.common
 
 import com.bupp.wood_spoon_eaters.managers.CampaignManager
 import com.bupp.wood_spoon_eaters.managers.EatersAnalyticsTracker
+import onFlowEventFired
 
 class FlowEventsManager(
     private val campaignManager: CampaignManager,

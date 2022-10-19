@@ -1,5 +1,6 @@
 package com.bupp.wood_spoon_eaters.repositories
 
+import android.content.Context
 import androidx.annotation.Keep
 
 interface FeatureFlagsListProvider {
@@ -12,6 +13,8 @@ interface FeatureFlagKey {
 
 fun AppSettingsRepository.featureFlag(key: FeatureFlagKey) = featureFlag(key.key)
 
+fun AppSettingsRepository.Companion.cachedFeatureFlag(key: FeatureFlagKey, context: Context) = cachedFeatureFlag(key.key, context)
+
 @Keep
 enum class EatersFeatureFlags(override val key: String) : FeatureFlagKey {
     TestMobileShowBuildNumber(key = "test_mobile_show_build_number"),
@@ -21,7 +24,9 @@ enum class EatersFeatureFlags(override val key: String) : FeatureFlagKey {
     GiftIsEnabled(key = "mobile_order_is_gift_enabled"),
     ShowCartSubtotal(key = "show_cart_subtotal"),
     NewAuth(key = "new_auth"),
-    FreeDeliveryEnabled(key = "backend_waive_delivery_fee_based_on_subtotal")
+    FreeDeliveryEnabled(key = "backend_waive_delivery_fee_based_on_subtotal"),
+    LogS3Enabled(key = "mobile_log_s3_enabled"),
+    LogShipbookEnabled(key = "mobile_log_shipbook_enabled"),
 }
 
 class StaticFeatureFlagsListProvider : FeatureFlagsListProvider {

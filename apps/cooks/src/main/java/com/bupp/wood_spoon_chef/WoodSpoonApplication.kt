@@ -2,10 +2,22 @@ package com.bupp.wood_spoon_chef
 
 import android.app.Application
 import com.bupp.wood_spoon_chef.common.MTLogger
+import com.bupp.wood_spoon_chef.data.repositories.AppSettingsRepository
+import com.bupp.wood_spoon_chef.data.repositories.CooksFeatureFlags
+import com.bupp.wood_spoon_chef.data.repositories.cachedFeatureFlag
 import com.bupp.wood_spoon_chef.di.appModule
 import com.bupp.wood_spoon_chef.di.networkModule
 import com.bupp.wood_spoon_chef.di.cookingSlotModule
+import com.eatwoodspoon.analytics.DeviceId
+import com.eatwoodspoon.analytics.SessionId
 import com.eatwoodspoon.analytics.analyticsModule
+import com.eatwoodspoon.analytics.app_attributes.AppAttributesDataSource
+import com.eatwoodspoon.analytics.app_attributes.AppAttributesDataSourceFactory
+import com.eatwoodspoon.logsender.Logger
+import com.eatwoodspoon.logsender.LoggerConfig
+import com.eatwoodspoon.logsender.Preprocessor
+import com.eatwoodspoon.logsender.S3SenderConfig
+import com.eatwoodspoon.timber.S3SenderTree
 import com.microsoft.appcenter.AppCenter
 import com.microsoft.appcenter.crashes.Crashes
 import com.microsoft.appcenter.distribute.Distribute
@@ -19,6 +31,7 @@ import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin
 import org.koin.core.logger.Level
+import timber.log.Timber
 
 
 class WoodSpoonApplication : Application() {
@@ -33,7 +46,9 @@ class WoodSpoonApplication : Application() {
         super.onCreate()
 
         instance = this
-        initShipBook()
+        initLogging()
+        Timber.i("test_event_app_started")
+
 
         // start Koin context
         startKoin {
@@ -75,8 +90,47 @@ class WoodSpoonApplication : Application() {
     }
 
     private fun initShipBook() {
-        ShipBook.start(this, BuildConfig.SHIPBOOK_APP_ID, BuildConfig.SHIPBOOK_APP_KEY)
-        ShipBook.addWrapperClass(MTLogger::class.java.name)
+        if(AppSettingsRepository.cachedFeatureFlag(CooksFeatureFlags.mobile_log_shipbook_enabled, this) != false) {
+            ShipBook.start(this, BuildConfig.SHIPBOOK_APP_ID, BuildConfig.SHIPBOOK_APP_KEY)
+            ShipBook.addWrapperClass(MTLogger::class.java.name)
+        }
+    }
+
+    private fun initLogging() {
+        initShipBook()
+        if(AppSettingsRepository.cachedFeatureFlag(CooksFeatureFlags.mobile_log_s3_enabled, this) != false) {
+            Logger.createSingletonInstance(
+                this,
+                LoggerConfig(
+                    s3config = S3SenderConfig(
+                        credentials = S3SenderConfig.Credentials.fromAssets(
+                            this,
+                            "aws-logger-credentials.properties"
+                        ),
+                        deviceId = DeviceId.getValue(this),
+                        logsDirectoryName = "Logs"
+                    )
+                ),
+                object : Preprocessor {
+                    val appAttributesDataSource: AppAttributesDataSource by lazy {
+                        AppAttributesDataSourceFactory.create(this@WoodSpoonApplication)
+                    }
+
+                    override fun process(logItem: Map<String, Any>): Map<String, Any> {
+                        return appAttributesDataSource.appAttributes + mapOf(
+                            "session_id" to SessionId.value,
+                            "timestamp" to System.currentTimeMillis(),
+                            "device_id" to DeviceId.getValue(this@WoodSpoonApplication),
+                        ) + logItem
+                    }
+                },
+            )
+            Timber.plant(S3SenderTree(Logger.instance))
+        }
+
+        if(BuildConfig.DEBUG) {
+            Timber.plant(Timber.DebugTree())
+        }
     }
 
 }

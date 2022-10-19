@@ -8,6 +8,7 @@ import com.bupp.wood_spoon_chef.data.remote.model.Cook
 import com.bupp.wood_spoon_chef.utils.DateUtils
 import com.eatwoodspoon.analytics.SessionId
 import com.eatwoodspoon.analytics.events.AnalyticsEvent
+import com.eatwoodspoon.logsender.Logger
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.segment.analytics.Analytics
 import com.segment.analytics.Properties
@@ -18,10 +19,15 @@ import io.shipbook.shipbooksdk.ShipBook
 //todo 🚩 Keep in mind this ChefAnalyticsTracker treks a sensitive user data like email, phoneNumber, fullName.
 class ChefAnalyticsTracker(
     val context: Context,
-    private var firebaseAnalytics: FirebaseAnalytics
-) {
+    private val firebaseAnalytics: FirebaseAnalytics,
+    private val logSender: Logger
+    ) {
+
+    private var currentUserId: String? = null
 
     fun trackEvent(eventName: String, params: Map<String, Any?>? = null) {
+
+        val enrichedParams = enrichParameters(eventName, params).filterValues { it != null } as Map<String, Any>
 
         val effectiveParams = mutableMapOf<String, Any?>(
             "session_id" to SessionId.value
@@ -38,6 +44,9 @@ class ChefAnalyticsTracker(
         Analytics.with(context).track(eventName, Properties().apply {
             putAll(effectiveParams)
         })
+
+        //WS
+        logSender.log(enrichedParams)
     }
 
     fun trackErrorToFirebase(eventName: String, errorMsg: String) {
@@ -46,10 +55,20 @@ class ChefAnalyticsTracker(
         logToFirebase(bundle)
     }
 
+    private fun enrichParameters(eventName: String, params: Map<String, Any?>?): Map<String, Any?> {
+        return mutableMapOf<String, Any?>(
+            "user_id" to currentUserId,
+            "name" to eventName
+        ).apply {
+            params?.let { putAll(it) }
+        }.toMap()
+    }
+
     fun initSegment(eater: Cook?, address: Address?) {
         eater?.let { user ->
             val userIdString = user.id.toString()
             val unifiedUserIdString = "Cook-$userIdString"
+            currentUserId = userIdString
 
             val traits = Traits()
                 .putName(user.getFullName())

@@ -46,6 +46,7 @@ dependencies {
     implementation project(path: ':core:android-utils')
     implementation project(path: ':shared:presentation')
     implementation project(path: ':shared:auth')
+    implementation project(path: ':core:logger')
 
 //    implementation 'org.jetbrains.kotlinx:kotlinx-metadata-jvm:0.3.0'
 

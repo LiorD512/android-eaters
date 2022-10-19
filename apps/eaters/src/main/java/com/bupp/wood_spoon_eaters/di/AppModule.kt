@@ -60,6 +60,7 @@ import com.bupp.wood_spoon_eaters.network.base_repos.*
 import com.bupp.wood_spoon_eaters.network.result_handler.ErrorManger
 import com.bupp.wood_spoon_eaters.network.result_handler.ResultManager
 import com.bupp.wood_spoon_eaters.repositories.*
+import com.eatwoodspoon.logsender.Logger
 import com.eatwoodspoon.analytics.AnalyticsEventReporter
 import com.eatwoodspoon.auth.WoodSpoonAuthConfigurationProvider
 import com.google.firebase.analytics.ktx.analytics
@@ -78,6 +79,7 @@ val appModule = module {
     single { MemoryAppReviewDataSource() }
     single { MemoryUpSaleItemsDataSource() }
 
+    single { Logger.instance }
     //global
     single { FcmManager(get()) }
     single { UserSettings(get(), get()) }
@@ -88,11 +90,13 @@ val appModule = module {
     //repos
     single { MetaDataRepository(get()) }
     single { MetaDataRepositoryImpl(get(), get()) }
+    factory<FeatureFlagLocalDataSource> { FeatureFlagLocalDataSourceImpl(get()) }
     single<AppSettingsRepository> {
         AppSettingsRepositoryImpl(
             get(),
             get(),
             StaticFeatureFlagsListProvider(),
+            get(),
             get(),
             get()
         )
@@ -143,7 +147,7 @@ val appModule = module {
 
     // analytics
     single { Firebase.analytics }
-    single { EatersAnalyticsTracker(get(), get()) }.bind(AnalyticsEventReporter::class)
+    single { EatersAnalyticsTracker(get(), get(), get()) }.bind(AnalyticsEventReporter::class)
 
     //bottom sheet
     viewModel { AddressMenuViewModel(get(), get(), get()) }
@@ -170,6 +174,7 @@ val appModule = module {
     viewModel { FeesAndTaxViewModel(get(), get()) }
     viewModel { GiftViewModel(get(), get(), get()) }
     viewModel { GiftActionsViewModel(get(), get()) }
+
 
     viewModel { UpSaleNCartViewModel(get(), get(), get(), get(), get(), get()) }
     viewModel { CartViewModel(get(), get(), get(), get(), get()) }

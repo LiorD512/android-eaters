@@ -5,13 +5,14 @@ import android.os.Bundle
 import androidx.core.os.bundleOf
 import com.bupp.wood_spoon_eaters.BuildConfig
 import com.bupp.wood_spoon_eaters.common.Constants
-import com.bupp.wood_spoon_eaters.common.FlowEventsManager
 import com.bupp.wood_spoon_eaters.model.Address
 import com.bupp.wood_spoon_eaters.model.Eater
 import com.bupp.wood_spoon_eaters.utils.DateUtils
+import com.eatwoodspoon.analytics.app_attributes.AppAttributesDataSource
 import com.eatwoodspoon.analytics.AnalyticsEventReporter
 import com.eatwoodspoon.analytics.SessionId
 import com.eatwoodspoon.analytics.events.AnalyticsEvent
+import com.eatwoodspoon.logsender.Logger
 import com.facebook.appevents.AppEventsConstants
 import com.facebook.appevents.AppEventsLogger
 import com.google.firebase.analytics.FirebaseAnalytics
@@ -25,11 +26,15 @@ import java.util.*
 //todo 🚩 Keep in mind this EatersAnalyticsTracker treks a sensitive user data like email, phoneNumber, fullName.
 class EatersAnalyticsTracker(
     val context: Context,
-    private var firebaseAnalytics: FirebaseAnalytics
-): AnalyticsEventReporter {
+    private val firebaseAnalytics: FirebaseAnalytics,
+    private val logSender: Logger
+) : AnalyticsEventReporter {
 
     private var currentUserId: String? = null
     private val shouldFireEvent = true//FlavorClassThing.equals("release", true)
+
+    private val facebook = AppEventsLogger.newLogger(context)
+    val segment: Analytics = Analytics.with(context)
 
     fun initSegment(eater: Eater?, address: Address?) {
         eater?.let { user ->
@@ -55,7 +60,7 @@ class EatersAnalyticsTracker(
                 )
             }
 
-            Analytics.with(context).apply {
+            segment.apply {
                 identify(userIdString, traits, null)
                 alias(unifiedUserIdString)
                 identify(unifiedUserIdString, traits, null)
@@ -67,8 +72,16 @@ class EatersAnalyticsTracker(
             UXCam.setUserProperty("name", user.getFullName() ?: "N/A")
             UXCam.setUserProperty("phone", user.phoneNumber ?: "N/A")
             UXCam.setUserProperty("created_at", DateUtils.parseDateToDate(user.createdAt))
-
         }
+    }
+
+    private fun enrichParameters(eventName: String, params: Map<String, Any?>?): Map<String, Any?> {
+        return mutableMapOf<String, Any?>(
+            "user_id" to currentUserId,
+            "name" to eventName
+        ).apply {
+            params?.let { putAll(it) }
+        }.toMap()
     }
 
 
@@ -77,7 +90,11 @@ class EatersAnalyticsTracker(
             val logger = AppEventsLogger.newLogger(context)
             val params = Bundle()
             params.putString(AppEventsConstants.EVENT_PARAM_CONTENT, "[{\"orderId\": $orderId]")
-            logger.logPurchase(BigDecimal.valueOf(purchaseCost), Currency.getInstance("USD"), params)
+            logger.logPurchase(
+                BigDecimal.valueOf(purchaseCost),
+                Currency.getInstance("USD"),
+                params
+            )
         }
     }
 
@@ -97,16 +114,25 @@ class EatersAnalyticsTracker(
 
     private fun logFBAddToCart(eventData: Map<String, Any>?) {
         if (shouldFireEvent) {
-            val logger = AppEventsLogger.newLogger(context)
             val params = Bundle()
 
             val formattedPrice = (eventData?.get("dish_price") as String).replace("$", "")
 
-            params.putString(AppEventsConstants.EVENT_PARAM_CONTENT, eventData.get("dish_name") as String?)
+            params.putString(
+                AppEventsConstants.EVENT_PARAM_CONTENT,
+                eventData.get("dish_name") as String?
+            )
             params.putString(AppEventsConstants.EVENT_PARAM_CONTENT_TYPE, "Dish")
-            params.putString(AppEventsConstants.EVENT_PARAM_CONTENT_ID, eventData.get("dish_id") as String?)
+            params.putString(
+                AppEventsConstants.EVENT_PARAM_CONTENT_ID,
+                eventData.get("dish_id") as String?
+            )
             params.putString(AppEventsConstants.EVENT_PARAM_CURRENCY, "USD")
-            logger.logEvent(AppEventsConstants.EVENT_NAME_ADDED_TO_CART, formattedPrice.toDouble(), params)
+            facebook.logEvent(
+                AppEventsConstants.EVENT_NAME_ADDED_TO_CART,
+                formattedPrice.toDouble(),
+                params
+            )
         }
     }
 
@@ -117,34 +143,48 @@ class EatersAnalyticsTracker(
 
             val formattedPrice = (eventData?.get("dish_price") as String).replace("$", "")
 
-            params.putString(AppEventsConstants.EVENT_PARAM_CONTENT, eventData.get("dish_name") as String?)
+            params.putString(
+                AppEventsConstants.EVENT_PARAM_CONTENT,
+                eventData.get("dish_name") as String?
+            )
             params.putString(AppEventsConstants.EVENT_PARAM_CONTENT_TYPE, "Dish-Upsale")
-            params.putString(AppEventsConstants.EVENT_PARAM_CONTENT_ID, eventData.get("dish_id") as String?)
+            params.putString(
+                AppEventsConstants.EVENT_PARAM_CONTENT_ID,
+                eventData.get("dish_id") as String?
+            )
             params.putString(AppEventsConstants.EVENT_PARAM_CURRENCY, "USD")
-            logger.logEvent(AppEventsConstants.EVENT_NAME_ADDED_TO_CART, formattedPrice.toDouble(), params)
+            logger.logEvent(
+                AppEventsConstants.EVENT_NAME_ADDED_TO_CART,
+                formattedPrice.toDouble(),
+                params
+            )
         }
     }
 
     private fun logFBCreateAccount(eventData: Map<String, Any>?) {
         if (shouldFireEvent) {
-            val logger = AppEventsLogger.newLogger(context)
             val params = Bundle()
 
             params.putString("user_id", eventData?.get("user_id") as String?)
-            logger.logEvent(AppEventsConstants.EVENT_NAME_COMPLETED_REGISTRATION, params)
+            facebook.logEvent(AppEventsConstants.EVENT_NAME_COMPLETED_REGISTRATION, params)
         }
     }
 
     private fun logOnRestaurantClickEvent(eventData: Map<String, Any>?) {
         if (shouldFireEvent) {
-            val logger = AppEventsLogger.newLogger(context)
             val params = Bundle()
 
-            params.putString(AppEventsConstants.EVENT_PARAM_CONTENT, eventData?.get("home_chef_name") as String?)
+            params.putString(
+                AppEventsConstants.EVENT_PARAM_CONTENT,
+                eventData?.get("home_chef_name") as String?
+            )
             params.putString(AppEventsConstants.EVENT_PARAM_CONTENT_TYPE, "Home Chef")
-            params.putString(AppEventsConstants.EVENT_PARAM_CONTENT_ID, eventData?.get("home_chef_id") as String?)
+            params.putString(
+                AppEventsConstants.EVENT_PARAM_CONTENT_ID,
+                eventData?.get("home_chef_id") as String?
+            )
             params.putString(AppEventsConstants.EVENT_PARAM_CURRENCY, "USD")
-            logger.logEvent(AppEventsConstants.EVENT_NAME_VIEWED_CONTENT, 0.0, params)
+            facebook.logEvent(AppEventsConstants.EVENT_NAME_VIEWED_CONTENT, 0.0, params)
         }
     }
 
@@ -167,9 +207,15 @@ class EatersAnalyticsTracker(
 
             val formattedPrice = (eventData?.get("dish_price") as String).replace("$", "")
 
-            params.putString(AppEventsConstants.EVENT_PARAM_CONTENT, eventData["dish_name"] as String?)
+            params.putString(
+                AppEventsConstants.EVENT_PARAM_CONTENT,
+                eventData["dish_name"] as String?
+            )
             params.putString(AppEventsConstants.EVENT_PARAM_CONTENT_TYPE, "dISH")
-            params.putString(AppEventsConstants.EVENT_PARAM_CONTENT_ID, eventData.get("dish_id") as String?)
+            params.putString(
+                AppEventsConstants.EVENT_PARAM_CONTENT_ID,
+                eventData.get("dish_id") as String?
+            )
             params.putString(AppEventsConstants.EVENT_PARAM_CURRENCY, "USD")
 
             formattedPrice.toDoubleOrNull()?.let {
@@ -179,111 +225,48 @@ class EatersAnalyticsTracker(
     }
 
     fun logEvent(eventName: String, params: Map<String, Any>? = null) {
-        if (params.isNullOrEmpty()) {
-            UXCam.logEvent(eventName)
-        } else {
-            UXCam.logEvent(eventName, params)
-        }
 
-        val eventData = Properties()
-        eventData.putValue("user_id", currentUserId)
-        eventData.putValue("session_id", SessionId.value)
+        val enrichedParams =
+            enrichParameters(eventName, params).filterValues { it != null } as Map<String, Any>
 
-        params?.forEach {
-            eventData.putValue(it.key, it.value)
-        }
+        //UXCam
+        UXCam.logEvent(eventName, params)
+
+        //Segment
+        logToSegment(eventName, params)
+
+        //WS
+        logSender.log(enrichedParams)
+
         when (eventName) {
             Constants.EVENT_ADD_DISH -> {
-                Analytics.with(context).track(Constants.EVENT_ADD_DISH, eventData)
                 logFBAddToCart(params)
             }
             Constants.EVENT_CREATE_ACCOUNT -> {
-                Analytics.with(context).track(Constants.EVENT_CREATE_ACCOUNT, eventData)
                 logFBCreateAccount(params)
             }
             Constants.EVENT_CLICK_RESTAURANT -> {
-                Analytics.with(context).track(Constants.EVENT_CLICK_RESTAURANT, eventData)
-                logOnRestaurantClickEvent(eventData)
+                logOnRestaurantClickEvent(enrichedParams)
             }
             Constants.EVENT_CLICK_ON_DISH -> {
-                Analytics.with(context).track(Constants.EVENT_CLICK_ON_DISH, eventData)
-                logOnDishClickEvent(eventData)
+                logOnDishClickEvent(enrichedParams)
             }
             Constants.EVENT_TIME_SPENT_IN_ONBOARDING -> {
-                Analytics.with(context).track(Constants.EVENT_TIME_SPENT_IN_ONBOARDING, eventData)
-                trackEventTimeSpentInOnboarding(eventData)
-            }
-            else -> {
-                Analytics.with(context).track(eventName, eventData)
+                trackEventTimeSpentInOnboarding(enrichedParams)
             }
         }
     }
 
-    fun onFlowEventFired(curEvent: FlowEventsManager.FlowEvents) {
-        when (curEvent) {
-            FlowEventsManager.FlowEvents.PAGE_VISIT_ON_BOARDING -> {
-                Analytics.with(context).screen("onboarding")
+    private fun logToSegment(eventName: String, params: Map<String, Any>?) {
+        val segmentProperties = Properties().apply {
+            params?.let {
+                putAll(it)
             }
-            FlowEventsManager.FlowEvents.PAGE_VISIT_GET_OTF_CODE -> {
-                Analytics.with(context).screen("getOtpCode")
-            }
-            FlowEventsManager.FlowEvents.PAGE_VISIT_CREATE_ACCOUNT -> {
-                Analytics.with(context).screen("createAccount")
-            }
-            FlowEventsManager.FlowEvents.PAGE_VISIT_FEED -> {
-                Analytics.with(context).screen("feed")
-            }
-            FlowEventsManager.FlowEvents.PAGE_VISIT_ACCOUNT -> {
-                Analytics.with(context).screen("account")
-            }
-            FlowEventsManager.FlowEvents.PAGE_VISIT_ORDERS -> {
-                Analytics.with(context).screen("orders")
-            }
-            FlowEventsManager.FlowEvents.PAGE_VISIT_PRIVACY_POLICY -> {
-                Analytics.with(context).screen("privacyPolicy")
-            }
-            FlowEventsManager.FlowEvents.PAGE_VISIT_QA -> {
-                Analytics.with(context).screen("popularQA")
-            }
-            FlowEventsManager.FlowEvents.PAGE_VISIT_COMMUNICATION_SETTINGS -> {
-                Analytics.with(context).screen("communicationSettings")
-            }
-            FlowEventsManager.FlowEvents.PAGE_VISIT_EDIT_ACCOUNT -> {
-                Analytics.with(context).screen("editAccount")
-            }
-            FlowEventsManager.FlowEvents.PAGE_VISIT_JOIN_HOME_CHEF -> {
-                Analytics.with(context).screen("joinHomeChef")
-            }
-            FlowEventsManager.FlowEvents.PAGE_VISIT_ADDRESSES -> {
-                Analytics.with(context).screen("addresses")
-            }
-            FlowEventsManager.FlowEvents.PAGE_VISIT_DELETE_ACCOUNT -> {
-                Analytics.with(context).screen("deleteAccount")
-            }
-            FlowEventsManager.FlowEvents.PAGE_VISIT_CHECKOUT -> {
-                Analytics.with(context).screen("checkout")
-            }
-            FlowEventsManager.FlowEvents.PAGE_VISIT_TRACK_ORDER -> {
-                Analytics.with(context).screen("trackOrder")
-            }
-            FlowEventsManager.FlowEvents.PAGE_VISIT_LOCATION_PERMISSION -> {
-                Analytics.with(context).screen("locationPersuasion")
-            }
-            FlowEventsManager.FlowEvents.PAGE_VISIT_DISH -> {
-                Analytics.with(context).screen("dish")
-            }
-            FlowEventsManager.FlowEvents.PAGE_VISIT_HOME_CHEF -> {
-                Analytics.with(context).screen("homeChef")
-            }
-            FlowEventsManager.FlowEvents.PAGE_VISIT_CART -> {
-                Analytics.with(context).screen("cart")
-            }
-            FlowEventsManager.FlowEvents.PAGE_VISIT_SEARCH -> {
-                Analytics.with(context).screen("view_search_page")
-            }
-            else -> {}
+
         }
+        segment.track(eventName, segmentProperties)
     }
+
 
     fun logErrorToFirebase(eventName: String, errorMsg: String) {
         val bundle = Bundle()

@@ -11,6 +11,8 @@ import com.bupp.wood_spoon_chef.data.remote.network.getMetaData
 import com.bupp.wood_spoon_chef.data.repositories.base_repos.BaseMetaDataRepository
 import com.bupp.wood_spoon_chef.utils.parseStringToTime
 import com.eatwoodspoon.analytics.app_attributes.AppAttributesDataSource
+import com.eatwoodspoon.android_utils.flows.toImmutable
+import kotlinx.coroutines.flow.MutableStateFlow
 import java.math.BigDecimal
 import java.util.*
 
@@ -21,7 +23,8 @@ class MetaDataRepository(
     private val appAttributesDataSource: AppAttributesDataSource
 ) : BaseMetaDataRepository {
 
-    private var metaDataObject: MetaDataModel? = null
+    private val _metaDataStateFlow = MutableStateFlow<MetaDataModel?>(null)
+    val metaDataStateFlow = _metaDataStateFlow.toImmutable()
 
     override suspend fun getMetaData(): ResponseResult<MetaDataModel> {
         return responseHandler.safeApiCall {
@@ -35,12 +38,12 @@ class MetaDataRepository(
     suspend fun initMetaData() {
         val result = getMetaData()
         if (result is ResponseSuccess) {
-            this.metaDataObject = result.data
+            this._metaDataStateFlow.value = result.data
         }
     }
 
     fun getMetaDataObject(): MetaDataModel? {
-        return this.metaDataObject
+        return this._metaDataStateFlow.value
     }
 
     fun getCuisineList(): List<CuisineIcon> {

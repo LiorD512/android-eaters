@@ -119,7 +119,7 @@ class CalendarViewModel(
         }?.toMutableMap()
 
         value?.let {
-            calendarEventsLaveData.value = it
+            calendarEventsLaveData.postValue(it)
         }
     }
 

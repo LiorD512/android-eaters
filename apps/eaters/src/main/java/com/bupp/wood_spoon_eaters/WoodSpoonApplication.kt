@@ -5,8 +5,20 @@ import com.bupp.wood_spoon_eaters.common.MTLogger
 import com.bupp.wood_spoon_eaters.di.appModule
 import com.bupp.wood_spoon_eaters.di.networkModule
 import com.bupp.wood_spoon_eaters.di.rateApp
+import com.bupp.wood_spoon_eaters.repositories.AppSettingsRepository
+import com.bupp.wood_spoon_eaters.repositories.EatersFeatureFlags
+import com.bupp.wood_spoon_eaters.repositories.cachedFeatureFlag
+import com.eatwoodspoon.analytics.DeviceId
+import com.eatwoodspoon.analytics.SessionId
 import com.eatwoodspoon.analytics.analyticsModule
+import com.eatwoodspoon.analytics.app_attributes.AppAttributesDataSource
+import com.eatwoodspoon.analytics.app_attributes.AppAttributesDataSourceFactory
 import com.eatwoodspoon.auth.authModule
+import com.eatwoodspoon.logsender.Logger
+import com.eatwoodspoon.logsender.LoggerConfig
+import com.eatwoodspoon.logsender.Preprocessor
+import com.eatwoodspoon.logsender.S3SenderConfig
+import com.eatwoodspoon.timber.S3SenderTree
 import com.facebook.FacebookSdk
 import com.facebook.LoggingBehavior
 import com.microsoft.appcenter.AppCenter
@@ -33,10 +45,9 @@ class WoodSpoonApplication : Application() {
 
     override fun onCreate() {
         super.onCreate()
+        initLogging()
 
-        if(BuildConfig.DEBUG) {
-            Timber.plant(Timber.DebugTree())
-        }
+        Timber.i("test_event_app_started")
 
         // start Koin context
         startKoin {
@@ -45,8 +56,6 @@ class WoodSpoonApplication : Application() {
             androidContext(this@WoodSpoonApplication)
             modules(networkModule + analyticsModule + rateApp + authModule + appModule)
         }
-
-        initShipBook()
 
         FacebookSdk.setIsDebugEnabled(true)
         FacebookSdk.addLoggingBehavior(LoggingBehavior.APP_EVENTS)
@@ -67,7 +76,10 @@ class WoodSpoonApplication : Application() {
         }
 
         val analytics =
-            Analytics.Builder(applicationContext, getString(R.string.segment_jey)) // Enable this to record certain application events automatically!
+            Analytics.Builder(
+                applicationContext,
+                getString(R.string.segment_jey)
+            ) // Enable this to record certain application events automatically!
                 .trackApplicationLifecycleEvents() // Enable this to record screen views automatically!
 //                .logLevel(Analytics.LogLevel.VERBOSE)
                 .use(MixpanelIntegration.FACTORY)
@@ -83,7 +95,45 @@ class WoodSpoonApplication : Application() {
     }
 
     private fun initShipBook() {
-        ShipBook.start(this, BuildConfig.SHIPBOOK_APP_ID, BuildConfig.SHIPBOOK_APP_KEY)
-        ShipBook.addWrapperClass(MTLogger::class.java.name)
+        if(AppSettingsRepository.cachedFeatureFlag(EatersFeatureFlags.LogShipbookEnabled, this) != false) {
+            ShipBook.start(this, BuildConfig.SHIPBOOK_APP_ID, BuildConfig.SHIPBOOK_APP_KEY)
+            ShipBook.addWrapperClass(MTLogger::class.java.name)
+        }
+    }
+
+    private fun initLogging() {
+        initShipBook()
+        if(AppSettingsRepository.cachedFeatureFlag(EatersFeatureFlags.LogS3Enabled, this) != false) {
+            Logger.createSingletonInstance(
+                this,
+                LoggerConfig(
+                    s3config = S3SenderConfig(
+                        credentials = S3SenderConfig.Credentials.fromAssets(
+                            this,
+                            "aws-logger-credentials.properties"
+                        ),
+                        deviceId = DeviceId.getValue(this),
+                        logsDirectoryName = "Logs"
+                    )
+                ),
+                object : Preprocessor {
+                    val appAttributesDataSource: AppAttributesDataSource by lazy {
+                        AppAttributesDataSourceFactory.create(this@WoodSpoonApplication)
+                    }
+                    override fun process(logItem: Map<String, Any>): Map<String, Any> {
+                        return appAttributesDataSource.appAttributes + mapOf(
+                            "session_id" to SessionId.value,
+                            "timestamp" to System.currentTimeMillis(),
+                            "device_id" to DeviceId.getValue(this@WoodSpoonApplication),
+                        ) + logItem
+                    }
+                },
+            )
+            Timber.plant(S3SenderTree(Logger.instance))
+        }
+
+        if(BuildConfig.DEBUG) {
+            Timber.plant(Timber.DebugTree())
+        }
     }
 }

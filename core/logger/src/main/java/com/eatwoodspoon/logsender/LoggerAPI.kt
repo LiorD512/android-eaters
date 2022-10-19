@@ -15,7 +15,7 @@ interface Logger {
 
     companion object {
 
-        lateinit var instance: Logger
+        var instance: Logger = NoOpLogger()
             private set
 
         @JvmStatic

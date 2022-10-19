@@ -1,13 +1,34 @@
 package com.eatwoodspoon.analytics.app_attributes
 
+import android.content.Context
 import android.os.Build
 import com.eatwoodspoon.analytics.app_attributes.providers.*
 import com.eatwoodspoon.analytics.events.AppAttributesEvent
 import org.koin.core.parameter.ParametersHolder
+import org.koin.dsl.module
 import java.util.*
 
 interface AppAttributesDataSource {
     val appAttributes: Map<String, Any>
+}
+
+object AppAttributesDataSourceFactory {
+
+    fun create(context: Context): AppAttributesDataSource {
+        return AppAttributesDataSourceImpl(
+            wifiStatusAttributeProvider = WiFiStatusAttributeProvider(context),
+            radioAttributeProvider = RadioAttributeProvider(context),
+            operatorNameAttributeProvider = OperatorNameAttributeProvider(context),
+            deviceIdAttributeProvider = DeviceIdAttributeProvider(context),
+            screenSizeAttributeProvider = ScreenSizeAttributeProvider(),
+            timeZoneAttributeProvider = TimeZoneAttributeProvider(),
+            osFullNameAttributeProvider = OSFullNameAttributeProvider(),
+            deviceTypeAttributeProvider = DeviceTypeAttributeProvider(context),
+            appNameAttributeProvider = AppNameAttributeProvider(context),
+            buildNumAttributeProvider = BuildNumAttributeProvider(context),
+            versionNameAttributeProvider = VersionNameAttributeProvider(context),
+        )
+    }
 }
 
 internal class AppAttributesDataSourceImpl(

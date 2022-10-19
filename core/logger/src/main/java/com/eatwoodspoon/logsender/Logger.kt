@@ -97,7 +97,7 @@ internal class LoggerImpl(
                     "attributes" to Metrics.dumpMetrics()
                 )
             )
-            delay(TimeUnit.MINUTES.toMillis(30))
+            delay(TimeUnit.SECONDS.toMillis(30))
         }
     }
 }

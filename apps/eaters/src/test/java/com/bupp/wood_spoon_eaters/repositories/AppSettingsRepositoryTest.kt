@@ -17,7 +17,7 @@ import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.test.TestCoroutineDispatcher
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.setMain
 import okhttp3.OkHttpClient
 import okhttp3.mockwebserver.MockResponse
@@ -29,19 +29,20 @@ import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.moshi.MoshiConverterFactory
 import java.util.*
 
-@Ignore
 @ExperimentalCoroutinesApi
 class AppSettingsRepositoryTest {
 
     @get:Rule
     var mainCoroutineRule = MainCoroutineRule()
-    private val testDispatcher = TestCoroutineDispatcher()
+    private val testDispatcher = UnconfinedTestDispatcher()
 
     lateinit var eatersAnalyticsTracker: EatersAnalyticsTracker
 
     lateinit var appSettingsRepository: AppSettingsRepository
 
     lateinit var mockWebServer: MockWebServer
+
+    lateinit var featureFlagLocalDataSource: FeatureFlagLocalDataSource
 
 
     @Before
@@ -75,12 +76,14 @@ class AppSettingsRepositoryTest {
 
         val errorManger: ErrorManger = mock()
         eatersAnalyticsTracker = mock()
+        featureFlagLocalDataSource = mock()
         appSettingsRepository = AppSettingsRepositoryImpl(
             apiService,
             ResultManager(errorManger),
             StaticFeatureFlagsListProvider(),
             appAttributesDataSource,
-            eatersAnalyticsTracker
+            eatersAnalyticsTracker,
+            featureFlagLocalDataSource
         )
     }
 
@@ -286,15 +289,19 @@ class AppSettingsRepositoryTest {
 
     @Test
     fun testFeatureFlags() = runBlocking {
+        val input = mapOf(
+            "feature_1" to true,
+            "feature_2" to false
+        )
         mockWebServer.enqueue(
-            ff = mapOf(
-                "feature_1" to true,
-                "feature_2" to false
-            )
+            ff = input
         )
         appSettingsRepository.initAppSettings(testDispatcher)
         assert(appSettingsRepository.featureFlag("feature_1") == true)
         assert(appSettingsRepository.featureFlag("feature_2") == false)
+        assert(appSettingsRepository.featureFlag("feature_3") == null)
+
+        verify(featureFlagLocalDataSource, times(1)).save(input);
     }
 
     @Test
@@ -330,11 +337,12 @@ private fun MockWebServer.enqueue(
 
     val gson = Gson()
     val response = ServerResponse(
+        code = 200,
         data = AppSettings(settings = settings, ff = ff)
     )
 
     val json = gson.toJson(response)
     this.enqueue(
-        MockResponse().setBody(json)
+        MockResponse().setResponseCode(200).setBody(json)
     )
 }
