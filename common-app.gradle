@@ -30,6 +30,10 @@ android {
         }
     }
 
+    lintOptions {
+        disable 'LogNotTimber'
+    }
+
     flavorDimensions "environment"
     productFlavors {
         staging {
