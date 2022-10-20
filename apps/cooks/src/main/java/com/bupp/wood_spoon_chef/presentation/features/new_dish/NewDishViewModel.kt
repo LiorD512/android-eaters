@@ -78,6 +78,7 @@ class NewDishViewModel(
     }
 
     fun saveDishCategory(dishCategory: DishCategory?) {
+        this.dishRequest.dishCategory = dishCategory
         this.dishRequest.dishCategoryId = dishCategory?.id
     }
 
