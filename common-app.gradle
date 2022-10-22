@@ -4,7 +4,7 @@ apply plugin: 'kotlin-kapt'
 apply plugin: 'kotlin-parcelize'
 apply plugin: 'com.google.gms.google-services'
 apply plugin: 'com.google.firebase.crashlytics'
-//apply plugin: 'com.innovattic.badge'
+apply plugin: 'com.innovattic.badge'
 
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
@@ -74,12 +74,12 @@ dependencies {
     kapt platform (project(':platform'))
 }
 
-//badge {
-//    productFlavors {
-//        staging {
-//            enabled = true
-//            text = "STAGING"
-//            fontSize = 8
-//        }
-//    }
-//}
+badge {
+    productFlavors {
+        staging {
+            enabled = true
+            text = "STAGING"
+            fontSize = 8
+        }
+    }
+}
