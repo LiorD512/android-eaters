@@ -84,7 +84,10 @@ class MTLogger {
     private fun log(level: Int, tag: String?, msg: String, cacheLog: Boolean) {
         try {
             // MTLogger should be removed in favor of Timber.
-            Timber.tag(tag).log(level, msg)
+            if(tag != null) {
+                Timber.tag(tag)
+            }
+            Timber.log(level, msg)
 
             val body = if (tag.isNullOrEmpty()) {
                 "${getLink()} --> $msg"

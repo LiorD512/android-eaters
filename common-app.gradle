@@ -30,10 +30,6 @@ android {
         }
     }
 
-    lintOptions {
-        disable 'LogNotTimber'
-    }
-
     flavorDimensions "environment"
     productFlavors {
         staging {
@@ -60,10 +56,6 @@ android {
 
     buildFeatures {
         viewBinding true
-    }
-
-    lintOptions {
-        disable 'StringFormatInTimber'
     }
 }
 
