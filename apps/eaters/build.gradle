@@ -164,9 +164,9 @@ dependencies {
     implementation "io.insert-koin:koin-androidx-workmanager"
 
     //AppCenter
-    implementation "com.microsoft.appcenter:appcenter-crashes:${appCenterSdkVersion}"
-    implementation "com.microsoft.appcenter:appcenter-analytics:${appCenterSdkVersion}"
-    implementation "com.microsoft.appcenter:appcenter-distribute:${appCenterSdkVersion}"
+//    implementation "com.microsoft.appcenter:appcenter-crashes:${appCenterSdkVersion}"
+//    implementation "com.microsoft.appcenter:appcenter-analytics:${appCenterSdkVersion}"
+//    implementation "com.microsoft.appcenter:appcenter-distribute:${appCenterSdkVersion}"
 
     //FireBase
     testImplementation 'junit:junit:4.13.2'
