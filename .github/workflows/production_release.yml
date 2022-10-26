@@ -80,12 +80,13 @@ jobs:
 
     - name: Eaters – Deploy to Play Store
       if: env.RELEASE_APP_NAME == 'eaters'
-      uses: r0adkll/upload-google-play@v1.0.15
+      uses: r0adkll/upload-google-play@v1.0.19
       with:
         serviceAccountJsonPlainText: ${{secrets.GOOGLE_PLAY_PUBLISHING_ACCOUNT}}
         packageName: com.bupp.wood_spoon_eaters
         releaseFiles: apps/eaters/build/outputs/bundle/productionRelease/eaters-production-release.aab
         track: internal
+        changesNotSentForReview: true
 
     - name: Cooks – Sign AAB
       if: env.RELEASE_APP_NAME == 'cooks'
