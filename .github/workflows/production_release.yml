@@ -99,9 +99,10 @@ jobs:
 
     - name: Cooks – Deploy to Play Store
       if: env.RELEASE_APP_NAME == 'cooks'
-      uses: r0adkll/upload-google-play@v1.0.15
+      uses: r0adkll/upload-google-play@v1.0.19
       with:
         serviceAccountJsonPlainText: ${{secrets.GOOGLE_PLAY_PUBLISHING_ACCOUNT}}
         packageName: com.bupp.wood_spoon_chef
         releaseFiles: apps/cooks/build/outputs/bundle/productionRelease/cooks-production-release.aab
         track: internal
+        changesNotSentForReview: true
