@@ -13,6 +13,7 @@ import com.bupp.wood_spoon_chef.presentation.features.new_dish.NewDishViewModel
 import com.bupp.wood_spoon_chef.data.remote.model.DishRequest
 import com.bupp.wood_spoon_chef.utils.AnimationUtil
 import com.bupp.wood_spoon_chef.utils.Utils
+import com.bupp.wood_spoon_chef.utils.getLocal
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import java.text.DecimalFormat
 import java.util.*
@@ -48,7 +49,8 @@ class NewDishPriceFragment : BaseFragment(R.layout.fragment_new_dish_price){
 //            val myLocaleCurrency = Currency.getInstance("en_US") //myLocale - add to set device locale
 //            val symbol = myLocaleCurrency.getSymbol(myLocale)
 
-            newDishPriceInput.locale = Locale.US
+            newDishPriceInput.locale = getLocal()
+            newDishPriceInput.configureViewForLocale(getLocal())
             newDishPriceInput.addTextChangedListener(object : SimpleTextWatcher() {
 
                 override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {

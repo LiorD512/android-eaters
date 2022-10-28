@@ -12,9 +12,12 @@ import com.bupp.wood_spoon_chef.databinding.CalendarCookSlotListFooterBinding
 import com.bupp.wood_spoon_chef.databinding.ItemCookingSlotSlimBinding
 import com.bupp.wood_spoon_chef.data.remote.model.CookingSlotSlim
 import com.bupp.wood_spoon_chef.presentation.views.findTextAndApplySpan
+import com.bupp.wood_spoon_chef.utils.getLocal
 import org.joda.time.DateTime
 import org.joda.time.format.DateTimeFormat
 import org.joda.time.format.DateTimeFormatter
+import java.util.*
+import kotlin.collections.ArrayList
 
 private object ViewType {
     const val ITEM = 1
@@ -50,8 +53,10 @@ class CookingSlotSlimAdapter(
                         doOnCookingSlotClick(slot)
                     }
 
-                    val fromDateTime: DateTimeFormatter = DateTimeFormat.forPattern("h:mm a")
-                    val toDateTime: DateTimeFormatter = DateTimeFormat.forPattern("h:mm a")
+                    val fromDateTime: DateTimeFormatter = DateTimeFormat.
+                    forPattern("h:mm a").withLocale(getLocal())
+                    val toDateTime: DateTimeFormatter = DateTimeFormat.
+                    forPattern("h:mm a").withLocale(getLocal())
                     val fromDateTimeFormatted: String = fromDateTime.print(DateTime(curCookingSlot.startsAt)).lowercase()
                     val toDateTimeFormatted: String = toDateTime.print(DateTime(curCookingSlot.endsAt)).lowercase()
 
