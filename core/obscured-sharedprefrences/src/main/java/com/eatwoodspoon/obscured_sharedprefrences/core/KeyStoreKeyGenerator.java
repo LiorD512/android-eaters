@@ -2,6 +2,7 @@ package com.eatwoodspoon.obscured_sharedprefrences.core;
 
 import android.app.Application;
 import android.security.KeyChain;
+import android.security.keystore.KeyProperties;
 import android.util.Base64;
 
 
@@ -36,7 +37,7 @@ public class KeyStoreKeyGenerator implements KeyGenerator {
 
     private KeyStoreKeyGenerator(Application application, String filename) {
         this.application = application;
-        this.isHardwareBacked = KeyChain.isBoundKeyAlgorithm("RSA");
+        this.isHardwareBacked = KeyChain.isBoundKeyAlgorithm(KeyProperties.KEY_ALGORITHM_RSA);
         this.keyFile = new File(application.getFilesDir(), filename);
 
         try {
