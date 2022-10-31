@@ -47,6 +47,7 @@ dependencies {
     implementation project(path: ':shared:presentation')
     implementation project(path: ':shared:auth')
     implementation project(path: ':core:logger')
+    implementation project(path: ':core:obscured-sharedprefrences')
 
 //    implementation 'org.jetbrains.kotlinx:kotlinx-metadata-jvm:0.3.0'
 
@@ -95,8 +96,6 @@ dependencies {
     //utils
     implementation 'com.stripe:stripe-android:18.2.0'
     implementation 'me.grantland:autofittextview:0.2.1'
-    implementation "in.co.ophio:secure-preferences:0.1.3"
-    implementation 'com.mikhaellopez:ratebottomsheet:1.1.0'
     implementation 'com.google.android.flexbox:flexbox:3.0.0'
     implementation 'com.github.ibrahimsn98:PhoneNumberKit:1.7.5'
     // TODO replace com.github.ibrahimsn98 with below, referenced by Google
@@ -111,7 +110,6 @@ dependencies {
 
     //camera util
     implementation 'com.github.dhaval2404:imagepicker:1.8'
-    implementation 'com.github.florent37:inline-activity-result-kotlin:1.0.4'
 
     //Branch.io
     // required for all Android apps

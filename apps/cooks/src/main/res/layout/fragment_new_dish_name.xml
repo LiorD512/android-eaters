@@ -42,7 +42,7 @@
         app:hint="Ex: The tomato soup of your dreams! This tomato creation is paired with crunchy croutons to fulfill your soup cravings. Topped with chives and drizzle of olive oil, then finished with a dollop of cream cheese."
         app:maxLines="7"
         app:title="Describe the dish…"
-        app:minChar="50"
+        app:minChar="25"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/newDishNameInput" />
 

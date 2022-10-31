@@ -17,7 +17,7 @@ object DateUtils {
     }
 
     fun DateTime.prepareFormattedDateForHours(): String =
-        DateTimeFormat.forPattern("hh:mm aa").print(this)
+        DateTimeFormat.forPattern("hh:mm aa").withLocale(getLocal()).print(this)
 
     fun parseDateToMonthYear(date: Date): String {
         val sdf = SimpleDateFormat("MMM yyyy", Locale.ENGLISH)

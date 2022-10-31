@@ -25,6 +25,7 @@ import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.last_call.fro
 import com.bupp.wood_spoon_chef.presentation.features.cooking_slot.rrules.RRuleTextFormatter
 import com.bupp.wood_spoon_chef.utils.extensions.prepareFormattedDate
 import com.bupp.wood_spoon_chef.utils.extensions.show
+import com.bupp.wood_spoon_chef.utils.getLocal
 import com.eatwoodspoon.android_utils.binding.viewBinding
 import com.shared.presentation.dialog.bottomsheet.ActionListBottomSheetFragment
 import kotlinx.coroutines.flow.collect
@@ -34,6 +35,7 @@ import org.joda.time.DateTime
 import org.joda.time.format.DateTimeFormat
 import org.joda.time.format.DateTimeFormatter
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import java.util.*
 
 @Parcelize
 @Keep
@@ -137,9 +139,9 @@ class CookingSlotDetailsFragmentNew : BaseFragment(R.layout.fragment_details_coo
 
             val dateTimeFormat: DateTimeFormatter = DateTimeFormat.forPattern("h:mm a")
             val fromDateTimeFormatted: String =
-                dateTimeFormat.print(DateTime(slot.startsAt)).uppercase()
+                dateTimeFormat.withLocale(getLocal()).print(DateTime(slot.startsAt)).uppercase()
             val toDateTimeFormatted: String =
-                dateTimeFormat.print(DateTime(slot.endsAt)).uppercase()
+                dateTimeFormat.withLocale(getLocal()).print(DateTime(slot.endsAt)).uppercase()
 
             setSubTitle("$fromDateTimeFormatted - $toDateTimeFormatted")
         }

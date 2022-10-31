@@ -92,7 +92,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/newDishDetailsRadioLayout"
                 app:maxLines="7"
-                app:minChar="50"
+                app:minChar="20"
                 app:title="Main ingredients" />
 
             <EditText

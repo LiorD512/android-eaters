@@ -11,6 +11,7 @@ import biweekly.property.RecurrenceRule
 import biweekly.util.DayOfWeek
 import biweekly.util.Frequency
 import biweekly.util.Recurrence
+import com.bupp.wood_spoon_chef.utils.getLocal
 import kotlinx.parcelize.Parcelize
 import timber.log.Timber
 import java.text.SimpleDateFormat
@@ -32,7 +33,7 @@ class RRuleTextFormatter {
     }
 
     private val writeContext = WriteContext(ICalVersion.V2_0, TimezoneInfo(), null)
-    private val dateFormat = SimpleDateFormat("MMM d", Locale.getDefault())
+    private val dateFormat = SimpleDateFormat("MMM d", getLocal())
 
     fun parseRRule(rruleString: String): SimpleRRule? {
         try {

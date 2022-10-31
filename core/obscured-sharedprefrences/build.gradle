@@ -1,0 +1,9 @@
+apply from: "${rootProject.projectDir}/common-module.gradle"
+
+android {
+
+}
+
+dependencies {
+
+}

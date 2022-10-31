@@ -1,16 +1,18 @@
 package com.bupp.wood_spoon_chef.utils.extensions
 
+import com.bupp.wood_spoon_chef.utils.getLocal
 import org.joda.time.DateTime
 import org.joda.time.format.DateTimeFormat
+import java.util.*
 
 fun DateTime.monthOfYearAsShortText(): String =
     this.monthOfYear().asShortText
 
 fun DateTime.prepareFormattedDate(): String =
-    DateTimeFormat.forPattern("EEEE, MMM dd, yyyy").print(this)
+    DateTimeFormat.forPattern("EEEE, MMM dd, yyyy").withLocale(getLocal()).print(this)
 
 fun DateTime.prepareFormattedDateForDateAndHour(): String =
-    DateTimeFormat.forPattern("EEEE, MMM dd, yyyy, hh:mm aa").print(this)
+    DateTimeFormat.forPattern("EEEE, MMM dd, yyyy, hh:mm aa").withLocale(getLocal()).print(this)
 
 fun DateTime.prepareRangeOneMonth(): Pair<Long, Long> {
     val startDate: DateTime = this.withDayOfMonth(1)

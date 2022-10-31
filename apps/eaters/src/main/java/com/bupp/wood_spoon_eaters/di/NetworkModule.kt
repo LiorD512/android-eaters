@@ -1,7 +1,5 @@
 package com.bupp.wood_spoon_eaters.di
 
-import `in`.co.ophio.secure.core.KeyStoreKeyGenerator
-import `in`.co.ophio.secure.core.ObscuredPreferencesBuilder
 import android.app.Application
 import android.content.Context
 import android.content.SharedPreferences
@@ -14,6 +12,8 @@ import com.bupp.wood_spoon_eaters.network.ApiService
 import com.bupp.wood_spoon_eaters.network.ApiSettings
 import com.bupp.wood_spoon_eaters.network.AuthInterceptor
 import com.eatwoodspoon.auth.AuthTokenRepository
+import com.eatwoodspoon.obscured_sharedprefrences.core.KeyStoreKeyGenerator
+import com.eatwoodspoon.obscured_sharedprefrences.core.ObscuredPreferencesBuilder
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import com.squareup.moshi.*
 import com.squareup.moshi.adapters.PolymorphicJsonAdapterFactory

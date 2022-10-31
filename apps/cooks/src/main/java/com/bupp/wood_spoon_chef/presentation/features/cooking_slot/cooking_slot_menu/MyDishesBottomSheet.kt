@@ -25,7 +25,6 @@ import com.bupp.wood_spoon_chef.utils.extensions.show
 import com.bupp.wood_spoon_chef.utils.extensions.showErrorToast
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
-import me.ibrahimsn.lib.util.clear
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MyDishesBottomSheet : TopCorneredBottomSheet(),
@@ -186,7 +185,7 @@ class MyDishesBottomSheet : TopCorneredBottomSheet(),
                 myDishesBsSearchImg.setOnClickListener(null)
             } else {
                 myDishesBsSearchImg.setImageResource(R.drawable.ic_icons_close_search)
-                myDishesBsSearchImg.setOnClickListener { myDishesBsSearchInput.clear() }
+                myDishesBsSearchImg.setOnClickListener { myDishesBsSearchInput.text.clear() }
             }
         }
     }

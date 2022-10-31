@@ -94,7 +94,7 @@ class CheckoutFragment : Fragment(R.layout.checkout_fragment),
             checkoutFragGift.setDeliveryDetailsViewListener(this@CheckoutFragment)
             checkoutFragFees.setWSTitleValueListener(this@CheckoutFragment)
             checkoutFragFreeDeliveryView.setAddItemsClickListener {
-                (activity as OrderCheckoutActivity).onEditOrderClick()
+                (activity as OrderCheckoutActivity).onEditOrderClick(shouldOpenCart = false)
                 viewModel.reportAddMoreItemsClickedEvent()
             }
             checkoutFragFreeDeliveryView.setFreeDeliveryProgressViewListener(this@CheckoutFragment)
