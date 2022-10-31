@@ -125,9 +125,9 @@ dependencies {
     implementation "io.insert-koin:koin-androidx-workmanager"
 
     //AppCenter
-    implementation "com.microsoft.appcenter:appcenter-analytics:$appCenterSdkVersion"
-    implementation "com.microsoft.appcenter:appcenter-crashes:$appCenterSdkVersion"
-    implementation "com.microsoft.appcenter:appcenter-distribute:$appCenterSdkVersion"
+//    implementation "com.microsoft.appcenter:appcenter-analytics:$appCenterSdkVersion"
+//    implementation "com.microsoft.appcenter:appcenter-crashes:$appCenterSdkVersion"
+//    implementation "com.microsoft.appcenter:appcenter-distribute:$appCenterSdkVersion"
 
     //FireBase
     implementation 'com.google.firebase:firebase-core:20.1.2'

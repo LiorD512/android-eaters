@@ -183,7 +183,7 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
             val menuItemId = intent.getLongExtra("menu_item_id", -1)
             Log.d("wowMain", "branch: cook $chefId, menuItem: $menuItemId")
             if (chefId > 0) {
-                viewModel.getRestaurant(chefId, false)
+                viewModel.getRestaurant(chefId)
                 viewModel.logDeepLinkEvent(chefId)
             }
         }

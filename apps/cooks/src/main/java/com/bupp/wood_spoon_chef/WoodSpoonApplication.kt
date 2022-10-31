@@ -18,9 +18,6 @@ import com.eatwoodspoon.logsender.LoggerConfig
 import com.eatwoodspoon.logsender.Preprocessor
 import com.eatwoodspoon.logsender.S3SenderConfig
 import com.eatwoodspoon.timber.S3SenderTree
-import com.microsoft.appcenter.AppCenter
-import com.microsoft.appcenter.crashes.Crashes
-import com.microsoft.appcenter.distribute.Distribute
 import com.segment.analytics.Analytics
 import com.segment.analytics.android.integrations.appsflyer.AppsflyerIntegration
 import com.segment.analytics.android.integrations.mixpanel.MixpanelIntegration
@@ -57,13 +54,13 @@ class WoodSpoonApplication : Application() {
             modules(appModule + cookingSlotModule + networkModule + analyticsModule)
         }
 
-        AppCenter.start(
-            this,
-            "906c970f-76e7-46df-8b07-af61ed082931",
-            com.microsoft.appcenter.analytics.Analytics::class.java,
-            Crashes::class.java,
-            Distribute::class.java
-        )
+//        AppCenter.start(
+//            this,
+//            "906c970f-76e7-46df-8b07-af61ed082931",
+//            com.microsoft.appcenter.analytics.Analytics::class.java,
+//            Crashes::class.java,
+//            Distribute::class.java
+//        )
 
         Branch.enableLogging()
         Branch.getAutoInstance(this)

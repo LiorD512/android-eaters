@@ -21,9 +21,9 @@ import com.eatwoodspoon.logsender.S3SenderConfig
 import com.eatwoodspoon.timber.S3SenderTree
 import com.facebook.FacebookSdk
 import com.facebook.LoggingBehavior
-import com.microsoft.appcenter.AppCenter
-import com.microsoft.appcenter.crashes.Crashes
-import com.microsoft.appcenter.distribute.Distribute
+//import com.microsoft.appcenter.AppCenter
+//import com.microsoft.appcenter.crashes.Crashes
+//import com.microsoft.appcenter.distribute.Distribute
 import com.segment.analytics.Analytics
 import com.segment.analytics.android.integrations.appsflyer.AppsflyerIntegration
 import com.segment.analytics.android.integrations.mixpanel.MixpanelIntegration
@@ -60,10 +60,10 @@ class WoodSpoonApplication : Application() {
         FacebookSdk.setIsDebugEnabled(true)
         FacebookSdk.addLoggingBehavior(LoggingBehavior.APP_EVENTS)
 
-        AppCenter.start(
-            this, getString(R.string.app_center_key),
-            com.microsoft.appcenter.analytics.Analytics::class.java, Crashes::class.java, Distribute::class.java
-        )
+//        AppCenter.start(
+//            this, getString(R.string.app_center_key),
+//            com.microsoft.appcenter.analytics.Analytics::class.java, Crashes::class.java, Distribute::class.java
+//        )
 
         Branch.enableLogging()
         Branch.getAutoInstance(this)
