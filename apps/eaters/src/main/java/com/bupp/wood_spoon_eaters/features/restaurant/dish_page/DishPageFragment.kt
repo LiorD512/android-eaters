@@ -274,7 +274,7 @@ class DishPageFragment : Fragment(R.layout.fragment_dish_page),
             dishFragAddToCartBtn.updateFloatingBtnTitle("Update cart")
             dishFragMainListLayout.dishFragRemoveBtn.visibility = View.VISIBLE
             dishFragMainListLayout.dishFragRemoveBtn.setOnClickListener {
-                viewModel.onDishRemove(orderItem.dish.id)
+                viewModel.onDishRemove(orderItem.id)
             }
         }
     }

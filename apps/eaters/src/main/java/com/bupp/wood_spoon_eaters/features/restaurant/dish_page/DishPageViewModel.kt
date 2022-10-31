@@ -290,7 +290,7 @@ class DishPageViewModel(
 
     fun onDishRemove(dishId: Long){
         viewModelScope.launch {
-            val result = cartManager.removeOrderItems(dishId)
+            val result = cartManager.removeOrderItems(dishId, true)
             if (result == OrderRepository.OrderRepoStatus.UPDATE_ORDER_SUCCESS) {
                 onFinishDishPage.postValue(FinishNavigation.FINISH_AND_BACK)
             }
