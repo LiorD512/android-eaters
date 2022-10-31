@@ -3,9 +3,9 @@ buildscript {
     repositories {
         mavenCentral()
         google()
-        jcenter()
         gradlePluginPortal()
         maven { url 'https://jitpack.io' }
+        jcenter()
     }
     dependencies {
         classpath 'com.google.gms:google-services:4.3.10'
@@ -22,9 +22,9 @@ allprojects {
         mavenLocal()
         mavenCentral()
         google()
-        jcenter()
         maven { url 'https://jitpack.io' }
         maven { url 'https://sdk.uxcam.com/android/' }
+        jcenter()
     }
 }
 
