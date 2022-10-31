@@ -140,8 +140,9 @@ class OrderCheckoutActivity : BaseActivity() {
         }
     }
 
-    fun onEditOrderClick() {
+    fun onEditOrderClick(shouldOpenCart: Boolean = true) {
         intent.putExtra("editOrderClick", true)
+        intent.putExtra("shouldOpenCart", shouldOpenCart)
         setResult(RESULT_OK, intent)
         finish()
     }

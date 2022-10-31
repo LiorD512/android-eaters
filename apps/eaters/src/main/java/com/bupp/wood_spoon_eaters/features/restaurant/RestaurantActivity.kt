@@ -40,7 +40,8 @@ class RestaurantActivity : BaseActivity() {
                 finish()
             }
             val editOrderClicked = data.getBooleanExtra("editOrderClick", false)
-            if (editOrderClicked) {
+            val shouldOpenCart = data.getBooleanExtra("shouldOpenCart", false)
+            if (editOrderClicked && shouldOpenCart) {
                 viewModel.reOpenCart()
             }
         }
