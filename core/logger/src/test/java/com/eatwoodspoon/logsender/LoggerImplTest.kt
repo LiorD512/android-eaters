@@ -67,7 +67,7 @@ internal class LoggerImplTest {
     }
 
     @Test
-    fun ensureCommonAttributesAddedBeforeLogItem() = runTest {
+    fun ensureCommonAttributesAddedBeforeLogItem() = runBlockingTest {
         commonAttributes.putAll(mapOf("key1" to "value1", "key2" to "value2"))
 
         initLogger(scope = this)
@@ -92,7 +92,7 @@ internal class LoggerImplTest {
     }
 
     @Test
-    fun checkExpectedFileCountMany() = runTest {
+    fun checkExpectedFileCountMany() = runBlockingTest {
 
         val maxFileSize = 512L
         val expectedFilesCount = 10
@@ -113,7 +113,7 @@ internal class LoggerImplTest {
     }
 
     @Test
-    fun checkExpectedFileCount1() = runTest {
+    fun checkExpectedFileCount1() = runBlockingTest {
         initLogger(scope = this)
 
         logger.log(
@@ -129,7 +129,7 @@ internal class LoggerImplTest {
     }
 
     @Test
-    fun checkMaxDirectorySize() = runTest {
+    fun checkMaxDirectorySize() = runBlockingTest {
 
         val maxDirectorySize = 100 * 1024L
         initLogger(config = defaultConfig.copy(maxDirectorySize = maxDirectorySize), scope = this)

@@ -17,7 +17,7 @@ import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.test.UnconfinedTestDispatcher
+import kotlinx.coroutines.test.TestCoroutineDispatcher
 import kotlinx.coroutines.test.setMain
 import okhttp3.OkHttpClient
 import okhttp3.mockwebserver.MockResponse
@@ -34,7 +34,7 @@ class AppSettingsRepositoryTest {
 
     @get:Rule
     var mainCoroutineRule = MainCoroutineRule()
-    private val testDispatcher = UnconfinedTestDispatcher()
+    private val testDispatcher = TestCoroutineDispatcher()
 
     lateinit var eatersAnalyticsTracker: EatersAnalyticsTracker
 

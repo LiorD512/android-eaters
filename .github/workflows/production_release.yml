@@ -27,9 +27,6 @@ jobs:
       run: |
         echo VERSION_CODE=`expr $GITHUB_RUN_NUMBER + 103` >> $GITHUB_ENV
 
-#    - name: Run Tests
-#      run: ./gradlew test
-
     - name: Build with Gradle
       run: ./gradlew build
 
