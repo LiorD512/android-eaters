@@ -3,7 +3,6 @@ buildscript {
     repositories {
         mavenCentral()
         google()
-        jcenter()
         gradlePluginPortal()
         maven { url 'https://jitpack.io' }
     }
@@ -22,7 +21,6 @@ allprojects {
         mavenLocal()
         mavenCentral()
         google()
-        jcenter()
         maven { url 'https://jitpack.io' }
         maven { url 'https://sdk.uxcam.com/android/' }
     }

@@ -1,7 +1,5 @@
 package com.bupp.wood_spoon_chef.di
 
-import `in`.co.ophio.secure.core.KeyStoreKeyGenerator
-import `in`.co.ophio.secure.core.ObscuredPreferencesBuilder
 import android.app.Application
 import android.content.Context
 import android.content.SharedPreferences
@@ -13,6 +11,8 @@ import com.bupp.wood_spoon_chef.data.remote.network.AuthInterceptor
 import com.bupp.wood_spoon_chef.data.remote.network.google.client.GoogleRetrofitFactory
 import com.bupp.wood_spoon_chef.data.remote.network.google.interfaces.GoogleApi
 import com.bupp.wood_spoon_chef.utils.UserSettings
+import com.eatwoodspoon.obscured_sharedprefrences.core.KeyStoreKeyGenerator
+import com.eatwoodspoon.obscured_sharedprefrences.core.ObscuredPreferencesBuilder
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.adapters.Rfc3339DateJsonAdapter

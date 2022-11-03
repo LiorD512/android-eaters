@@ -36,9 +36,6 @@ import com.bupp.wood_spoon_eaters.views.MainActivityTabLayout
 import com.bupp.wood_spoon_eaters.views.floating_buttons.WSFloatingButton
 import com.eatwoodspoon.android_utils.views.setSafeOnClickListener
 import com.eatwoodspoon.auth.WoodSpoonAuth
-import com.mikhaellopez.ratebottomsheet.AskRateBottomSheet
-import com.mikhaellopez.ratebottomsheet.RateBottomSheet
-import com.mikhaellopez.ratebottomsheet.RateBottomSheetManager
 import com.stripe.android.view.PaymentMethodsActivityStarter
 import com.uxcam.UXCam
 import org.koin.android.ext.android.inject
@@ -142,28 +139,28 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
     }
 
     private fun showRateTheAppDialog() {
-        Log.d(TAG, "showRateTheAppDialog")
-        RateBottomSheetManager(this)
-            .setInstallDays(3) // 3 by default
-            .setLaunchTimes(2) // 5 by default
-            .setRemindInterval(1) // 2 by default
-            .setShowAskBottomSheet(true) // True by default
-            .setShowLaterButton(true) // True by default
-            .setShowCloseButtonIcon(true) // True by default
-            .monitor()
-        RateBottomSheet.showRateBottomSheetIfMeetsConditions(
-            this,
-            listener = object : AskRateBottomSheet.ActionListener {
-                override fun onDislikeClickListener() {
-                    // Will be called when a click on the "I don't like" button is triggered
-                    Log.d(TAG, "showRateTheAppDialog - onDislikeClickListener")
-                }
-
-                override fun onRateClickListener() {
-                    Log.d(TAG, "showRateTheAppDialog - onRateClickListener")
-                }
-            }
-        )
+//        Log.d(TAG, "showRateTheAppDialog")
+//        RateBottomSheetManager(this)
+//            .setInstallDays(3) // 3 by default
+//            .setLaunchTimes(2) // 5 by default
+//            .setRemindInterval(1) // 2 by default
+//            .setShowAskBottomSheet(true) // True by default
+//            .setShowLaterButton(true) // True by default
+//            .setShowCloseButtonIcon(true) // True by default
+//            .monitor()
+//        RateBottomSheet.showRateBottomSheetIfMeetsConditions(
+//            this,
+//            listener = object : AskRateBottomSheet.ActionListener {
+//                override fun onDislikeClickListener() {
+//                    // Will be called when a click on the "I don't like" button is triggered
+//                    Log.d(TAG, "showRateTheAppDialog - onDislikeClickListener")
+//                }
+//
+//                override fun onRateClickListener() {
+//                    Log.d(TAG, "showRateTheAppDialog - onRateClickListener")
+//                }
+//            }
+//        )
     }
 
 

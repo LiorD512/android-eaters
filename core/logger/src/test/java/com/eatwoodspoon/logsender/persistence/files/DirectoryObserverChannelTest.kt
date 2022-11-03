@@ -5,7 +5,8 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.TimeoutCancellationException
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.toList
-import kotlinx.coroutines.test.runTest
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.test.runBlockingTest
 import kotlinx.coroutines.withTimeout
 import org.junit.After
 import org.junit.Assert.*
@@ -39,7 +40,7 @@ class DirectoryObserverChannelTest {
     }
 
     @Test
-    fun `test existing files received`() = runTest {
+    fun `test existing files received`() = runBlockingTest {
         val expectedFilesCount = 10
         generateFiles(expectedFilesCount)
         val channel =
@@ -58,7 +59,7 @@ class DirectoryObserverChannelTest {
     }
 
     @Test
-    fun `test new files received`() = runTest {
+    fun `test new files received`() = runBlocking {
         val expectedFilesCount = 10
         val channel =
             DirectoryObserverChannel(logDirectory, { pathname -> pathname.name.endsWith(".log") })
@@ -76,7 +77,7 @@ class DirectoryObserverChannelTest {
     }
 
     @Test
-    fun `test files received with filter`() = runTest {
+    fun `test files received with filter`() = runBlocking {
         val expectedFilesCount = 5
 
         generateFiles(expectedFilesCount)
