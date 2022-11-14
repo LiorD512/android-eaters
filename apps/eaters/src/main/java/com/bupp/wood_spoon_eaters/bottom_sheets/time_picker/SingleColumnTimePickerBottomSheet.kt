@@ -3,6 +3,7 @@ package com.bupp.wood_spoon_eaters.bottom_sheets.time_picker
 import android.app.Dialog
 import android.content.res.Configuration
 import android.os.Bundle
+import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,6 +17,7 @@ import com.bupp.wood_spoon_eaters.utils.DateUtils
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import kotlinx.parcelize.Parcelize
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.util.*
 
@@ -23,14 +25,16 @@ class SingleColumnTimePickerBottomSheet(
     val listener: TimePickerListener? = null
 ) : BottomSheetDialogFragment() {
 
+    @Parcelize
     data class DeliveryTimeParam(
         val deliveryTimeType: DeliveryType,
         val date: Date? = null
-    )
+    ): Parcelable
 
     enum class DeliveryType {
         TODAY,
-        FUTURE
+        FUTURE,
+        ANYTIME
     }
 
     interface TimePickerListener {

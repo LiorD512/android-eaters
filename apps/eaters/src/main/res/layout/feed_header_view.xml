@@ -41,28 +41,28 @@
             app:layout_constraintStart_toEndOf="@+id/feedHeaderAddress"
             app:layout_constraintTop_toTopOf="@+id/feedHeaderAddress" />
 
-    <TextView
+    <FrameLayout
+        android:id="@+id/feedHeaderDateLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:background="@drawable/feed_time_filter_bkg"
+        android:layout_marginEnd="15dp"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
             android:id="@+id/feedHeaderDate"
             style="@style/LatoBold13Teal"
             android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:paddingStart="7.7dp"
+            android:layout_height="wrap_content"
             android:text="Anytime"
             android:gravity="center"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/feedHeaderDateArrow"
-            app:layout_constraintTop_toTopOf="parent" />
-
-    <ImageView
-            android:id="@+id/feedHeaderDateArrow"
-            android:paddingEnd="15.4dp"
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:paddingStart="6dp"
-            android:src="@drawable/ic_arrow_down_teal"
-            app:layout_constraintBottom_toBottomOf="@+id/feedHeaderDate"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/feedHeaderDate" />
-
+            android:drawablePadding="5dp"
+            android:layout_gravity="center"
+            android:paddingVertical="10dp"
+            android:paddingHorizontal="12dp"
+            app:drawableEndCompat="@drawable/ic_arrow_down_teal" />
+    </FrameLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

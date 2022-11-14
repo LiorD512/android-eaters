@@ -42,6 +42,7 @@ class FeedViewModel(
     val feedSkeletonEvent = MutableLiveData<FeedLiveData>()
     val feedResultData: MutableLiveData<FeedLiveData> = MutableLiveData()
     var feedJobs: MutableList<Job> = mutableListOf()
+    private var currentTimeFilter : SingleColumnTimePickerBottomSheet.DeliveryTimeParam? = null
 
     fun initFeed(){
         feedSkeletonEvent.postValue(getSkeletonItems())
@@ -173,9 +174,14 @@ class FeedViewModel(
     }
 
     fun onTimePickerChanged(deliveryTimeParam: SingleColumnTimePickerBottomSheet.DeliveryTimeParam?) {
+        currentTimeFilter = deliveryTimeParam
         feedDataManager.onTimePickerChanged(deliveryTimeParam)
         logEvent(Constants.EVENT_CHANGE_DELIVERY_DATE, getDateChangedData(deliveryTimeParam))
         onPullToRefresh()
+    }
+
+    fun getCurrentTimeFilter(): SingleColumnTimePickerBottomSheet.DeliveryTimeParam? {
+        return currentTimeFilter
     }
 
     fun logFeedHeroItemClickedEvent(heroId: Int?) = eatersAnalyticsTracker.logEvent(

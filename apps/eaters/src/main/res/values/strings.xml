@@ -188,4 +188,6 @@
     <string name="upsale_button_items_added_title">Continue</string>
     <string name="upsale_title">Anything else?</string>
     <string name="go_to_checkout">Go to checkout</string>
+    <string name="select_delivery_date">Select delivery date</string>
+    <string name="apply">Apply</string>
 </resources>

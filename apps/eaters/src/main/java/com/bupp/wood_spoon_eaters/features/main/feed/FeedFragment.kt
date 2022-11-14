@@ -18,6 +18,7 @@ import com.bupp.wood_spoon_eaters.databinding.FragmentFeedBinding
 import com.bupp.wood_spoon_eaters.features.main.MainNavigationEvent
 import com.bupp.wood_spoon_eaters.features.main.MainViewModel
 import com.bupp.wood_spoon_eaters.features.main.feed.adapters.FeedMainAdapter
+import com.bupp.wood_spoon_eaters.features.main.feed.time_filter.FeedTimeFilterBottomSheet
 import com.bupp.wood_spoon_eaters.features.restaurant.RestaurantActivity
 import com.bupp.wood_spoon_eaters.model.*
 import com.bupp.wood_spoon_eaters.utils.Utils
@@ -130,9 +131,10 @@ class FeedFragment : Fragment(R.layout.fragment_feed),
     }
 
     override fun onHeaderDateClick() {
-        val timePickerBottomSheet = SingleColumnTimePickerBottomSheet(this)
-        timePickerBottomSheet.setDatesFromNow(7)
-        timePickerBottomSheet.show(childFragmentManager, Constants.TIME_PICKER_BOTTOM_SHEET)
+        FeedTimeFilterBottomSheet.show(this, viewModel.getCurrentTimeFilter()){
+            viewModel.onTimePickerChanged(it)
+            binding!!.feedFragHeader.setDate(it)
+        }
     }
 
     override fun onTimerPickerChange(deliveryTimeParam: SingleColumnTimePickerBottomSheet.DeliveryTimeParam?) {

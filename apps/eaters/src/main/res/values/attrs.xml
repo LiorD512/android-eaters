@@ -310,4 +310,8 @@
         </attr>
     </declare-styleable>
 
+    <declare-styleable name="TimeFilterBtn">
+        <attr name="title" />
+        <attr name="timeFilterIcon" format="reference" />
+    </declare-styleable>
 </resources>

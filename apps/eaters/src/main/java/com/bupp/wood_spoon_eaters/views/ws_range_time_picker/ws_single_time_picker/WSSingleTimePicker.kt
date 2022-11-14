@@ -89,13 +89,39 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
         }
     }
 
-    fun setSelectedDate(selectedDate: Date){
-            Log.d(TAG, "setSelectedDate: $selectedDate")
-            datesList.forEachIndexed { index, date ->
-                if(DateUtils.isSameDay(selectedDate, date) && index > 0){
-                    binding.wsRangeTimePickerDateList.scrollToPosition(index)
+    fun initSimpleDatesDataFromTomorrow(daysFromNow: Int, selectedDate: Date? = null) {
+        stringPair.clear()
+        datesList.clear()
+        val dates = getDaysFromNow(daysFromNow)
+        dates.let {
+            it.forEach {
+                if (DateUtils.isTomorrow(it)) {
+                    stringPair.add(Pair(null, "Tomorrow"))
+                } else {
+                    if (!DateUtils.isToday(it)) {
+                        stringPair.add(Pair(null, DateUtils.parseDateToFullDayDate(it)))
+                    }
+                }
+
+                if (!DateUtils.isToday(it)) {
+                    datesList.add(it)
                 }
             }
+        }
+        wsTimePickerCustomAdapter?.submitList(stringPair)
+
+        selectedDate?.let {
+            setSelectedDate(it)
+        }
+    }
+
+    fun setSelectedDate(selectedDate: Date) {
+        Log.d(TAG, "setSelectedDate: $selectedDate")
+        datesList.forEachIndexed { index, date ->
+            if (DateUtils.isSameDay(selectedDate, date) && index > 0) {
+                binding.wsRangeTimePickerDateList.scrollToPosition(index)
+            }
+        }
     }
 
     private fun getDaysFromNow(daysFromNow: Int): List<Date> {

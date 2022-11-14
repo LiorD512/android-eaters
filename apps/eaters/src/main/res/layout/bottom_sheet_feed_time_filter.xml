@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="bottom"
+    android:layout_marginHorizontal="15dp"
+    android:layout_marginTop="15dp"
+    android:background="@drawable/top_cornered_bkg"
+    android:orientation="vertical"
+    app:behavior_hideable="true"
+    app:behavior_peekHeight="220dp"
+    android:paddingBottom="15dp"
+    android:id="@+id/feedTimeFilterMainLayout"
+    app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="20dp">
+
+        <ImageView
+            android:id="@+id/feedTimePickerCloseBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/icons_close"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginStart="15dp" />
+
+        <TextView
+            android:id="@+id/feedTimePickerTitle"
+            android:layout_gravity="center_horizontal"
+            style="@style/LatoBold15Dark"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:letterSpacing="0.03"
+            android:text="@string/select_delivery_date"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <View
+        android:layout_marginTop="17dp"
+        android:background="@color/light_periwinkle"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"/>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp">
+
+        <TextView
+            android:id="@+id/feedTimeFilterAnytimeBtn"
+            style="@style/TimeFilterInactiveUi"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:tag="ANYTIME"
+            android:text="Anytime"
+            android:layout_marginEnd="5dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/feedTimeTodayBtn"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/feedTimeTodayBtn"
+            style="@style/TimeFilterInactiveUi"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:tag="TODAY"
+            android:text="Today"
+            android:layout_marginEnd="5dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/feedTimeFilterScheduleBtn"
+            app:layout_constraintEnd_toStartOf="@+id/feedTimeFilterScheduleBtn"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/feedTimeFilterAnytimeBtn"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/feedTimeFilterScheduleBtn"
+            style="@style/TimeFilterInactiveUi"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:tag="FUTURE"
+            android:text="Schedule"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/feedTimeTodayBtn"
+            app:layout_constraintTop_toTopOf="parent"
+            android:drawablePadding="5dp"
+            app:drawableEndCompat="@drawable/ic_arrow_rotate" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    <LinearLayout
+        android:id="@+id/feedTimeFilterBottomLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:orientation="vertical">
+
+        <com.bupp.wood_spoon_eaters.views.ws_range_time_picker.ws_single_time_picker.WSSingleTimePicker
+            android:id="@+id/feedTimeFilterTimePicker"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+
+        <View
+            android:background="@color/light_periwinkle"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="15dp"/>
+
+        <TextView
+            android:id="@+id/feedTimeFilterApplyBtn"
+            style="@style/LatoBold15Teal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:letterSpacing="0.03"
+            android:gravity="center"
+            android:layout_marginTop="15dp"
+            android:text="@string/apply"/>
+
+    </LinearLayout>
+</LinearLayout>

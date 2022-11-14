@@ -38,9 +38,7 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 
                 feedHeaderAddress.setOnClickListener { listener?.onHeaderAddressClick() }
                 feedHeaderAddressArrow.setOnClickListener { listener?.onHeaderAddressClick() }
-                feedHeaderDate.setOnClickListener { listener?.onHeaderDateClick() }
-                feedHeaderDateArrow.setOnClickListener { listener?.onHeaderDateClick() }
-            }
+                feedHeaderDateLayout.setOnClickListener { listener?.onHeaderDateClick() } }
         }
     }
 
@@ -56,7 +54,12 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
                     "Today"
                 }
                 SingleColumnTimePickerBottomSheet.DeliveryType.FUTURE -> {
-                    deliveryTimeParam.date?.let { DateUtils.parseDateToDayDateNumberOrToday(it) } ?: "ERROR"
+                    deliveryTimeParam.date?.let {
+                        DateUtils.parseDateToDayDateNumberOrToday(it)
+                    } ?: "ERROR"
+                }
+                SingleColumnTimePickerBottomSheet.DeliveryType.ANYTIME -> {
+                    "Anytime"
                 }
             }
         }

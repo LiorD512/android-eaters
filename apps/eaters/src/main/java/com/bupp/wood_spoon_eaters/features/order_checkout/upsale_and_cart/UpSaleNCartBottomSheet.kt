@@ -37,6 +37,7 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetBehavior.STATE_EXPANDED
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -177,7 +178,7 @@ class UpSaleNCartBottomSheet() : BottomSheetDialogFragment(), UpSaleFragment.UpS
     private fun observeEvents() {
         lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.events.collect { event ->
+                viewModel.events.collect(){ event ->
                     when (event) {
                         UpSaleAndCartEvents.OpenUpSaleDialog -> openUpSaleFragmentAndSetUpSaleUi()
                         UpSaleAndCartEvents.GoToCheckout -> {

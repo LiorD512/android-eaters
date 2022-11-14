@@ -590,4 +590,24 @@
         <item name="cornerSize">13.4dp</item>
     </style>
 
+    <style name="TimeFilterInactiveUi" parent="Widget.AppCompat.TextView">
+        <item name="android:fontFamily">@font/lato_bold</item>
+        <item name="android:textSize">13.4sp</item>
+        <item name="android:textColor">@color/medium_grey</item>
+        <item name="android:background">@drawable/time_filter_btn_inactive</item>
+        <item name="android:gravity">center</item>
+        <item name="android:paddingVertical">10dp</item>
+        <item name="android:paddingHorizontal">10dp</item>
+    </style>
+
+    <style name="TimeFilterActiveUi" parent="Widget.AppCompat.TextView">
+        <item name="android:fontFamily">@font/lato_bold</item>
+        <item name="android:textSize">13.4sp</item>
+        <item name="android:textColor">@color/teal_blue</item>
+        <item name="android:background">@drawable/time_filter_btn_active</item>
+        <item name="android:gravity">center</item>
+        <item name="android:paddingVertical">10dp</item>
+        <item name="android:paddingHorizontal">10dp</item>
+    </style>
+
 </resources>

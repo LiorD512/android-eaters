@@ -36,6 +36,7 @@ import com.bupp.wood_spoon_eaters.features.create_profile.EditProfileActivity
 import com.bupp.wood_spoon_eaters.features.create_profile.PhoneNumberVerificationRequestCodeUseCase
 import com.bupp.wood_spoon_eaters.features.create_profile.SendPhoneVerificationUseCase
 import com.bupp.wood_spoon_eaters.features.create_profile.code.EditProfileCodeViewModel
+import com.bupp.wood_spoon_eaters.features.main.feed.time_filter.FeedTimeFilterViewModel
 import com.bupp.wood_spoon_eaters.features.main.search.SearchViewModel
 import com.bupp.wood_spoon_eaters.features.onboarding.OnboardingViewModel
 import com.bupp.wood_spoon_eaters.features.order_checkout.checkout.CheckoutViewModel
@@ -167,6 +168,7 @@ val appModule = module {
 
     //time
     viewModel { TimePickerViewModel(get()) }
+    viewModel { FeedTimeFilterViewModel(get()) }
 
     //New Order
     viewModel { CheckoutViewModel(get(), get(), get(), get(), get(), get(), get(), get(), get()) }

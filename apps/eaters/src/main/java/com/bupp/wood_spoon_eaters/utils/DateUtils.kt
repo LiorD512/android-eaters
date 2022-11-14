@@ -112,10 +112,12 @@ object DateUtils {
 
     fun parseDateToDayDateNumberOrToday(date: Date): String {
         //Fri, Feb 12 / Today
-        if(isToday(date)){
-            return "Today"
+        return if(isToday(date)){
+            "Today"
+        }else if (isTomorrow(date)){
+            "Tomorrow"
         }else{
-            return parseDateToDayDateNumber(date)
+            parseDateToDayDateNumber(date)
         }
     }
 
