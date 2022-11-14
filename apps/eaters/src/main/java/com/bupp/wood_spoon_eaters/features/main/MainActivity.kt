@@ -289,6 +289,7 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
                     CampaignViewType.BANNER -> {
                         binding.mainActCampaignBanner.initCampaignHeader(campaign, this)
                     }
+                    else -> {}
                 }
             }
         }
@@ -315,6 +316,7 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
             CampaignButtonAction.JUMP_TO_LINK -> {
                 //todo = add webView
             }
+            else -> {}
         }
         viewModel.updateCampaignStatus(campaign, UserInteractionStatus.ENGAGED)
 

@@ -2,8 +2,13 @@ plugins {
     id 'java-platform'
 }
 
+javaPlatform {
+    allowDependencies()
+}
 
 dependencies {
+    api platform("com.squareup.okhttp3:okhttp-bom:4.10.0")
+
     constraints {
 
         def lifecycle_version = '2.4.1'
@@ -15,6 +20,12 @@ dependencies {
 
         api 'androidx.fragment:fragment-ktx:1.4.1'
         api 'androidx.appcompat:appcompat:1.4.1'
+
+        def nav_version = '2.4.1'
+        api "androidx.navigation:navigation-ui-ktx:$nav_version"
+        api "androidx.navigation:navigation-dynamic-features-fragment:$nav_version"
+        api "androidx.navigation:navigation-fragment-ktx:$nav_version"
+
 
         def koin_version = '3.2.0'
         api "io.insert-koin:koin-core:$koin_version"
@@ -29,14 +40,9 @@ dependencies {
         def material_version = '1.6.0'
         api "com.google.android.material:material:$material_version"
 
-        def okhttp_version = '4.9.3'
-        api "com.squareup.okhttp3:okhttp:$okhttp_version"
-        api "com.squareup.okhttp3:logging-interceptor:$okhttp_version"
-        api "com.squareup.okhttp3:mockwebserver:$okhttp_version"
-
         api 'com.squareup.retrofit2:retrofit:2.9.0'
 
-        def moshi_version = '1.12.0'
+        def moshi_version = '1.14.0'
         api "com.squareup.moshi:moshi:$moshi_version"
         api "com.squareup.moshi:moshi-kotlin:$moshi_version"
         api "com.squareup.moshi:moshi-adapters:$moshi_version"

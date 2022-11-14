@@ -54,3 +54,8 @@
 
 #branch
 -keep class com.google.android.gms.** { *; }
+
+#AWS
+-keep class com.amazon.** { *; }
+-keep class com.amazonaws.** { *; }
+-keep class com.amplifyframework.** { *; }

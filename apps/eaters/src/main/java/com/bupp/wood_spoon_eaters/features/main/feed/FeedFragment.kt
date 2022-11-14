@@ -146,6 +146,7 @@ class FeedFragment : Fragment(R.layout.fragment_feed),
                 campaign.viewTypes?.forEach { viewType ->
                     when (viewType) {
                         CampaignViewType.FEED -> {}
+                        else -> {}
                     }
                 }
             }

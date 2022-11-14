@@ -55,7 +55,7 @@ class EditProfileCodeFragment : Fragment(R.layout.fragment_code) {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewModel.setPhoneNumber(navArgs.arguments.phoneNumber)
+        viewModel.setPhoneNumber(navArgs.params.phoneNumber)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

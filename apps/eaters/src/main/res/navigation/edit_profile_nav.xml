@@ -21,7 +21,7 @@
         android:name="com.bupp.wood_spoon_eaters.features.create_profile.code.EditProfileCodeFragment"
         android:label="PhoneVerificationFragment">
         <argument
-            android:name="arguments"
+            android:name="params"
             app:argType="com.bupp.wood_spoon_eaters.features.create_profile.code.EditProfileCodeFragmentParams"
             app:nullable="false" />
         <action

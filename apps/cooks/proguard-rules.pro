@@ -75,3 +75,5 @@
 
 # branch.io
 -keep class com.google.android.gms.** { *; }
+
+-keep class kotlinx.coroutines.android.AndroidDispatcherFactory {*;}

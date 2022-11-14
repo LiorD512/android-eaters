@@ -39,6 +39,7 @@ class PromoCodeViewModel(private val cartManager: CartManager, private val eater
                         errorEvent.postValue(it)
                     }
                 }
+                else -> {}
             }
             progressData.endProgress()
         }

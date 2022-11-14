@@ -200,6 +200,8 @@ class NewDishViewModel(
                 MediaUploadArgs.IMG_3 -> {
                     this.dishRequest.tempImageGallery.addOrUpdate(1, it)
                 }
+
+                else -> {}
             }
             curDishLiveData.postValue(this.dishRequest)
         }

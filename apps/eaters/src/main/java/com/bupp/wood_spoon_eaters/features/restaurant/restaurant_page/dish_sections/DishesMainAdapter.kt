@@ -75,6 +75,7 @@ class DishesMainAdapter(private val listener: DishesMainAdapterListener) :
                 holder as DishViewHolderSkeleton
                 holder.bind(section, listener)
             }
+            else -> {}
         }
     }
 

@@ -242,6 +242,8 @@ data class DishRequest(
             NewDishStatus.EDIT_DRAFT -> {
                 imageGallery?.remove(uri.toString())
             }
+
+            else -> {}
         }
     }
 

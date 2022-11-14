@@ -55,6 +55,7 @@ class SelectAddressViewModel(val settings: UserSettings, val eaterDataManager: E
             MyLocationStatus.READY -> {
                 navigationEvent.postRawValue(NavigationEventType.OPEN_MAP_VERIFICATION_WITH_MY_LOCATION)
             }
+            else -> {}
         }
 
     }

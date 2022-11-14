@@ -162,6 +162,7 @@ class MyProfileFragment : Fragment(R.layout.my_profile_fragment),
                             this
                         )
                     }
+                    else -> {}
                 }
             }
         }

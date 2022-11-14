@@ -26,6 +26,8 @@ dependencies {
 
     implementation 'com.jakewharton.timber:timber'
 
-//    def aws_sdk_version = "0.15.2-beta"
-//    implementation("aws.sdk.kotlin:s3:$aws_sdk_version")
+    def aws_sdk_version = "0.17.9-beta"
+    implementation("aws.sdk.kotlin:s3:$aws_sdk_version") {
+        exclude group:"com.squareup.okhttp3", module:"okhttp"
+    }
 }

@@ -43,6 +43,7 @@ class CodeFragment : Fragment(R.layout.fragment_code) {
                 ErrorEventType.CODE_EMPTY -> {
                     binding?.codeFragInputError?.visibility = View.VISIBLE
                 }
+                else -> {}
             }
         }
         viewModel.userData.observe(viewLifecycleOwner) {

@@ -68,10 +68,10 @@ class RestaurantActivity : BaseActivity() {
         val inflater = navHostFragment.navController.navInflater
         val graph = inflater.inflate(R.navigation.restaurant_nav)
         if (restaurantInitParams != null) {
-            graph.startDestination = R.id.restaurantPageFragment
+            graph.setStartDestination(R.id.restaurantPageFragment)
             bundle.putParcelable("extras", restaurantInitParams)
         } else {
-            graph.startDestination = R.id.dishPageFragment
+            graph.setStartDestination(R.id.dishPageFragment)
             bundle.putParcelable("extras", dishInitParams)
         }
 

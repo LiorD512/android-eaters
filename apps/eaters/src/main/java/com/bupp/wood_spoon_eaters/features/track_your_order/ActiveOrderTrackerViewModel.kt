@@ -239,6 +239,7 @@ class ActiveOrderTrackerViewModel(
                 OrderState.DELIVERED -> {
                     curOrderStage = 3
                 }
+                else -> {}
             }
             cancelOrderEvent.postRawValue(CancelOrderParam(curOrderStage, it.id))
         }

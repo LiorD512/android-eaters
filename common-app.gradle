@@ -23,8 +23,8 @@ android {
 
         release {
             debuggable false
-            shrinkResources false
-            minifyEnabled false
+            shrinkResources true
+            minifyEnabled true
             manifestPlaceholders["isTestMode"] = "false"
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }

@@ -1,12 +1,12 @@
 package com.eatwoodspoon.logsender.s3sender
 
 import android.util.Log
-//import aws.sdk.kotlin.runtime.auth.credentials.StaticCredentialsProvider
-//import aws.sdk.kotlin.services.s3.S3Client
-//import aws.sdk.kotlin.services.s3.model.PutObjectRequest
-//import aws.smithy.kotlin.runtime.auth.awscredentials.Credentials
-//import aws.smithy.kotlin.runtime.client.SdkLogMode
-//import aws.smithy.kotlin.runtime.content.asByteStream
+import aws.sdk.kotlin.runtime.auth.credentials.StaticCredentialsProvider
+import aws.sdk.kotlin.services.s3.S3Client
+import aws.sdk.kotlin.services.s3.model.PutObjectRequest
+import aws.smithy.kotlin.runtime.auth.awscredentials.Credentials
+import aws.smithy.kotlin.runtime.client.SdkLogMode
+import aws.smithy.kotlin.runtime.content.asByteStream
 import com.eatwoodspoon.logsender.LoggerConfig
 import com.eatwoodspoon.logsender.Metrics
 import com.eatwoodspoon.logsender.persistence.files.LoggingFileSystem
@@ -102,33 +102,33 @@ internal class S3Sender(
     }
 
     private suspend fun s3Upload(file: File, remoteFileName: String): SendFileResult {
-//        val s3Credentials = config.s3config.credentials
-//
-//        if (file.length() == 0L) {
-//            return SendFileResult.Success
-//        }
-//        val request = PutObjectRequest {
-//            bucket = s3Credentials.s3BucketName
-//            key = remoteFileName
-//            body = file.asByteStream()
-//        }
-//
-//        S3Client {
-//            region = s3Credentials.region
-//            sdkLogMode = SdkLogMode.LogResponseWithBody
-//            credentialsProvider = StaticCredentialsProvider(
-//                credentials = Credentials(
-//                    accessKeyId = s3Credentials.awsAccessKey,
-//                    secretAccessKey = s3Credentials.awsSecretKey
-//                )
-//            )
-//        }.use { s3 ->
-//            val response = s3.putObject(request)
-//            if (response.eTag != null) {
-//                Log.d(TAG, "File uploaded successfully")
-//                return SendFileResult.Success
-//            }
-//        }
+        val s3Credentials = config.s3config.credentials
+
+        if (file.length() == 0L) {
+            return SendFileResult.Success
+        }
+        val request = PutObjectRequest {
+            bucket = s3Credentials.s3BucketName
+            key = remoteFileName
+            body = file.asByteStream()
+        }
+
+        S3Client {
+            region = s3Credentials.region
+            sdkLogMode = SdkLogMode.LogResponseWithBody
+            credentialsProvider = StaticCredentialsProvider(
+                credentials = Credentials(
+                    accessKeyId = s3Credentials.awsAccessKey,
+                    secretAccessKey = s3Credentials.awsSecretKey
+                )
+            )
+        }.use { s3 ->
+            val response = s3.putObject(request)
+            if (response.eTag != null) {
+                Log.d(TAG, "File uploaded successfully")
+                return SendFileResult.Success
+            }
+        }
 
         return SendFileResult.FileError
     }
