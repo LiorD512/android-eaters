@@ -1,5 +1,6 @@
 package com.bupp.wood_spoon_eaters.features.main.order_history
 
+import android.annotation.SuppressLint
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -15,13 +16,16 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 
-class OrdersHistoryViewModel(val orderRepository: OrderRepository, val eaterDataManager: EaterDataManager,
-private val eatersAnalyticsTracker: EatersAnalyticsTracker) : ViewModel() {
+class OrdersHistoryViewModel(
+    val orderRepository: OrderRepository, val eaterDataManager: EaterDataManager,
+    private val eatersAnalyticsTracker: EatersAnalyticsTracker
+) : ViewModel() {
 
     private var refreshRepeatedJob: Job? = null
     val TAG = "wowOrderHistoryVM"
 
-    private val orderListData: MutableMap<Int, MutableList<OrderHistoryBaseItem>> = mutableMapOf()//add skeleton ads default here
+    private val orderListData: MutableMap<Int, MutableList<OrderHistoryBaseItem>> =
+        mutableMapOf()//add skeleton ads default here
 
     val orderLiveData = MutableLiveData<List<OrderHistoryBaseItem>>()
 
@@ -86,24 +90,26 @@ private val eatersAnalyticsTracker: EatersAnalyticsTracker) : ViewModel() {
     private fun getActiveOrders() {
         viewModelScope.launch {
             val data = eaterDataManager.checkForTraceableOrders()
-            data?.let { it ->
+            data?.let {
                 updateActiveOrders(data)
                 updateListData()
             }
         }
     }
 
+    @SuppressLint("SuspiciousIndentation")
     private fun updateActiveOrders(newData: List<Order>) {
         val currentList = orderListData[SECTION_ACTIVE]!!
         newData.forEachIndexed { index, order ->
-            val itemInList = currentList.find { order.id == (it as OrderAdapterItemActiveOrder).order.id }
-            val isLast = (index == newData.size-1)
-                Log.d("wowStatus", "isLast $isLast")
+            val itemInList =
+                currentList.find { order.id == (it as OrderAdapterItemActiveOrder).order.id }
+            val isLast = (index == newData.size - 1)
+            Log.d("wowStatus", "isLast $isLast")
             if (itemInList == null) {
                 currentList.add(OrderAdapterItemActiveOrder(order, isLast))
                 Log.d("wowStatus", "add new to list ${order.id}")
             } else {
-                var isSame = false
+                val isSame: Boolean
                 if (itemInList is OrderAdapterItemActiveOrder) {
                     isSame = order.deliveryStatus == itemInList.order.deliveryStatus &&
                             order.preparationStatus == itemInList.order.preparationStatus
@@ -171,19 +177,22 @@ private val eatersAnalyticsTracker: EatersAnalyticsTracker) : ViewModel() {
         var orderItemPosition = 0
 
         orderListData[SECTION_ACTIVE]?.let {
-            if(it.size == 1){
+            if (it.size == 1) {
                 orderItemPosition = 0
-            }else{
+            } else {
                 it.forEachIndexed { index, orderHistoryBaseItem ->
-                    if(orderHistoryBaseItem is OrderAdapterItemActiveOrder){
-                        if(orderHistoryBaseItem.order.id == orderId){
+                    if (orderHistoryBaseItem is OrderAdapterItemActiveOrder) {
+                        if (orderHistoryBaseItem.order.id == orderId) {
                             orderItemPosition = index + 1
                         }
                     }
                 }
             }
         }
-        logEvent(Constants.EVENT_ORDERS_TRACK_ORDER_CLICK, mapOf(Pair("order_position", orderItemPosition.toString())))
+        logEvent(
+            Constants.EVENT_ORDERS_TRACK_ORDER_CLICK,
+            mapOf(Pair("order_position", orderItemPosition.toString()))
+        )
     }
 
 
