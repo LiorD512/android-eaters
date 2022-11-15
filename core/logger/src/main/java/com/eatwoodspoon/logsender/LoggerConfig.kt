@@ -9,7 +9,7 @@ import java.util.*
 @Parcelize
 @Keep
 data class LoggerConfig(
-    val enabled: Boolean = true,
+//    val enabled: Boolean = true, //disabled till migration to stable AWS lib
     val maxDirectorySize: Long = (20 * 1024 * 1024).toLong(), // Default for 20MB
     val maxFileSize: Long = (50 * 1024).toLong(), // Default for 50KB
     val maxLogBufferSize: Int = 2000,
@@ -17,7 +17,9 @@ data class LoggerConfig(
     val maxSendRetries: Int = 3,
     val s3config: S3SenderConfig,
     val enableStatsReporting: Boolean = true,
-) : Parcelable
+) : Parcelable {
+    val enabled = false
+}
 
 @Parcelize
 @Keep
