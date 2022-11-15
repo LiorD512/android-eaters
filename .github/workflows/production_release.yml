@@ -28,10 +28,7 @@ jobs:
         echo VERSION_CODE=`expr $GITHUB_RUN_NUMBER + 103` >> $GITHUB_ENV
 
     - name: Build with Gradle
-      run: ./gradlew build
-      variables:
-        GRADLE_OPTS: "-Dorg.gradle.daemon=false"
-
+      run: ./gradlew build --no-daemon
 
     - name: Build Release AAB
       run: ./gradlew bundleRelease
