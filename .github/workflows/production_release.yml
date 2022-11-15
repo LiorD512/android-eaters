@@ -29,6 +29,9 @@ jobs:
 
     - name: Build with Gradle
       run: ./gradlew build
+      variables:
+        GRADLE_OPTS: "-Dorg.gradle.daemon=false"
+
 
     - name: Build Release AAB
       run: ./gradlew bundleRelease
