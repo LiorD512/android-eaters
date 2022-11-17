@@ -27,17 +27,14 @@ jobs:
       run: |
         echo VERSION_CODE=`expr $GITHUB_RUN_NUMBER + 103` >> $GITHUB_ENV
 
-    - name: Build with Gradle
+    - name: Clean with Gradle
       run: ./gradlew clean
       
-    - name: Build with Gradle
+    - name: Stopping Gradle
       run: ./gradlew --stop
 
-    - name: Build with Gradle
-      run: ./gradlew apps:eaters:assembleRelease --no-daemon -x lint --stacktrace --debug --info
-
-    - name: Build Release AAB
-      run: ./gradlew bundleRelease
+    - name: Build eaters assembleDebug with Gradle
+      run: ./gradlew apps:eaters:assembleDebug --no-daemon -x lint
 
     - name: Eaters – Publish To App Center
       if: github.ref == 'refs/heads/develop' || startsWith(github.ref, 'refs/heads/release')
@@ -50,6 +47,9 @@ jobs:
         releaseNotes: "Staging version.\nBuild number ${{env.VERSION_CODE}}\n ${{ github.event.head_commit.message }}"
         notifyTesters: false
         debug: true
+        
+    - name: Build cooks assembleDebug with Gradle
+      run: ./gradlew apps:cooks:assembleDebug --no-daemon -x lint
 
     - name: Cooks – Publish To App Center
       if: github.ref == 'refs/heads/develop' || startsWith(github.ref, 'refs/heads/release')
@@ -70,7 +70,16 @@ jobs:
     - name: Printing Release App Name
       if: env.RELEASE_APP_NAME != ''
       run: echo "Releasing app named [$RELEASE_APP_NAME]"
-
+      
+    - name: Build eaters assembleRelease with Gradle
+      run: ./gradlew apps:eaters:assembleRelease --no-daemon -x lint
+      
+    - name: Build cooks assembleRelease with Gradle
+      run: ./gradlew apps:cooks:assembleRelease --no-daemon -x lint
+    
+    - name: Build Release AAB
+      run: ./gradlew bundleRelease
+      
     - name: Eaters – Sign AAB
       if: env.RELEASE_APP_NAME == 'eaters'
       uses: r0adkll/sign-android-release@v1
