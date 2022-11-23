@@ -72,13 +72,12 @@ jobs:
       run: echo "Releasing app named [$RELEASE_APP_NAME]"
       
     - name: Build eaters assembleRelease with Gradle
+      if: env.RELEASE_APP_NAME == 'eaters'
       run: ./gradlew apps:eaters:assembleRelease --no-daemon -x lint
-      
-    - name: Build cooks assembleRelease with Gradle
-      run: ./gradlew apps:cooks:assembleRelease --no-daemon -x lint
     
     - name: Build Release AAB
-      run: ./gradlew bundleRelease
+      if: env.RELEASE_APP_NAME == 'eaters'
+      run: ./gradlew apps:eaters:bundleRelease
       
     - name: Eaters – Sign AAB
       if: env.RELEASE_APP_NAME == 'eaters'
@@ -98,7 +97,15 @@ jobs:
         packageName: com.bupp.wood_spoon_eaters
         releaseFiles: apps/eaters/build/outputs/bundle/productionRelease/eaters-production-release.aab
         track: internal
-        changesNotSentForReview: true
+#         changesNotSentForReview: true
+
+    - name: Build cooks assembleRelease with Gradle
+      if: env.RELEASE_APP_NAME == 'cooks'
+      run: ./gradlew apps:cooks:assembleRelease --no-daemon -x lint
+      
+    - name: Build Release AAB
+      if: env.RELEASE_APP_NAME == 'cooks'
+      run: ./gradlew apps:cooks:bundleRelease
 
     - name: Cooks – Sign AAB
       if: env.RELEASE_APP_NAME == 'cooks'

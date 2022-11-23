@@ -88,6 +88,7 @@ class WebDocsDialog : TopCorneredBottomSheet() {
 
         binding!!.webDocsWebView.settings.loadWithOverviewMode = true
         binding!!. webDocsWebView.settings.useWideViewPort = true
+        binding!!.webDocsWebView.settings.javaScriptEnabled = true
 
         binding!!.webDocsWebView.webViewClient = object : WebViewClient() {
             override fun shouldOverrideUrlLoading(view: WebView?, url: String?): Boolean {

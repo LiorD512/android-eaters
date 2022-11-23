@@ -11,7 +11,7 @@ ext {
     material_version = "1.4.0-alpha01"
 
     // Android Sdk and tools
-    targetSdkVersion = 30
+    targetSdkVersion = 31
     compileSdkVersion = 31
 
     buildToolsVersion = '30.0.2'
