@@ -64,7 +64,7 @@ class ActiveOrderTrackerViewModel(
                     getCurrentOrderDetails.postValue(
                         GetActiveOrdersEvent(
                             it,
-                            getOrderUserInfo(),
+                            getOrderUserInfo(it),
                             pricingExperimentUseCase.getExperimentParams()
                         )
                     )
@@ -105,18 +105,13 @@ class ActiveOrderTrackerViewModel(
         return appSettingsRepository.getContactUsPhoneNumber()
     }
 
-    private fun getOrderUserInfo(): OrderUserInfo {
-        var paymentString = "Fetching data...."
-        val paymentMethod = paymentManager.getStripeCurrentPaymentMethod()
-        paymentMethod?.let {
-            paymentString = "${paymentMethod.card?.brand} ending in ${paymentMethod.card?.last4}"
-        }
-
-        val userName = eaterDataManager.currentEater?.getFullName()
-        val phoneNumber = eaterDataManager.currentEater?.phoneNumber
+    private fun getOrderUserInfo(order: Order): OrderUserInfo {
+        val paymentString = order.paymentMethodStr
+        val userName = "${order.recipientFirstName} ${order.recipientLastName}"
+        val phoneNumber = order.recipientPhoneNumber
         val userInfo = "$userName, $phoneNumber"
 
-        val userLocation = eaterDataManager.getLastChosenAddress()
+        val userLocation  = order.deliveryAddress
 
         return OrderUserInfo(paymentString, userInfo, userLocation)
     }

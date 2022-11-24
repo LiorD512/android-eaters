@@ -83,10 +83,10 @@ class CartManager(
         return -1
     }
 
-    private fun buildOrderRequest(cart: List<OrderItemRequest>? = null): OrderRequest {
+    private fun buildOrderRequest(cart: List<OrderItemRequest>? = null, selectedAddress: Address? = null): OrderRequest {
         return OrderRequest(
             cookingSlotId = currentCookingSlotId,
-            deliveryAddressId = currentOrderResponse?.deliveryAddress?.id ?: getAddressId(),
+            deliveryAddressId = selectedAddress?.id ?: getAddressId(),
             orderItemRequests = cart,
             tipPercentage = getTipPercentage()?.toFloat()
         )
@@ -463,8 +463,8 @@ class CartManager(
     /**
      * this function is called when user change address or delivery time
      */
-    suspend fun updateOrderDeliveryAddressParam(): OrderRepository.OrderRepoResult<Order>? {
-        val orderRequest = buildOrderRequest(emptyList())
+    suspend fun updateOrderDeliveryAddressParam(selectedAddress: Address? = null): OrderRepository.OrderRepoResult<Order>? {
+        val orderRequest = buildOrderRequest(emptyList(), selectedAddress)
         return updateOrderParams(orderRequest)
     }
 

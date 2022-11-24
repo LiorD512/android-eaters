@@ -9,6 +9,7 @@ import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.navigation.findNavController
 import com.bupp.wood_spoon_eaters.R
+import com.bupp.wood_spoon_eaters.common.Constants
 import com.bupp.wood_spoon_eaters.common.MTLogger
 import com.bupp.wood_spoon_eaters.databinding.ActivityOrderCheckoutActivityBinding
 import com.bupp.wood_spoon_eaters.di.abs.LiveEvent
@@ -17,6 +18,7 @@ import com.bupp.wood_spoon_eaters.features.create_profile.EditProfileActivity
 import com.bupp.wood_spoon_eaters.features.locations_and_address.LocationAndAddressActivity
 import com.bupp.wood_spoon_eaters.features.main.MainActivity
 import com.bupp.wood_spoon_eaters.features.order_checkout.checkout.CheckoutFragmentDirections
+import com.bupp.wood_spoon_eaters.model.Address
 import com.bupp.wood_spoon_eaters.utils.showErrorToast
 import com.stripe.android.view.PaymentMethodsActivityStarter
 import com.uxcam.UXCam
@@ -29,7 +31,8 @@ class OrderCheckoutActivity : BaseActivity() {
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
             Log.d(TAG, "Activity For Result - startAddressChooserForResult")
             if (result.resultCode == Activity.RESULT_OK) {
-                viewModel.onLocationChanged()
+                    val selectedAddress = result.data?.extras?.get(Constants.SELECTED_ADDRESS) as Address
+                viewModel.onLocationChanged(selectedAddress)
             }
         }
 

@@ -70,12 +70,11 @@ class LocationAndAddressActivity : AppCompatActivity(), HeaderView.HeaderViewLis
 
     @SuppressLint("LongLogTag")
     private fun initObservers() {
-        viewModel.progressData.observe(this, {
+        viewModel.progressData.observe(this) {
             handleProgressBar(it)
-        })
-        viewModel.mainNavigationEvent.observe(this, {
-            Log.d(TAG, it.name)
-            when(it){
+        }
+        viewModel.mainNavigationEvent.observe(this) {
+            when (it.navigationEventType) {
                 LocationAndAddressViewModel.NavigationEventType.OPEN_ADDRESS_LIST_CHOOSER -> {
                     finalDetailsToSelectAddress()
                 }
@@ -86,6 +85,7 @@ class LocationAndAddressActivity : AppCompatActivity(), HeaderView.HeaderViewLis
                     viewModel.updateMyLocationStats()
                 }
                 LocationAndAddressViewModel.NavigationEventType.LOCATION_AND_ADDRESS_DONE -> {
+                    intent.putExtra(Constants.SELECTED_ADDRESS, it.selectedAddress)
                     setResult(RESULT_OK, intent)
                     finish()
                 }
@@ -105,7 +105,7 @@ class LocationAndAddressActivity : AppCompatActivity(), HeaderView.HeaderViewLis
                     Log.d(TAG, "wow else")
                 }
             }
-        })
+        }
 //        viewModel.locationPermissionActionEvent.observe(this, {
 //            askLocationPermission()
 //        })

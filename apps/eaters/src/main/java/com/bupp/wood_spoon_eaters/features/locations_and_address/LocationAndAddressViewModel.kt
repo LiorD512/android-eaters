@@ -30,7 +30,13 @@ class LocationAndAddressViewModel(val eaterDataManager: EaterDataManager, privat
     val progressData = ProgressData()
     val errorEvents: MutableLiveData<ErrorEventType> = MutableLiveData()
 
-    val mainNavigationEvent = MutableLiveData<NavigationEventType>()
+
+    data class MainNavigationData(
+        val navigationEventType: NavigationEventType? = null,
+        val selectedAddress: Address? = null
+    )
+
+    val mainNavigationEvent = MutableLiveData<MainNavigationData>()
     enum class NavigationEventType {
         OPEN_ADDRESS_LIST_CHOOSER,
         OPEN_ADDRESS_AUTO_COMPLETE,
@@ -50,7 +56,7 @@ class LocationAndAddressViewModel(val eaterDataManager: EaterDataManager, privat
             eaterDataManager.updateSelectedAddress(selectedAddress, LocationManager.AddressDataType.FULL_ADDRESS)
             eaterDataManager.refreshSegment()
         }
-        mainNavigationEvent.postValue(NavigationEventType.LOCATION_AND_ADDRESS_DONE)
+        mainNavigationEvent.postValue(MainNavigationData(NavigationEventType.LOCATION_AND_ADDRESS_DONE, selectedAddress))
     }
 
     private var unsavedNewAddress: AddressRequest? = null
@@ -71,22 +77,22 @@ class LocationAndAddressViewModel(val eaterDataManager: EaterDataManager, privat
     }
 
     fun showLocationPermissionScreen() {
-        mainNavigationEvent.postValue(NavigationEventType.OPEN_LOCATION_PERMISSION_SCREEN)
+        mainNavigationEvent.postValue(MainNavigationData(NavigationEventType.OPEN_LOCATION_PERMISSION_SCREEN))
     }
 
     fun onSearchAddressAutoCompleteClick() {
-        mainNavigationEvent.postValue(NavigationEventType.OPEN_ADDRESS_AUTO_COMPLETE)
+        mainNavigationEvent.postValue(MainNavigationData(NavigationEventType.OPEN_ADDRESS_AUTO_COMPLETE))
     }
 
     fun redirectFinalDetailsToMap() {
-        mainNavigationEvent.postValue(NavigationEventType.OPEN_MAP_VERIFICATION_FROM_FINAL_DETAILS)
+        mainNavigationEvent.postValue(MainNavigationData(NavigationEventType.OPEN_MAP_VERIFICATION_FROM_FINAL_DETAILS))
     }
 
     fun openAddressMapVerificationWithMyLocation() {
         val myLocationAddress = getLocationLiveData().value
         myLocationAddress?.let{
             unsavedNewAddress = it.copy()
-            mainNavigationEvent.postValue(NavigationEventType.OPEN_MAP_VERIFICATION_SCREEN)
+            mainNavigationEvent.postValue(MainNavigationData(NavigationEventType.OPEN_MAP_VERIFICATION_SCREEN))
             addressFoundUiEvent.postValue(it)
         }
     }
@@ -131,17 +137,17 @@ class LocationAndAddressViewModel(val eaterDataManager: EaterDataManager, privat
     fun saveAndPostAddress(address: AddressRequest){
         address.let{
             unsavedNewAddress = address
-            mainNavigationEvent.postValue(NavigationEventType.OPEN_MAP_VERIFICATION_SCREEN)
+            mainNavigationEvent.postValue(MainNavigationData(NavigationEventType.OPEN_MAP_VERIFICATION_SCREEN))
             addressFoundUiEvent.postValue(it)
         }
     }
 
     fun onLocationPermissionDone() {
-        mainNavigationEvent.postValue(NavigationEventType.LOCATION_PERMISSION_GUARENTEED)
+        mainNavigationEvent.postValue(MainNavigationData(NavigationEventType.LOCATION_PERMISSION_GUARENTEED))
     }
 
     fun onAddressMapVerificationDone() {
-        mainNavigationEvent.postValue(NavigationEventType.OPEN_FINAL_ADDRESS_DETAILS_SCREEN)
+        mainNavigationEvent.postValue(MainNavigationData(NavigationEventType.OPEN_FINAL_ADDRESS_DETAILS_SCREEN))
     }
 
     fun updateUnsavedAddressLatLng(currentLatLng: LatLng) {
@@ -196,7 +202,7 @@ class LocationAndAddressViewModel(val eaterDataManager: EaterDataManager, privat
                             eaterDataManager.updateSelectedAddress(address, LocationManager.AddressDataType.FULL_ADDRESS)
                             eaterDataManager.refreshSegment()
                         }
-                        mainNavigationEvent.postValue(NavigationEventType.LOCATION_AND_ADDRESS_DONE)
+                        mainNavigationEvent.postValue(MainNavigationData(NavigationEventType.LOCATION_AND_ADDRESS_DONE))
                     }
                     else -> {
 //                        Log.d(TAG, "NetworkError")
@@ -209,7 +215,7 @@ class LocationAndAddressViewModel(val eaterDataManager: EaterDataManager, privat
     }
 
     fun onReEnterAddressClick() {
-        mainNavigationEvent.postValue(NavigationEventType.OPEN_ADDRESS_LIST_CHOOSER)
+        mainNavigationEvent.postValue(MainNavigationData(NavigationEventType.OPEN_ADDRESS_LIST_CHOOSER))
     }
 
     fun locationPermissionEvent(isAllowPermission: Boolean) {

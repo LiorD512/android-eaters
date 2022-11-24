@@ -260,6 +260,8 @@ class Constants {
         const val SEARCH_IN_RESTAURANT = "android_show_search_in_restaurant"
 
         const val MINIMUM_LOCATION_DISTANCE = 100
+
+        const val SELECTED_ADDRESS = "selected_address"
     }
 
 }

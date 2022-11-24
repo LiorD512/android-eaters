@@ -13,6 +13,7 @@ import com.bupp.wood_spoon_eaters.di.abs.ProgressData
 import com.bupp.wood_spoon_eaters.domain.FeatureFlagNewAuthUseCase
 import com.bupp.wood_spoon_eaters.features.order_checkout.upsale_and_cart.CustomOrderItem
 import com.bupp.wood_spoon_eaters.managers.*
+import com.bupp.wood_spoon_eaters.model.Address
 import com.bupp.wood_spoon_eaters.model.DishInitParams
 import com.bupp.wood_spoon_eaters.repositories.OrderRepository
 import com.bupp.wood_spoon_eaters.utils.DateUtils
@@ -80,9 +81,9 @@ class OrderCheckoutViewModel(
         paymentManager.updateSelectedPaymentMethod(context, paymentMethod)
     }
 
-    fun onLocationChanged() {
+    fun onLocationChanged(selectedAddress: Address?) {
         viewModelScope.launch {
-            val result = cartManager.updateOrderDeliveryAddressParam()
+            val result = cartManager.updateOrderDeliveryAddressParam(selectedAddress)
             result?.let {
                 when (result.type) {
                     OrderRepository.OrderRepoStatus.UPDATE_ORDER_SUCCESS -> {
