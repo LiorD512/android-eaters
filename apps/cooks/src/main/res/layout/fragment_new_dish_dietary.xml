@@ -6,69 +6,83 @@
     android:layout_height="match_parent"
     android:background="@color/white"
     android:orientation="vertical"
+    android:paddingBottom="5dp"
     tools:context=".features.new_dish.fragments.NewDishNameFragment">
 
-    <TextView
-        android:paddingHorizontal="15.4dp"
-        android:id="@+id/title"
-        style="@style/LatoBlack23Dark"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Let’s get specific " />
-
-    <com.bupp.wood_spoon_chef.presentation.views.horizontal_dietary_view.HorizontalDietaryView
-        android:clipToPadding="true"
-        android:layout_marginTop="22.9dp"
-        android:id="@+id/newDishDietaryIcons"
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="match_parent"
+        android:fillViewport="true">
 
-    <com.bupp.wood_spoon_chef.presentation.views.WSCounterEditText
-        android:paddingHorizontal="15.4dp"
-        android:id="@+id/newDishDietaryAccommodations"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="23.4dp"
-        app:title="Dietary accommodations (optional)"
-        app:hint="Ex: Food may contain: peanuts, tree nuts, wheat, dairy, eggs or soy"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/newDishDietaryRadioLayout"
-        app:maxLines="4"
-        app:maxChar="300" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-    <com.bupp.wood_spoon_chef.presentation.views.WSEditText
-        app:isEditable="false"
-        android:paddingHorizontal="15.4dp"
-        android:layout_marginTop="22.5dp"
-        app:hint="Enter a cuisine that best represents your dish"
-        app:error="Which vacation does it bring to mind?"
-        android:id="@+id/newDishDietaryCuisine"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+            <TextView
+                android:paddingHorizontal="15.4dp"
+                android:id="@+id/title"
+                style="@style/LatoBlack23Dark"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Let’s get specific " />
 
-    <View
-        android:layout_weight="1"
-        android:layout_width="1dp"
-        android:layout_height="0dp"/>
+            <com.bupp.wood_spoon_chef.presentation.views.horizontal_dietary_view.HorizontalDietaryView
+                android:clipToPadding="true"
+                android:layout_marginTop="22.9dp"
+                android:id="@+id/newDishDietaryIcons"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
 
-    <com.bupp.wood_spoon_chef.presentation.custom_views.OrangeBtnCornered
-        android:paddingHorizontal="15.4dp"
-        android:id="@+id/newDishDietaryNext"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="19.4dp"
-        app:title="Next" />
+            <com.bupp.wood_spoon_chef.presentation.views.WSCounterEditText
+                android:paddingHorizontal="15.4dp"
+                android:id="@+id/newDishDietaryAccommodations"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="23.4dp"
+                app:title="Dietary accommodations (optional)"
+                app:hint="Ex: Food may contain: peanuts, tree nuts, wheat, dairy, eggs or soy"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/newDishDietaryRadioLayout"
+                app:maxLines="4"
+                app:maxChar="300" />
 
-    <TextView
-        android:paddingHorizontal="15.4dp"
-        android:id="@+id/newDishDietaryBack"
-        style="@style/LatoBlack15Orangish"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
-        android:letterSpacing="0.03"
-        android:padding="15.4dp"
-        android:text="Back"/>
+            <com.bupp.wood_spoon_chef.presentation.views.WSEditText
+                app:isEditable="false"
+                android:paddingHorizontal="15.4dp"
+                android:layout_marginTop="22.5dp"
+                app:hint="Enter a cuisine that best represents your dish"
+                app:error="Which vacation does it bring to mind?"
+                android:id="@+id/newDishDietaryCuisine"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+            <View
+                android:layout_weight="1"
+                android:layout_width="1dp"
+                android:layout_height="0dp"/>
+
+            <com.bupp.wood_spoon_chef.presentation.custom_views.OrangeBtnCornered
+                android:paddingHorizontal="15.4dp"
+                android:id="@+id/newDishDietaryNext"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="19.4dp"
+                app:title="Next" />
+
+            <TextView
+                android:paddingHorizontal="15.4dp"
+                android:id="@+id/newDishDietaryBack"
+                style="@style/LatoBlack15Orangish"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:letterSpacing="0.03"
+                android:padding="15.4dp"
+                android:text="Back"/>
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
 
 
 </LinearLayout>
