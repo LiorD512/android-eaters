@@ -14,6 +14,7 @@ import com.bupp.wood_spoon_eaters.features.order_checkout.upsale_and_cart.*
 import com.bupp.wood_spoon_eaters.managers.CartManager
 import com.bupp.wood_spoon_eaters.managers.EatersAnalyticsTracker
 import com.bupp.wood_spoon_eaters.model.MenuItem
+import com.bupp.wood_spoon_eaters.model.Order
 import com.bupp.wood_spoon_eaters.repositories.AppSettingsRepository
 import com.bupp.wood_spoon_eaters.repositories.getCurrentFreeDeliveryThreshold
 import com.eatwoodspoon.analytics.events.FreeDeliveryEvent
@@ -37,6 +38,8 @@ class UpSaleViewModel(
 
     private val _state = MutableStateFlow(UpSaleState())
     val state: StateFlow<UpSaleState> = _state
+
+    val currentOrder = cartManager.getCurrentOrderData()
 
     init {
         logPageEvent()
@@ -111,6 +114,12 @@ class UpSaleViewModel(
             return true
         }
         return false
+    }
+
+    fun updateQuantity(order: Order?){
+        val orderItems = order?.orderItems
+        val upsaleItem = _state.value.upSaleItems?.find { upsaleItem -> orderItems?.any { it.dish.id == upsaleItem.menuItem?.dishId } == true }
+        upsaleItem?.cartQuantity = orderItems?.filter { it.dish.id == upsaleItem?.menuItem?.dishId }?.size ?: 0
     }
 
 

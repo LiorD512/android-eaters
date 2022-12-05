@@ -23,3 +23,10 @@ fun View.setSafeOnClickListener(onSafeClick: (View) -> Unit) {
     }
     setOnClickListener(safeClickListener)
 }
+
+fun View.setLongerSafeOnClickListener(onSafeClick: (View) -> Unit) {
+    val safeClickListener = SafeClickListener(defaultInterval = 2000) {
+        onSafeClick(it)
+    }
+    setOnClickListener(safeClickListener)
+}

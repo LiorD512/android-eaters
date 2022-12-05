@@ -351,7 +351,7 @@ class MainActivity : BaseActivity(), HeaderView.HeaderViewListener,
                 val intent = Intent(this, SplashActivity::class.java)
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                val pendingIntent = PendingIntent.getActivity(this, 1, intent, 0)
+                val pendingIntent = PendingIntent.getActivity(this, 1, intent, PendingIntent.FLAG_IMMUTABLE)
                 woodSpoonAuth.startWebLogout(
                     this,
                     pendingIntent,

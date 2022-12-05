@@ -47,6 +47,8 @@ class UpSaleFragment : Fragment(), UpSaleAdapter.UpSaleAdapterListener{
         super.onViewCreated(view, savedInstanceState)
         initAdapter()
         observeViewModelState()
+
+        initObservers()
     }
 
     private fun observeViewModelState() {
@@ -58,6 +60,12 @@ class UpSaleFragment : Fragment(), UpSaleAdapter.UpSaleAdapterListener{
                     }
                 }
             }
+        }
+    }
+
+    private fun initObservers(){
+        viewModel.currentOrder.observe(viewLifecycleOwner){
+            viewModel.updateQuantity(it)
         }
     }
 

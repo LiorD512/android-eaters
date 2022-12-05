@@ -36,6 +36,7 @@ import com.bupp.wood_spoon_eaters.features.create_profile.EditProfileActivity
 import com.bupp.wood_spoon_eaters.features.create_profile.PhoneNumberVerificationRequestCodeUseCase
 import com.bupp.wood_spoon_eaters.features.create_profile.SendPhoneVerificationUseCase
 import com.bupp.wood_spoon_eaters.features.create_profile.code.EditProfileCodeViewModel
+import com.bupp.wood_spoon_eaters.features.main.feed.time_filter.FeatureFlagTimeFilterUseCase
 import com.bupp.wood_spoon_eaters.features.main.feed.time_filter.FeedTimeFilterViewModel
 import com.bupp.wood_spoon_eaters.features.main.search.SearchViewModel
 import com.bupp.wood_spoon_eaters.features.onboarding.OnboardingViewModel
@@ -126,6 +127,7 @@ val appModule = module {
     single { FeatureFlagLongFeedUseCase(get()) }
     single { FeatureFlagNewAuthUseCase(get()) }
     single { FeatureFlagFreeDeliveryUseCase(get()) }
+    single { FeatureFlagTimeFilterUseCase(get()) }
     factory { PhoneNumberVerificationRequestCodeUseCase(get(), get()) }
     factory { SendPhoneVerificationUseCase(get(), get()) }
 
@@ -200,7 +202,7 @@ val appModule = module {
             get()
         )
     }
-    viewModel { FeedViewModel(get(), get(), get(), get(), get(), get()) }
+    viewModel { FeedViewModel(get(), get(), get(), get(), get(), get(), get()) }
     viewModel { SearchViewModel(get(), get(), get()) }
     viewModel { ReportIssueViewModel(get(), get(), get()) }
 

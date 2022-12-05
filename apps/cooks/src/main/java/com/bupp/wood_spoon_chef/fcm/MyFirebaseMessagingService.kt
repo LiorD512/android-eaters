@@ -56,7 +56,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         val resultIntent = Intent(this, MainActivity::class.java)
         val resultPendingIntent: PendingIntent = TaskStackBuilder.create(this).run {
             addNextIntentWithParentStack(resultIntent)
-            getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT)
+            getPendingIntent(0, PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT)
         }
 
         NotificationsHelper.sendNotification(this, title ,message, resultPendingIntent)

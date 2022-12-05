@@ -10,6 +10,7 @@ import com.bupp.wood_spoon_eaters.common.MTLogger
 import com.bupp.wood_spoon_eaters.di.abs.ProgressData
 import com.bupp.wood_spoon_eaters.domain.comon.execute
 import com.bupp.wood_spoon_eaters.domain.FeatureFlagLongFeedUseCase
+import com.bupp.wood_spoon_eaters.features.main.feed.time_filter.FeatureFlagTimeFilterUseCase
 import com.bupp.wood_spoon_eaters.managers.CampaignManager
 import com.bupp.wood_spoon_eaters.managers.EatersAnalyticsTracker
 import com.bupp.wood_spoon_eaters.managers.FeedDataManager
@@ -29,6 +30,7 @@ data class FeedLiveData(
 
 class FeedViewModel(
     private val featureFlagLongFeedUseCase: FeatureFlagLongFeedUseCase,
+    private val featureFlagTimeFilterUseCase: FeatureFlagTimeFilterUseCase,
     private val feedDataManager: FeedDataManager,
     private val feedRepository: FeedRepository,
     private val flowEventsManager: FlowEventsManager,
@@ -42,9 +44,16 @@ class FeedViewModel(
     val feedSkeletonEvent = MutableLiveData<FeedLiveData>()
     val feedResultData: MutableLiveData<FeedLiveData> = MutableLiveData()
     var feedJobs: MutableList<Job> = mutableListOf()
+    val timeFilterDefault = MutableLiveData<SingleColumnTimePickerBottomSheet.DeliveryTimeParam>()
     private var currentTimeFilter : SingleColumnTimePickerBottomSheet.DeliveryTimeParam? = null
 
     fun initFeed(){
+        if (featureFlagTimeFilterUseCase.execute()){
+            timeFilterDefault.postValue(SingleColumnTimePickerBottomSheet.DeliveryTimeParam(SingleColumnTimePickerBottomSheet.DeliveryType.TODAY))
+        }else{
+            timeFilterDefault.postValue(SingleColumnTimePickerBottomSheet.DeliveryTimeParam(SingleColumnTimePickerBottomSheet.DeliveryType.ANYTIME))
+        }
+
         feedSkeletonEvent.postValue(getSkeletonItems())
         feedDataManager.initFeedDataManager()
 

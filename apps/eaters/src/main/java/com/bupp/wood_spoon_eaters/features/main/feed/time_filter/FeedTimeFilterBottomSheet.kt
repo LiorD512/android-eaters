@@ -3,7 +3,6 @@ package com.bupp.wood_spoon_eaters.features.main.feed.time_filter
 import android.animation.ObjectAnimator
 import android.app.Dialog
 import android.content.res.Configuration
-import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -28,12 +27,13 @@ import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.bottom_sheets.time_picker.SingleColumnTimePickerBottomSheet
 import com.bupp.wood_spoon_eaters.databinding.BottomSheetFeedTimeFilterBinding
 import com.eatwoodspoon.android_utils.binding.viewBinding
+import com.eatwoodspoon.android_utils.views.setLongerSafeOnClickListener
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import java.util.Date
 
 
 class FeedTimeFilterBottomSheet() : BottomSheetDialogFragment() {
@@ -125,34 +125,18 @@ class FeedTimeFilterBottomSheet() : BottomSheetDialogFragment() {
                 dismiss()
             }
 
-            feedTimeTodayBtn.setOnClickListener {
+            feedTimeTodayBtn.setLongerSafeOnClickListener {
                 it.isHapticFeedbackEnabled = true
                 it.performHapticFeedback(HapticFeedbackConstants.CONFIRM)
                 viewModel.onItemClicked(SingleColumnTimePickerBottomSheet.DeliveryType.TODAY)
-                setFragmentResult(
-                    FILTER_TIME_KEY,
-                    bundleOf(
-                        FILTER_TIME_VALUE to SingleColumnTimePickerBottomSheet.DeliveryTimeParam(
-                            SingleColumnTimePickerBottomSheet.DeliveryType.TODAY
-                        )
-                    )
-                )
-                dismissWithDelay()
+                setResultAndDismissWithDelay( SingleColumnTimePickerBottomSheet.DeliveryType.TODAY)
             }
 
-            feedTimeFilterAnytimeBtn.setOnClickListener {
+            feedTimeFilterAnytimeBtn.setLongerSafeOnClickListener {
                 it.isHapticFeedbackEnabled = true
                 it.performHapticFeedback(HapticFeedbackConstants.CONFIRM)
                 viewModel.onItemClicked(SingleColumnTimePickerBottomSheet.DeliveryType.ANYTIME)
-                setFragmentResult(
-                    FILTER_TIME_KEY,
-                    bundleOf(
-                        FILTER_TIME_VALUE to SingleColumnTimePickerBottomSheet.DeliveryTimeParam(
-                            SingleColumnTimePickerBottomSheet.DeliveryType.ANYTIME
-                        )
-                    )
-                )
-                dismissWithDelay()
+                setResultAndDismissWithDelay( SingleColumnTimePickerBottomSheet.DeliveryType.ANYTIME)
             }
 
 
@@ -160,18 +144,9 @@ class FeedTimeFilterBottomSheet() : BottomSheetDialogFragment() {
                 viewModel.onItemClicked(SingleColumnTimePickerBottomSheet.DeliveryType.FUTURE)
             }
 
-            feedTimeFilterApplyBtn.setOnClickListener {
-                setFragmentResult(
-                    FILTER_TIME_KEY,
-                    bundleOf(
-                        FILTER_TIME_VALUE to SingleColumnTimePickerBottomSheet.DeliveryTimeParam(
-                            SingleColumnTimePickerBottomSheet.DeliveryType.FUTURE,
-                            feedTimeFilterTimePicker.getChosenDate()
-                        )
-                    )
-                )
-
-                dismissWithDelay()
+            feedTimeFilterApplyBtn.setLongerSafeOnClickListener {
+                setResultAndDismissWithDelay(SingleColumnTimePickerBottomSheet.DeliveryType.FUTURE,
+                    feedTimeFilterTimePicker.getChosenDate())
             }
         }
     }
@@ -224,9 +199,20 @@ class FeedTimeFilterBottomSheet() : BottomSheetDialogFragment() {
         }
     }
 
-    private fun dismissWithDelay() {
+    private fun setResultAndDismissWithDelay(deliveryTimeType: SingleColumnTimePickerBottomSheet.DeliveryType, chosenDate: Date? = null) {
         Handler(Looper.getMainLooper()).postDelayed({
             dismiss()
+
+            setFragmentResult(
+                FILTER_TIME_KEY,
+                bundleOf(
+                    FILTER_TIME_VALUE to SingleColumnTimePickerBottomSheet.DeliveryTimeParam(
+                        deliveryTimeType,
+                        chosenDate
+                    )
+                )
+            )
+
         }, 1000)
     }
 

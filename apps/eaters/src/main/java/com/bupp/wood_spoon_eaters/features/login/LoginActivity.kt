@@ -84,7 +84,7 @@ class LoginActivity : BaseActivity() {
                                     addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
                                     addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                                 },
-                                0
+                                PendingIntent.FLAG_IMMUTABLE
                             ),
                             "onboarding"
                         )

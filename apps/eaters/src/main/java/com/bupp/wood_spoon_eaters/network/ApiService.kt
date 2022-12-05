@@ -33,6 +33,7 @@ interface ApiService {
 
     @FormUrlEncoded
     @POST("eaters/auth/validate_code")
+    @Headers("$DoNotLogoutOnUnauthorizedHeader: true") // Workaround to avoid logging out when invalid code is provided
     suspend fun validateCode(
         @Field("phone_number") phone: String,
         @Field("code") code: String

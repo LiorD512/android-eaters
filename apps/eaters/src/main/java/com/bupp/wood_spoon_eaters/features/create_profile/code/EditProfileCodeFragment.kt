@@ -8,6 +8,7 @@ import android.os.Parcelable
 import android.text.Editable
 import android.view.View
 import android.widget.Toast
+import androidx.annotation.Keep
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -30,6 +31,7 @@ import java.lang.Integer.min
 private const val PIN_SIZE = 4
 
 @Parcelize
+@Keep
 data class EditProfileCodeFragmentParams(
     val phoneNumber: String
 ) : Parcelable

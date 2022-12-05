@@ -90,7 +90,7 @@ class DishPageViewModel(
         if (extras.menuItem != null) {
             currentFragmentState = DishFragmentState.ADD_DISH
 
-            if (extras.cookingSlot?.id != extras.menuItem.cookingSlotId) {
+            if (extras.menuItem.cookingSlotId != null && extras.cookingSlot?.id != extras.menuItem.cookingSlotId) {
                 dishMatchCookingSlot = false
             }
 

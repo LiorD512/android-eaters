@@ -10,19 +10,28 @@ import okhttp3.Response
 import retrofit2.Invocation
 import java.io.IOException
 
+// Workaround to avoid logging out when some of the endpoints return 401
+const val DoNotLogoutOnUnauthorizedHeader = "X-Do-Not-Logout-On-Unauthorized"
+
 class AuthInterceptor(private val tokenRepository: AuthTokenRepository) : Interceptor {
 
     @Throws(IOException::class)
     override fun intercept(chain: Interceptor.Chain): Response {
 
         var request = chain.request()
+
+        val doNotLogoutOnUnauthorized = request.header(DoNotLogoutOnUnauthorizedHeader)?.toBoolean() == true
+        if(doNotLogoutOnUnauthorized) {
+            request = request.newBuilder().removeHeader(DoNotLogoutOnUnauthorizedHeader).build()
+        }
+
         val authToken: String? = tokenRepository.authorizationToken
 
         val newRequest = buildVersionPath(request)
         val finalRequest = addTokenToRequest(newRequest, authToken)
         val response = chain.proceed(finalRequest)
 
-        if(response.code == 401) {
+        if(response.code == 401 && !doNotLogoutOnUnauthorized) {
             tokenRepository.authorizationToken = null
         }
         if (!response.header("X-Auth-Token").isNullOrEmpty()) {

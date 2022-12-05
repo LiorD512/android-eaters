@@ -8,6 +8,7 @@ import com.bupp.wood_spoon_eaters.R
 import com.bupp.wood_spoon_eaters.bottom_sheets.time_picker.SingleColumnTimePickerBottomSheet
 import com.bupp.wood_spoon_eaters.databinding.FeedHeaderViewBinding
 import com.bupp.wood_spoon_eaters.utils.DateUtils
+import com.eatwoodspoon.android_utils.views.setSafeOnClickListener
 
 class FeedHeaderView @JvmOverloads
 constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) :
@@ -38,7 +39,7 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 
                 feedHeaderAddress.setOnClickListener { listener?.onHeaderAddressClick() }
                 feedHeaderAddressArrow.setOnClickListener { listener?.onHeaderAddressClick() }
-                feedHeaderDateLayout.setOnClickListener { listener?.onHeaderDateClick() } }
+                feedHeaderDateLayout.setSafeOnClickListener { listener?.onHeaderDateClick() } }
         }
     }
 

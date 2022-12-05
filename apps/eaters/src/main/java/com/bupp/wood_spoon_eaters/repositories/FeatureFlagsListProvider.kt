@@ -27,6 +27,7 @@ enum class EatersFeatureFlags(override val key: String) : FeatureFlagKey {
     FreeDeliveryEnabled(key = "backend_waive_delivery_fee_based_on_subtotal"),
     LogS3Enabled(key = "mobile_log_s3_enabled"),
     LogShipbookEnabled(key = "mobile_log_shipbook_enabled"),
+    TimeFilterToday(key = "default_timestamp_today")
 }
 
 class StaticFeatureFlagsListProvider : FeatureFlagsListProvider {

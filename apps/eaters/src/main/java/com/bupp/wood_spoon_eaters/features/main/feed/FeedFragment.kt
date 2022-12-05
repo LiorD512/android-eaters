@@ -118,6 +118,10 @@ class FeedFragment : Fragment(R.layout.fragment_feed),
         mainViewModel.scrollFeedToTop.observe(viewLifecycleOwner) {
             binding!!.feedFragList.smoothScrollToPosition(0)
         }
+        viewModel.timeFilterDefault.observe(viewLifecycleOwner){
+            viewModel.onTimePickerChanged(it)
+            binding!!.feedFragHeader.setDate(it)
+        }
     }
 
     private fun handleFeedUi(isLargeItems: Boolean) {

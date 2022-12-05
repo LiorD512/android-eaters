@@ -22,5 +22,5 @@ private fun splashActivityPendingIntent(context: Context): PendingIntent {
     val intent = Intent(context, SplashActivity::class.java)
     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-    return PendingIntent.getActivity(context, 1, intent, 0)
+    return PendingIntent.getActivity(context, 1, intent, PendingIntent.FLAG_IMMUTABLE)
 }
