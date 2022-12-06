@@ -98,8 +98,8 @@ class NewDishMediaFragment : BaseFragment(R.layout.fragment_new_dish_media), New
 
     private fun loadUnSavedData(dishRequest: DishRequest?) {
         binding?.apply {
-            dishRequest?.let { it ->
-                it.tempThumbnail?.let {
+            dishRequest?.let { request ->
+                request.tempThumbnail?.let {
                     Glide.with(requireContext()).load(it)
                         .transform(CenterCrop(), RoundedCorners(26))
                         .transition(DrawableTransitionOptions.withCrossFade())
@@ -111,14 +111,8 @@ class NewDishMediaFragment : BaseFragment(R.layout.fragment_new_dish_media), New
                     NewDishMedia(VIEW_TYPE_PHOTO, null),
                     NewDishMedia(VIEW_TYPE_VIDEO, null)
                 )
-                it.tempImageGallery.let { it ->
-                    it.forEachIndexed { index, uri ->
-                        uri?.let {
-                            mediaList[index].uri = it
-                        }
-                    }
-                }
-                it.imageGallery?.let { it ->
+
+                request.imageGallery?.let { it ->
                     it.forEachIndexed { index, uri ->
                         uri?.let {
                             when (index) {
@@ -130,21 +124,30 @@ class NewDishMediaFragment : BaseFragment(R.layout.fragment_new_dish_media), New
                                     newDishMainPhotoBtn.text = "Edit main photo"
                                 }
                                 else -> {
-                                    mediaList[index - 1].uri = Uri.parse(uri)
+                                    request.tempImageGallery.add(Uri.parse(uri))
                                 }
                             }
                         }
                     }
                 }
-                if (it.tempVideo != null) {
-                    mediaList.last().uri = it.tempVideo
+                if (request.tempVideo != null) {
+                    mediaList.last().uri = request.tempVideo
                 } else {
                     mediaList.last().uri = null
 
-                    if (it.video != null) {
-                        mediaList.last().uri = Uri.parse(it.video)
+                    if (request.video != null) {
+                        mediaList.last().uri = Uri.parse(request.video)
                     } else {
                         mediaList.last().uri = null
+                    }
+                }
+
+                request.tempImageGallery.let { it ->
+                    it.forEachIndexed { index, uri ->
+                        uri?.let {
+                            request.imageGallery?.remove(uri.toString())
+                            mediaList[index].uri = it
+                        }
                     }
                 }
 
